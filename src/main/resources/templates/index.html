@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>demo</title>
+    <link th:href="@{/layui/css/layui.css}" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <table class="layui-hide" lay-filter="users">
+        <thead>
+            <tr>
+                <th lay-data="{field: 'id', width: 100}">id</th>
+                <th lay-data="{field: 'name', width: 80, sort: true}">姓名</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.name}"></td>
+            </tr>
+        </tbody>
+    </table>
+<script th:src="@{/layui/layui.js}"></script>
+<script th:inline="javascript">
+//一般直接写在一个js文件中
+layui.use(['table'], function(){
+    var table = layui.table;
+
+    table.init('users');
+});
+</script>
+</body>
+</html>

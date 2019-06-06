@@ -1,0 +1,36 @@
+app:
+  instance:
+    code: website
+    profile: dev
+server:
+  port: 5000
+logging:
+  level:
+    root: info
+    com.bestvike: debug
+    org.springframework.security: warn
+spring:
+  application:
+    name: ${app.instance.code}-${app.instance.profile}
+  http:
+    encoding:
+      force: true
+  servlet:
+    multipart:
+      max-file-size: 20MB # 最大文件大小
+      max-request-size: 20MB # 最大请求大小
+  thymeleaf:
+    cache: false # 开发时关闭缓存,不然没法看到实时页面
+    mode: LEGACYHTML5 # 用非严格的 HTML
+    encoding: UTF-8
+    servlet:
+      content-type: text/html
+datasources:
+  website:
+    jdbc-url: jdbc:mariadb://172.10.11.26:3306/oa?allowMultiQueries=true
+    username: oa
+    password: oa
+    hikari:
+      minimum-idle: 2
+      maximum-pool-size: 5
+      connection-test-query: select 1
