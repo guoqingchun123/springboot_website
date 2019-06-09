@@ -27,9 +27,9 @@ spring:
       content-type: text/html
 datasources:
   website:
-    jdbc-url: jdbc:mariadb://172.10.11.26:3306/oa?allowMultiQueries=true
-    username: oa
-    password: oa
+    jdbc-url: jdbc:oracle:thin:@172.10.11.121:1521/orclgbk
+    username: bvdf_qz
+    password: bvdf_qz
     hikari:
       minimum-idle: 2
       maximum-pool-size: 5

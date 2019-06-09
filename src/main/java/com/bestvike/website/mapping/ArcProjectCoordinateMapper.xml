@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "com.bestvike.website.dao.ArcProjectCoordinateDao">
+	<select id = "selectAllProject" resultType = "ArcProjectCoordinate">
+        <![CDATA[
+           SELECT t1.projectno, xcoordinate, ycoordinate, averageprice, popularity, projectname, address
+           FROM arc_project_coordinate t1 INNER JOIN arc_projectinfo t2 on t1.projectno = t2.projectno
+        ]]>
+    </select>
+
+	<select id = "selectProjectByProjectNo" parameterType = "String" resultType = "ArcProjectInfo">
+		<![CDATA[
+           SELECT t1.projectno, t1.projectname, t1.address, t1.corpno, t2.corpname, t1.bldnum, t1.coverarea, t1.plantotalarea, t1.plantotalinvest,
+           t1.opendate, t1.admitdate, t1.salephoneno, t1.saleaddress
+           FROM arc_projectinfo t1 INNER JOIN arc_corpinfo t2 on t1.corpno = t2.corpno
+           WHERE t1.projectno = #{projectNo}
+        ]]>
+	</select>
+	<select id = "selectPerBaseInfoByProjectNo" parameterType = "String" resultType = "PerBaseInfo">
+		<![CDATA[
+        	SELECT t1.presellno, t1.address, t1.bldfunction, t1.totalnum, t1.totalarea, t1.startdate,
+        	t1.stopdate
+        	FROM Per_BaseInfo t1
+        	WHERE t1.projectno = #{projectNo}
+        ]]>
+	</select>
+</mapper>

@@ -1,33 +1,159 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>demo</title>
-    <link th:href="@{/layui/css/layui.css}" rel="stylesheet" type="text/css">
+	<meta charset="UTF-8">
+	<title>赤峰市房产信息网</title>
+	<link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}"/>
+	<link th:href="@{/layui/css/layui.css}" rel="stylesheet" type="text/css">
+	<script type="text/javascript"
+			src="https://webapi.amap.com/maps?v=1.4.14&key=711b07f98b652cadccc69f4abd7ed455&plugin=AMap.Autocomplete,AMap.PlaceSearch,AMap.MarkerClusterer"></script>
 </head>
-<body>
-    <table class="layui-hide" lay-filter="users">
-        <thead>
-            <tr>
-                <th lay-data="{field: 'id', width: 100}">id</th>
-                <th lay-data="{field: 'name', width: 80, sort: true}">姓名</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="user : ${users}">
-                <td th:text="${user.id}"></td>
-                <td th:text="${user.name}"></td>
-            </tr>
-        </tbody>
-    </table>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+	<div class="layui-header layui-bg-blue">
+		<div class="layui-logo" style="color: white">赤峰市房产信息网</div>
+	</div>
+	<div class="layui-col-md9">
+		<div id="container"></div>
+	</div>
+	<div class="layui-col-md3" style="overflow-y: auto">
+		<div class="layui-btn-group sortBtnGroup" style="margin-top: 5px;">
+			<button class="layui-btn layui-btn-sm" data-type="set" data-key="indicator" data-value="default" style="background-color: #5FB878;">默认</button>
+			<button class="layui-btn layui-btn-sm" data-type="set" data-key="indicator" data-value="popularity">人气</button>
+			<button class="layui-btn layui-btn-sm" data-type="set" data-key="indicator" data-value="price">售价</button>
+		</div>
+		<div class="layui-card" th:each="project : ${projects}">
+			<div class="layui-card-header">
+				<div style="float: left;">
+					<label style="color: green;font-weight:bold" th:text="${project.projectname}"></label>&nbsp;&nbsp;
+					¥<label style="color: red;font-weight:bold" th:text="${project.averageprice}"></label>
+				</div>
+				<div style="float: right">
+					<button type="button" class="layui-btn layui-btn-primary summary-btn" th:value="${project.getProjectno()}">查看详情</button>
+				</div>
+			</div>
+			<div class="layui-card-body">
+				<img src="https://pic4.ajkimg.com/display/xinfang/665944b5b39a56537506838714c4e8b4/129x115n.jpg">
+				项目地址：<label th:text="${project.address}"></label>
+			</div>
+		</div>
+	</div>
+</div>
 <script th:src="@{/layui/layui.js}"></script>
 <script th:inline="javascript">
-//一般直接写在一个js文件中
-layui.use(['table'], function(){
-    var table = layui.table;
+	layui.use(['carousel', 'element', "layer"], function () {
+		var $ = layui.jquery;
+		var layer = layui.layer;
 
-    table.init('users');
-});
+		$("#container").height(window.innerHeight);
+		$(".layui-col-md3").height(window.innerHeight);
+
+		//地图加载
+		var map = new AMap.Map("container", {
+			resizeEnable: true,
+			zoom: 14, //初始地图级别
+			center: [118.88683, 42.257692], //初始地图中心点（赤峰市政府）
+			showIndoorMap: false //关闭室内地图
+		});
+
+		$.get("/projects", {}, function (data) {
+			layer.msg('共为您过滤出' + data.length + "个项目~~~");
+			for (var i = 0, marker; i < data.length; i++) {
+				var project = data[i];
+				if (isNaN(project.xcoordinate) || isNaN(project.ycoordinate)) {
+					continue;
+				}
+				marker = new AMap.Marker({
+					icon: "/themes/images/poi-marker-default.png",
+					position: [parseFloat(project.xcoordinate), parseFloat(project.ycoordinate)],
+					offset: new AMap.Pixel(-13, -30)
+				});
+				marker.setMap(map);
+				marker.content = "<div class=\"layui-card\">"
+					+ "<div class=\"layui-card-header\">"
+					+ project.projectname
+					+ "</div>"
+					+ "<div class=\"layui-card-body\">"
+					+ "<img src=\"https://pic4.ajkimg.com/display/xinfang/665944b5b39a56537506838714c4e8b4/129x115n.jpg\">"
+					+ "</div>"
+					+ "</div>";
+				marker._id = project.projectno;
+				marker.on('mouseover', markerOver);
+				marker.on('click', markerClick);
+			}
+		});
+
+		var infoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(0, -30)});
+
+		//点击标注，展示自定义弹框
+		function markerOver(e) {
+			infoWindow.setContent(e.target.content);
+			infoWindow.open(map, e.target.getPosition());
+		}
+
+		function markerClick(e) {
+			// 用于页面传值
+			layui.data('project', {
+				key: 'projectno'
+				, value: e.target._id
+			});
+			layer.open({
+				type: 2,
+				title: "项目详情",
+				area: ['90%', '900px'],
+				maxmin: true,
+				scrollbar: false,
+				content: ['/content/' + e.target._id, 'yes']
+			});
+		}
+
+		$('.summary-btn').on('click', function () {
+			var projectno = $(this).val();
+			layui.data('project', {
+				key: 'projectno'
+				, value: projectno
+			});
+			layer.open({
+				type: 2,
+				title: "项目详情",
+				area: ['90%', '900px'],
+				maxmin: true,
+				scrollbar: false,
+				content: ['/content/' + projectno, 'yes']
+			});
+		});
+
+		var btnOnClick = function (projectno) {
+			layui.data('project', {
+				key: 'projectno'
+				, value: projectno
+			});
+			layer.open({
+				type: 2,
+				title: "项目详情",
+				area: ['90%', '900px'],
+				maxmin: true,
+				scrollbar: false,
+				content: ['/content/' + projectno, 'yes']
+			});
+		};
+
+		var active = {
+			set: function (othis) {
+				var THIS = 'layui-bg-normal'
+					, key = othis.data('key')
+					, options = {};
+
+				othis.css('background-color', '#5FB878').siblings().removeAttr('style');
+				options[key] = othis.data('value');
+			}
+		};
+
+		$('.sortBtnGroup .layui-btn').on('click', function () {
+			var othis = $(this), type = othis.data('type');
+			active[type] ? active[type].call(this, othis) : '';
+		});
+	});
 </script>
 </body>
 </html>

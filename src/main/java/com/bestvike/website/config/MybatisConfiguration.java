@@ -47,15 +47,15 @@ public class MybatisConfiguration implements ApplicationContextAware {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
         sqlSessionFactoryBean.setDataSource(dataSource());
         sqlSessionFactoryBean.setTypeAliasesPackage("com.bestvike.website.data");
-        sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath*:mapping/website/*.xml"));
+        sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath*:com/bestvike/website/mapping/*.xml"));
         tk.mybatis.mapper.session.Configuration configuration = new tk.mybatis.mapper.session.Configuration();
-        configuration.setMapUnderscoreToCamelCase(true);
+        configuration.setMapUnderscoreToCamelCase(false);
         sqlSessionFactoryBean.setConfiguration(configuration);
 
         // 分页插件
         Interceptor interceptor = new PageInterceptor();
         Properties properties = new Properties();
-        properties.setProperty("helperDialect", "mariadb");
+        properties.setProperty("helperDialect", "oracle");
         // properties.setProperty("offsetAsPageNum", "true");
         properties.setProperty("rowBoundsWithCount", "true");
         properties.setProperty("reasonable", "true");

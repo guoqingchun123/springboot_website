@@ -1,21 +1,18 @@
-package com.bestvike.website.service;
+package com.bestvike.website.dao;
 
-import com.bestvike.website.data.ArcCorpInfo;
 import com.bestvike.website.data.ArcProjectCoordinate;
 import com.bestvike.website.data.ArcProjectInfo;
 import com.bestvike.website.data.PerBaseInfo;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
+import org.springframework.stereotype.Repository;
+import tk.mybatis.mapper.common.Mapper;
 
-@Service
-public interface LayoutService {
+@Repository
+public interface ArcProjectCoordinateDao extends Mapper<ArcProjectCoordinate> {
 
 	public List<ArcProjectCoordinate> selectAllProject();
 
-	public ArcProjectInfo selectProject(String projectNo);
+	public ArcProjectInfo selectProjectByProjectNo(String projectNo);
 
 	public List<PerBaseInfo> selectPerBaseInfoByProjectNo(String projectNo);
-
-	public ArcCorpInfo selectCorpInfo(String corpNo);
 }
