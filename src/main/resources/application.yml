@@ -25,6 +25,7 @@ spring:
     encoding: UTF-8
     servlet:
       content-type: text/html
+    prefix: classpath:/templates/
 datasources:
   website:
     jdbc-url: jdbc:oracle:thin:@172.10.11.121:1521/orclgbk

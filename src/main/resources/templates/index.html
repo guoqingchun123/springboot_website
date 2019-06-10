@@ -55,8 +55,8 @@
 			center: [118.88683, 42.257692], //初始地图中心点（赤峰市政府）
 			showIndoorMap: false //关闭室内地图
 		});
-
-		$.get("/projects", {}, function (data) {
+		
+		$.get("/maps/projects", {}, function (data) {
 			layer.msg('共为您过滤出' + data.length + "个项目~~~");
 			for (var i = 0, marker; i < data.length; i++) {
 				var project = data[i];
@@ -103,7 +103,7 @@
 				area: ['90%', '900px'],
 				maxmin: true,
 				scrollbar: false,
-				content: ['/content/' + e.target._id, 'yes']
+				content: ['/maps/content/' + e.target._id, 'yes']
 			});
 		}
 
@@ -119,7 +119,7 @@
 				area: ['90%', '900px'],
 				maxmin: true,
 				scrollbar: false,
-				content: ['/content/' + projectno, 'yes']
+				content: ['/maps/content/' + projectno, 'yes']
 			});
 		});
 
@@ -134,7 +134,7 @@
 				area: ['90%', '900px'],
 				maxmin: true,
 				scrollbar: false,
-				content: ['/content/' + projectno, 'yes']
+				content: ['/maps/content/' + projectno, 'yes']
 			});
 		};
 

@@ -133,11 +133,11 @@
 		<div class="layui-tab-item">
 			<div class="layui-carousel" id="test10">
 				<div carousel-item="">
-					<div><img src="/themes/images/2.jpg"/></div>
-					<div><img src="/themes/images/3-1.jpg"/></div>
-					<div><img src="/themes/images/3-2.jpg"/></div>
-					<div><img src="/themes/images/4.jpg"/></div>
-					<div><img src="/themes/images/5.jpg"/></div>
+					<div><img th:src="@{/themes/images/2.jpg}"/></div>
+					<div><img th:src="@{/themes/images/3-1.jpg}"/></div>
+					<div><img th:src="@{/themes/images/3-2.jpg}"/></div>
+					<div><img th:src="@{/themes/images/4.jpg}"/></div>
+					<div><img th:src="@{/themes/images/5.jpg}"/></div>
 				</div>
 			</div>
 		</div>
@@ -257,7 +257,7 @@
 
 		table.render({
 			elem: '#perBaseInfoTb'
-			, url: '/perBaseInfos/' + projectno
+			, url: '/maps/perBaseInfos/' + projectno
 			, height: 780
 			, cellMinWidth: 80
 			, cols: [
