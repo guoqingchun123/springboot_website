@@ -56,7 +56,7 @@
 			showIndoorMap: false //关闭室内地图
 		});
 		
-		$.get("/maps/projects", {}, function (data) {
+		$.get("/projects", {}, function (data) {
 			layer.msg('共为您过滤出' + data.length + "个项目~~~");
 			for (var i = 0, marker; i < data.length; i++) {
 				var project = data[i];
@@ -103,7 +103,7 @@
 				area: ['90%', '900px'],
 				maxmin: true,
 				scrollbar: false,
-				content: ['/maps/content/' + e.target._id, 'yes']
+				content: ['/content/' + e.target._id, 'yes']
 			});
 		}
 
@@ -119,24 +119,9 @@
 				area: ['90%', '900px'],
 				maxmin: true,
 				scrollbar: false,
-				content: ['/maps/content/' + projectno, 'yes']
+				content: ['/content/' + projectno, 'yes']
 			});
 		});
-
-		var btnOnClick = function (projectno) {
-			layui.data('project', {
-				key: 'projectno'
-				, value: projectno
-			});
-			layer.open({
-				type: 2,
-				title: "项目详情",
-				area: ['90%', '900px'],
-				maxmin: true,
-				scrollbar: false,
-				content: ['/maps/content/' + projectno, 'yes']
-			});
-		};
 
 		var active = {
 			set: function (othis) {
