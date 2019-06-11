@@ -54,7 +54,7 @@
 			center: [118.916202, 42.271235], //初始地图中心点
 			resizeEnable: true, //是否监控地图容器尺寸变化
 			zoom: 9,
-			zooms:[8,18]
+			zooms:[8,15]
 		});
 
 		var toolBar = new AMap.ToolBar({
@@ -115,6 +115,8 @@
 					})
 				});
 
+				pointSimplifierIns.on('pointClick', markerClick);
+
 				distCluster.on('renderFinish', function (e, result) {
 					var features = result.features, //当前绘制的features
 						currentAdcodeExists = false;
@@ -138,7 +140,6 @@
 					//根据当前zoom调整点的尺寸
 					pointStyle.width = pointStyle.height = 2 * Math.pow(1.2, map.getZoom() - 3);
 				}
-
 				map.on('zoomend', function () {
 					refresh();
 				});
@@ -165,11 +166,11 @@
 			infoWindow.open(map, e.target.getPosition());
 		}
 
-		function markerClick(e) {
+		function markerClick(dataItem,number) {debugger
 			// 用于页面传值
 			layui.data('project', {
 				key: 'projectno'
-				, value: e.target._id
+				, value: number.data.dataItem.projectno
 			});
 			layer.open({
 				type: 2,
@@ -177,7 +178,7 @@
 				area: ['90%', '900px'],
 				maxmin: true,
 				scrollbar: false,
-				content: ['/content/' + e.target._id, 'yes']
+				content: ['/content/' + number.data.dataItem.projectno, 'yes']
 			});
 		}
 
