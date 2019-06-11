@@ -53,7 +53,8 @@
 		var map = new AMap.Map('container', {
 			center: [118.916202, 42.271235], //初始地图中心点
 			resizeEnable: true, //是否监控地图容器尺寸变化
-			zoom: 10
+			zoom: 9,
+			zooms:[8,18]
 		});
 
 		var toolBar = new AMap.ToolBar({
@@ -73,7 +74,7 @@
 						return item.position;
 					},
 					getHoverTitle: function (dataItem, idx) {
-						return idx + ': ' + dataItem.dataItem.projectname + "售价：" + dataItem.dataItem.averageprice;
+						return dataItem.dataItem.projectname + " 均价：" + dataItem.dataItem.averageprice;
 					},
 					renderOptions: {
 						//点的样式
@@ -101,8 +102,8 @@
 				var currentAdcode = null;
 
 				//监听区划面的点击
-				distCluster.on('featureClick', function (e, feature) {
-					currentAdcode = feature.properties.adcode;
+				distCluster.on('clusterMarkerClick', function (e, record) {
+					currentAdcode = record.feature.properties.adcode;
 					//获取该节点的聚合信息
 					distCluster.getClusterRecord(currentAdcode, function (error, result) {
 						//currentAdcode已经更新，有新的点击
