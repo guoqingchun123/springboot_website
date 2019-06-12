@@ -25,6 +25,11 @@ public class LayoutServiceImpl implements LayoutService {
 	}
 
 	@Override
+	public List<ArcProjectCoordinate> selectProjectByKeywords(String keywords) {
+		return arcProjectCoordinateDao.selectProjectByKeywords(keywords);
+	}
+
+	@Override
 	public ArcProjectInfo selectProject(String projectNo) {
 		return arcProjectCoordinateDao.selectProjectByProjectNo(projectNo);
 	}

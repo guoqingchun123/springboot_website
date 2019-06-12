@@ -12,6 +12,8 @@ public interface ArcProjectCoordinateDao extends Mapper<ArcProjectCoordinate> {
 
 	public List<ArcProjectCoordinate> selectAllProject();
 
+	public List<ArcProjectCoordinate> selectProjectByKeywords(String keywords);
+
 	public ArcProjectInfo selectProjectByProjectNo(String projectNo);
 
 	public List<PerBaseInfo> selectPerBaseInfoByProjectNo(String projectNo);

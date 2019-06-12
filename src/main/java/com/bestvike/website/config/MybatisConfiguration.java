@@ -54,7 +54,7 @@ public class MybatisConfiguration implements ApplicationContextAware {
         Resource[] resources = resolver.getResources("classpath*:com/bestvike/website/mapping/*.xml");
         sqlSessionFactoryBean.setMapperLocations(resources);
         tk.mybatis.mapper.session.Configuration configuration = new tk.mybatis.mapper.session.Configuration();
-        configuration.setMapUnderscoreToCamelCase(false);
+        configuration.setMapUnderscoreToCamelCase(true);
         sqlSessionFactoryBean.setConfiguration(configuration);
 
         // 分页插件

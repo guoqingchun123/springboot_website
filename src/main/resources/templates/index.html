@@ -6,13 +6,33 @@
 	<link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}"/>
 	<link th:href="@{/layui/css/layui.css}" rel="stylesheet" type="text/css">
 	<script type="text/javascript"
-			src="https://webapi.amap.com/maps?v=1.4.14&key=711b07f98b652cadccc69f4abd7ed455&plugin=AMap.Autocomplete,AMap.PlaceSearch,AMap.MarkerClusterer,AMap.ToolBar"></script>
+			src="https://webapi.amap.com/maps?v=1.4.14&key=711b07f98b652cadccc69f4abd7ed455&plugin=AMap.ToolBar,AMap.DistrictSearch"></script>
 	<script src="//webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
+	<style>
+		.division {
+			width: 120px;
+			height: 20px;
+			line-height: 20px;
+			font-size: 12px;
+			margin: 0 auto 10px;
+			text-align: center;
+			background-color: rgba(0, 167, 91, 0.9);
+			cursor: pointer;
+			color: #fff;
+			border-radius: 10%;
+		}
+		
+		.division:hover {
+			background-color: red;
+		}
+	</style>
 </head>
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
 	<div class="layui-header layui-bg-blue">
-		<div class="layui-logo" style="color: white">赤峰市房产信息网</div>
+		<div class="layui-logo" style="left: 15px">
+			<img th:src="@{/themes/images/logo.png}">
+		</div>
 	</div>
 	<div class="layui-col-md9">
 		<div id="container"></div>
@@ -42,282 +62,144 @@
 </div>
 <script th:src="@{/layui/layui.js}"></script>
 <script th:inline="javascript">
-	layui.use(['carousel', 'element', "layer"], function () {
+	var ctxPath = /*[[@{/}]]*/'';
+	var district = null;
+	var polygons = [];
+
+	layui.config({
+		base: '/layui/autocomplete/'
+	}).extend({ //设定模块别名
+		autocomplete: 'autocomplete'
+	});
+	layui.use(['carousel', 'element', 'layer', 'autocomplete'], function () {
 		var $ = layui.jquery;
 		var layer = layui.layer;
-
 		$("#container").height(window.innerHeight);
 		$(".layui-col-md3").height(window.innerHeight);
 
-		var area = ["阿鲁科尔沁旗", "巴林左旗", "巴林右旗", "克什克腾旗", "林西县", "翁牛特旗", "松山区", "宁城县", "红山区", "元宝山区", "喀喇沁旗", "敖汉旗"]
-		var LngLats=[
-			[120.094969,43.87877], [119.391737,43.980715], [118.678347,43.528963], [117.542465,43.256233], [118.05775,43.605326], [119.022619,42.937128], [118.938958,42.281046], [119.339242,41.598692], [118.961087,42.269732], [119.289877,42.041168], [118.708572,41.92778],
-			[119.906486,42.287012]
-		]
-		// 创建地图实例
-		var map = new AMap.Map("container", {
+		//创建地图
+		var map = new AMap.Map('container', {
 			center: [118.916202, 42.271235], //初始地图中心点
 			resizeEnable: true, //是否监控地图容器尺寸变化
 			zoom: 10,
 			zooms: [10, 15]
 		});
 
-		var toolBar = new AMap.ToolBar({
-			visible: true
+		map.on('zoomend', function () {
+			// 地图缩放，刷新业务数据
+			mapRefresh();
 		});
-		toolBar.hideDirection();
-		map.addControl(toolBar);
 
-		$.get("/projects", {}, function (data) {
-			layer.msg('共为您过滤出' + data.length + "个项目~~~");
+		map.on('complete', function () {
+			// 地图加载完成，刷新业务数据
+			mapRefresh();
+		});
 
-			addMap();
-			function addMap() {
-				for (i = 0; i < area.length; i++) {
-					var circleMarker = new AMap.CircleMarker({
-																 center:LngLats[i],
-																 radius:38,
-																 strokeColor:'white',
-																 strokeWeight:2,
-																 strokeOpacity:0.5,
-																 fillColor:'#3CB371',
-																 fillOpacity:1,
-																 zIndex:10,
-																 bubble:true,
-																 cursor:'pointer',
-																 clickable: true
-															 })
-					circleMarker.setMap(map)
-
-					// 点标记显示内容，HTML要素字符串
-					var markerContent =
-						'<div style="width:50px;background-color:#3CB371;color:#FFFAFA">' +
-						' <center>'+area[i]+'<br/>5641套<br/></center>' +
+		function mapRefresh() {
+			var zoom = map.getZoom();
+			if (zoom >= 14) { // 刷项目
+				map.clearMap();
+				// 获取项目加载点
+				$.get(ctxPath + "projects", {}, function (data) {
+					layer.msg('共为您过滤出' + data.length + "个项目~~~");
+					for (var i = 0; i < data.length; i++) {
+						var project = data[i];
+						if (isNaN(project.xcoordinate) || isNaN(project.ycoordinate)) {
+							continue;
+						}
+						if (project.xcoordinate == null || project.ycoordinate == null) {
+							continue;
+						}
+						console.info(project);
+						// 点标记显示内容，HTML要素字符串
+						var markerContent =
+							'<div class="division">' +
+							'' + project.projectname
 						'</div>';
-					//console.log(position);
-					var marker = new AMap.Marker({
-													 position: LngLats[i],
-													 // 将 html 传给 content
-													 content: markerContent,
-													 // 以 icon 的 [center bottom] 为原点
-													 offset: new AMap.Pixel(-25, -27)
-												 });
-					// 将 markers 添加到地图
-					map.add(marker);
-				}
+						var marker = new AMap.Marker({
+							position: [project.xcoordinate, project.ycoordinate],
+							content: markerContent,
+							// 以 icon 的 [center bottom] 为原点
+							offset: new AMap.Pixel(-25, -27)
+						});
+						// 将 markers 添加到地图
+						map.add(marker);
+					}
+				})
+			} else if (zoom <= 13) { // 刷行政区
+				map.clearMap();
+				// 获取行政区加载点
+				$.get(ctxPath + "divisions", {}, function (data) {
+					layer.msg('共为您过滤出' + data.length + "个行政区~~~");
+					for (var i = 0; i < data.length; i++) {
+						var division = data[i];
+
+						// 点标记显示内容，HTML要素字符串
+						var markerContent =
+							'<div class="division">' +
+							'' + division.divisionName
+							'</div>';
+						var marker = new AMap.Marker({
+							position: [division.x, division.y],
+							content: markerContent,
+							offset: new AMap.Pixel(-25, -27),
+							extData: {
+								division: division
+							}
+						});
+						// 将 markers 添加到地图
+						map.add(marker);
+						// 给marker附焦点事件
+						marker.on("mouseover", function () {
+							divisionMousemove($(this)[0]);
+						});
+						// 给marker附焦点事件
+						marker.on("mouseout", function () {
+							map.remove(polygons); // 清除上次结果
+							polygons = [];
+						});
+						// 给marker附点击事件
+						marker.on("click", function () {
+							map.setZoom(14);
+							mapRefresh();
+						});
+					}
+				})
 			}
-			function addMapPoint(){
-				for (var i = 0, marker; i < data.length; i++) {debugger
-					var project = data[i];
-					if (isNaN(project.xcoordinate) || isNaN(project.ycoordinate)) {
-						continue;
-					}
-					if (project.xcoordinate==null|| project.ycoordinate==null){
-						continue;
-					}
-					// 创建一个 Icon
-					var Icon = new AMap.Icon({
-												 // 图标尺寸
-												 size: new AMap.Size(50, 50),
-												 // 图标的取图地址
-												 image: '/themes/images/ld.png',
-												 // 图标所用图片大小
-												 imageSize: new AMap.Size(40, 40),
-												 // 图标取图偏移量
-												 imageOffset: new AMap.Pixel(-7, 0)
-											 });
-					marker = new AMap.Marker({
-												 icon: Icon,
-												 position: [parseFloat(project.xcoordinate), parseFloat(project.ycoordinate)],
-												 offset: new AMap.Pixel(-13, -30),
-												 map: map
-											 });
-					marker.content = "<div class=\"layui-card\">"
-									 + "<div class=\"layui-card-header\">"
-									 + project.projectname
-									 + "</div>"
-									 + "<div class=\"layui-card-body\">"
-									 + "<img src=\"https://pic4.ajkimg.com/display/xinfang/665944b5b39a56537506838714c4e8b4/129x115n.jpg\">"
-									 + "</div>"
-									 + "</div>";
-					marker._id = project.projectno;
-					marker.on('mouseover', markerOver);
-					marker.on('click', markerClick);
+		}
+		
+		function divisionMousemove(marker) {
+			var division = marker.getExtData().division;
+			if (!district) {
+				//实例化DistrictSearch
+				var opts = {
+					subdistrict: 0,   //获取边界不需要返回下级行政区
+					extensions: 'all',  //返回行政区边界坐标组等具体信息
+					level: 'district'  //查询行政级别为 市
 				};
-				var infoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(0, -30)});
-
-				//点击标注，展示自定义弹框
-				function markerOver(e) {
-					infoWindow.setContent(e.target.content);
-					infoWindow.open(map, e.target.getPosition());
-				}
-
-				function markerClick(e) {
-					// 用于页面传值
-					layui.data('project', {
-						key: 'projectno'
-						, value: e.target._id
-					});
-					layer.open({
-								   type: 2,
-								   title: "项目详情",
-								   area: ['90%', '900px'],
-								   maxmin: true,
-								   scrollbar: false,
-								   content: ['/content/' + e.target._id, 'yes']
-							   });
-				}
+				district = new AMap.DistrictSearch(opts);
 			}
-			map.on('zoomend', function () {
-				var zoo = map.getZoom();
-				if (zoo> 13) {
-					map.clearMap();
-					addMapPoint();
-				}else if (zoo <= 13) {
-					map.clearMap();
-					addMap();
+			//行政区查询
+			district.search(division.divisionName, function (status, result) {
+				map.remove(polygons)//清除上次结果
+				polygons = [];
+				var bounds = result.districtList[0].boundaries;
+				if (bounds) {
+					for (var i = 0, l = bounds.length; i < l; i++) {
+						//生成行政区划polygon
+						var polygon = new AMap.Polygon({
+							strokeWeight: 1,
+							path: bounds[i],
+							fillOpacity: 0.4,
+							fillColor: '#18ff41',
+							strokeColor: '#0bea9c'
+						});
+						polygons.push(polygon);
+					}
 				}
-			});
-
-			function initPage(DistrictCluster, PointSimplifier, $) {
-				var pointSimplifierIns = new PointSimplifier({
-					zIndex: 110,
-					autoSetFitView: false, //禁止自动更新地图视野
-					getPosition: function (item) {
-						return item.position;
-					},
-					getHoverTitle: function (dataItem, idx) {
-						return dataItem.dataItem.projectname + " 均价：" + dataItem.dataItem.averageprice;
-					},
-					renderOptions: {
-						//点的样式
-						pointStyle: {
-							width: 6,
-							height: 6,
-							fillStyle: 'rgba(153, 0, 153, 0.38)'
-						},
-						//鼠标hover时的title信息
-						hoverTitleStyle: {
-							position: 'top'
-						}
-					}
-				});
-
-				var distCluster = new DistrictCluster({
-					zIndex: 100,
-					getPosition: function (item) {
-						//返回经纬度
-						return [item.xcoordinate, item.ycoordinate];
-					},
-					topAdcodes: [150400] //赤峰市
-				});
-				var currentAdcode = null;
-
-				//监听区划面的点击
-				distCluster.on('clusterMarkerClick', function (e, record) {
-					currentAdcode = record.feature.properties.adcode;
-					//获取该节点的聚合信息
-					distCluster.getClusterRecord(currentAdcode, function (error, result) {
-						//currentAdcode已经更新，有新的点击
-						if (result.adcode !== currentAdcode) {
-							return;
-						}
-						//设置数据
-						pointSimplifierIns.setData(result.dataItems);
-
-					})
-				});
-
-				//pointSimplifierIns.on('pointClick', markerClick);
-
-				distCluster.on('renderFinish', function (e, result) {
-					var features = result.features, //当前绘制的features
-						currentAdcodeExists = false;
-					for (var i = 0, len = features.length; i < len; i++) {
-						if (currentAdcode === features[i].properties.adcode) {
-							currentAdcodeExists = true;
-							break;
-						}
-					}
-					if (!currentAdcodeExists) {
-						//如果当前adcode没有绘制，清除？
-						//pointSimplifierIns.setData(null);
-					}
-				});
-				window.distCluster = distCluster;
-
-				function refresh() {
-					var zoom = map.getZoom();
-					//获取 pointStyle
-					var pointStyle = pointSimplifierIns.getRenderOptions().pointStyle;
-					//根据当前zoom调整点的尺寸
-					pointStyle.width = pointStyle.height = 2 * Math.pow(1.2, map.getZoom() - 3);
-				}
-
-
-				refresh();
-
-				$('<div id="loadingTip">加载数据，请稍候...</div>').appendTo(document.body);
-				distCluster.setData(data);
-				// $.get('https://a.amap.com/amap-ui/static/data/10w.txt', function (csv) {
-				//
-				// });
-			}
-			//加载相关组件
-			AMapUI.load(['ui/geo/DistrictCluster', 'ui/misc/PointSimplifier', 'lib/$'], function (DistrictCluster, PointSimplifier, $) {
-				//启动页面
-				initPage(DistrictCluster, PointSimplifier, $);
-			});
-		});
-
-		function markerClick(dataItem, number) {
-			debugger
-			// 用于页面传值
-			layui.data('project', {
-				key: 'projectno'
-				, value: number.data.dataItem.projectno
-			});
-			layer.open({
-				type: 2,
-				title: "项目详情",
-				area: ['90%', '900px'],
-				maxmin: true,
-				scrollbar: false,
-				content: ['/content/' + number.data.dataItem.projectno, 'yes']
+				map.add(polygons)
 			});
 		}
-
-		$('.summary-btn').on('click', function () {
-			var projectno = $(this).val();
-			layui.data('project', {
-				key: 'projectno'
-				, value: projectno
-			});
-			layer.open({
-				type: 2,
-				title: "项目详情",
-				area: ['90%', '900px'],
-				maxmin: true,
-				scrollbar: false,
-				content: ['/content/' + projectno, 'yes']
-			});
-		});
-
-		var active = {
-			set: function (othis) {
-				var THIS = 'layui-bg-normal'
-					, key = othis.data('key')
-					, options = {};
-
-				othis.css('background-color', '#5FB878').siblings().removeAttr('style');
-				options[key] = othis.data('value');
-			}
-		};
-
-		$('.sortBtnGroup .layui-btn').on('click', function () {
-			var othis = $(this), type = othis.data('type');
-			active[type] ? active[type].call(this, othis) : '';
-		});
 	});
 </script>
 </body>

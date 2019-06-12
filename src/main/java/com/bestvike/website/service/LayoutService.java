@@ -13,6 +13,8 @@ public interface LayoutService {
 
 	public List<ArcProjectCoordinate> selectAllProject();
 
+	public List<ArcProjectCoordinate> selectProjectByKeywords(String keywords);
+
 	public ArcProjectInfo selectProject(String projectNo);
 
 	public List<PerBaseInfo> selectPerBaseInfoByProjectNo(String projectNo);

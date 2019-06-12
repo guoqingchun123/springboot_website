@@ -7,7 +7,13 @@
            FROM arc_project_coordinate t1 INNER JOIN arc_projectinfo t2 on t1.projectno = t2.projectno
         ]]>
     </select>
-
+	<select id = "selectProjectByKeywords" parameterType = "String" resultType = "ArcProjectCoordinate">
+		 <![CDATA[
+           SELECT t1.projectno, xcoordinate, ycoordinate, averageprice, popularity, projectname, address
+           FROM arc_project_coordinate t1 INNER JOIN arc_projectinfo t2 on t1.projectno = t2.projectno
+		   WHERE t2.projectname like #{keywords} or t2.address like #{keywords}
+        ]]>
+	</select>
 	<select id = "selectProjectByProjectNo" parameterType = "String" resultType = "ArcProjectInfo">
 		<![CDATA[
            SELECT t1.projectno, t1.projectname, t1.address, t1.corpno, t2.corpname, t1.bldnum, t1.coverarea, t1.plantotalarea, t1.plantotalinvest,
