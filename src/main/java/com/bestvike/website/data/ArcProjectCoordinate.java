@@ -4,53 +4,55 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
+@Table(name = "Arc_ProjectCoordinate")
 public class ArcProjectCoordinate implements Serializable {
 
 	@Id
-	private String projectno;
-	private String xcoordinate;
-	private String ycoordinate;
-	private BigDecimal averageprice;
+	private String projectNo;
+	private BigDecimal x;
+	private BigDecimal y;
+	private BigDecimal avgPrice;
 	private BigDecimal popularity;
 
 	@Transient
-	private String projectname;
+	private String projectName;
 	@Transient
 	private String address;
 
-	public String getProjectno() {
-		return projectno;
+	public String getProjectNo() {
+		return projectNo;
 	}
 
-	public void setProjectno(String projectno) {
-		this.projectno = projectno;
+	public void setProjectNo(String projectNo) {
+		this.projectNo = projectNo;
 	}
 
-	public String getXcoordinate() {
-		return xcoordinate;
+	public BigDecimal getX() {
+		return x;
 	}
 
-	public void setXcoordinate(String xcoordinate) {
-		this.xcoordinate = xcoordinate;
+	public void setX(BigDecimal x) {
+		this.x = x;
 	}
 
-	public String getYcoordinate() {
-		return ycoordinate;
+	public BigDecimal getY() {
+		return y;
 	}
 
-	public void setYcoordinate(String ycoordinate) {
-		this.ycoordinate = ycoordinate;
+	public void setY(BigDecimal y) {
+		this.y = y;
 	}
 
-	public BigDecimal getAverageprice() {
-		return averageprice;
+	public BigDecimal getAvgPrice() {
+		return avgPrice;
 	}
 
-	public void setAverageprice(BigDecimal averageprice) {
-		this.averageprice = averageprice;
+	public void setAvgPrice(BigDecimal avgPrice) {
+		this.avgPrice = avgPrice;
 	}
 
 	public BigDecimal getPopularity() {
@@ -61,12 +63,12 @@ public class ArcProjectCoordinate implements Serializable {
 		this.popularity = popularity;
 	}
 
-	public String getProjectname() {
-		return projectname;
+	public String getProjectName() {
+		return projectName;
 	}
 
-	public void setProjectname(String projectname) {
-		this.projectname = projectname;
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
 	}
 
 	public String getAddress() {
