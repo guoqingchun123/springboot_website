@@ -33,10 +33,10 @@ public class LayoutController extends BaseController {
 		return mv;
 	}
 
-	@GetMapping(value = "/content/{projectNo}")
-	public ModelAndView content(@PathVariable String projectNo) {
+	@GetMapping(value = "/content/{projectId}")
+	public ModelAndView content(@PathVariable String projectId) {
 		ModelAndView mv = new ModelAndView();
-		ArcProjectInfo arcProjectInfo = layoutService.selectProject(projectNo);
+		ArcProjectInfo arcProjectInfo = layoutService.selectProject(projectId);
 		mv.addObject("project", arcProjectInfo);
 		if (arcProjectInfo != null && !StringUtils.isEmpty(arcProjectInfo.getCorpno())) {
 			ArcCorpInfo arcCorpInfo = layoutService.selectCorpInfo(arcProjectInfo.getCorpno());

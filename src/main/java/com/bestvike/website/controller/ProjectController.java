@@ -2,7 +2,9 @@ package com.bestvike.website.controller;
 
 import com.bestvike.website.data.ArcProjectCoordinate;
 import com.bestvike.website.data.PerBaseInfo;
+import com.bestvike.website.data.ViewProjectinfo;
 import com.bestvike.website.service.LayoutService;
+import com.bestvike.website.service.ProjectService;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.HashMap;
@@ -12,10 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Created by lihua on 2016/9/30.
@@ -26,11 +26,23 @@ public class ProjectController extends BaseController {
 	@Autowired
 	private LayoutService layoutService;
 
+	@Autowired
+	private ProjectService projectService;
 
 	@GetMapping(value = "/projects")
 	public List<ArcProjectCoordinate> projects() {
 		List<ArcProjectCoordinate> listArcProjectCoordinate = layoutService.selectAllProject();
 		return listArcProjectCoordinate;
+	}
+
+	/**
+	 * 查询项目详情
+	 * @param projectId
+	 * @return
+	 */
+	@GetMapping(value = "/project/{projectId}")
+	public ViewProjectinfo project(@PathVariable String projectId) {
+		return projectService.project(projectId);
 	}
 
 	@GetMapping(value = "/perBaseInfos/{projectNo}")

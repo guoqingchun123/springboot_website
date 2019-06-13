@@ -12,7 +12,7 @@ import javax.persistence.Transient;
 public class ArcProjectCoordinate implements Serializable {
 
 	@Id
-	private String projectNo;
+	private String projectId;
 	private BigDecimal x;
 	private BigDecimal y;
 	private BigDecimal avgPrice;
@@ -23,12 +23,12 @@ public class ArcProjectCoordinate implements Serializable {
 	@Transient
 	private String address;
 
-	public String getProjectNo() {
-		return projectNo;
+	public String getProjectId() {
+		return projectId;
 	}
 
-	public void setProjectNo(String projectNo) {
-		this.projectNo = projectNo;
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
 	}
 
 	public BigDecimal getX() {

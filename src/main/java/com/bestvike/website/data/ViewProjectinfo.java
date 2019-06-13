@@ -8,7 +8,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
-@Table(name = "View_ProjectInfo")
+@Table(name = "v_view_projectinfo")
 public class ViewProjectinfo implements Serializable {
 
 	private static final long serialVersionUID = 5525452015062772372L;
