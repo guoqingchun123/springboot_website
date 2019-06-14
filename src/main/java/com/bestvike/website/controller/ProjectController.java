@@ -30,7 +30,7 @@ public class ProjectController extends BaseController {
 	private ProjectService projectService;
 
 	@GetMapping(value = "/projects")
-	public List<ArcProjectCoordinate> projects(@RequestParam String order) {
+	public List<ArcProjectCoordinate> projects(@RequestParam(required = false) String order) {
 		List<ArcProjectCoordinate> listArcProjectCoordinate = layoutService.selectAllProject(order);
 		return listArcProjectCoordinate;
 	}
