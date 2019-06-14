@@ -102,7 +102,7 @@
 		</div>
 		<div class="layui-col-md6" style="padding-right: 15px;">
 			<div style="float: right">
-				<input type='text' autocomplete="off" placeholder="请输入小区名称或小区地址进行检索" class="layui-input layui-input-search" name="auto-projects" id="auto-projects">
+				<input type='text' autocomplete="off" placeholder="请输入项目名称或项目地址进行检索" class="layui-input layui-input-search" name="auto-projects" id="auto-projects">
 				<a href=""><i class="layui-icon layui-icon-search"></i></a>
 			</div>
 		</div>
@@ -111,12 +111,12 @@
 		<div id="container"></div>
 	</div>
 	<div class="layui-col-md3 projects-card" style="overflow-y: auto">
-		<div class="layui-btn-group sortBtnGroup" style="margin-top: 5px;">
-			<button class="layui-btn layui-btn-sm" data-type="set" data-key="indicator" data-value="default" style="background-color: #5FB878;">默认</button>
-			<button class="layui-btn layui-btn-sm" data-type="set" data-key="indicator" data-value="popularity">人气</button>
-			<button class="layui-btn layui-btn-sm" data-type="set" data-key="indicator" data-value="price">售价</button>
+		<div class="layui-btn-group sortBtnGroup" style="padding-top: 5px;">
+			<button class="layui-btn" data-type="set" data-key="indicator" th:value="default" style="background-color: #5FB878;">默认</button>
+			<button class="layui-btn" data-type="set" data-key="indicator" th:value="popularity">人气</button>
+			<button class="layui-btn" data-type="set" data-key="indicator" th:value="price">售价</button>
 		</div>
-		<div class="layui-card" th:each="project : ${projects}">
+		<div class="layui-card project-search-list" th:each="project : ${projects}">
 			<div class="layui-card-header">
 				<div style="float: left;">
 					<label style="color: green;font-weight:bold" th:text="${project.projectName}"></label>&nbsp;&nbsp;
@@ -228,7 +228,7 @@
 							'<div class="project" id="' + project.projectId + 'Div">'
 							+ '<p class="project-text">' + project.projectName + '&nbsp;' + project.avgPrice + '元</p>'
 							+ '<i class="project-jiantou"></i>'
-						'</div>';
+							+ '</div>';
 						var marker = new AMap.Marker({
 							position: [project.x, project.y],
 							content: markerContent,
@@ -353,7 +353,7 @@
 				map.add(polygons)
 			});
 		}
-		
+
 		function projectShow(project) {
 			$(".projects-card").hide();
 			var options = {
@@ -384,6 +384,30 @@
 				window.open(ctxPath + 'content/' + project.projectId, '_blank');
 			});
 		}
+
+		var active = {
+			set: function (othis) {
+				var THIS = 'layui-bg-normal'
+					, key = othis.data('key')
+					, options = {};
+
+				othis.css('background-color', '#5FB878').siblings().removeAttr('style');
+				options[key] = othis.data('value');
+			}
+		};
+
+		$('.sortBtnGroup .layui-btn').on('click', function () {
+			var othis = $(this), type = othis.data('type');
+			active[type] ? active[type].call(this, othis) : '';
+			$.get(ctxPath + "projects", {}, function (data) {
+			
+			});
+		});
+
+		$('.summary-btn').on('click', function () {
+			var projectId = $(this).val();
+			window.open(ctxPath + 'content/' + projectId, '_blank');
+		});
 	});
 </script>
 </body>
