@@ -27,7 +27,7 @@ public class LayoutController extends BaseController {
 	@GetMapping(value = "/")
 	public ModelAndView index() {
 		ModelAndView mv = new ModelAndView();
-		List<ArcProjectCoordinate> listArcProjectCoordinate = layoutService.selectAllProject();
+		List<ArcProjectCoordinate> listArcProjectCoordinate = layoutService.selectAllProject("default");
 		mv.addObject("projects", listArcProjectCoordinate);
 		mv.setViewName("index");
 		return mv;

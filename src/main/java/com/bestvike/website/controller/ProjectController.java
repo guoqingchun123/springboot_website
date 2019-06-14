@@ -30,8 +30,8 @@ public class ProjectController extends BaseController {
 	private ProjectService projectService;
 
 	@GetMapping(value = "/projects")
-	public List<ArcProjectCoordinate> projects() {
-		List<ArcProjectCoordinate> listArcProjectCoordinate = layoutService.selectAllProject();
+	public List<ArcProjectCoordinate> projects(@RequestParam String order) {
+		List<ArcProjectCoordinate> listArcProjectCoordinate = layoutService.selectAllProject(order);
 		return listArcProjectCoordinate;
 	}
 
@@ -70,7 +70,7 @@ public class ProjectController extends BaseController {
 				paramterMap.put("type", "success");
 			}
 			else {
-				List<ArcProjectCoordinate> listArcProjectCoordinate = layoutService.selectAllProject();
+				List<ArcProjectCoordinate> listArcProjectCoordinate = layoutService.selectAllProject("default");
 				paramterMap.put("content", listArcProjectCoordinate);
 				paramterMap.put("code", "0");
 				paramterMap.put("type", "success");

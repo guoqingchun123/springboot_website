@@ -116,21 +116,7 @@
 			<button class="layui-btn" data-type="set" data-key="indicator" th:value="popularity">人气</button>
 			<button class="layui-btn" data-type="set" data-key="indicator" th:value="price">售价</button>
 		</div>
-		<div class="layui-card project-search-list" th:each="project : ${projects}">
-			<div class="layui-card-header">
-				<div style="float: left;">
-					<label style="color: green;font-weight:bold" th:text="${project.projectName}"></label>&nbsp;&nbsp;
-					¥<label style="color: red;font-weight:bold" th:text="${project.avgPrice}"></label>
-				</div>
-				<div style="float: right">
-					<button type="button" class="layui-btn layui-btn-primary summary-btn" th:value="${project.projectId}">查看详情</button>
-				</div>
-			</div>
-			<div class="layui-card-body">
-				<img src="https://pic4.ajkimg.com/display/xinfang/665944b5b39a56537506838714c4e8b4/129x115n.jpg">
-				项目地址：<label th:text="${project.address}"></label>
-			</div>
-		</div>
+		<div id="projectCardView" style=""></div>
 	</div>
 	<div class="layui-col-md3 project-form" style="overflow-y: hidden">
 		<div style="padding: 15px 15px 0 15px">
@@ -146,6 +132,26 @@
 		</div>
 	</div>
 </div>
+<script id="projectCardScript" type="text/html">
+	{{#  layui.each(d, function(index, item){ }}
+	<div class="layui-card">
+		<div class="layui-card-header">
+			<div style="float: left;">
+				<label style="color: green;font-weight:bold">{{item.projectName}}</label>&nbsp;&nbsp;
+				¥<label style="color: red;font-weight:bold">{{item.avgPrice}}</label>
+			</div>
+			<div style="float: right">
+				<button type="button" class="layui-btn layui-btn-primary summary-btn">查看详情</button>
+			</div>
+		</div>
+		<div class="layui-card-body">
+			<img src="https://pic4.ajkimg.com/display/xinfang/665944b5b39a56537506838714c4e8b4/129x115n.jpg">
+			项目地址：<label>{{item.address}}</label>
+		</div>
+	</div>
+	{{#  }); }}
+</script>
+
 <script th:src="@{/layui/layui.js}"></script>
 <script th:inline="javascript">
 	var ctxPath = /*[[@{/}]]*/'';
@@ -153,18 +159,27 @@
 	var polygons = [];
 	var infoWindow = null;
 
+	var projects = [[${projects}]];
+
 	layui.config({
 		base: ctxPath + 'layui/autocomplete/'
 	}).extend({ //设定模块别名
 		autocomplete: 'autocomplete'
 	});
-	layui.use(['carousel', 'element', 'layer', 'autocomplete'], function () {
+	layui.use(['carousel', 'element', 'layer', 'autocomplete', 'laytpl'], function () {
 		var $ = layui.jquery;
 		var layer = layui.layer;
 		var carousel = layui.carousel;
+		var laytpl = layui.laytpl;
 
-		$("#container").height(window.innerHeight);
-		$(".layui-col-md3").height(window.innerHeight);
+		var getTpl = document.getElementById("projectCardScript").innerHTML
+			, view = document.getElementById('projectCardView');
+		laytpl(getTpl).render(projects, function (html) {
+			view.innerHTML = html;
+		});
+
+		$("#container").height(window.innerHeight - 60);
+		$(".layui-col-md3").height(window.innerHeight - 60);
 
 		var autocomplete = layui.autocomplete;
 
@@ -291,7 +306,7 @@
 							+ '<p class="division-title">' + division.divisionName + '</p>'
 							+ '<p>' + division.avgPrice + '元</p>'
 							+ '<p>' + division.houseNum + '套</p>'
-						'</div>';
+							+ '</div>';
 						var marker = new AMap.Marker({
 							position: [division.x, division.y],
 							content: markerContent,
@@ -399,8 +414,10 @@
 		$('.sortBtnGroup .layui-btn').on('click', function () {
 			var othis = $(this), type = othis.data('type');
 			active[type] ? active[type].call(this, othis) : '';
-			$.get(ctxPath + "projects", {}, function (data) {
-			
+			$.get(ctxPath + "projects?order=" + othis.val(), {}, function (data) {
+				laytpl(getTpl).render(data, function (html) {
+					view.innerHTML = html;
+				});
 			});
 		});
 

@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace = "com.bestvike.website.dao.ArcProjectCoordinateDao">
-	<select id = "selectAllProject" resultType = "ArcProjectCoordinate">
+	<select id = "selectAllProject" parameterType = "String" resultType = "ArcProjectCoordinate">
         <![CDATA[
            SELECT t1.project_id, x, y, avg_price, popularity, project_name, address
            FROM arc_projectcoordinate t1 INNER JOIN view_projectinfo t2 on t1.project_id = t2.project_id
         ]]>
+		<choose>
+			<when test = "order == 'popularity'">
+				ORDER BY t1.popularity
+			</when>
+			<when test = "order == 'price'">
+				ORDER BY t1.avg_price
+			</when>
+			<otherwise>
+				ORDER BY t2.project_name
+			</otherwise>
+		</choose>
     </select>
 	<select id = "selectProjectByKeywords" parameterType = "String" resultType = "ArcProjectCoordinate">
 		 <![CDATA[

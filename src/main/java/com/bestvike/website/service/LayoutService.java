@@ -11,7 +11,7 @@ import java.util.List;
 @Service
 public interface LayoutService {
 
-	public List<ArcProjectCoordinate> selectAllProject();
+	public List<ArcProjectCoordinate> selectAllProject(String order);
 
 	public List<ArcProjectCoordinate> selectProjectByKeywords(String keywords);
 

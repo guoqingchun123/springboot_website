@@ -20,8 +20,8 @@ public class LayoutServiceImpl implements LayoutService {
 	private ArcCorpInfoDao arcCorpInfoDao;
 
 	@Override
-	public List<ArcProjectCoordinate> selectAllProject() {
-		return arcProjectCoordinateDao.selectAllProject();
+	public List<ArcProjectCoordinate> selectAllProject(String order) {
+		return arcProjectCoordinateDao.selectAllProject(order);
 	}
 
 	@Override
