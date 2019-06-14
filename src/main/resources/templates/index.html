@@ -129,7 +129,7 @@
 			</fieldset>
 			<div class="project-content"></div>
 			<button type="button" class="layui-btn layui-btn-normal">查看详情</button>
-			<button type="button" class="layui-btn layui-btn-primary">返回</button>
+			<button type="button" class="layui-btn layui-btn-primary layui-btn-back">返回</button>
 		</div>
 	</div>
 </div>
@@ -395,6 +395,8 @@
 				+ '<p class="layui-elem-quote">绿化率：' + project.greeningRate + '</p>'
 			);
 
+			$(".project-form").show();
+
 			// 跳转到新页面
 			$(".layui-btn-normal").on("click", function () {
 				window.open(ctxPath + 'content/' + project.projectId, '_blank');
@@ -425,6 +427,11 @@
 		$('.summary-btn').on('click', function () {
 			var projectId = $(this).val();
 			window.open(ctxPath + 'content/' + projectId, '_blank');
+		});
+
+		$(".layui-btn-back").on('click', function () {
+			$(".projects-card").show();
+			$(".project-form").hide();
 		});
 	});
 </script>
