@@ -47,6 +47,15 @@
 			<div class="project-content"></div>
 			<button type="button" class="layui-btn layui-btn-normal">查看详情</button>
 			<button type="button" class="layui-btn layui-btn-primary layui-btn-back">返回</button>
+			<button type="button" class="layui-btn layui-btn-primary">返回</button>
+			<div>
+				<button type="button" class="layui-btn " id="alterCoo">修改坐标</button>
+			</div>
+			<div class="layui-input-block" hidden >
+				<label for="">坐标：</label>
+				<input type="text" readonly="true" id="lnglat" placeholder="请点击地图选取坐标" autocomplete="off" class="layui-input">
+				<button type="button" class="layui-btn " id="submitCoo">提交坐标</button>
+			</div>
 		</div>
 	</div>
 </div>
@@ -317,6 +326,21 @@
 			// 跳转到新页面
 			$(".layui-btn-normal").on("click", function () {
 				window.open(ctxPath + 'content/' + project.projectId, '_blank');
+			});
+			$("#alterCoo").on("click", function () {
+				$(".layui-input-block").toggle();
+				map.on('click', function(e) {
+					document.getElementById("lnglat").value = e.lnglat.getLng() + ',' + e.lnglat.getLat();
+				});
+			});
+			$("#submitCoo").click(function () {
+				var submitCoo = document.getElementById("lnglat").value;
+				$.post(ctxPath + "alterCoo",{
+					projectId:project.projectId,
+					submitCoo:submitCoo
+				},function () {
+					mapRefresh();
+				});
 			});
 		}
 

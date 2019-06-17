@@ -7,9 +7,13 @@ import com.bestvike.website.data.ArcProjectCoordinate;
 import com.bestvike.website.data.ArcProjectInfo;
 import com.bestvike.website.data.PerBaseInfo;
 import com.bestvike.website.service.LayoutService;
+
+import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import tk.mybatis.mapper.entity.Example;
 
 @Service
 public class LayoutServiceImpl implements LayoutService {
@@ -27,6 +31,18 @@ public class LayoutServiceImpl implements LayoutService {
 	@Override
 	public List<ArcProjectCoordinate> selectProjectByKeywords(String keywords) {
 		return arcProjectCoordinateDao.selectProjectByKeywords(keywords);
+	}
+
+	@Override
+	public int updateProjectByKeywords(String keywords,String submitCoo) {
+
+		ArcProjectCoordinate arcProjectCoordinate = new ArcProjectCoordinate();
+		String[] subStr = submitCoo.split(",");
+		arcProjectCoordinate.setX(new BigDecimal(subStr[0]));
+		arcProjectCoordinate.setY(new BigDecimal(subStr[1]));
+		Example example = new Example(ArcProjectCoordinate.class);
+		example.createCriteria().andEqualTo("projectId",keywords);
+		return arcProjectCoordinateDao.updateByExampleSelective(arcProjectCoordinate,example);
 	}
 
 	@Override

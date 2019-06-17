@@ -5,17 +5,20 @@ import com.bestvike.website.data.PerBaseInfo;
 import com.bestvike.website.data.ViewProjectinfo;
 import com.bestvike.website.service.LayoutService;
 import com.bestvike.website.service.ProjectService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Created by lihua on 2016/9/30.
@@ -45,6 +48,12 @@ public class ProjectController extends BaseController {
 		return projectService.project(projectId);
 	}
 
+	@PostMapping(value = "/alterCoo")
+	public int alterCoo(@RequestParam String projectId, @RequestParam(required = false) String submitCoo) {
+
+		return layoutService.updateProjectByKeywords(projectId, submitCoo);
+	}
+
 	@GetMapping(value = "/perBaseInfos/{projectNo}")
 	public Map<String, Object> perBaseInfos(@PathVariable String projectNo) {
 		List<PerBaseInfo> perBaseInfos = layoutService.selectPerBaseInfoByProjectNo(projectNo);
@@ -68,8 +77,7 @@ public class ProjectController extends BaseController {
 				paramterMap.put("content", listArcProjectCoordinate);
 				paramterMap.put("code", "0");
 				paramterMap.put("type", "success");
-			}
-			else {
+			} else {
 				List<ArcProjectCoordinate> listArcProjectCoordinate = layoutService.selectAllProject("default");
 				paramterMap.put("content", listArcProjectCoordinate);
 				paramterMap.put("code", "0");
