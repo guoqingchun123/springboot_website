@@ -5,282 +5,149 @@
 	<title>赤峰市房产信息网</title>
 	<link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}"/>
 	<link th:href="@{/layui/css/layui.css}" rel="stylesheet" type="text/css">
-	<link th:href="@{/themes/css/content.css}" rel="stylesheet" type="text/css">
+	<link th:href="@{/layui/autocomplete/autocomplete.css}" rel="stylesheet" type="text/css">
+	<link th:href="@{/layui/css/index.css}" rel="stylesheet" type="text/css">
 </head>
-<body class="layui-layout-body">
-<div class="layui-tab layui-tab-card">
-	<ul class="layui-tab-title">
-		<li class="layui-this">项目详情</li>
-		<li>预售证详情</li>
-		<li>开发企业详情</li>
-		<li>户型图</li>
-		<li>在线预订</li>
-	</ul>
-	<div class="layui-tab-content" style="min-height: 780px;">
-		<div class="layui-tab-item layui-show">
-			<div class="layui-form-item">
-				<label class="layui-form-label form-table-title">项目名称</label>
-				<div class="layui-input-block form-table-content">
-					<input type="text" class="layui-input" disabled="disabled" th:value="${project.projectname}">
-				</div>
+<body class="layui-layout-body" style="min-width: 1000px;overflow-x: auto;overflow-y: auto;background: #f1f1f1">
+<div class="layui-layout layui-layout-admin">
+	<div class="layui-header layui-bg-blue" style="position: fixed;width: 100%;">
+		<div class="layui-col-md3" style="padding-left: 15px;padding-top: 15px">
+			<img th:src="@{/themes/images/logo.png}">
+		</div>
+		<div class="layui-col-md9" style="padding-right: 15px;">
+			<div style="float: right">
+				<input type='text' autocomplete="off" placeholder="请输入项目名称或项目地址检索" class="layui-input layui-input-search" name="auto-projects" id="auto-projects">
+				<a href=""><i class="layui-icon layui-icon-search"></i></a>
 			</div>
-			<div class="layui-form-item">
-				<label class="layui-form-label form-table-title">开发企业</label>
-				<div class="layui-input-block form-table-content">
-					<input type="text" class="layui-input" disabled="disabled" th:value="${project.corpname}">
-				</div>
+		</div>
+	</div>
+	<div id="layui-body" data-anim="layui-anim-upbit" style="width: 1000px;margin:0 auto;padding-top: 60px;">
+		<div id="test1" class="layui-carousel" style="padding-top: 20px; background-color: #F2F2F2;">
+			<div carousel-item>
+				<div><img src="http://localhost:8001/api/file/f771e1bc7d4b492f80ea30d81af01f4c"></div>
+				<div><img src="http://localhost:8001/api/file/ef907f1ebfec4980ab54158f5590e2f9"></div>
+				<div><img src="http://localhost:8001/api/file/ee8f101e6ffe44519bc8d930e8fe7d7b"></div>
 			</div>
-			<div class="layui-form-item">
-				<label class="layui-form-label form-table-title">项目地址</label>
-				<div class="layui-input-block">
-					<input type="text" class="layui-input" disabled="disabled" th:value="${project.address}">
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<div class="layui-inline" style="width: 45%">
-					<label class="layui-form-label form-table-title">售楼处电话</label>
-					<div class="layui-input-inline" style="width:85%">
-						<input type="text" name="phone" class="layui-input" disabled="disabled" th:value="${project.salephoneno}">
+		</div>
+		<div style="padding-top: 20px; background-color: #F2F2F2;">
+			<div class="layui-row layui-col-space15">
+				<div class="layui-col-md9">
+					<div class="layui-card">
+						<div class="layui-card-header">项目详情</div>
+						<div class="layui-card-body">
+							<p class="layui-elem-quote" th:text="'项目名称：' + ${project.projectName}"></p>
+							<p class="layui-elem-quote" th:text="'项目地址：' + ${project.address}"></p>
+							<p class="layui-elem-quote" th:text="'销售均价：' + ${project.avgPrice} + '元/㎡'"></p>
+							<p class="layui-elem-quote" th:text="'价格区间：' + ${project.minPrice} + '-' + ${project.maxPrice} + '元/㎡'"></p>
+							<p class="layui-elem-quote" th:text="'楼栋数：' + ${project.bldNum}"></p>
+							<p class="layui-elem-quote" th:text="'绿化率：' + ${project.greeningRate}"></p>
+						</div>
 					</div>
 				</div>
-				<div class="layui-inline" style="width: 45%">
-					<label class="layui-form-label form-table-title">售楼处地址</label>
-					<div class="layui-input-inline" style="width:85%">
-						<input type="text" name="phone" class="layui-input" disabled="disabled" th:value="${project.saleaddress}">
-					</div>
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<div class="layui-inline" style="width: 45%">
-					<label class="layui-form-label form-table-title">楼栋数</label>
-					<div class="layui-input-inline" style="width:85%">
-						<input type="text" name="phone" class="layui-input" disabled="disabled" th:value="${project.bldnum}">
-					</div>
-				</div>
-				<div class="layui-inline" style="width: 45%">
-					<label class="layui-form-label form-table-title">占地面积</label>
-					<div class="layui-input-inline" style="width:85%">
-						<input type="text" name="phone" class="layui-input" disabled="disabled" th:value="${project.coverarea}">
-					</div>
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<div class="layui-inline" style="width: 45%">
-					<label class="layui-form-label form-table-title">开工日期</label>
-					<div class="layui-input-inline" style="width:85%">
-						<input type="text" name="phone" class="layui-input" disabled="disabled" th:value="${project.opendate}">
-					</div>
-				</div>
-				<div class="layui-inline" style="width: 45%">
-					<label class="layui-form-label form-table-title">交房日期</label>
-					<div class="layui-input-inline" style="width:85%">
-						<input type="text" name="phone" class="layui-input" disabled="disabled" th:value="${project.admitdate}">
+				<div class="layui-col-md3">
+					<div class="layui-card">
+						<div class="layui-card-header">项目大事记</div>
+						<div class="layui-card-body">
+							<ul class="layui-timeline">
+								<li class="layui-timeline-item">
+									<i class="layui-icon layui-timeline-axis"></i>
+									<div class="layui-timeline-content layui-text">
+										<div class="layui-timeline-title" th:text="${project.heatingDate} + '供暖，' + ${project.aerationDate} + '供气！'"></div>
+									</div>
+								</li>
+								<li class="layui-timeline-item">
+									<i class="layui-icon layui-timeline-axis"></i>
+									<div class="layui-timeline-content layui-text">
+										<div class="layui-timeline-title" th:text="${project.finishDate} + '项目竣工...'"></div>
+									</div>
+								</li>
+								<li class="layui-timeline-item">
+									<i class="layui-icon layui-timeline-axis"></i>
+									<div class="layui-timeline-content layui-text">
+										<div class="layui-timeline-title" th:text="${project.bodyFinishDate} + '主体完工...'"></div>
+									</div>
+								</li>
+								<li class="layui-timeline-item">
+									<i class="layui-icon layui-timeline-axis"></i>
+									<div class="layui-timeline-content layui-text">
+										<div class="layui-timeline-title" th:text="${project.basicFinishDate} + '基础完工...'"></div>
+									</div>
+								</li>
+								<li class="layui-timeline-item">
+									<i class="layui-icon layui-timeline-axis"></i>
+									<div class="layui-timeline-content layui-text">
+										<div class="layui-timeline-title" th:text="${project.startDate} + '项目开工...'"></div>
+									</div>
+								</li>
+							</ul>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="layui-tab-item">
-			<table class="layui-hide" id="perBaseInfoTb" lay-filter="perBaseInfos"></table>
-		</div>
-		<div class="layui-tab-item">
-			<div class="layui-form-item">
-				<label class="layui-form-label form-table-title">开发企业</label>
-				<div class="layui-input-block form-table-content">
-					<input type="text" class="layui-input" disabled="disabled" th:value="${corp.corpname}">
+		<div class="layui-tab layui-tab-brief" style="padding-top: 20px;background: #ffffff">
+			<ul class="layui-tab-title">
+				<li class="layui-this">楼盘详情</li>
+				<li>预售证信息</li>
+				<li>开发企业信息</li>
+				<li>户型图</li>
+				<li>楼盘相册</li>
+			</ul>
+			<div class="layui-tab-content" style="min-height: 500px;">
+				<div class="layui-tab-item layui-show">
+				
 				</div>
+				<div class="layui-tab-item">2</div>
+				<div class="layui-tab-item">3</div>
+				<div class="layui-tab-item">4</div>
+				<div class="layui-tab-item">5</div>
+				<div class="layui-tab-item">6</div>
 			</div>
-			<div class="layui-form-item">
-				<label class="layui-form-label form-table-title">统一社会信用代码</label>
-				<div class="layui-input-block form-table-content">
-					<input type="text" class="layui-input" disabled="disabled" th:value="${corp.licenseno}">
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<label class="layui-form-label form-table-title">注册地址</label>
-				<div class="layui-input-block">
-					<input type="text" class="layui-input" disabled="disabled" th:value="${corp.registeraddress}">
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<div class="layui-inline" style="width: 45%">
-					<label class="layui-form-label form-table-title">联系人电话</label>
-					<div class="layui-input-inline" style="width:85%">
-						<input type="text" name="phone" class="layui-input" disabled="disabled" th:value="${corp.getPhoneno()}">
-					</div>
-				</div>
-				<div class="layui-inline" style="width: 45%">
-					<label class="layui-form-label form-table-title">联系人姓名</label>
-					<div class="layui-input-inline" style="width:85%">
-						<input type="text" name="phone" class="layui-input" disabled="disabled" th:value="${corp.getContactname()}">
-					</div>
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<div class="layui-inline" style="width: 45%">
-					<label class="layui-form-label form-table-title">法人姓名</label>
-					<div class="layui-input-inline" style="width:85%">
-						<input type="text" name="phone" class="layui-input" disabled="disabled" th:value="${corp.getLegalname()}">
-					</div>
-				</div>
-				<div class="layui-inline" style="width: 45%">
-					<label class="layui-form-label form-table-title">法人证件号</label>
-					<div class="layui-input-inline" style="width:85%">
-						<input type="text" name="phone" class="layui-input" disabled="disabled" th:value="${corp.getLegalcertno()}">
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="layui-tab-item">
-			<div class="layui-carousel" id="test10">
-				<div carousel-item="">
-					<div><img th:src="@{/themes/images/2.jpg}"/></div>
-					<div><img th:src="@{/themes/images/3-1.jpg}"/></div>
-					<div><img th:src="@{/themes/images/3-2.jpg}"/></div>
-					<div><img th:src="@{/themes/images/4.jpg}"/></div>
-					<div><img th:src="@{/themes/images/5.jpg}"/></div>
-				</div>
-			</div>
-		</div>
-		<div class="layui-tab-item">
-			<form class="layui-form" action="">
-				<div class="layui-form-item">
-					<label class="layui-form-label form-table-title">选择户型</label>
-					<div class="layui-input-block">
-						<input type="checkbox" name="like[write]" title="二居室">
-						<input type="checkbox" name="like[read]" title="三居室" checked="">
-						<input type="checkbox" name="like[game]" title="四居室">
-						<input type="checkbox" name="like[game]" title="其他">
-					</div>
-				</div>
-				<div class="layui-form-item">
-					<label class="layui-form-label form-table-title">建筑面积</label>
-					<div class="layui-input-block">
-						<input type="checkbox" name="like[50]" title="50㎡以内">
-						<input type="checkbox" name="like[70]" title="50-70㎡" checked="">
-						<input type="checkbox" name="like[90]" title="70-90㎡">
-						<input type="checkbox" name="like[120]" title="90-120㎡">
-						<input type="checkbox" name="like[140]" title="120㎡以上">
-					</div>
-				</div>
-				<div class="layui-form-item">
-					<label class="layui-form-label form-table-title">购房预算</label>
-					<div class="layui-input-block">
-						<input type="checkbox" name="like[50]" title="50万以内">
-						<input type="checkbox" name="like[70]" title="50-70万" checked="">
-						<input type="checkbox" name="like[90]" title="70-90万">
-						<input type="checkbox" name="like[120]" title="90-120万">
-						<input type="checkbox" name="like[140]" title="120万以上">
-					</div>
-				</div>
-				<div class="layui-form-item">
-					<label class="layui-form-label form-table-title">楼层属性</label>
-					<div class="layui-input-block">
-						<input type="checkbox" name="like[50]" title="多层">
-						<input type="checkbox" name="like[70]" title="小高层" checked="">
-						<input type="checkbox" name="like[90]" title="高层">
-						<input type="checkbox" name="like[120]" title="别墅">
-						<input type="checkbox" name="like[140]" title="其他">
-					</div>
-				</div>
-				<div class="layui-form-item">
-					<label class="layui-form-label form-table-title">房屋列表</label>
-					<div class="layui-input-block">
-						<select name="modules" lay-verify="required" lay-search="">
-							<option value="">直接选择或搜索选择</option>
-							<option value="1">1#1单元1032【562150元】</option>
-							<option value="2">1#1单元1032【562150元】</option>
-							<option value="3">1#1单元1032【562150元】</option>
-							<option value="4">1#1单元1032【562150元】</option>
-							<option value="5">2#1单元1032【562150元】</option>
-							<option value="6">2#1单元1032【562150元】</option>
-							<option value="7">2#1单元1032【562150元】</option>
-							<option value="8">2#1单元1032【562150元】</option>
-							<option value="9">2#1单元1032【562150元】</option>
-							<option value="10">3#1单元1032【562150元】</option>
-							<option value="11">3#1单元1032【562150元】</option>
-							<option value="12">3#1单元1032【562150元】</option>
-						</select>
-					</div>
-				</div>
-				<div class="layui-form-item">
-					<div class="layui-inline" style="width: 45%">
-						<label class="layui-form-label form-table-title">购房人</label>
-						<div class="layui-input-inline" style="width:85%">
-							<input type="text" name="phone" class="layui-input" autocomplete="off">
-						</div>
-					</div>
-					<div class="layui-inline" style="width: 45%">
-						<label class="layui-form-label form-table-title">身份证号码</label>
-						<div class="layui-input-inline" style="width:85%">
-							<input type="text" name="phone" class="layui-input" autocomplete="off">
-						</div>
-					</div>
-				</div>
-				<div class="layui-form-item">
-					<div class="layui-inline" style="width: 45%">
-						<label class="layui-form-label form-table-title">手机号码</label>
-						<div class="layui-input-inline" style="width:85%">
-							<input type="text" name="phone" class="layui-input" autocomplete="off">
-						</div>
-					</div>
-					<div class="layui-inline" style="width: 45%">
-						<label class="layui-form-label form-table-title">短信验证码</label>
-						<div class="layui-input-inline">
-							<input type="text" name="phone" class="layui-input" autocomplete="off">
-						</div>
-						<div class="layui-form-mid" style="padding: 0!important;">
-							<button type="button" class="layui-btn layui-btn-normal" id="FLY-getvercode">获取验证码</button>
-						</div>
-					</div>
-				</div>
-				<button type="button" class="layui-btn layui-btn-lg">在线预订</button>
-			</form>
 		</div>
 	</div>
 </div>
+</body>
 <script th:src="@{/layui/layui.js}"></script>
 <script th:inline="javascript">
-	layui.use(['element', 'table', 'carousel'], function () {
-		var projectno = layui.data('project').projectno;
+	var ctxPath = /*[[@{/}]]*/'';
+	layui.config({
+		base: ctxPath + 'layui/autocomplete/'
+	}).extend({ //设定模块别名
+		autocomplete: 'autocomplete'
+	});
+	layui.use(['carousel', 'element', 'layer', 'autocomplete', 'laytpl'], function () {
+		var $ = layui.jquery;
+		var autocomplete = layui.autocomplete;
 
-		var $ = layui.jquery
-			, element = layui.element
-			, table = layui.table
-			, carousel = layui.carousel;
+		$("#layui-body").height(window.innerHeight - 60);
+
+		// auto 快速定位，过滤小区
+		autocomplete.render({
+			elem: $('#auto-projects')[0],
+			url: ctxPath + 'auto-projects',
+			template_val: '{{d.projectName}}',
+			template_txt: '{{d.projectName}} <span class=\'layui-badge layui-bg-gray\'>{{d.address}}</span>',
+			onselect: function (resp) {
+				// 跳转到选择的项目详情页面
+				window.location.href = ctxPath + 'content/' + resp.projectId;
+			}
+		});
+
+		var carousel = layui.carousel;
+		//建造实例
+		carousel.render({
+			elem: '#test1'
+			, width: '100%' //设置容器宽度
+			, arrow: 'always' //始终显示箭头
+		});
 
 		var layid = location.hash.replace(/^#tab=/, '');
+		var element = layui.element;
 		element.tabChange('tab', layid);
 
 		element.on('tab(tab)', function (elem) {
 			location.hash = 'tab=' + $(this).attr('lay-id');
 		});
-
-		table.render({
-			elem: '#perBaseInfoTb'
-			, url: /*[[@{/}]]*/ + 'perBaseInfos/' + projectno
-			, height: 780
-			, cellMinWidth: 80
-			, cols: [
-				[
-					{field: 'presellno', title: '预售证号', width: 100}
-					, {field: 'bldfunction', title: '楼栋属性', sort: true, width: 100}
-					, {field: 'totalnum', title: '批准户数', width: 100}
-					, {field: 'totalarea', title: '批准面积', width: 100}
-					, {field: 'startdate', title: '许可开始日期', width: 120}
-					, {field: 'stopdate', title: '许可截止日期', width: 120}
-					, {field: 'address', title: '项目位置'}
-				]
-			]
-		});
-
-		//图片轮播
-		carousel.render({
-			elem: '#test10'
-			, width: '900px'
-			, height: '760px'
-			, interval: 5000
-		});
 	});
 </script>
-</body>
 </html>

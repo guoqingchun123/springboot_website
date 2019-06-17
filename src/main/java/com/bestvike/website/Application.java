@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.bestvike.website"})
-@ServletComponentScan(basePackages = {"com.bestvike.file"})
+@ServletComponentScan(basePackages = {"com.bestvike.website"})
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);

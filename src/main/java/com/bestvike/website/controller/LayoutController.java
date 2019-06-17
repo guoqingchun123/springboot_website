@@ -4,7 +4,9 @@ import com.bestvike.website.data.ArcCorpInfo;
 import com.bestvike.website.data.ArcProjectCoordinate;
 import com.bestvike.website.data.ArcProjectInfo;
 import com.bestvike.website.data.PerBaseInfo;
+import com.bestvike.website.data.ViewProjectinfo;
 import com.bestvike.website.service.LayoutService;
+import com.bestvike.website.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -23,6 +25,8 @@ public class LayoutController extends BaseController {
 
 	@Autowired
 	private LayoutService layoutService;
+	@Autowired
+	private ProjectService projectService;
 
 	@GetMapping(value = "/")
 	public ModelAndView index() {
@@ -36,10 +40,10 @@ public class LayoutController extends BaseController {
 	@GetMapping(value = "/content/{projectId}")
 	public ModelAndView content(@PathVariable String projectId) {
 		ModelAndView mv = new ModelAndView();
-		ArcProjectInfo arcProjectInfo = layoutService.selectProject(projectId);
-		mv.addObject("project", arcProjectInfo);
-		if (arcProjectInfo != null && !StringUtils.isEmpty(arcProjectInfo.getCorpno())) {
-			ArcCorpInfo arcCorpInfo = layoutService.selectCorpInfo(arcProjectInfo.getCorpno());
+		ViewProjectinfo viewProjectinfo = projectService.project(projectId);
+		mv.addObject("project", viewProjectinfo);
+		if (viewProjectinfo != null && !StringUtils.isEmpty(viewProjectinfo.getDeveloperNo())) {
+			ArcCorpInfo arcCorpInfo = layoutService.selectCorpInfo(viewProjectinfo.getDeveloperNo());
 			mv.addObject("corp", arcCorpInfo);
 		}
 
