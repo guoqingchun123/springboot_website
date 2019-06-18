@@ -1,23 +1,22 @@
 package com.bestvike.website.service;
 
-import com.bestvike.website.data.ArcCorpInfo;
-import com.bestvike.website.data.ArcProjectCoordinate;
-import com.bestvike.website.data.ArcProjectInfo;
-import com.bestvike.website.data.PerBaseInfo;
-import org.springframework.stereotype.Service;
-
+import com.bestvike.website.data.ViewCorpInfo;
+import com.bestvike.website.data.ViewPresalecard;
+import com.bestvike.website.data.ViewProjectInfo;
+import com.bestvike.website.data.ViewRegionInfo;
 import java.util.List;
+import org.springframework.stereotype.Service;
 
 @Service
 public interface LayoutService {
 
-	public List<ArcProjectCoordinate> selectAllProject(String order);
+	public List<ViewRegionInfo> selectAllRegions(String order);
 
-	public List<ArcProjectCoordinate> selectProjectByKeywords(String keywords);
+	public List<ViewProjectInfo> selectProjectByKeywords(String keywords);
 
-	public ArcProjectInfo selectProject(String projectNo);
+	public ViewProjectInfo selectProject(String projectNo);
 
-	public List<PerBaseInfo> selectPerBaseInfoByProjectNo(String projectNo);
+	public List<ViewPresalecard> selectPerBaseInfoByProjectNo(String projectNo);
 
-	public ArcCorpInfo selectCorpInfo(String corpNo);
+	public ViewCorpInfo selectCorpInfo(String corpNo);
 }

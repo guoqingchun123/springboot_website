@@ -1,13 +1,16 @@
 package com.bestvike.website.service.impl;
 
-import com.bestvike.website.dao.ArcCorpInfoDao;
-import com.bestvike.website.dao.ArcProjectCoordinateDao;
-import com.bestvike.website.data.ArcCorpInfo;
-import com.bestvike.website.data.ArcProjectCoordinate;
-import com.bestvike.website.data.ArcProjectInfo;
-import com.bestvike.website.data.PerBaseInfo;
+import com.bestvike.website.dao.ViewCorpInfoDao;
+import com.bestvike.website.dao.ViewProjectInfoDao;
+import com.bestvike.website.dao.ViewRegionInfoDao;
+import com.bestvike.website.data.ViewCorpInfo;
+import com.bestvike.website.data.ViewPresalecard;
+import com.bestvike.website.data.ViewProjectInfo;
+import com.bestvike.website.data.ViewRegionInfo;
 import com.bestvike.website.service.LayoutService;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,32 +18,36 @@ import org.springframework.stereotype.Service;
 public class LayoutServiceImpl implements LayoutService {
 
 	@Autowired
-	private ArcProjectCoordinateDao arcProjectCoordinateDao;
+	private ViewRegionInfoDao viewRegionInfoDao;
 	@Autowired
-	private ArcCorpInfoDao arcCorpInfoDao;
+	private ViewProjectInfoDao viewProjectInfoDao;
+	@Autowired
+	private ViewCorpInfoDao viewCorpInfoDao;
 
 	@Override
-	public List<ArcProjectCoordinate> selectAllProject(String order) {
-		return arcProjectCoordinateDao.selectAllProject(order);
+	public List<ViewRegionInfo> selectAllRegions(String order) {
+		Map<String, Object> maps = new HashMap<>();
+		maps.put("order", order);
+		return viewRegionInfoDao.selectAllRegions(maps);
 	}
 
 	@Override
-	public List<ArcProjectCoordinate> selectProjectByKeywords(String keywords) {
-		return arcProjectCoordinateDao.selectProjectByKeywords(keywords);
+	public List<ViewProjectInfo> selectProjectByKeywords(String keywords) {
+		return viewProjectInfoDao.selectProjectByKeywords(keywords);
 	}
 
 	@Override
-	public ArcProjectInfo selectProject(String projectNo) {
-		return arcProjectCoordinateDao.selectProjectByProjectNo(projectNo);
+	public ViewProjectInfo selectProject(String projectNo) {
+		return viewProjectInfoDao.selectProjectByProjectNo(projectNo);
 	}
 
 	@Override
-	public List<PerBaseInfo> selectPerBaseInfoByProjectNo(String projectNo) {
-		return arcProjectCoordinateDao.selectPerBaseInfoByProjectNo(projectNo);
+	public List<ViewPresalecard> selectPerBaseInfoByProjectNo(String projectNo) {
+		return viewProjectInfoDao.selectPerBaseInfoByProjectNo(projectNo);
 	}
 
 	@Override
-	public ArcCorpInfo selectCorpInfo(String corpNo) {
-		return arcCorpInfoDao.selectByPrimaryKey(corpNo);
+	public ViewCorpInfo selectCorpInfo(String corpNo) {
+		return viewCorpInfoDao.selectByPrimaryKey(corpNo);
 	}
 }

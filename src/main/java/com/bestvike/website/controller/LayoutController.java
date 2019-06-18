@@ -1,21 +1,16 @@
 package com.bestvike.website.controller;
 
-import com.bestvike.website.data.ArcCorpInfo;
-import com.bestvike.website.data.ArcProjectCoordinate;
-import com.bestvike.website.data.ArcProjectInfo;
-import com.bestvike.website.data.PerBaseInfo;
-import com.bestvike.website.data.ViewProjectinfo;
+import com.bestvike.website.data.ViewCorpInfo;
+import com.bestvike.website.data.ViewRegionInfo;
 import com.bestvike.website.service.LayoutService;
 import com.bestvike.website.service.ProjectService;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.List;
 
 /**
  * Created by lihua on 2016/9/30.
@@ -31,22 +26,26 @@ public class LayoutController extends BaseController {
 	@GetMapping(value = "/")
 	public ModelAndView index() {
 		ModelAndView mv = new ModelAndView();
-		List<ArcProjectCoordinate> listArcProjectCoordinate = layoutService.selectAllProject("default");
-		mv.addObject("projects", listArcProjectCoordinate);
+		List<ViewRegionInfo> listViewRegionInfo = layoutService.selectAllRegions("default");
+		mv.addObject("regions", listViewRegionInfo);
 		mv.setViewName("index");
 		return mv;
 	}
 
-	@GetMapping(value = "/content/{projectId}")
-	public ModelAndView content(@PathVariable String projectId) {
+	@GetMapping(value = "/maps")
+	public ModelAndView maps() {
 		ModelAndView mv = new ModelAndView();
-		ViewProjectinfo viewProjectinfo = projectService.project(projectId);
-		mv.addObject("project", viewProjectinfo);
-		if (viewProjectinfo != null && !StringUtils.isEmpty(viewProjectinfo.getDeveloperNo())) {
-			ArcCorpInfo arcCorpInfo = layoutService.selectCorpInfo(viewProjectinfo.getDeveloperNo());
-			mv.addObject("corp", arcCorpInfo);
-		}
+		List<ViewRegionInfo> listViewRegionInfo = layoutService.selectAllRegions("default");
+		mv.addObject("regions", listViewRegionInfo);
+		mv.setViewName("maps");
+		return mv;
+	}
 
+	@GetMapping(value = "/content/{regionId}")
+	public ModelAndView content(@PathVariable String regionId) {
+		ModelAndView mv = new ModelAndView();
+		ViewRegionInfo viewRegionInfo = projectService.region(regionId);
+		mv.addObject("region", viewRegionInfo);
 		mv.setViewName("content");
 		return mv;
 	}

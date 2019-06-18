@@ -6,7 +6,6 @@
 	<link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}"/>
 	<link th:href="@{/layui/css/layui.css}" rel="stylesheet" type="text/css">
 	<link th:href="@{/layui/autocomplete/autocomplete.css}" rel="stylesheet" type="text/css">
-	<link th:href="@{/layui/css/index.css}" rel="stylesheet" type="text/css">
 </head>
 <body class="layui-layout-body" style="min-width: 1000px;overflow-x: auto;overflow-y: auto;background: #f1f1f1">
 <div class="layui-layout layui-layout-admin">
@@ -16,7 +15,7 @@
 		</div>
 		<div class="layui-col-md9" style="padding-right: 15px;">
 			<div style="float: right">
-				<input type='text' autocomplete="off" placeholder="请输入项目名称或项目地址检索" class="layui-input layui-input-search" name="auto-projects" id="auto-projects">
+				<input type='text' autocomplete="off" placeholder="请输入项目名称或项目地址检索" class="layui-input layui-input-search" name="auto-regions" id="auto-regions">
 				<a href=""><i class="layui-icon layui-icon-search"></i></a>
 			</div>
 		</div>
@@ -35,52 +34,15 @@
 					<div class="layui-card">
 						<div class="layui-card-header">项目详情</div>
 						<div class="layui-card-body">
-							<p class="layui-elem-quote" th:text="'项目名称：' + ${project.projectName}"></p>
-							<p class="layui-elem-quote" th:text="'项目地址：' + ${project.address}"></p>
-							<p class="layui-elem-quote" th:text="'销售均价：' + ${project.avgPrice} + '元/㎡'"></p>
-							<p class="layui-elem-quote" th:text="'价格区间：' + ${project.minPrice} + '-' + ${project.maxPrice} + '元/㎡'"></p>
-							<p class="layui-elem-quote" th:text="'楼栋数：' + ${project.bldNum}"></p>
-							<p class="layui-elem-quote" th:text="'绿化率：' + ${project.greeningRate}"></p>
+							<p class="layui-elem-quote" th:text="'项目名称：' + ${region.regionName}"></p>
+							<p class="layui-elem-quote" th:text="'项目地址：' + ${region.address}"></p>
+							<p class="layui-elem-quote" th:text="'销售均价：' + ${region.avgPrice} + '元/㎡'"></p>
+							<p class="layui-elem-quote" th:text="'绿化率：' + ${region.greeningRate}"></p>
 						</div>
 					</div>
 				</div>
 				<div class="layui-col-md3">
 					<div class="layui-card">
-						<div class="layui-card-header">项目大事记</div>
-						<div class="layui-card-body">
-							<ul class="layui-timeline">
-								<li class="layui-timeline-item">
-									<i class="layui-icon layui-timeline-axis"></i>
-									<div class="layui-timeline-content layui-text">
-										<div class="layui-timeline-title" th:text="${project.heatingDate} + '供暖，' + ${project.aerationDate} + '供气！'"></div>
-									</div>
-								</li>
-								<li class="layui-timeline-item">
-									<i class="layui-icon layui-timeline-axis"></i>
-									<div class="layui-timeline-content layui-text">
-										<div class="layui-timeline-title" th:text="${project.finishDate} + '项目竣工...'"></div>
-									</div>
-								</li>
-								<li class="layui-timeline-item">
-									<i class="layui-icon layui-timeline-axis"></i>
-									<div class="layui-timeline-content layui-text">
-										<div class="layui-timeline-title" th:text="${project.bodyFinishDate} + '主体完工...'"></div>
-									</div>
-								</li>
-								<li class="layui-timeline-item">
-									<i class="layui-icon layui-timeline-axis"></i>
-									<div class="layui-timeline-content layui-text">
-										<div class="layui-timeline-title" th:text="${project.basicFinishDate} + '基础完工...'"></div>
-									</div>
-								</li>
-								<li class="layui-timeline-item">
-									<i class="layui-icon layui-timeline-axis"></i>
-									<div class="layui-timeline-content layui-text">
-										<div class="layui-timeline-title" th:text="${project.startDate} + '项目开工...'"></div>
-									</div>
-								</li>
-							</ul>
-						</div>
 					</div>
 				</div>
 			</div>
@@ -95,13 +57,36 @@
 			</ul>
 			<div class="layui-tab-content" style="min-height: 500px;">
 				<div class="layui-tab-item layui-show">
-				
+					<img th:src="@{/themes/images/bldview.jpg}"/>
 				</div>
-				<div class="layui-tab-item">2</div>
-				<div class="layui-tab-item">3</div>
-				<div class="layui-tab-item">4</div>
-				<div class="layui-tab-item">5</div>
-				<div class="layui-tab-item">6</div>
+				<div class="layui-tab-item">
+					<img th:src="@{/themes/images/cert.jpg}" style="width: 80%"/>
+				</div>
+				<div class="layui-tab-item">
+					<img th:src="@{/themes/images/cert.jpg}" style="width: 80%"/>
+				</div>
+				<div class="layui-tab-item">
+					<div class="layui-carousel" id="test10">
+						<div carousel-item="">
+							<div><img th:src="@{/themes/images/png01.jpg}" style="width: 80%"/></div>
+							<div><img th:src="@{/themes/images/png02.jpg}" style="width: 80%"/></div>
+							<div><img th:src="@{/themes/images/png03.jpg}" style="width: 80%"/></div>
+							<div><img th:src="@{/themes/images/png04.jpg}" style="width: 80%"/></div>
+							<div><img th:src="@{/themes/images/png05.jpg}" style="width: 80%"/></div>
+						</div>
+					</div>
+				</div>
+				<div class="layui-tab-item">
+					<div class="layui-carousel" id="test11">
+						<div carousel-item="">
+							<div><img th:src="@{/themes/images/proj01.jpg}" style="width: 80%"/></div>
+							<div><img th:src="@{/themes/images/proj02.jpg}" style="width: 80%"/></div>
+							<div><img th:src="@{/themes/images/proj03.jpg}" style="width: 80%"/></div>
+							<div><img th:src="@{/themes/images/proj04.jpg}" style="width: 80%"/></div>
+							<div><img th:src="@{/themes/images/proj05.jpg}" style="width: 80%"/></div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -123,13 +108,13 @@
 
 		// auto 快速定位，过滤小区
 		autocomplete.render({
-			elem: $('#auto-projects')[0],
-			url: ctxPath + 'auto-projects',
-			template_val: '{{d.projectName}}',
-			template_txt: '{{d.projectName}} <span class=\'layui-badge layui-bg-gray\'>{{d.address}}</span>',
+			elem: $('#auto-regions')[0],
+			url: ctxPath + 'auto-regions',
+			template_val: '{{d.regionName}}',
+			template_txt: '{{d.regionName}} <span class=\'layui-badge layui-bg-gray\'>{{d.address}}</span>',
 			onselect: function (resp) {
 				// 跳转到选择的项目详情页面
-				window.location.href = ctxPath + 'content/' + resp.projectId;
+				window.location.href = ctxPath + 'content/' + resp.regionId;
 			}
 		});
 
@@ -147,6 +132,22 @@
 
 		element.on('tab(tab)', function (elem) {
 			location.hash = 'tab=' + $(this).attr('lay-id');
+		});
+
+		//图片轮播
+		carousel.render({
+			elem: '#test10'
+			, width: '900px'
+			, height: '760px'
+			, interval: 5000
+		});
+
+		//图片轮播
+		carousel.render({
+			elem: '#test11'
+			, width: '900px'
+			, height: '760px'
+			, interval: 5000
 		});
 	});
 </script>

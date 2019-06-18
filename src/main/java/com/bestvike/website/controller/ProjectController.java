@@ -1,8 +1,8 @@
 package com.bestvike.website.controller;
 
-import com.bestvike.website.data.ArcProjectCoordinate;
-import com.bestvike.website.data.PerBaseInfo;
-import com.bestvike.website.data.ViewProjectinfo;
+import com.bestvike.website.data.ViewPresalecard;
+import com.bestvike.website.data.ViewProjectInfo;
+import com.bestvike.website.data.ViewRegionInfo;
 import com.bestvike.website.service.LayoutService;
 import com.bestvike.website.service.ProjectService;
 import java.io.UnsupportedEncodingException;
@@ -29,25 +29,26 @@ public class ProjectController extends BaseController {
 	@Autowired
 	private ProjectService projectService;
 
-	@GetMapping(value = "/projects")
-	public List<ArcProjectCoordinate> projects(@RequestParam(required = false) String order) {
-		List<ArcProjectCoordinate> listArcProjectCoordinate = layoutService.selectAllProject(order);
-		return listArcProjectCoordinate;
+	@GetMapping(value = "/regions")
+	public List<ViewRegionInfo> regions(@RequestParam(required = false) String order) {
+		List<ViewRegionInfo> listRegionInfo = layoutService.selectAllRegions(order);
+		return listRegionInfo;
 	}
 
 	/**
 	 * 查询项目详情
-	 * @param projectId
+	 *
+	 * @param regionId
 	 * @return
 	 */
-	@GetMapping(value = "/project/{projectId}")
-	public ViewProjectinfo project(@PathVariable String projectId) {
-		return projectService.project(projectId);
+	@GetMapping(value = "/region/{regionId}")
+	public ViewRegionInfo project(@PathVariable String regionId) {
+		return projectService.region(regionId);
 	}
 
 	@GetMapping(value = "/perBaseInfos/{projectNo}")
 	public Map<String, Object> perBaseInfos(@PathVariable String projectNo) {
-		List<PerBaseInfo> perBaseInfos = layoutService.selectPerBaseInfoByProjectNo(projectNo);
+		List<ViewPresalecard> perBaseInfos = layoutService.selectPerBaseInfoByProjectNo(projectNo);
 		Map<String, Object> paramterMap = new HashMap<>();
 		paramterMap.put("code", "0");
 		paramterMap.put("msg", "查询成功");
@@ -64,14 +65,13 @@ public class ProjectController extends BaseController {
 			keywords = URLDecoder.decode(keywords, "UTF-8");
 			if (!StringUtils.isEmpty(keywords)) {
 				keywords = "%" + keywords + "%";
-				List<ArcProjectCoordinate> listArcProjectCoordinate = layoutService.selectProjectByKeywords(keywords);
-				paramterMap.put("content", listArcProjectCoordinate);
+				List<ViewProjectInfo> listViewProjectInfo = layoutService.selectProjectByKeywords(keywords);
+				paramterMap.put("content", listViewProjectInfo);
 				paramterMap.put("code", "0");
 				paramterMap.put("type", "success");
-			}
-			else {
-				List<ArcProjectCoordinate> listArcProjectCoordinate = layoutService.selectAllProject("default");
-				paramterMap.put("content", listArcProjectCoordinate);
+			} else {
+//				List<ViewProjectInfo> listViewProjectInfo = layoutService.selectAllProject("default");
+//				paramterMap.put("content", listViewProjectInfo);
 				paramterMap.put("code", "0");
 				paramterMap.put("type", "success");
 			}

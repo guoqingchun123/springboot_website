@@ -1,10 +1,10 @@
 package com.bestvike.website.service;
 
-import com.bestvike.website.data.ViewProjectinfo;
+import com.bestvike.website.data.ViewRegionInfo;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface ProjectService {
 
-	public ViewProjectinfo project(String projectId);
+	public ViewRegionInfo region(String regionId);
 }

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "com.bestvike.website.dao.ViewProjectInfoDao">
+	<select id = "selectAllProject" parameterType = "Map" resultType = "ViewProjectInfo">
+		<![CDATA[
+           SELECT t1.project_id, x, y, avg_price, popularity, project_name, address
+           FROM view_regionInfo t1 INNER JOIN view_projectinfo t2 on t1.project_id = t2.project_id
+        ]]>
+		<choose>
+			<when test = "order == 'popularity'">
+				ORDER BY t1.popularity
+			</when>
+			<when test = "order == 'price'">
+				ORDER BY t2.avg_price
+			</when>
+			<otherwise>
+				ORDER BY t2.project_name
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id = "selectProjectByKeywords" parameterType = "String" resultType = "ViewProjectInfo">
+		 <![CDATA[
+           SELECT t1.project_id, x, y, avg_price, popularity, address, t2.project_name
+           FROM proj_coordinate t1 INNER JOIN view_projectinfo t2 on t1.project_id = t2.project_id
+		   WHERE t2.project_name like #{keywords} or t2.address like #{keywords}
+        ]]>
+	</select>
+
+	<select id = "selectProjectByProjectNo" parameterType = "String" resultType = "ViewProjectInfo">
+		<![CDATA[
+           SELECT t1.project_id, t1.project_name, t1.address, t1.developer_no,
+	           t1.developer_name, t1.bld_num
+           FROM view_projectInfo t1
+           WHERE t1.project_id = #{projectId}
+        ]]>
+	</select>
+	<select id = "selectPerBaseInfoByProjectNo" parameterType = "String" resultType = "ViewPresalecard">
+		<![CDATA[
+        	SELECT t1.presale_no, t1.address, t1.bld_function, t1.total_num, t1.total_area, t1.start_date,
+        	t1.stop_date
+        	FROM view_preSaleCard t1
+        	WHERE t1.project_id = #{projectId}
+        ]]>
+	</select>
+</mapper>
