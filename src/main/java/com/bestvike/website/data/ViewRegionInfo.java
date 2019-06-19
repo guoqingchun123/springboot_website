@@ -2,6 +2,8 @@ package com.bestvike.website.data;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -23,6 +25,8 @@ public class ViewRegionInfo implements Serializable {
 	private String remark;
 
 	@Transient
+	private String houseNum;
+	@Transient
 	private String salePhone;
 	@Transient
 	private String areaRange;
@@ -32,6 +36,12 @@ public class ViewRegionInfo implements Serializable {
 	private BigDecimal avgPrice;
 	@Transient
 	private String greeningRate;
+	@Transient
+	private List<Map<String, Object>> salesData;
+	@Transient
+	private List<Map<String, Object>> listHouseHold;
+	@Transient
+	private List<Map<String, Object>> listCellList;
 
 	public String getRegionId() {
 		return regionId;
@@ -127,5 +137,37 @@ public class ViewRegionInfo implements Serializable {
 
 	public void setGreeningRate(String greeningRate) {
 		this.greeningRate = greeningRate;
+	}
+
+	public List<Map<String, Object>> getSalesData() {
+		return salesData;
+	}
+
+	public void setSalesData(List<Map<String, Object>> salesData) {
+		this.salesData = salesData;
+	}
+
+	public String getHouseNum() {
+		return houseNum;
+	}
+
+	public void setHouseNum(String houseNum) {
+		this.houseNum = houseNum;
+	}
+
+	public List<Map<String, Object>> getListHouseHold() {
+		return listHouseHold;
+	}
+
+	public void setListHouseHold(List<Map<String, Object>> listHouseHold) {
+		this.listHouseHold = listHouseHold;
+	}
+
+	public List<Map<String, Object>> getListCellList() {
+		return listCellList;
+	}
+
+	public void setListCellList(List<Map<String, Object>> listCellList) {
+		this.listCellList = listCellList;
 	}
 }

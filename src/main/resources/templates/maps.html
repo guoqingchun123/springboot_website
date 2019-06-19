@@ -78,7 +78,7 @@
 				map.setZoom("14"); //设置地图层级
 				map.panTo([resp.x, resp.y]);
 				// 刷新获取region详情数据
-				$.get(ctxPath + "region/" + resp.region, {}, function (data) {
+				$.get(ctxPath + "region/" + resp.regionId, {}, function (data) {
 					regionShow(data);
 				});
 			}

@@ -6,6 +6,82 @@
 	<link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}"/>
 	<link th:href="@{/layui/css/layui.css}" rel="stylesheet" type="text/css">
 	<link th:href="@{/layui/autocomplete/autocomplete.css}" rel="stylesheet" type="text/css">
+	<link th:href="@{/layui/css/maps.css}" rel="stylesheet" type="text/css">
+	<style>
+		.room-list {
+			margin: 5px;
+			width: 150px;
+			color: #333;
+			font-size: 14px;
+			line-height: 32px;
+			cursor: pointer;
+			position: relative;
+			display: inline-block;
+		}
+		
+		.bg-gdcd {
+			height: 32px;
+			background: #dcdddd;
+			font-size: 16px;
+			padding: 0 8px;
+			font-weight: bold;
+		}
+		
+		.saled {
+			background: #007bdd;
+		}
+		
+		.bg-gdcd span {
+			border: 1px solid #959595;
+			padding: 0 5px;
+			font-size: 14px;
+			margin: 0 5px;
+			font-weight: normal;
+		}
+		
+		.m-bott {
+			padding: 6px;
+			line-height: 20px;
+			border: 1px solid #dcdddd;
+		}
+		
+		.room-content {
+			width: 260px;
+			position: absolute;
+			z-index: 999;
+			top: -120px;
+			left: 160px;
+			display: none;
+		}
+		
+		.room-list:hover .room-content {
+			display: block;
+			z-index: 999;
+		}
+		
+		.content-box {
+			background: #fff;
+			padding: 15px;
+			box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+			border-radius: 5px;
+		}
+		
+		.content-box p {
+			margin: 0;
+			color: #999;
+		}
+		
+		.content-box p span {
+			color: #333;
+		}
+		
+		.box-title span {
+			font-size: 14px;
+			margin-left: 8px;
+			border: 1px solid #959595;
+			padding: 0 5px;
+		}
+	</style>
 </head>
 <body class="layui-layout-body" style="min-width: 1000px;overflow-x: auto;overflow-y: auto;background: #f1f1f1">
 <div class="layui-layout layui-layout-admin">
@@ -20,79 +96,199 @@
 			</div>
 		</div>
 	</div>
-	<div id="layui-body" data-anim="layui-anim-upbit" style="width: 1000px;margin:0 auto;padding-top: 60px;">
-		<div id="test1" class="layui-carousel" style="padding-top: 20px; background-color: #F2F2F2;">
-			<div carousel-item>
-				<div><img src="http://localhost:8001/api/file/f771e1bc7d4b492f80ea30d81af01f4c"></div>
-				<div><img src="http://localhost:8001/api/file/ef907f1ebfec4980ab54158f5590e2f9"></div>
-				<div><img src="http://localhost:8001/api/file/ee8f101e6ffe44519bc8d930e8fe7d7b"></div>
+	<div id="layui-body" data-anim="layui-anim-upbit" style="width: 75%;min-width: 1000px;margin:0 auto;padding-top: 65px;">
+		<div style="width: 100%;height:60px;background-color: white;padding-top: 15px;line-height: 60px;">
+			<div class="layui-col-md3" style="padding-left: 15px">
+				<h1 th:text="${region.regionName}"></h1>
+			</div>
+			<div class="layui-col-md9">
+				<span class="layui-breadcrumb" lay-separator="|" style="font-size: 30px">
+				  <a href="">楼盘销售情况</a>
+				  <a href="">户型图</a>
+				  <a href="">项目相册</a>
+				</span>
 			</div>
 		</div>
-		<div style="padding-top: 20px; background-color: #F2F2F2;">
-			<div class="layui-row layui-col-space15">
-				<div class="layui-col-md9">
-					<div class="layui-card">
-						<div class="layui-card-header">项目详情</div>
-						<div class="layui-card-body">
-							<p class="layui-elem-quote" th:text="'项目名称：' + ${region.regionName}"></p>
-							<p class="layui-elem-quote" th:text="'项目地址：' + ${region.address}"></p>
-							<p class="layui-elem-quote" th:text="'销售均价：' + ${region.avgPrice} + '元/㎡'"></p>
-							<p class="layui-elem-quote" th:text="'绿化率：' + ${region.greeningRate}"></p>
-						</div>
-					</div>
-				</div>
-				<div class="layui-col-md3">
-					<div class="layui-card">
+		<div style="width: 100%;background-color: white;margin-top: 10px;height:auto;overflow:hidden">
+			<div class="layui-col-md6" style="height: 210px">
+				<div id="layui-sales-echarts" style="height: 200px"></div>
+			</div>
+			<div id="layuiSalesProgress" class="layui-col-md6" style="padding-top: 15px"></div>
+		</div>
+		<div style="width: 100%;background-color: white;margin-top: 10px;height:auto;">
+			
+			<div id="houseCardContainer"></div>
+		</div>
+	</div>
+</div>
+<script id="layuiSalesProgressScript" type="text/html">
+	{{#  layui.each(d, function(index, item){ }}
+	<div class="layui-elem-quote" style="width: 85%">{{item.HOUSE_HOLD}}，
+		共<label style="color: red;font-size: large">{{item.TOTAL_NUM}}</label>户，已售出<label style="color: #005aff;font-size: large">{{item.SELL_NUM}}</label>户
+	</div>
+	{{#  }); }}
+</script>
+<script id="houseCardScript" type="text/html">
+	{{#  layui.each(d, function(index, item){ }}
+	<div class="layui-card">
+		<div class="layui-card-header">
+			<div style="float: left;">
+				<label style="color: green;font-weight:bold;font-size: large">{{index + 1}}层</label>
+			</div>
+			<div style="float: right">
+				<button type="button" class="layui-btn layui-btn-primary summary-btn" value="{{=item.regionId }}">更多详情</button>
+			</div>
+		</div>
+		<div class="layui-card-body">
+			<div class="room-list">
+				<div class="bg-gdcd">401<span>待售</span></div>
+				<div class="m-bott">面积：118.56m²</div>
+				<div class="room-content">
+					<img class="content-top" th:src="@{/themes/images/houseTitle.png}"/>
+					<div class="content-box">
+						<div class="box-title"><span>住宅</span><span>待售</span></div>
+						<p>套内面积：<span>89.84㎡</span>
+						<p>户型：<span>两室两厅</span>
+						<p>售价：<span>837483.33元</span>
 					</div>
 				</div>
 			</div>
-		</div>
-		<div class="layui-tab layui-tab-brief" style="padding-top: 20px;background: #ffffff">
-			<ul class="layui-tab-title">
-				<li class="layui-this">楼盘详情</li>
-				<li>预售证信息</li>
-				<li>开发企业信息</li>
-				<li>户型图</li>
-				<li>楼盘相册</li>
-			</ul>
-			<div class="layui-tab-content" style="min-height: 500px;">
-				<div class="layui-tab-item layui-show">
-					<img th:src="@{/themes/images/bldview.jpg}"/>
-				</div>
-				<div class="layui-tab-item">
-					<img th:src="@{/themes/images/cert.jpg}" style="width: 80%"/>
-				</div>
-				<div class="layui-tab-item">
-					<img th:src="@{/themes/images/cert.jpg}" style="width: 80%"/>
-				</div>
-				<div class="layui-tab-item">
-					<div class="layui-carousel" id="test10">
-						<div carousel-item="">
-							<div><img th:src="@{/themes/images/png01.jpg}" style="width: 80%"/></div>
-							<div><img th:src="@{/themes/images/png02.jpg}" style="width: 80%"/></div>
-							<div><img th:src="@{/themes/images/png03.jpg}" style="width: 80%"/></div>
-							<div><img th:src="@{/themes/images/png04.jpg}" style="width: 80%"/></div>
-							<div><img th:src="@{/themes/images/png05.jpg}" style="width: 80%"/></div>
-						</div>
+			<div class="room-list">
+				<div class="bg-gdcd">401<span>待售</span></div>
+				<div class="m-bott">面积：118.56m²</div>
+				<div class="room-content">
+					<img class="content-top" th:src="@{/themes/images/houseTitle.png}"/>
+					<div class="content-box">
+						<div class="box-title"><span>住宅</span><span>待售</span></div>
+						<p>套内面积：<span>89.84㎡</span>
+						<p>户型：<span>两室两厅</span>
+						<p>售价：<span>837483.33元</span>
 					</div>
 				</div>
-				<div class="layui-tab-item">
-					<div class="layui-carousel" id="test11">
-						<div carousel-item="">
-							<div><img th:src="@{/themes/images/proj01.jpg}" style="width: 80%"/></div>
-							<div><img th:src="@{/themes/images/proj02.jpg}" style="width: 80%"/></div>
-							<div><img th:src="@{/themes/images/proj03.jpg}" style="width: 80%"/></div>
-							<div><img th:src="@{/themes/images/proj04.jpg}" style="width: 80%"/></div>
-							<div><img th:src="@{/themes/images/proj05.jpg}" style="width: 80%"/></div>
-						</div>
+			</div>
+			<div class="room-list">
+				<div class="bg-gdcd">401<span>待售</span></div>
+				<div class="m-bott">面积：118.56m²</div>
+				<div class="room-content">
+					<img class="content-top" th:src="@{/themes/images/houseTitle.png}"/>
+					<div class="content-box">
+						<div class="box-title"><span>住宅</span><span>待售</span></div>
+						<p>套内面积：<span>89.84㎡</span>
+						<p>户型：<span>两室两厅</span>
+						<p>售价：<span>837483.33元</span>
+					</div>
+				</div>
+			</div>
+			<div class="room-list">
+				<div class="bg-gdcd">401<span>待售</span></div>
+				<div class="m-bott">面积：118.56m²</div>
+				<div class="room-content">
+					<img class="content-top" th:src="@{/themes/images/houseTitle.png}"/>
+					<div class="content-box">
+						<div class="box-title"><span>住宅</span><span>待售</span></div>
+						<p>套内面积：<span>89.84㎡</span>
+						<p>户型：<span>两室两厅</span>
+						<p>售价：<span>837483.33元</span>
+					</div>
+				</div>
+			</div>
+			<div class="room-list">
+				<div class="bg-gdcd">401<span>待售</span></div>
+				<div class="m-bott">面积：118.56m²</div>
+				<div class="room-content">
+					<img class="content-top" th:src="@{/themes/images/houseTitle.png}"/>
+					<div class="content-box">
+						<div class="box-title"><span>住宅</span><span>待售</span></div>
+						<p>套内面积：<span>89.84㎡</span>
+						<p>户型：<span>两室两厅</span>
+						<p>售价：<span>837483.33元</span>
+					</div>
+				</div>
+			</div>
+			<div class="room-list">
+				<div class="bg-gdcd">401<span>待售</span></div>
+				<div class="m-bott">面积：118.56m²</div>
+				<div class="room-content">
+					<img class="content-top" th:src="@{/themes/images/houseTitle.png}"/>
+					<div class="content-box">
+						<div class="box-title"><span>住宅</span><span>待售</span></div>
+						<p>套内面积：<span>89.84㎡</span>
+						<p>户型：<span>两室两厅</span>
+						<p>售价：<span>837483.33元</span>
+					</div>
+				</div>
+			</div>
+			<div class="room-list">
+				<div class="bg-gdcd">401<span>待售</span></div>
+				<div class="m-bott">面积：118.56m²</div>
+				<div class="room-content">
+					<img class="content-top" th:src="@{/themes/images/houseTitle.png}"/>
+					<div class="content-box">
+						<div class="box-title"><span>住宅</span><span>待售</span></div>
+						<p>套内面积：<span>89.84㎡</span>
+						<p>户型：<span>两室两厅</span>
+						<p>售价：<span>837483.33元</span>
+					</div>
+				</div>
+			</div>
+			<div class="room-list">
+				<div class="bg-gdcd">401<span>待售</span></div>
+				<div class="m-bott">面积：118.56m²</div>
+				<div class="room-content">
+					<img class="content-top" th:src="@{/themes/images/houseTitle.png}"/>
+					<div class="content-box">
+						<div class="box-title"><span>住宅</span><span>待售</span></div>
+						<p>套内面积：<span>89.84㎡</span>
+						<p>户型：<span>两室两厅</span>
+						<p>售价：<span>837483.33元</span>
+					</div>
+				</div>
+			</div>
+			<div class="room-list">
+				<div class="bg-gdcd saled">401<span>已售</span></div>
+				<div class="m-bott">面积：118.56m²</div>
+				<div class="room-content">
+					<img class="content-top" th:src="@{/themes/images/houseTitle.png}"/>
+					<div class="content-box">
+						<div class="box-title"><span>住宅</span><span>待售</span></div>
+						<p>套内面积：<span>89.84㎡</span>
+						<p>户型：<span>两室两厅</span>
+						<p>售价：<span>837483.33元</span>
+					</div>
+				</div>
+			</div>
+			<div class="room-list">
+				<div class="bg-gdcd">401<span>待售</span></div>
+				<div class="m-bott">面积：118.56m²</div>
+				<div class="room-content">
+					<img class="content-top" th:src="@{/themes/images/houseTitle.png}"/>
+					<div class="content-box">
+						<div class="box-title"><span>住宅</span><span>待售</span></div>
+						<p>套内面积：<span>89.84㎡</span>
+						<p>户型：<span>两室两厅</span>
+						<p>售价：<span>837483.33元</span>
+					</div>
+				</div>
+			</div>
+			<div class="room-list">
+				<div class="bg-gdcd">401<span>待售</span></div>
+				<div class="m-bott">面积：118.56m²</div>
+				<div class="room-content">
+					<img class="content-top" th:src="@{/themes/images/houseTitle.png}"/>
+					<div class="content-box">
+						<div class="box-title"><span>住宅</span><span>待售</span></div>
+						<p>套内面积：<span>89.84㎡</span>
+						<p>户型：<span>两室两厅</span>
+						<p>售价：<span>837483.33元</span>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
-</body>
+	{{#  }); }}
+</script>
 <script th:src="@{/layui/layui.js}"></script>
+<script th:src="@{/layui/echarts/echarts.js}"></script>
 <script th:inline="javascript">
 	var ctxPath = /*[[@{/}]]*/'';
 	layui.config({
@@ -103,6 +299,7 @@
 	layui.use(['carousel', 'element', 'layer', 'autocomplete', 'laytpl'], function () {
 		var $ = layui.jquery;
 		var autocomplete = layui.autocomplete;
+		var laytpl = layui.laytpl;
 
 		$("#layui-body").height(window.innerHeight - 60);
 
@@ -149,6 +346,43 @@
 			, height: '760px'
 			, interval: 5000
 		});
+
+		var myChart = echarts.init(document.getElementById('layui-sales-echarts'));
+
+		var option = {
+			tooltip: {
+				trigger: 'item',
+				formatter: "{a} <br/>{b} : {c} ({d}%)"
+			},
+			series: [
+				{
+					type: 'pie',
+					radius: '55%',
+					data: [[${region.salesData}]],
+					itemStyle: {
+						emphasis: {
+							shadowBlur: 10,
+							shadowOffsetX: 0,
+							shadowColor: 'rgba(0, 0, 0, 0.5)'
+						}
+					}
+				}
+			]
+		};
+
+		myChart.setOption(option);
+		var getTpl = document.getElementById("layuiSalesProgressScript").innerHTML
+			, view = document.getElementById('layuiSalesProgress');
+		laytpl(getTpl).render([[${region.listHouseHold}]], function (html) {
+			view.innerHTML = html;
+		});
+
+		getTpl = document.getElementById("houseCardScript").innerHTML
+			, view = document.getElementById('houseCardContainer');
+		laytpl(getTpl).render([[${region.listHouseHold}]], function (html) {
+			view.innerHTML = html;
+		});
 	});
 </script>
+</body>
 </html>

@@ -7,4 +7,6 @@ import org.springframework.stereotype.Service;
 public interface ProjectService {
 
 	public ViewRegionInfo region(String regionId);
+
+	public ViewRegionInfo region(String regionId, String viewType);
 }

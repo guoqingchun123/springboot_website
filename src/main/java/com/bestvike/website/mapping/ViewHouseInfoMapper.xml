@@ -12,4 +12,14 @@
 		  ON t1.division_code = t3.division_code
         ]]>
     </select>
+
+	<select id = "selectRegionCellList" parameterType = "String" resultType = "map">
+		<![CDATA[
+			SELECT t.bld_id, t.cell_no, t1.bld_name || t.cell_name || '单元'
+			FROM view_houseinfo t LEFT JOIN view_bldinfo t1 ON t.bld_id = t1.bld_id WHERE t.bld_id
+				IN (SELECT bld_id FROM ass_regbld WHERE region_id = #{regionId})
+			GROUP BY t.bld_id, t.cell_no, t1.bld_name , t.cell_name
+			ORDER BY t.bld_id, t.cell_no, t1.bld_name, t.cell_name
+		]]>
+	</select>
 </mapper>

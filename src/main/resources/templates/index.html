@@ -39,28 +39,26 @@
 			<img th:src="@{/themes/images/logo.png}">
 		</div>
 	</div>
-	<div id="layui-body" data-anim="layui-anim-upbit" style="width: 1000px;margin:0 auto;padding-top: 65px;">
+	<div id="layui-body" data-anim="layui-anim-upbit" style="width: 75%;min-width: 1000px;margin:0 auto;padding-top: 65px;">
 		<div style="width: 100%;height:60px;background-color: white;padding-top: 15px;">
-			<div class="layui-col-md9" style="padding-left: 15px;">
+			<div class="layui-col-md6" style="padding-left: 15px;">
 				<div class="layui-div-search">
 					<input placeholder="请输入小区名称或小区地址进行检索" class="layui-input-search">
 					<i class="layui-icon layui-icon-search"></i>
 				</div>
 			</div>
-			<div class="layui-col-md3" style="padding-left: 15px;">
-				<button type="button" class="layui-btn layui-btn-lg layui-btn-normal layui-btn-maps">
-					<i class="layui-icon layui-icon-location layui-btn-maps" style="color: #ff0813;"></i>地图找房
+			<div class="layui-col-md6" style="padding-right: 15px;">
+				<button type="button" class="layui-btn layui-btn-lg layui-btn-normal layui-btn-maps" style="float:right;">
+					<i class="layui-icon layui-icon-location layui-btn-maps" style="color: #ff0813;"></i>地图导航
 				</button>
 			</div>
 		</div>
-		<div class="layui-form-search" style="padding-top: 10px">
-		
-		</div>
+		<div class="layui-form-search" style="padding-top: 10px"></div>
 		<div id="regionCardContainer"></div>
 	</div>
 </div>
 <script id="regionCardScript" type="text/html">
-	<blockquote class="layui-elem-quote layui-quote-nm">
+	<blockquote class="layui-elem-quote layui-quote-nm" style="background-color: #e1f0f3">
 		小区列表：共为您筛选出<label style="color: red">{{d.length}}</label>个小区
 	</blockquote>
 	{{#  layui.each(d, function(index, item){ }}
@@ -112,9 +110,14 @@
 			view.innerHTML = html;
 		});
 
-		// 跳转到新页面
+		// 跳转到地图刷新页面
 		$(".layui-btn-maps").on("click", function () {
 			window.open(ctxPath + 'maps', '_blank');
+		});
+
+		// 跳转到小区详情页面
+		$(".summary-btn").on("click", function () {
+			window.open(ctxPath + 'content/' + $(this).val(), '_blank');
 		});
 	});
 </script>

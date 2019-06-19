@@ -9,18 +9,46 @@
         ]]>
 	</select>
 
+	<select id = "selectRegionByKeywords" parameterType = "String" resultType = "ViewRegionInfo">
+		 <![CDATA[
+           SELECT region_id, t1.x, t1.y, region_name, address, pre_sale_date, t1.division_code, t2.division_name
+           FROM view_regionInfo t1 LEFT JOIN view_divisionInfo t2 on t1.division_code = t2.division_code
+		   WHERE t1.region_name like #{keywords} or t1.address like #{keywords}
+        ]]>
+	</select>
+
 	<select id = "selectRegion" parameterType = "String" resultType = "ViewRegionInfo">
 		<![CDATA[
 			SELECT * FROM view_regioninfo t1
 			LEFT JOIN (SELECT #{regionId} region_id, wm_concat(sale_phone) sale_phone, min(vpi.greening_rate) greening_rate, max(vpi.avg_price) avg_price
-			from view_projectinfo vpi where exists(select 1 from ass_regbld where region_id = '0000001' and project_id = vpi.project_id)) t2
+			from view_projectinfo vpi where exists(select 1 from ass_regbld where region_id = #{regionId} and project_id = vpi.project_id)) t2
 			on t1.region_id = t2.region_id
-			left join (select #{regionId} region_id, wm_concat(distinct case when vhi.house_use like '%住宅%' then vhi.house_hold else '' end) houseHold,
+			left join (select #{regionId} region_id, COUNT(1) house_num, wm_concat(distinct case when vhi.house_use like '%住宅%' then vhi.house_hold else '' end) houseHold,
 				min(case when vhi.house_use not like '%住宅%' then 9999 else vhi.construct_area end)
 				|| '-' || max(case when vhi.house_use like '%住宅%' then vhi.construct_area else 0 end) area_range
-			from view_houseinfo vhi where exists(select 1 from ass_regbld where region_id = '0000001' and bld_id = vhi.bld_id)) t3
+			from view_houseinfo vhi where exists(select 1 from ass_regbld where region_id = #{regionId} and bld_id = vhi.bld_id)) t3
 			on t1.region_id = t3.region_id
 			WHERE t1.region_id = #{regionId}
+		]]>
+	</select>
+
+	<select id = "selectRegionSalesData" parameterType = "String" resultType = "map">
+		<![CDATA[
+			SELECT SUM(CASE WHEN mortgage_flag = '是' THEN 1 ELSE 0 END) 抵押,
+				SUM(CASE WHEN close_flag = '是' THEN 1 ELSE 0 END) 查封,
+	            SUM(CASE WHEN frozen_flag = '是' THEN 1 ELSE 0 END) 冻结,
+	            SUM(CASE WHEN presell_state = '已售' THEN 1 ELSE 0 END) 已售,
+	            SUM(CASE WHEN presell_state = '未售' THEN 1 ELSE 0 END) 未售
+            FROM view_houseinfo t WHERE t.bld_id IN (SELECT bld_id FROM ass_regbld WHERE region_id = #{regionId})
+		]]>
+	</select>
+
+	<select id = "selectRegionHouseHoldData" parameterType = "String" resultType = "map">
+		<![CDATA[
+			SELECT house_hold, COUNT(1) total_num, sum(case when t.presell_state = '已售' then 1 else 0 end) sell_num
+            FROM view_houseinfo t WHERE t.bld_id IN (SELECT bld_id FROM ass_regbld WHERE region_id = #{regionId})
+            GROUP BY house_hold
+            ORDER BY house_hold
 		]]>
 	</select>
 </mapper>

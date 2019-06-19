@@ -19,14 +19,6 @@
 		</choose>
 	</select>
 
-	<select id = "selectProjectByKeywords" parameterType = "String" resultType = "ViewProjectInfo">
-		 <![CDATA[
-           SELECT t1.project_id, x, y, avg_price, popularity, address, t2.project_name
-           FROM proj_coordinate t1 INNER JOIN view_projectinfo t2 on t1.project_id = t2.project_id
-		   WHERE t2.project_name like #{keywords} or t2.address like #{keywords}
-        ]]>
-	</select>
-
 	<select id = "selectProjectByProjectNo" parameterType = "String" resultType = "ViewProjectInfo">
 		<![CDATA[
            SELECT t1.project_id, t1.project_name, t1.address, t1.developer_no,

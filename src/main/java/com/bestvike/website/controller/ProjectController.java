@@ -42,7 +42,7 @@ public class ProjectController extends BaseController {
 	 * @return
 	 */
 	@GetMapping(value = "/region/{regionId}")
-	public ViewRegionInfo project(@PathVariable String regionId) {
+	public ViewRegionInfo region(@PathVariable String regionId) {
 		return projectService.region(regionId);
 	}
 
@@ -57,21 +57,21 @@ public class ProjectController extends BaseController {
 		return paramterMap;
 	}
 
-	@GetMapping(value = "/auto-projects")
-	public Map<String, Object> autoProjects(@RequestParam String keywords) {
+	@GetMapping(value = "/auto-regions")
+	public Map<String, Object> autoRegions(@RequestParam String keywords) {
 		logger.info("检索条件：" + keywords);
 		Map<String, Object> paramterMap = new HashMap<>();
 		try {
 			keywords = URLDecoder.decode(keywords, "UTF-8");
 			if (!StringUtils.isEmpty(keywords)) {
 				keywords = "%" + keywords + "%";
-				List<ViewProjectInfo> listViewProjectInfo = layoutService.selectProjectByKeywords(keywords);
-				paramterMap.put("content", listViewProjectInfo);
+				List<ViewRegionInfo> listRegionInfo = layoutService.selectRegionByKeywords(keywords);
+				paramterMap.put("content", listRegionInfo);
 				paramterMap.put("code", "0");
 				paramterMap.put("type", "success");
 			} else {
-//				List<ViewProjectInfo> listViewProjectInfo = layoutService.selectAllProject("default");
-//				paramterMap.put("content", listViewProjectInfo);
+				List<ViewRegionInfo> listRegionInfo = layoutService.selectAllRegions("default");
+				paramterMap.put("content", listRegionInfo);
 				paramterMap.put("code", "0");
 				paramterMap.put("type", "success");
 			}

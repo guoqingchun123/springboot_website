@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -42,9 +43,9 @@ public class LayoutController extends BaseController {
 	}
 
 	@GetMapping(value = "/content/{regionId}")
-	public ModelAndView content(@PathVariable String regionId) {
+	public ModelAndView content(@PathVariable String regionId, @RequestParam(required = false) String viewType) {
 		ModelAndView mv = new ModelAndView();
-		ViewRegionInfo viewRegionInfo = projectService.region(regionId);
+		ViewRegionInfo viewRegionInfo = projectService.region(regionId, viewType);
 		mv.addObject("region", viewRegionInfo);
 		mv.setViewName("content");
 		return mv;
