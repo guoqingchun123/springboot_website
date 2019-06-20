@@ -1,6 +1,7 @@
 package com.bestvike.website.controller;
 
 import com.bestvike.website.data.ViewRegionInfo;
+import com.bestvike.website.entity.SimpleRegion;
 import com.bestvike.website.service.LayoutService;
 import com.bestvike.website.service.ProjectService;
 import java.util.List;
@@ -26,7 +27,7 @@ public class LayoutController extends BaseController {
 	@GetMapping(value = "/")
 	public ModelAndView index() {
 		ModelAndView mv = new ModelAndView();
-		List<ViewRegionInfo> listViewRegionInfo = layoutService.selectAllRegions("default");
+		List<SimpleRegion> listViewRegionInfo = layoutService.selectAllRegions("default");
 		mv.addObject("regions", listViewRegionInfo);
 		mv.setViewName("index");
 		return mv;
@@ -35,7 +36,7 @@ public class LayoutController extends BaseController {
 	@GetMapping(value = "/maps")
 	public ModelAndView maps() {
 		ModelAndView mv = new ModelAndView();
-		List<ViewRegionInfo> listViewRegionInfo = layoutService.selectAllRegions("default");
+		List<SimpleRegion> listViewRegionInfo = layoutService.selectAllRegions("default");
 		mv.addObject("regions", listViewRegionInfo);
 		mv.setViewName("maps");
 		return mv;

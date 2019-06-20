@@ -3,18 +3,26 @@
 <mapper namespace = "com.bestvike.website.dao.ViewRegionInfoDao">
 	<select id = "selectAllRegions" parameterType = "Map" resultType = "ViewRegionInfo">
 		<![CDATA[
-           SELECT region_id, t1.x, t1.y, region_name, address, pre_sale_date, t1.division_code, t2.division_name
+           SELECT t1.region_id, t1.x, t1.y, region_name, address, pre_sale_date, t1.division_code, t2.division_name, proj.avg_price
            FROM view_regionInfo t1 LEFT JOIN view_divisionInfo t2 on t1.division_code = t2.division_code
+           LEFT JOIN (SELECT region_id, max(avg_price) avg_price FROM view_projectinfo vpi LEFT JOIN Ass_RegBld arb ON vpi.project_id = arb.project_id GROUP BY region_id) proj
+           	ON t1.region_id = proj.region_id
            ORDER BY t1.pre_sale_date desc
         ]]>
 	</select>
 
-	<select id = "selectRegionByKeywords" parameterType = "String" resultType = "ViewRegionInfo">
-		 <![CDATA[
-           SELECT region_id, t1.x, t1.y, region_name, address, pre_sale_date, t1.division_code, t2.division_name
+	<select id = "selectRegionByKeywords" parameterType = "String" resultType = "com.bestvike.website.entity.SimpleRegion">
+		<![CDATA[
+           SELECT t1.region_id, t1.x, t1.y, region_name, address, pre_sale_date, t1.division_code, t2.division_name, proj.avg_price
            FROM view_regionInfo t1 LEFT JOIN view_divisionInfo t2 on t1.division_code = t2.division_code
-		   WHERE t1.region_name like #{keywords} or t1.address like #{keywords}
+           LEFT JOIN (SELECT region_id, max(avg_price) avg_price FROM view_projectinfo vpi LEFT JOIN Ass_RegBld arb ON vpi.project_id = arb.project_id GROUP BY region_id) proj
+           ON t1.region_id = proj.region_id
         ]]>
+		<where>
+			<if test = "keywords != null">
+				t1.region_name like #{keywords} or t1.address like #{keywords}
+			</if>
+		</where>
 	</select>
 
 	<select id = "selectRegion" parameterType = "String" resultType = "ViewRegionInfo">

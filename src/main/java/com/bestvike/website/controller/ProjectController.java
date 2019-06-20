@@ -3,6 +3,7 @@ package com.bestvike.website.controller;
 import com.bestvike.website.data.ViewHouseInfo;
 import com.bestvike.website.data.ViewPresalecard;
 import com.bestvike.website.data.ViewRegionInfo;
+import com.bestvike.website.entity.SimpleRegion;
 import com.bestvike.website.service.LayoutService;
 import com.bestvike.website.service.ProjectService;
 import java.io.UnsupportedEncodingException;
@@ -30,8 +31,8 @@ public class ProjectController extends BaseController {
 	private ProjectService projectService;
 
 	@GetMapping(value = "/regions")
-	public List<ViewRegionInfo> regions(@RequestParam(required = false) String order) {
-		List<ViewRegionInfo> listRegionInfo = layoutService.selectAllRegions(order);
+	public List<SimpleRegion> regions(@RequestParam(required = false) String order) {
+		List<SimpleRegion> listRegionInfo = layoutService.selectAllRegions(order);
 		return listRegionInfo;
 	}
 
@@ -65,12 +66,12 @@ public class ProjectController extends BaseController {
 			keywords = URLDecoder.decode(keywords, "UTF-8");
 			if (!StringUtils.isEmpty(keywords)) {
 				keywords = "%" + keywords + "%";
-				List<ViewRegionInfo> listRegionInfo = layoutService.selectRegionByKeywords(keywords);
+				List<SimpleRegion> listRegionInfo = layoutService.selectRegionByKeywords(keywords);
 				paramterMap.put("content", listRegionInfo);
 				paramterMap.put("code", "0");
 				paramterMap.put("type", "success");
 			} else {
-				List<ViewRegionInfo> listRegionInfo = layoutService.selectAllRegions("default");
+				List<SimpleRegion> listRegionInfo = layoutService.selectAllRegions("default");
 				paramterMap.put("content", listRegionInfo);
 				paramterMap.put("code", "0");
 				paramterMap.put("type", "success");

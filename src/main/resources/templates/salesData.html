@@ -234,6 +234,7 @@
 </script>
 <script th:src="@{/layui/layui.js}"></script>
 <script th:src="@{/layui/echarts/echarts.js}"></script>
+<script th:src="@{/layui/echarts/macarons.js}"></script>
 <script th:inline="javascript">
 	var ctxPath = /*[[@{/}]]*/'';
 	layui.config({
@@ -276,7 +277,7 @@
 			location.hash = 'tab=' + $(this).attr('lay-id');
 		});
 
-		var myChart = echarts.init(document.getElementById('layui-sales-echarts'));
+		var myChart = echarts.init(document.getElementById('layui-sales-echarts'), 'macarons');
 
 		var option = {
 			tooltip: {
