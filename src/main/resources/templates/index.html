@@ -26,10 +26,14 @@
 	
 	.layui-icon-search {
 		position: relative;
-		left: -34px;
-		top: 4px;
+		right: -400px;
+		top: -30px;
 		font-size: 23px;
 		color: #1E9FFF;
+	}
+	
+	.layui-breadcrumb a.selected {
+		color: green;
 	}
 </style>
 <body class="layui-layout-body" style="min-width: 1000px;overflow-x: auto;overflow-y: auto;background: #f1f1f1">
@@ -43,7 +47,7 @@
 		<div style="width: 100%;height:60px;background-color: white;padding-top: 15px;">
 			<div class="layui-col-md6" style="padding-left: 15px;">
 				<div class="layui-div-search">
-					<input placeholder="请输入小区名称或小区地址进行检索" class="layui-input-search">
+					<input placeholder="请输入小区名称或小区地址进行检索" class="layui-input-search" id="auto-regions" name="auto-regions">
 					<i class="layui-icon layui-icon-search"></i>
 				</div>
 			</div>
@@ -53,7 +57,38 @@
 				</button>
 			</div>
 		</div>
-		<div class="layui-form-search" style="padding-top: 10px"></div>
+		<div class="layui-form-search" style="margin-top: 10px;background-color: white;">
+			<blockquote class="layui-elem-quote layui-quote-nm">
+				区域范围：
+				<span class="layui-breadcrumb" lay-separator="|">
+					<a href="" class="selected">不限</a>
+					<a href="">松山区</a>
+					<a href="">洪山区</a>
+					<a href="">元宝山区</a>
+				</span>
+			</blockquote>
+			<blockquote class="layui-elem-quote layui-quote-nm">
+				预售均价：
+				<span class="layui-breadcrumb" lay-separator="|">
+					<a href="" class="selected">不限</a>
+					<a href="">3千以下</a>
+					<a href="">3-5千</a>
+					<a href="">5-8千</a>
+					<a href="">8-10千</a>
+					<a href="">1万以上</a>
+				</span>
+			</blockquote>
+			<blockquote class="layui-elem-quote layui-quote-nm">
+				房屋户型：
+				<span class="layui-breadcrumb" lay-separator="|">
+					<a href="" class="selected">不限</a>
+					<a href="">一室</a>
+					<a href="">二室</a>
+					<a href="">三室</a>
+					<a href="">四室及以上</a>
+				</span>
+			</blockquote>
+		</div>
 		<div id="regionCardContainer"></div>
 	</div>
 </div>
@@ -71,9 +106,19 @@
 				<button type="button" class="layui-btn layui-btn-primary summary-btn" value="{{=item.regionId }}">查看详情</button>
 			</div>
 		</div>
-		<div class="layui-card-body">
-			<img src="https://pic4.ajkimg.com/display/xinfang/665944b5b39a56537506838714c4e8b4/129x115n.jpg">
-			小区地址：<label>{{item.address}}</label>
+		<div class="layui-card-body" style="overflow: hidden">
+			<div class="layui-col-md9" style="float: left">
+				<div class="layui-col-md3" style="float: left">
+					<img th:src="@{/themes/test/images/title/title01.png}" style="width: 200px;height: 120px">
+				</div>
+				<div class="layui-col-md9">
+					<p class="layui-elem-quote">小区地址：<label>{{item.address}}</label></p>
+					<p class="layui-elem-quote">预售许可日期：<label>{{item.preSaleDate}}</label></p>
+				</div>
+			</div>
+			<div class="layui-col-md3" style="text-align: right;padding-top: 50px">
+				销售均价：<label style="color: red;font-size: x-large">{{item.avgPrice}}元/㎡</label>
+			</div>
 		</div>
 	</div>
 	{{#  }); }}

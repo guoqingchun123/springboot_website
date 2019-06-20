@@ -41,7 +41,9 @@ public class ViewRegionInfo implements Serializable {
 	@Transient
 	private List<Map<String, Object>> listHouseHold;
 	@Transient
-	private List<Map<String, Object>> listCellList;
+	private List<Map<String, Object>> listCell;
+	@Transient
+	private List<ViewHouseInfo> listHouse;
 
 	public String getRegionId() {
 		return regionId;
@@ -163,11 +165,19 @@ public class ViewRegionInfo implements Serializable {
 		this.listHouseHold = listHouseHold;
 	}
 
-	public List<Map<String, Object>> getListCellList() {
-		return listCellList;
+	public List<Map<String, Object>> getListCell() {
+		return listCell;
 	}
 
-	public void setListCellList(List<Map<String, Object>> listCellList) {
-		this.listCellList = listCellList;
+	public void setListCell(List<Map<String, Object>> listCell) {
+		this.listCell = listCell;
+	}
+
+	public List<ViewHouseInfo> getListHouse() {
+		return listHouse;
+	}
+
+	public void setListHouse(List<ViewHouseInfo> listHouse) {
+		this.listHouse = listHouse;
 	}
 }

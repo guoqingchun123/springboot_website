@@ -1,6 +1,5 @@
 package com.bestvike.website.controller;
 
-import com.bestvike.website.data.ViewCorpInfo;
 import com.bestvike.website.data.ViewRegionInfo;
 import com.bestvike.website.service.LayoutService;
 import com.bestvike.website.service.ProjectService;
@@ -45,9 +44,10 @@ public class LayoutController extends BaseController {
 	@GetMapping(value = "/content/{regionId}")
 	public ModelAndView content(@PathVariable String regionId, @RequestParam(required = false) String viewType) {
 		ModelAndView mv = new ModelAndView();
+		viewType =  StringUtils.isEmpty(viewType) ? "salesData" : viewType;
 		ViewRegionInfo viewRegionInfo = projectService.region(regionId, viewType);
 		mv.addObject("region", viewRegionInfo);
-		mv.setViewName("content");
+		mv.setViewName(viewType);
 		return mv;
 	}
 }

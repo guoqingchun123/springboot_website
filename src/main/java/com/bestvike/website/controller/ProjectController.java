@@ -1,7 +1,7 @@
 package com.bestvike.website.controller;
 
+import com.bestvike.website.data.ViewHouseInfo;
 import com.bestvike.website.data.ViewPresalecard;
-import com.bestvike.website.data.ViewProjectInfo;
 import com.bestvike.website.data.ViewRegionInfo;
 import com.bestvike.website.service.LayoutService;
 import com.bestvike.website.service.ProjectService;
@@ -79,5 +79,10 @@ public class ProjectController extends BaseController {
 			e.printStackTrace();
 		}
 		return paramterMap;
+	}
+
+	@GetMapping(value = "/cell-house")
+	public List<ViewHouseInfo> selectCellHouse(@RequestParam String bldId, @RequestParam String cellNo) {
+		return projectService.selectCellHouse(bldId, cellNo);
 	}
 }

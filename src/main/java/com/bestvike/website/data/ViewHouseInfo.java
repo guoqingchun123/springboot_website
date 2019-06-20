@@ -5,13 +5,14 @@ import java.math.BigDecimal;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "View_HouseInfo")
 public class ViewHouseInfo implements Serializable {
 
 	private static final long serialVersionUID = 7701428993616884751L;
-	
+
 	@Id
 	private String houseId;
 	private String bldId;
@@ -36,7 +37,7 @@ public class ViewHouseInfo implements Serializable {
 	private String houseStructure;
 	private String houseHold;
 	private BigDecimal balconyNum;
-	private BigDecimal roomDirection;
+	private String roomDirection;
 	private BigDecimal skipNum;
 	private BigDecimal mergeNum;
 	private BigDecimal presellPrice;
@@ -61,6 +62,15 @@ public class ViewHouseInfo implements Serializable {
 	private String pledgeDate;
 	private BigDecimal orderNum;
 	private String remark;
+
+	@Transient
+	private BigDecimal initRoom;
+	@Transient
+	private BigDecimal saleNum;
+	@Transient
+	private BigDecimal noSaleNum;
+	@Transient
+	private BigDecimal totalNum;
 
 	public String getHouseId() {
 		return houseId;
@@ -246,11 +256,11 @@ public class ViewHouseInfo implements Serializable {
 		this.balconyNum = balconyNum;
 	}
 
-	public BigDecimal getRoomDirection() {
+	public String getRoomDirection() {
 		return roomDirection;
 	}
 
-	public void setRoomDirection(BigDecimal roomDirection) {
+	public void setRoomDirection(String roomDirection) {
 		this.roomDirection = roomDirection;
 	}
 
@@ -444,5 +454,37 @@ public class ViewHouseInfo implements Serializable {
 
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+
+	public BigDecimal getInitRoom() {
+		return initRoom;
+	}
+
+	public void setInitRoom(BigDecimal initRoom) {
+		this.initRoom = initRoom;
+	}
+
+	public BigDecimal getSaleNum() {
+		return saleNum;
+	}
+
+	public void setSaleNum(BigDecimal saleNum) {
+		this.saleNum = saleNum;
+	}
+
+	public BigDecimal getNoSaleNum() {
+		return noSaleNum;
+	}
+
+	public void setNoSaleNum(BigDecimal noSaleNum) {
+		this.noSaleNum = noSaleNum;
+	}
+
+	public BigDecimal getTotalNum() {
+		return totalNum;
+	}
+
+	public void setTotalNum(BigDecimal totalNum) {
+		this.totalNum = totalNum;
 	}
 }

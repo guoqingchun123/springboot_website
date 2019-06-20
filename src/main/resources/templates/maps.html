@@ -260,9 +260,8 @@
 				autoplay: true
 			};
 			var ins = carousel.render(options);
-			$("#region-form-header").children("div").html('<img src="http://localhost:8001/api/file/f771e1bc7d4b492f80ea30d81af01f4c">'
-				+ '<img src="http://localhost:8001/api/file/ef907f1ebfec4980ab54158f5590e2f9">'
-				+ '<img src="http://localhost:8001/api/file/ee8f101e6ffe44519bc8d930e8fe7d7b">');
+			$("#region-form-header").children("div").html('<img src="/maps/themes/test/images/viewer/view01.jpg"/>'
+				+ '<img src="/maps/themes/test/images/viewer/view02.jpg"/>');
 			ins.reload(options);
 			$("#region-form-name").html(region.regionName);
 
@@ -270,7 +269,6 @@
 				+ '<p class="layui-elem-quote">购房热线：' + region.salePhone + '</p>';
 			if (region.houseHold) {
 				content = content + '<p class="layui-elem-quote">住宅面积：' + region.areaRange + '</p>'
-				+ '<p class="layui-elem-quote">主打户型：' + region.houseHold + '</p>';
 			}
 			
 			content = content +  '<p class="layui-elem-quote">销售均价：' + region.avgPrice + '元/㎡</p>';

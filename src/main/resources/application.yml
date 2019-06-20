@@ -2,8 +2,8 @@ app:
   instance:
     code: website
     profile: dev
-  file-url: http://localhost:8001/api/file/
-  thumb-url: http://localhost:8001/api/thumb/
+  file:
+    uploadPath: d:\file\upload
 server:
   port: 5000
   servlet:
@@ -19,6 +19,9 @@ spring:
   http:
     encoding:
       force: true
+  data:
+    mongodb:
+      uri: mongodb://website:website@192.168.2.21:27017/website
   servlet:
     multipart:
       max-file-size: 20MB # 最大文件大小

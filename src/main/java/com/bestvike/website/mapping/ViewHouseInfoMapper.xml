@@ -13,13 +13,31 @@
         ]]>
     </select>
 
+	<select id = "selectRegionBldList" parameterType = "String" resultType = "AssRegBld">
+		<![CDATA[
+			SELECT t.bld_id, t2.bld_name || '#',
+			t.region_id FROM Ass_RegBld t LEFT JOIN View_BldInfo t2 on t.bld_id = t2.bld_id WHERE t.region_id = #{regionId}
+		]]>
+	</select>
+
 	<select id = "selectRegionCellList" parameterType = "String" resultType = "map">
 		<![CDATA[
-			SELECT t.bld_id, t.cell_no, t1.bld_name || t.cell_name || '单元'
+			SELECT t.bld_id, t.cell_no, t1.bld_name || '#' || t.cell_name || '单元' cell_name
 			FROM view_houseinfo t LEFT JOIN view_bldinfo t1 ON t.bld_id = t1.bld_id WHERE t.bld_id
 				IN (SELECT bld_id FROM ass_regbld WHERE region_id = #{regionId})
-			GROUP BY t.bld_id, t.cell_no, t1.bld_name , t.cell_name
+			GROUP BY t.bld_id, t.cell_no, t1.bld_name, t.cell_name
 			ORDER BY t.bld_id, t.cell_no, t1.bld_name, t.cell_name
+		]]>
+	</select>
+
+	<select id = "selectHouseInfoList" parameterType = "map" resultType = "ViewHouseInfo">
+		<![CDATA[
+			SELECT t.*, row_number() over(partition by bld_id, cell_no, floor_no order by lpad(floor_no, 10, '0'), show_name, house_id) init_room,
+				SUM(CASE WHEN t.presell_state = '已售' THEN 1 ELSE 0 END) over(partition BY bld_id, cell_no, floor_no) sale_num,
+       			SUM(CASE WHEN t.presell_state = '未售' THEN 1 ELSE 0 END) over(partition BY bld_id, cell_no, floor_no) no_sale_Num,
+       			SUM(1) over(partition BY bld_id, cell_no, floor_no) total_num
+			FROM view_houseinfo t WHERE bld_id = #{bldId} and cell_no = #{cellNo}
+			ORDER BY lpad(floor_no, 10, '0'), show_name, house_id
 		]]>
 	</select>
 </mapper>

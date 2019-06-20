@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "Ass_RegBld")
@@ -17,6 +18,9 @@ public class AssRegBld implements Serializable {
 	private String regionId;
 	private String projectId;
 	private String remark;
+
+	@Transient
+	private String bldName;
 
 	public String getBldId() {
 		return bldId;
@@ -48,5 +52,13 @@ public class AssRegBld implements Serializable {
 
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+
+	public String getBldName() {
+		return bldName;
+	}
+
+	public void setBldName(String bldName) {
+		this.bldName = bldName;
 	}
 }

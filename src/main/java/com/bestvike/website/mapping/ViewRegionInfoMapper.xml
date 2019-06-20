@@ -45,10 +45,10 @@
 
 	<select id = "selectRegionHouseHoldData" parameterType = "String" resultType = "map">
 		<![CDATA[
-			SELECT house_hold, COUNT(1) total_num, sum(case when t.presell_state = '已售' then 1 else 0 end) sell_num
+			SELECT house_use, house_hold, COUNT(1) total_num, sum(case when t.presell_state = '已售' then 1 else 0 end) sell_num
             FROM view_houseinfo t WHERE t.bld_id IN (SELECT bld_id FROM ass_regbld WHERE region_id = #{regionId})
-            GROUP BY house_hold
-            ORDER BY house_hold
+            GROUP BY house_use, house_hold
+            ORDER BY house_use, house_hold
 		]]>
 	</select>
 </mapper>
