@@ -133,7 +133,7 @@
 			<div class="layui-col-md9">
 				<span class="layui-breadcrumb" lay-separator="|" style="font-size: 30px">
 				  <a href="#" data-value="salesData">销售情况</a>
-				  <a href="#" data-value="houseHold">户型图</a>
+				  <a href="#" data-value="houseHold">套型图</a>
 				  <a href="#" data-value="regionImage">项目相册</a>
 				</span>
 			</div>
@@ -177,7 +177,7 @@
 	{{#  layui.each(d, function(index, item){ }}
 	{{# if(item.HOUSE_USE.indexOf('住宅') != -1){ }}
 	<div class="layui-elem-quote">{{item.HOUSE_USE}}-{{item.HOUSE_HOLD}}，
-		共<label style="color: red;font-size: large">{{item.TOTAL_NUM}}</label>户，已售出<label style="color: #005aff;font-size: large">{{item.SELL_NUM}}</label>户
+		共<label style="color: red;font-size: large">{{item.TOTAL_NUM}}</label>套，已售出<label style="color: #005aff;font-size: large">{{item.SELL_NUM}}</label>套
 	</div>
 	{{# } }}
 	{{#  }); }}
@@ -189,7 +189,7 @@
 	{{#  layui.each(d, function(index, item){ }}
 	{{# if(item.HOUSE_USE.indexOf('住宅') == -1){ }}
 	<div class="layui-elem-quote">{{item.HOUSE_USE}}-{{item.HOUSE_HOLD}}，
-		共<label style="color: red;font-size: large">{{item.TOTAL_NUM}}</label>户，已售出<label style="color: #005aff;font-size: large">{{item.SELL_NUM}}</label>户
+		共<label style="color: red;font-size: large">{{item.TOTAL_NUM}}</label>套，已售出<label style="color: #005aff;font-size: large">{{item.SELL_NUM}}</label>套
 	</div>
 	{{# } }}
 	{{#  }); }}

@@ -68,7 +68,7 @@
 				</span>
 			</blockquote>
 			<blockquote class="layui-elem-quote layui-quote-nm">
-				预售均价：
+				备案均价：
 				<span class="layui-breadcrumb" lay-separator="|">
 					<a href="" class="selected">不限</a>
 					<a href="">3千以下</a>
@@ -111,13 +111,13 @@
 				<div class="layui-col-md3" style="float: left">
 					<img th:src="@{/themes/test/images/title/title01.png}" style="width: 200px;height: 120px">
 				</div>
-				<div class="layui-col-md9">
+				<div class="layui-col-md9" style="padding-left: 30px">
 					<p class="layui-elem-quote">小区地址：<label>{{item.address}}</label></p>
 					<p class="layui-elem-quote">预售许可日期：<label>{{item.preSaleDate}}</label></p>
 				</div>
 			</div>
 			<div class="layui-col-md3" style="text-align: right;padding-top: 50px">
-				销售均价：<label style="color: red;font-size: x-large">{{item.avgPrice}}元/㎡</label>
+				备案均价：<label style="color: red;font-size: x-large">{{item.avgPrice}}元/㎡</label>
 			</div>
 		</div>
 	</div>

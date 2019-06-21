@@ -157,7 +157,7 @@
 	{{#  layui.each(d, function(index, item){ }}
 	{{# if(item.HOUSE_USE.indexOf('住宅') != -1){ }}
 	<div class="layui-elem-quote">{{item.HOUSE_USE}}-{{item.HOUSE_HOLD}}，
-		共<label style="color: red;font-size: large">{{item.TOTAL_NUM}}</label>户，已售出<label style="color: #005aff;font-size: large">{{item.SELL_NUM}}</label>户
+		共<label style="color: red;font-size: large">{{item.TOTAL_NUM}}</label>套，已售出<label style="color: #005aff;font-size: large">{{item.SELL_NUM}}</label>套
 	</div>
 	{{# } }}
 	{{#  }); }}
@@ -169,7 +169,7 @@
 	{{#  layui.each(d, function(index, item){ }}
 	{{# if(item.HOUSE_USE.indexOf('住宅') == -1){ }}
 	<div class="layui-elem-quote">{{item.HOUSE_USE}}-{{item.HOUSE_HOLD}}，
-		共<label style="color: red;font-size: large">{{item.TOTAL_NUM}}</label>户，已售出<label style="color: #005aff;font-size: large">{{item.SELL_NUM}}</label>户
+		共<label style="color: red;font-size: large">{{item.TOTAL_NUM}}</label>套，已售出<label style="color: #005aff;font-size: large">{{item.SELL_NUM}}</label>套
 	</div>
 	{{# } }}
 	{{#  }); }}
