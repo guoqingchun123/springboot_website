@@ -154,7 +154,7 @@
 		</div>
 		<div id="regionImageDiv" style="width: 100%;background-color: white;margin-top: 10px;height:auto;">
 			<p class="layui-elem-quote">项目施工图</p>
-			<ul id="viewer01" class="viewer">
+			<ul id="viewer01" class="viewer" style="width: 95%">
 				<li><img th:src="@{/themes/test/images/regionImages/recon01.jpg}"/></li>
 				<li><img th:src="@{/themes/test/images/regionImages/recon02.jpg}"/></li>
 				<li><img th:src="@{/themes/test/images/regionImages/recon03.jpg}"/></li>
@@ -163,7 +163,7 @@
 				<li><img th:src="@{/themes/test/images/regionImages/recon06.jpg}"/></li>
 			</ul>
 			<p class="layui-elem-quote">小区鸟瞰图</p>
-			<ul id="viewer02" class="viewer">
+			<ul id="viewer02" class="viewer" style="width: 95%">
 				<li><img th:src="@{/themes/test/images/viewer/view01.jpg}"/></li>
 				<li><img th:src="@{/themes/test/images/viewer/view02.jpg}"/></li>
 			</ul>
@@ -268,7 +268,8 @@
 <script th:src="@{/layui/viewer/js/viewer.min.js}"></script>
 <script>
 	var viewer01 = new Viewer(document.getElementById('viewer01'), {
-		url: 'data-original'
+		url: 'data-original',
+		navbar: true
 	});
 	var viewer02 = new Viewer(document.getElementById('viewer02'), {
 		url: 'data-original'

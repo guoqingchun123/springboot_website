@@ -21,14 +21,14 @@
 		
 		.bg-gdcd {
 			height: 32px;
-			background: #dcdddd;
+			background: #03c2dd;
 			font-size: 16px;
 			padding: 0 8px;
 			font-weight: bold;
 		}
 		
 		.saled {
-			background: #03c2dd;
+			background: #dcdddd;
 		}
 		
 		.mortgage {
@@ -287,13 +287,13 @@
 			series: [
 				{
 					type: 'pie',
-					radius: '55%',
+					radius: '85%',
 					data: [[${region.salesData}]],
-					itemStyle: {
-						emphasis: {
-							shadowBlur: 10,
-							shadowOffsetX: 0,
-							shadowColor: 'rgba(0, 0, 0, 0.5)'
+					label: {
+						normal:{
+							formatter(v) {
+								return Math.round(v.percent) + '%' + '' + v.name
+							}
 						}
 					}
 				}
