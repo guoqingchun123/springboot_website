@@ -16,6 +16,8 @@ public class ViewHouseInfo implements Serializable {
 	@Id
 	private String houseId;
 	private String bldId;
+	private String projectId;
+	private String bldNo;
 	private String houseUse;
 	private String houseProp;
 	private String houseType;
@@ -60,6 +62,8 @@ public class ViewHouseInfo implements Serializable {
 	private String pledgeFlag;
 	private String pledgeNo;
 	private String pledgeDate;
+	private String salesFlag;
+	private String nosaleReason;
 	private BigDecimal orderNum;
 	private String remark;
 
@@ -86,6 +90,22 @@ public class ViewHouseInfo implements Serializable {
 
 	public void setBldId(String bldId) {
 		this.bldId = bldId;
+	}
+
+	public String getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
+
+	public String getBldNo() {
+		return bldNo;
+	}
+
+	public void setBldNo(String bldNo) {
+		this.bldNo = bldNo;
 	}
 
 	public String getHouseUse() {
@@ -486,5 +506,21 @@ public class ViewHouseInfo implements Serializable {
 
 	public void setTotalNum(BigDecimal totalNum) {
 		this.totalNum = totalNum;
+	}
+
+	public String getSalesFlag() {
+		return salesFlag;
+	}
+
+	public void setSalesFlag(String salesFlag) {
+		this.salesFlag = salesFlag;
+	}
+
+	public String getNosaleReason() {
+		return nosaleReason;
+	}
+
+	public void setNosaleReason(String nosaleReason) {
+		this.nosaleReason = nosaleReason;
 	}
 }

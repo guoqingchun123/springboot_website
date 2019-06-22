@@ -5,7 +5,8 @@
 		<![CDATA[
            SELECT t1.region_id, t1.x, t1.y, region_name, address, pre_sale_date, t1.division_code, t2.division_name, proj.avg_price
            FROM view_regionInfo t1 LEFT JOIN view_divisionInfo t2 on t1.division_code = t2.division_code
-           LEFT JOIN (SELECT region_id, max(avg_price) avg_price FROM view_projectinfo vpi LEFT JOIN Ass_RegBld arb ON vpi.project_id = arb.project_id GROUP BY region_id) proj
+           LEFT JOIN (SELECT region_id, max(avg_price) avg_price
+           	FROM view_projectinfo vpi LEFT JOIN Ass_RegBld arb ON vpi.project_id = arb.project_id GROUP BY region_id) proj
            	ON t1.region_id = proj.region_id
            ORDER BY t1.pre_sale_date desc
         ]]>
@@ -15,7 +16,8 @@
 		<![CDATA[
            SELECT t1.region_id, t1.x, t1.y, region_name, address, pre_sale_date, t1.division_code, t2.division_name, proj.avg_price
            FROM view_regionInfo t1 LEFT JOIN view_divisionInfo t2 on t1.division_code = t2.division_code
-           LEFT JOIN (SELECT region_id, max(avg_price) avg_price FROM view_projectinfo vpi LEFT JOIN Ass_RegBld arb ON vpi.project_id = arb.project_id GROUP BY region_id) proj
+           LEFT JOIN (SELECT region_id, max(avg_price) avg_price
+				FROM view_projectinfo vpi LEFT JOIN Ass_RegBld arb ON vpi.project_id = arb.project_id GROUP BY region_id) proj
            ON t1.region_id = proj.region_id
         ]]>
 		<where>
@@ -34,7 +36,8 @@
 			left join (select #{regionId} region_id, COUNT(1) house_num, wm_concat(distinct case when vhi.house_use like '%住宅%' then vhi.house_hold else '' end) houseHold,
 				min(case when vhi.house_use not like '%住宅%' then 9999 else vhi.construct_area end)
 				|| '-' || max(case when vhi.house_use like '%住宅%' then vhi.construct_area else 0 end) area_range
-			from view_houseinfo vhi where exists(select 1 from ass_regbld where region_id = #{regionId} and bld_id = vhi.bld_id)) t3
+			from view_houseinfo vhi
+			WHERE EXISTS(select 1 from ass_regbld WHERE region_id = #{regionId} AND project_id = vhi.project_id AND bld_no = vhi.bld_no)) t3
 			on t1.region_id = t3.region_id
 			WHERE t1.region_id = #{regionId}
 		]]>
@@ -47,14 +50,19 @@
 	            SUM(CASE WHEN frozen_flag = '是' THEN 1 ELSE 0 END) 冻结,
 	            SUM(CASE WHEN presell_state = '已售' THEN 1 ELSE 0 END) 已售,
 	            SUM(CASE WHEN presell_state = '未售' THEN 1 ELSE 0 END) 未售
-            FROM view_houseinfo t WHERE t.bld_id IN (SELECT bld_id FROM ass_regbld WHERE region_id = #{regionId})
+            FROM view_houseinfo t
+            WHERE EXISTS(SELECT 1 FROM ass_regbld WHERE region_id = #{regionId} AND project_id = t.project_id AND bld_no = t.bld_no)
 		]]>
 	</select>
 
-	<select id = "selectRegionHouseHoldData" parameterType = "String" resultType = "map">
+	<select id = "selectRegionHouseHoldData" parameterType = "String" resultType = "com.bestvike.website.entity.HouseHoldSales">
 		<![CDATA[
-			SELECT house_use, house_hold, COUNT(1) total_num, sum(case when t.presell_state = '已售' then 1 else 0 end) sell_num
-            FROM view_houseinfo t WHERE t.bld_id IN (SELECT bld_id FROM ass_regbld WHERE region_id = #{regionId})
+			SELECT house_use, house_hold, COUNT(1) total_num,
+			sum(case when t.presell_state = '已售' then 1 else 0 end) sell_num,
+			sum(case when t.presell_state = '未售' AND t.sales_flag = '是' then 1 else 0 end) nosaled_num,
+			sum(case when t.sales_flag = '否' then 1 else 0 end) nosale_num
+            FROM view_houseinfo t
+            WHERE EXISTS(select 1 from ass_regbld WHERE region_id = #{regionId} AND project_id = t.project_id AND bld_no = t.bld_no)
             GROUP BY house_use, house_hold
             ORDER BY house_use, house_hold
 		]]>

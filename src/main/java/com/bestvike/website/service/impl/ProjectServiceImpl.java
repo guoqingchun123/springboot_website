@@ -4,9 +4,11 @@ import com.bestvike.website.dao.ViewHouseInfoDao;
 import com.bestvike.website.dao.ViewRegionInfoDao;
 import com.bestvike.website.data.ViewHouseInfo;
 import com.bestvike.website.data.ViewRegionInfo;
-import com.bestvike.website.document.Region;
-import com.bestvike.website.entity.PageBean;
 import com.bestvike.website.document.Division;
+import com.bestvike.website.document.Region;
+import com.bestvike.website.entity.HouseHoldSales;
+import com.bestvike.website.entity.PageBean;
+import com.bestvike.website.entity.RegionCell;
 import com.bestvike.website.entity.SimpleRegion;
 import com.bestvike.website.service.ProjectService;
 import com.github.pagehelper.ISelect;
@@ -51,16 +53,17 @@ public class ProjectServiceImpl implements ProjectService {
 				salesData.add(sales);
 			}
 		}
-		List<Map<String, Object>> listHouseHoldMap = viewRegionInfoDao.selectRegionHouseHoldData(regionId);
+		List<HouseHoldSales> listHouseHold = viewRegionInfoDao.selectRegionHouseHoldData(regionId);
 		viewRegionInfo.setSalesData(salesData);
-		viewRegionInfo.setListHouseHold(listHouseHoldMap);
+		viewRegionInfo.setListHouseHold(listHouseHold);
 		if (StringUtils.isEmpty(viewType) || "salesData".equals(viewType)) {
 			// 楼盘图
-			List<Map<String, Object>> listCellInfo = viewHouseInfoDao.selectRegionCellList(regionId);
+			List<RegionCell> listCellInfo = viewHouseInfoDao.selectRegionCellList(regionId);
 			viewRegionInfo.setListCell(listCellInfo);
 			Map<String, Object> parameterMap = new HashMap<>();
-			parameterMap.put("bldId", (String) listCellInfo.get(0).get("BLD_ID"));
-			parameterMap.put("cellNo", (String) listCellInfo.get(0).get("CELL_NO"));
+			parameterMap.put("projectId", listCellInfo.get(0).getProjectId());
+			parameterMap.put("bldNo", listCellInfo.get(0).getBldNo());
+			parameterMap.put("cellNo", listCellInfo.get(0).getCellNo());
 			List<ViewHouseInfo> listHouseInfo = viewHouseInfoDao.selectHouseInfoList(parameterMap);
 			viewRegionInfo.setListHouse(listHouseInfo);
 		} else if ("houseHold".equals(viewType)) {
@@ -76,9 +79,10 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	@Override
-	public List<ViewHouseInfo> selectCellHouse(String bldId, String cellNo) {
+	public List<ViewHouseInfo> selectCellHouse(String projectId, String bldNo, String cellNo) {
 		Map<String, Object> parameterMap = new HashMap<>();
-		parameterMap.put("bldId", bldId);
+		parameterMap.put("projectId", projectId);
+		parameterMap.put("bldNo", bldNo);
 		parameterMap.put("cellNo", cellNo);
 		return viewHouseInfoDao.selectHouseInfoList(parameterMap);
 	}

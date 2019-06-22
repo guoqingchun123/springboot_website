@@ -4,8 +4,8 @@
 	background-color: rgba(0, 167, 91, 0.9);
 	border-radius: 50%;
 	overflow: hidden;
-	line-height: 20px;
-	font-size: 12px;
+	line-height: 80px;
+	font-size: 18px;
 	font-weight: 600;
 	text-align: center;
 	color: #fff;
@@ -20,20 +20,11 @@
 	background-color: rgba(255, 0, 0, 0.9);
 }
 
-.division p {
-	padding: 0 6px;
-	margin: 0;
-}
-
-.division-title {
-	margin: 10px 0 0 0 !important;
-}
-
 .region {
 	line-height: 24px;
 	cursor: pointer;
 	color: #fff;
-	font-size: 12px;
+	font-size: 14px;
 	font-weight: 600;
 	text-align: center;
 	display: inline-block;

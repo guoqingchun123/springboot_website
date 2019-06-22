@@ -7,7 +7,7 @@
 	<link th:href="@{/layui/css/layui.css}" rel="stylesheet" type="text/css">
 	<link th:href="@{/layui/autocomplete/autocomplete.css}" rel="stylesheet" type="text/css">
 	<link th:href="@{/layui/css/maps.css}" rel="stylesheet" type="text/css">
-	<link th:href="@{/layui/viewer/css/viewer.min.css}" rel="stylesheet" >
+	<link th:href="@{/layui/viewer/css/viewer.min.css}" rel="stylesheet">
 	<style>
 		.room-list {
 			margin: 5px;
@@ -95,10 +95,27 @@
 			padding: 0 5px;
 		}
 		
-		* { margin: 0; padding: 0;}
-		#jq22 { width: 700px; margin: 0 auto; font-size: 0;}
-		#jq22 li { display: inline-block; width: 32%; margin-left: 1%; padding-top: 1%;}
-		#jq22 li img { width: 100%;}
+		* {
+			margin: 0;
+			padding: 0;
+		}
+		
+		#jq22 {
+			width: 700px;
+			margin: 0 auto;
+			font-size: 0;
+		}
+		
+		#jq22 li {
+			display: inline-block;
+			width: 32%;
+			margin-left: 1%;
+			padding-top: 1%;
+		}
+		
+		#jq22 li img {
+			width: 100%;
+		}
 	</style>
 </head>
 <body class="layui-layout-body" style="min-width: 1000px;overflow-x: auto;overflow-y: auto;background: #f1f1f1">
@@ -143,7 +160,7 @@
 		</div>
 		<div id="regionImageDiv" style="width: 100%;background-color: white;margin-top: 10px;height:auto;">
 			<p class="layui-elem-quote">户型图</p>
-			<ul id="jq22">
+			<ul id="jq22" class="viewer" style="width: 95%">
 				<li><img th:src="@{/themes/test/images/houseHold/houseHold01.jpg}"/></li>
 				<li><img th:src="@{/themes/test/images/houseHold/houseHold02.jpg}"/></li>
 			</ul>
@@ -216,7 +233,7 @@
 			, width: '100%' //设置容器宽度
 			, arrow: 'always' //始终显示箭头
 		});
-		
+
 		var layid = location.hash.replace(/^#tab=/, '');
 		var element = layui.element;
 		element.tabChange('tab', layid);
@@ -235,13 +252,17 @@
 			series: [
 				{
 					type: 'pie',
-					radius: '55%',
+					radius: '85%',
 					data: [[${region.salesData}]],
-					itemStyle: {
-						emphasis: {
-							shadowBlur: 10,
-							shadowOffsetX: 0,
-							shadowColor: 'rgba(0, 0, 0, 0.5)'
+					label: {
+						normal: {
+							formatter(v) {
+								return Math.round(v.percent) + '%' + '' + v.name
+							},
+							textStyle: {
+								fontWeight: 300,
+								fontSize: 16    //文字的字体大小
+							}
 						}
 					}
 				}

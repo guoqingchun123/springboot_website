@@ -14,20 +14,21 @@ public class AssRegBld implements Serializable {
 	private static final long serialVersionUID = 9086418361123853195L;
 
 	@Id
-	private String bldId;
+	private String sysId;
 	private String regionId;
 	private String projectId;
+	private String bldNo;
 	private String remark;
 
 	@Transient
 	private String bldName;
 
-	public String getBldId() {
-		return bldId;
+	public String getSysId() {
+		return sysId;
 	}
 
-	public void setBldId(String bldId) {
-		this.bldId = bldId;
+	public void setSysId(String sysId) {
+		this.sysId = sysId;
 	}
 
 	public String getRegionId() {
@@ -44,6 +45,14 @@ public class AssRegBld implements Serializable {
 
 	public void setProjectId(String projectId) {
 		this.projectId = projectId;
+	}
+
+	public String getBldNo() {
+		return bldNo;
+	}
+
+	public void setBldNo(String bldNo) {
+		this.bldNo = bldNo;
 	}
 
 	public String getRemark() {

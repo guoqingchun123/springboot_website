@@ -185,9 +185,7 @@
 						// 点标记显示内容，HTML要素字符串
 						var markerContent =
 							'<div class="division">'
-							+ '<p class="division-title">' + division.divisionName + '</p>'
-							+ '<p>' + division.regionNum + '小区</p>'
-							+ '<p>' + division.bldNum + '栋楼</p>'
+							+ division.divisionName
 							+ '</div>';
 						var marker = new AMap.Marker({
 							position: [division.x, division.y],

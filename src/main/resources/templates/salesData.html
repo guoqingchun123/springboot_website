@@ -21,14 +21,14 @@
 		
 		.bg-gdcd {
 			height: 32px;
-			background: #03c2dd;
+			background: #00dd02;
 			font-size: 16px;
 			padding: 0 8px;
 			font-weight: bold;
 		}
 		
 		.saled {
-			background: #dcdddd;
+			background: #dd6a62;
 		}
 		
 		.mortgage {
@@ -40,7 +40,7 @@
 		}
 		
 		.frozen {
-			background: #dd000e;
+			background: #dd8800;
 		}
 		
 		.bg-gdcd span {
@@ -103,7 +103,8 @@
 		</div>
 		<div class="layui-col-md9" style="padding-right: 15px;">
 			<div style="float: right">
-				<input type='text' autocomplete="off" placeholder="请输入项目名称或项目地址检索" class="layui-input layui-input-search" name="auto-regions" id="auto-regions">
+				<input type='text' autocomplete="off" placeholder="请输入项目名称或项目地址检索"
+					   class="layui-input layui-input-search" name="auto-regions" id="auto-regions">
 				<a href=""><i class="layui-icon layui-icon-search"></i></a>
 			</div>
 		</div>
@@ -121,26 +122,28 @@
 				</span>
 			</div>
 		</div>
-		<div style="width: 100%;background-color: white;margin-top: 10px;height:auto;overflow:hidden">
-			<div class="layui-col-md6" style="padding-top: 15px">
-				<div class="layui-carousel" id="test1">
+		<div style="width: 100%;background-color: white;margin-top: 10px;height:auto;overflow:hidden;">
+			<div class="layui-col-md4">
+				<div class="layui-carousel" id="carousel">
 					<div carousel-item="">
-						<div id="layui-sales-echarts"></div>
-						<div><img th:src="@{/themes/test/images/title/title01.png}"/></div>
+						<div id="regionSalesData"></div>
+						<div style="text-align:center"><img th:src="@{/themes/test/images/title/title01.png}" style="height: 350px"/></div>
 					</div>
 				</div>
 			</div>
-			<div id="layuiSalesProgress01" class="layui-col-md3" style="padding-left: 15px;padding-top: 15px">
+			<div class="layui-col-md4" style="padding-left: 15px;">
+				<div id="residenceSalesData" style="width: 100%;height: 350px"></div>
 			</div>
-			<div id="layuiSalesProgress02" class="layui-col-md3" style="padding-top: 15px;padding-right: 15px">
+			<div class="layui-col-md4" style="padding-left: 15px;">
+				<div id="matingSalesData" style="width: 100%;height: 350px"></div>
 			</div>
 		</div>
 		<div id="salesDataDiv" style="width: 100%;background-color: white;margin-top: 10px;height:auto;">
 			<div class="layui-tab layui-tab-card">
-				<ul class="layui-tab-title" >
+				<ul class="layui-tab-title">
 					<li th:each="cell,cellStat : ${region.listCell}"
-						th:value="${cell.BLD_ID} + '|' + ${cell.CELL_NO}" th:class="${cellStat.index == 0 ? 'layui-this bldCellTab' : 'bldCellTab'}">
-						<label th:text="${cell.CELL_NAME}"></label>
+						th:value="${cell.projectId} + '|' + ${cell.bldNo} + '|' + ${cell.cellNo}" th:class="${cellStat.index == 0 ? 'layui-this bldCellTab' : 'bldCellTab'}">
+						<label th:text="${cell.cellName}"></label>
 					</li>
 				</ul>
 			</div>
@@ -148,30 +151,6 @@
 		</div>
 	</div>
 </div>
-<script id="layuiSalesProgress01Script" type="text/html">
-	<fieldset class="layui-elem-field layui-field-title">
-		<legend>住宅销售情况</legend>
-	</fieldset>
-	{{#  layui.each(d, function(index, item){ }}
-	{{# if(item.HOUSE_USE.indexOf('住宅') != -1){ }}
-	<div class="layui-elem-quote">{{item.HOUSE_USE}}-{{item.HOUSE_HOLD}}，
-		共<label style="color: red;font-size: large">{{item.TOTAL_NUM}}</label>套，已售出<label style="color: #005aff;font-size: large">{{item.SELL_NUM}}</label>套
-	</div>
-	{{# } }}
-	{{#  }); }}
-</script>
-<script id="layuiSalesProgress02Script" type="text/html">
-	<fieldset class="layui-elem-field layui-field-title">
-		<legend>配套销售情况</legend>
-	</fieldset>
-	{{#  layui.each(d, function(index, item){ }}
-	{{# if(item.HOUSE_USE.indexOf('住宅') == -1){ }}
-	<div class="layui-elem-quote">{{item.HOUSE_USE}}-{{item.HOUSE_HOLD}}，
-		共<label style="color: red;font-size: large">{{item.TOTAL_NUM}}</label>套，已售出<label style="color: #005aff;font-size: large">{{item.SELL_NUM}}</label>套
-	</div>
-	{{# } }}
-	{{#  }); }}
-</script>
 <script id="houseCardScript" type="text/html">
 	{{#  layui.each(d, function(index, item){ }}
 	{{# if(item.initRoom === 1){ }}
@@ -264,8 +243,9 @@
 		var carousel = layui.carousel;
 
 		carousel.render({
-			elem: '#test1'
+			elem: '#carousel'
 			, width: '100%' //设置容器宽度
+			, height: '350px'
 			, arrow: 'always' //始终显示箭头
 		});
 
@@ -276,8 +256,6 @@
 		element.on('tab(tab)', function (elem) {
 			location.hash = 'tab=' + $(this).attr('lay-id');
 		});
-
-		var myChart = echarts.init(document.getElementById('layui-sales-echarts'), 'macarons');
 
 		var option = {
 			tooltip: {
@@ -290,9 +268,13 @@
 					radius: '85%',
 					data: [[${region.salesData}]],
 					label: {
-						normal:{
+						normal: {
 							formatter(v) {
 								return Math.round(v.percent) + '%' + '' + v.name
+							},
+							textStyle: {
+								fontWeight: 300,
+								fontSize: 16    //文字的字体大小
 							}
 						}
 					}
@@ -300,18 +282,159 @@
 			]
 		};
 
-		myChart.setOption(option);
-		var getTpl = document.getElementById("layuiSalesProgress01Script").innerHTML
-			, view = document.getElementById('layuiSalesProgress01');
-		laytpl(getTpl).render([[${region.listHouseHold}]], function (html) {
-			view.innerHTML = html;
-		});
+		var regionSalesData = echarts.init(document.getElementById('regionSalesData'), 'macarons');
 
-		getTpl = document.getElementById("layuiSalesProgress02Script").innerHTML
-			, view = document.getElementById('layuiSalesProgress02');
-		laytpl(getTpl).render([[${region.listHouseHold}]], function (html) {
-			view.innerHTML = html;
-		});
+		regionSalesData.setOption(option);
+		var regionHouseHoldSalesData = [[${region.listHouseHold}]];
+		
+		var matingSalesHouseHolds = [];
+		var matingSalesSell = [];
+		var matingSalesNoSaled = [];
+		var matingSalesNoSale = [];
+		var residenceHouseHolds = [];
+		var residenceSalesSell = [];
+		var residenceSalesNoSaled = [];
+		var residenceSalesNoSale = [];
+		
+		for (var i = 0; i < regionHouseHoldSalesData.length; i++) {
+			if (regionHouseHoldSalesData[i].houseUse.indexOf('住宅') == -1) {
+				matingSalesHouseHolds.push(regionHouseHoldSalesData[i].houseUse + regionHouseHoldSalesData[i].houseHold);
+				matingSalesSell.push(regionHouseHoldSalesData[i].sellNum);
+				matingSalesNoSaled.push(regionHouseHoldSalesData[i].nosaledNum);
+				matingSalesNoSale.push(regionHouseHoldSalesData[i].nosaleNum);
+			} else {
+				residenceHouseHolds.push(regionHouseHoldSalesData[i].houseUse + regionHouseHoldSalesData[i].houseHold);
+				residenceSalesSell.push(regionHouseHoldSalesData[i].sellNum);
+				residenceSalesNoSaled.push(regionHouseHoldSalesData[i].nosaledNum);
+				residenceSalesNoSale.push(regionHouseHoldSalesData[i].nosaleNum);
+			}
+		}
+
+		option = {
+			title: {
+				text: '配套',
+				textStyle: {
+					//文字颜色
+					color: '#1a1b1a',
+					fontWeight: 'bold',
+					//字体大小
+					fontSize: 18
+				}
+			},
+			tooltip: {
+				trigger: 'axis',
+				axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+					type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+				}
+			},
+			legend: {
+				data: ['已售', '未售', '不参与销售']
+			},
+			grid: {
+				left: '3%',
+				right: '4%',
+				bottom: '3%',
+				containLabel: true
+			},
+			xAxis: [
+				{
+					type: 'category',
+					data: matingSalesHouseHolds
+				}
+			],
+			yAxis: [
+				{
+					type: 'value'
+				}
+			],
+			series: [
+				{
+					name: '已售',
+					type: 'bar',
+					stack: '销售情况',
+					data: matingSalesSell
+				},
+				{
+					name: '未售',
+					type: 'bar',
+					stack: '销售情况',
+					data: matingSalesNoSaled
+				},
+				{
+					name: '不参与销售',
+					type: 'bar',
+					stack: '销售情况',
+					data: matingSalesNoSale
+				},
+			]
+		};
+
+		var matingSalesDataEcharts = echarts.init(document.getElementById('matingSalesData'), 'macarons');
+
+		matingSalesDataEcharts.setOption(option);
+
+		option = {
+			title: {
+				text: '住宅',
+				textStyle: {
+					//文字颜色
+					color: '#1a1b1a',
+					fontWeight: 'bold',
+					//字体大小
+					fontSize: 18
+				}
+			},
+			tooltip: {
+				trigger: 'axis',
+				axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+					type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+				}
+			},
+			legend: {
+				data: ['已售', '未售', '不参与销售']
+			},
+			grid: {
+				left: '3%',
+				right: '4%',
+				bottom: '3%',
+				containLabel: true
+			},
+			xAxis: [
+				{
+					type: 'category',
+					data: residenceHouseHolds
+				}
+			],
+			yAxis: [
+				{
+					type: 'value'
+				}
+			],
+			series: [
+				{
+					name: '已售',
+					type: 'bar',
+					stack: '销售情况',
+					data: residenceSalesSell
+				},
+				{
+					name: '未售',
+					type: 'bar',
+					stack: '销售情况',
+					data: residenceSalesNoSaled
+				},
+				{
+					name: '不参与销售',
+					type: 'bar',
+					stack: '销售情况',
+					data: residenceSalesNoSale
+				},
+			]
+		};
+		
+		var residenceSalesDataEcharts = echarts.init(document.getElementById('residenceSalesData'), 'macarons');
+
+		residenceSalesDataEcharts.setOption(option);
 
 		getTpl = document.getElementById("houseCardScript").innerHTML
 			, view = document.getElementById('houseCardContainer');
@@ -325,8 +448,9 @@
 				url: ctxPath + 'cell-house',
 				method: 'get',
 				data: {
-					bldId: bld.split("|")[0],
-					cellNo: bld.split("|")[1]
+					projectId: bld.split("|")[0],
+					bldNo: bld.split("|")[1],
+					cellNo: bld.split("|")[2]
 				},
 				success: function (res) {
 					getTpl = document.getElementById("houseCardScript").innerHTML

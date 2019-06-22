@@ -1,6 +1,7 @@
 package com.bestvike.website.dao;
 
 import com.bestvike.website.data.ViewRegionInfo;
+import com.bestvike.website.entity.HouseHoldSales;
 import com.bestvike.website.entity.SimpleRegion;
 import java.util.List;
 import java.util.Map;
@@ -18,5 +19,5 @@ public interface ViewRegionInfoDao extends Mapper<ViewRegionInfo> {
 
 	public Map<String, Object> selectRegionSalesData(String regionId);
 
-	public List<Map<String, Object>> selectRegionHouseHoldData(String regionId);
+	public List<HouseHoldSales> selectRegionHouseHoldData(String regionId);
 }

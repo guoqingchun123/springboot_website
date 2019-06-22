@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -83,7 +84,7 @@ public class ProjectController extends BaseController {
 	}
 
 	@GetMapping(value = "/cell-house")
-	public List<ViewHouseInfo> selectCellHouse(@RequestParam String bldId, @RequestParam String cellNo) {
-		return projectService.selectCellHouse(bldId, cellNo);
+	public List<ViewHouseInfo> selectCellHouse(@RequestParam String projectId, @RequestParam String bldNo, @RequestParam String cellNo) {
+		return projectService.selectCellHouse(projectId, bldNo, cellNo);
 	}
 }

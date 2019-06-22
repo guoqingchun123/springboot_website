@@ -1,5 +1,7 @@
 package com.bestvike.website.data;
 
+import com.bestvike.website.entity.HouseHoldSales;
+import com.bestvike.website.entity.RegionCell;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
@@ -39,9 +41,9 @@ public class ViewRegionInfo implements Serializable {
 	@Transient
 	private List<Map<String, Object>> salesData;
 	@Transient
-	private List<Map<String, Object>> listHouseHold;
+	private List<HouseHoldSales> listHouseHold;
 	@Transient
-	private List<Map<String, Object>> listCell;
+	private List<RegionCell> listCell;
 	@Transient
 	private List<ViewHouseInfo> listHouse;
 
@@ -157,19 +159,19 @@ public class ViewRegionInfo implements Serializable {
 		this.houseNum = houseNum;
 	}
 
-	public List<Map<String, Object>> getListHouseHold() {
+	public List<HouseHoldSales> getListHouseHold() {
 		return listHouseHold;
 	}
 
-	public void setListHouseHold(List<Map<String, Object>> listHouseHold) {
+	public void setListHouseHold(List<HouseHoldSales> listHouseHold) {
 		this.listHouseHold = listHouseHold;
 	}
 
-	public List<Map<String, Object>> getListCell() {
+	public List<RegionCell> getListCell() {
 		return listCell;
 	}
 
-	public void setListCell(List<Map<String, Object>> listCell) {
+	public void setListCell(List<RegionCell> listCell) {
 		this.listCell = listCell;
 	}
 

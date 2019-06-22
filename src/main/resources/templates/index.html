@@ -35,6 +35,10 @@
 	.layui-breadcrumb a.selected {
 		color: green;
 	}
+	
+	.summary-card:hover {
+		background-color: #e1f0f3;
+	}
 </style>
 <body class="layui-layout-body" style="min-width: 1000px;overflow-x: auto;overflow-y: auto;background: #f1f1f1">
 <div class="layui-layout layui-layout-admin">
@@ -97,7 +101,7 @@
 		小区列表：共为您筛选出<label style="color: red">{{d.length}}</label>个小区
 	</blockquote>
 	{{#  layui.each(d, function(index, item){ }}
-	<div class="layui-card">
+	<div class="layui-card summary-card" data-value="{{=item.regionId}}" style="cursor: pointer;">
 		<div class="layui-card-header">
 			<div style="float: left;">
 				<label style="color: green;font-weight:bold;font-size: large">{{item.regionName}}</label>
@@ -163,6 +167,10 @@
 		// 跳转到小区详情页面
 		$(".summary-btn").on("click", function () {
 			window.open(ctxPath + 'content/' + $(this).val(), '_blank');
+		});
+		
+		$(".summary-card").on("click", function () {
+			window.open(ctxPath + 'content/' + $(this).attr("data-value"), '_blank');
 		});
 	});
 </script>
