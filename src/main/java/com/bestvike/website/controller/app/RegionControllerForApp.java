@@ -2,11 +2,14 @@ package com.bestvike.website.controller.app;
 
 import com.bestvike.website.controller.BaseController;
 import com.bestvike.website.document.Division;
+import com.bestvike.website.entity.BldCells;
+import com.bestvike.website.entity.FloorSummary;
 import com.bestvike.website.service.ProjectService;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,5 +37,36 @@ public class RegionControllerForApp extends BaseController {
 		return projectService.queryDivision();
 	}
 
+	@GetMapping(value = "/regionSales/{regionId}")
+	public Map<String, Object> regionSalesData(@PathVariable String regionId) {
+		return projectService.queryRegionSales(regionId);
+	}
 
+	@GetMapping(value = "/regionDocs/{regionId}")
+	public List<Map<String, Object>> regionDocs(@PathVariable String regionId, @RequestParam String type) {
+		return projectService.queryRegionDocs(regionId, type);
+	}
+
+	@GetMapping(value = "/regionBldCells/{regionId}")
+	public List<BldCells> regionBldCells(@PathVariable String regionId) {
+		return projectService.queryRegionBldCells(regionId);
+	}
+
+	@GetMapping(value = "/houses")
+	public Map<String, Object> houses(@RequestParam String projectId, @RequestParam String bldNo, @RequestParam String cellNo,
+		@RequestParam int pageNo, @RequestParam int pageSize) {
+		return projectService.pageHouses(projectId, bldNo, cellNo, pageNo, pageSize);
+	}
+
+	/**
+	 * 查询楼层统计数据
+	 * @param projectId
+	 * @param bldNo
+	 * @param cellNo
+	 * @return
+	 */
+	@GetMapping(value = "/floorSummary")
+	public List<FloorSummary> floorSummary(@RequestParam String projectId, @RequestParam String bldNo, @RequestParam String cellNo) {
+		return projectService.floorSummary(projectId, bldNo, cellNo);
+	}
 }

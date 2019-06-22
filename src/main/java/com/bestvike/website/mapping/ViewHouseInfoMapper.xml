@@ -40,4 +40,40 @@
 			ORDER BY lpad(floor_no, 10, '0'), show_name, house_id
 		]]>
 	</select>
+
+	<select id = "selectHouseByParameter" parameterType = "map" resultType = "com.bestvike.website.entity.House">
+		<![CDATA[
+			SELECT house_id, show_name, house_hold, house_use, floor_no, floor_name, construct_area,
+				CASE WHEN mortgage_flag = '是' THEN '抵押'
+					WHEN close_flag = '是' THEN '查封'
+					WHEN frozen_flag = '是' THEN '冻结'
+					WHEN presell_state = '已售' THEN '已售'
+					WHEN sales_flag = '否' THEN '不予销售'
+					WHEN presell_state = '未售' THEN '未售'
+				ELSE '其他' END presell_state,
+				CASE WHEN mortgage_flag = '是' THEN 'ddb400'
+					WHEN close_flag = '是' THEN 'dd6600'
+					WHEN frozen_flag = '是' THEN 'dd8800'
+					WHEN presell_state = '已售' THEN 'dd6a62'
+					WHEN sales_flag = '否' THEN '959595'
+					WHEN presell_state = '未售' THEN '00dd02'
+				ELSE '00dd02' END color_code,
+				CASE WHEN sales_flag = '是' THEN presell_price ELSE 0 END presell_price
+			FROM view_houseinfo
+			WHERE project_id = #{projectId} AND bld_no = #{bldNo} AND cell_no = #{cellNo}
+			ORDER BY lpad(floor_no, 10, '0') DESC, show_name ASC, house_id ASC
+		]]>
+	</select>
+
+	<select id = "selectFloorSummary" parameterType = "map" resultType = "com.bestvike.website.entity.FloorSummary">
+		<![CDATA[
+			SELECT floor_no, floor_name, COUNT(1) total_num, sum(case when presell_state = '已售' then 1 else 0 END) saled_num,
+				sum(case when presell_state = '未售' then 1 else 0 END) nosaled_num,
+				sum(case when sales_flag = '否' then 1 else 0 END) nosale_num
+			FROM view_houseinfo t
+			WHERE t.project_id = #{projectId} AND t.bld_no = #{bldNo} AND t.cell_no = #{cellNo}
+			GROUP BY floor_no, floor_name
+			ORDER BY lpad(floor_no, 10, '0') DESC
+		]]>
+	</select>
 </mapper>

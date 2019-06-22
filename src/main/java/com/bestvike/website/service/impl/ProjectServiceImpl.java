@@ -5,11 +5,14 @@ import com.bestvike.website.dao.ViewRegionInfoDao;
 import com.bestvike.website.data.ViewHouseInfo;
 import com.bestvike.website.data.ViewRegionInfo;
 import com.bestvike.website.document.Division;
-import com.bestvike.website.document.Region;
+import com.bestvike.website.entity.BldCells;
+import com.bestvike.website.entity.Cell;
+import com.bestvike.website.entity.FloorSummary;
+import com.bestvike.website.entity.House;
 import com.bestvike.website.entity.HouseHoldSales;
 import com.bestvike.website.entity.PageBean;
 import com.bestvike.website.entity.RegionCell;
-import com.bestvike.website.entity.SimpleRegion;
+import com.bestvike.website.entity.Region;
 import com.bestvike.website.service.ProjectService;
 import com.github.pagehelper.ISelect;
 import com.github.pagehelper.PageHelper;
@@ -53,14 +56,16 @@ public class ProjectServiceImpl implements ProjectService {
 				salesData.add(sales);
 			}
 		}
-		List<HouseHoldSales> listHouseHold = viewRegionInfoDao.selectRegionHouseHoldData(regionId);
+		Map<String, Object> parameterMap = new HashMap<>();
+		parameterMap.put("regionId", regionId);
+		List<HouseHoldSales> listHouseHold = viewRegionInfoDao.selectRegionHouseHoldData(parameterMap);
 		viewRegionInfo.setSalesData(salesData);
 		viewRegionInfo.setListHouseHold(listHouseHold);
 		if (StringUtils.isEmpty(viewType) || "salesData".equals(viewType)) {
 			// 楼盘图
 			List<RegionCell> listCellInfo = viewHouseInfoDao.selectRegionCellList(regionId);
 			viewRegionInfo.setListCell(listCellInfo);
-			Map<String, Object> parameterMap = new HashMap<>();
+			parameterMap = new HashMap<>();
 			parameterMap.put("projectId", listCellInfo.get(0).getProjectId());
 			parameterMap.put("bldNo", listCellInfo.get(0).getBldNo());
 			parameterMap.put("cellNo", listCellInfo.get(0).getCellNo());
@@ -88,7 +93,7 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	public Map<String, Object> pageRegions(String keywords, int pageNo, int pageSize, String divisonCode, String price, String houseHold, String sort) {
-		PageInfo<SimpleRegion> simpleRegionPage = PageHelper.startPage(pageNo, pageSize).doSelectPageInfo(new ISelect() {
+		PageInfo<Region> simpleRegionPage = PageHelper.startPage(pageNo, pageSize).doSelectPageInfo(new ISelect() {
 			@Override
 			public void doSelect() {
 				Map<String, Object> paramterMap = new HashMap<>();
@@ -102,7 +107,7 @@ public class ProjectServiceImpl implements ProjectService {
 					paramterMap.put("price", price);
 				}
 				if (!StringUtils.isEmpty(houseHold)) {
-					paramterMap.put("houseHold",  "%" + houseHold + "%");
+					paramterMap.put("houseHold", "%" + houseHold + "%");
 				}
 				if (!StringUtils.isEmpty(sort)) {
 					String querySort = sort.replaceAll("avgPrice", "avg_price").replaceAll("preSaleDate", "pre_sale_date");
@@ -123,10 +128,133 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	public List<Division> queryDivision() {
-		Region region = new Region();
+		com.bestvike.website.document.Region region = new com.bestvike.website.document.Region();
 		region.setRegionId(UUID.randomUUID().toString());
 		region.setRegionName("小眺望小区");
 		mongoTemplate.save(region);
 		return mongoTemplate.findAll(Division.class);
+	}
+
+	/**
+	 * 查询小区销售统计信息及logos
+	 *
+	 * @param regionId
+	 * @return
+	 */
+	public Map<String, Object> queryRegionSales(String regionId) {
+		Map<String, Object> result = new HashMap<>();
+		List<String> regionLogos = new ArrayList<>();
+		regionLogos.add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1262922132,88008920&fm=26&gp=0.jpg");
+		regionLogos.add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1262922132,88008920&fm=26&gp=0.jpg");
+		result.put("logos", regionLogos);
+		// 查询住宅销售情况
+		Map<String, Object> parameterMap = new HashMap<>();
+		parameterMap.put("regionId", regionId);
+		parameterMap.put("houseUse", "01");
+		List<HouseHoldSales> residence = viewRegionInfoDao.selectRegionHouseHoldData(parameterMap);
+		result.put("residence", residence);
+		// 查询配套销售情况
+		parameterMap.put("houseUse", "99");
+		List<HouseHoldSales> mating = viewRegionInfoDao.selectRegionHouseHoldData(parameterMap);
+		result.put("mating", mating);
+		return result;
+	}
+
+	/**
+	 * @param regionId
+	 * @return
+	 */
+	public List<Map<String, Object>> queryRegionDocs(String regionId, String type) {
+		List<Map<String, Object>> listResult = new ArrayList<>();
+		List<Map<String, Object>> houseHoldList = new ArrayList<>();
+		Map<String, Object> imageMap = new HashMap<>();
+		imageMap.put("imageId", "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1262922132,88008920&fm=26&gp=0.jpg");
+		imageMap.put("imageDesc", "户型图01");
+		houseHoldList.add(imageMap);
+		Map<String, Object> imageMap2 = new HashMap<>();
+		imageMap2.put("imageId", "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1262922132,88008920&fm=26&gp=0.jpg");
+		imageMap2.put("imageDesc", "户型图02");
+		houseHoldList.add(imageMap2);
+		if (!StringUtils.isEmpty(type)) {
+			switch (type) {
+				case "houseHold":
+					// 户型图
+					Map<String, Object> houseHold = new HashMap<>();
+					houseHold.put("docType", "houseHold");
+					houseHold.put("docName", "户型图");
+					houseHold.put("imageList", houseHoldList);
+					listResult.add(houseHold);
+					// 样板间
+					Map<String, Object> prototypeRoom = new HashMap<>();
+					prototypeRoom.put("docType", "prototypeRoom");
+					prototypeRoom.put("docName", "样板间");
+					prototypeRoom.put("imageList", houseHoldList);
+					listResult.add(prototypeRoom);
+					break;
+				case "regionImage":
+					// 鸟瞰图
+					Map<String, Object> aerialView = new HashMap<>();
+					aerialView.put("docType", "aerialView");
+					aerialView.put("docName", "小区鸟瞰图");
+					aerialView.put("imageList", houseHoldList);
+					listResult.add(aerialView);
+					// 施工现场
+					Map<String, Object> constructionSite = new HashMap<>();
+					constructionSite.put("docType", "constructionSite");
+					constructionSite.put("docName", "施工现场");
+					constructionSite.put("imageList", houseHoldList);
+					listResult.add(constructionSite);
+					break;
+			}
+		}
+		return listResult;
+	}
+
+	@Override
+	public List<BldCells> queryRegionBldCells(String regionId) {
+		List<BldCells> listBldCells = viewRegionInfoDao.selectBlds(regionId);
+		for (BldCells bldCells : listBldCells) {
+			List<Cell> listCell = viewRegionInfoDao.selectBldCells(bldCells);
+			bldCells.setListCell(listCell);
+		}
+		return listBldCells;
+	}
+
+	@Override
+	public Map<String, Object> pageHouses(String projectId, String bldNo, String cellNo, int pageNo, int pageSize) {
+		PageInfo<House> simpleHousePage = PageHelper.startPage(pageNo, pageSize).doSelectPageInfo(new ISelect() {
+			@Override
+			public void doSelect() {
+				Map<String, Object> paramterMap = new HashMap<>();
+				if (!StringUtils.isEmpty(projectId)) {
+					paramterMap.put("projectId", projectId);
+				}
+				if (!StringUtils.isEmpty(bldNo)) {
+					paramterMap.put("bldNo", bldNo);
+				}
+				if (!StringUtils.isEmpty(cellNo)) {
+					paramterMap.put("cellNo", cellNo);
+				}
+				viewHouseInfoDao.selectHouseByParameter(paramterMap);
+			}
+		});
+		Map<String, Object> result = new HashMap<>();
+		result.put("list", simpleHousePage.getList());
+		PageBean pageBean = new PageBean();
+		pageBean.setPageNo(simpleHousePage.getPageNum());
+		pageBean.setPageSize(simpleHousePage.getPageSize());
+		pageBean.setTotalPage(simpleHousePage.getPages());
+		pageBean.setTotalSize(simpleHousePage.getSize());
+		result.put("page", pageBean);
+		return result;
+	}
+
+	@Override
+	public List<FloorSummary> floorSummary(String projectId, String bldNo, String cellNo) {
+		Map<String, Object> parameterMap = new HashMap<>();
+		parameterMap.put("projectId", projectId);
+		parameterMap.put("bldNo", bldNo);
+		parameterMap.put("cellNo", cellNo);
+		return viewHouseInfoDao.selectFloorSummary(parameterMap);
 	}
 }

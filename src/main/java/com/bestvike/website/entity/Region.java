@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import javax.persistence.Entity;
 
 @Entity
-public class SimpleRegion implements Serializable {
+public class Region implements Serializable {
 
 	private static final long serialVersionUID = -8881290539595052784L;
 
