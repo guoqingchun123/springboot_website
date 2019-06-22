@@ -68,9 +68,10 @@
 
 	<select id = "selectFloorSummary" parameterType = "map" resultType = "com.bestvike.website.entity.FloorSummary">
 		<![CDATA[
-			SELECT floor_no, floor_name || '层' floor_name, COUNT(1) total_num, sum(case when presell_state = '已售' then 1 else 0 END) saled_num,
+			SELECT floor_no, floor_name || '层' floor_name, COUNT(1) total_num,
+				sum(case when presell_state = '已售' then 1 else 0 END) saled_num,
 				sum(case when presell_state = '未售' then 1 else 0 END) nosaled_num,
-				sum(case when sales_flag = '否' then 1 else 0 END) nosale_num
+				sum(case when sales_flag != '是' then 1 else 0 END) nosale_num
 			FROM view_houseinfo t
 			WHERE t.project_id = #{projectId} AND t.bld_no = #{bldNo} AND t.cell_no = #{cellNo}
 			GROUP BY floor_no, floor_name
