@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Created by lihua on 2016/9/30.
  */
 @RestController
-@RequestMapping(value = "/app")
+@RequestMapping(value = "/api/app")
 public class RegionControllerForApp extends BaseController {
 
 	@Autowired
