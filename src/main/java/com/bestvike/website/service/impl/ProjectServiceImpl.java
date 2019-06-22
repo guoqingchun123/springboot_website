@@ -122,7 +122,7 @@ public class ProjectServiceImpl implements ProjectService {
 		pageBean.setPageNo(simpleRegionPage.getPageNum());
 		pageBean.setPageSize(simpleRegionPage.getPageSize());
 		pageBean.setTotalPage(simpleRegionPage.getPages());
-		pageBean.setTotalSize(simpleRegionPage.getSize());
+		pageBean.setTotalSize(simpleRegionPage.getTotal());
 		result.put("page", pageBean);
 		return result;
 	}
@@ -244,7 +244,7 @@ public class ProjectServiceImpl implements ProjectService {
 		pageBean.setPageNo(simpleHousePage.getPageNum());
 		pageBean.setPageSize(simpleHousePage.getPageSize());
 		pageBean.setTotalPage(simpleHousePage.getPages());
-		pageBean.setTotalSize(simpleHousePage.getSize());
+		pageBean.setTotalSize(simpleHousePage.getTotal());
 		result.put("page", pageBean);
 		return result;
 	}

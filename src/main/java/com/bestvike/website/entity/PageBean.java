@@ -1,10 +1,7 @@
 package com.bestvike.website.entity;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
 @Entity
 public class PageBean implements Serializable {
@@ -13,7 +10,7 @@ public class PageBean implements Serializable {
 
 	private int pageNo;
 	private int pageSize;
-	private int totalSize;
+	private long totalSize;
 	private int totalPage;
 
 	public int getPageNo() {
@@ -32,11 +29,11 @@ public class PageBean implements Serializable {
 		this.pageSize = pageSize;
 	}
 
-	public int getTotalSize() {
+	public long getTotalSize() {
 		return totalSize;
 	}
 
-	public void setTotalSize(int totalSize) {
+	public void setTotalSize(long totalSize) {
 		this.totalSize = totalSize;
 	}
 
