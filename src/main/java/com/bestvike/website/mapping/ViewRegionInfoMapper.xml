@@ -96,7 +96,7 @@
 
 	<select id = "selectBlds" parameterType = "String" resultType = "com.bestvike.website.entity.BldCells">
 		<![CDATA[
-			SELECT project_id, bld_no, bld_name FROM view_bldInfo t WHERE EXISTS (
+			SELECT project_id, bld_no, bld_name || '#' bld_name FROM view_bldInfo t WHERE EXISTS (
 				SELECT 1 FROM ass_regbld WHERE region_id = #{regionId} AND project_id = t.project_id
 			)
 		]]>
