@@ -257,6 +257,39 @@
 			location.hash = 'tab=' + $(this).attr('lay-id');
 		});
 
+
+		getTpl = document.getElementById("houseCardScript").innerHTML
+			, view = document.getElementById('houseCardContainer');
+		laytpl(getTpl).render([[${region.listHouse}]], function (html) {
+			view.innerHTML = html;
+		});
+
+		$(".bldCellTab").on("click", function () {
+			var bld = $(this).attr("value");
+			$.ajax({
+				url: ctxPath + 'cell-house',
+				method: 'get',
+				data: {
+					projectId: bld.split("|")[0],
+					bldNo: bld.split("|")[1],
+					cellNo: bld.split("|")[2]
+				},
+				success: function (res) {
+					getTpl = document.getElementById("houseCardScript").innerHTML
+						, view = document.getElementById('houseCardContainer');
+					laytpl(getTpl).render(res, function (html) {
+						view.innerHTML = html;
+					});
+				}
+			});
+		});
+
+		$(".layui-breadcrumb a").on("click", function () {
+			var viewType = $(this).attr("data-value");
+			window.location.replace(ctxPath + 'content/' + [[${region.regionId}]] + "?viewType=" + viewType);
+		});
+
+
 		var option = {
 			tooltip: {
 				trigger: 'item',
@@ -282,11 +315,11 @@
 			]
 		};
 
-		var regionSalesData = echarts.init(document.getElementById('regionSalesData'), 'macarons');
+		var regionSalesDataCharts = echarts.init(document.getElementById('regionSalesData'), 'macarons');
 
-		regionSalesData.setOption(option);
+		regionSalesDataCharts.setOption(option);
 		var regionHouseHoldSalesData = [[${region.listHouseHold}]];
-		
+
 		var matingSalesHouseHolds = [];
 		var matingSalesSell = [];
 		var matingSalesNoSaled = [];
@@ -295,7 +328,7 @@
 		var residenceSalesSell = [];
 		var residenceSalesNoSaled = [];
 		var residenceSalesNoSale = [];
-		
+
 		for (var i = 0; i < regionHouseHoldSalesData.length; i++) {
 			if (regionHouseHoldSalesData[i].houseUse.indexOf('住宅') == -1) {
 				matingSalesHouseHolds.push(regionHouseHoldSalesData[i].houseUse + regionHouseHoldSalesData[i].houseHold);
@@ -431,41 +464,16 @@
 				},
 			]
 		};
-		
+
 		var residenceSalesDataEcharts = echarts.init(document.getElementById('residenceSalesData'), 'macarons');
 
 		residenceSalesDataEcharts.setOption(option);
 
-		getTpl = document.getElementById("houseCardScript").innerHTML
-			, view = document.getElementById('houseCardContainer');
-		laytpl(getTpl).render([[${region.listHouse}]], function (html) {
-			view.innerHTML = html;
-		});
-
-		$(".bldCellTab").on("click", function () {
-			var bld = $(this).attr("value");
-			$.ajax({
-				url: ctxPath + 'cell-house',
-				method: 'get',
-				data: {
-					projectId: bld.split("|")[0],
-					bldNo: bld.split("|")[1],
-					cellNo: bld.split("|")[2]
-				},
-				success: function (res) {
-					getTpl = document.getElementById("houseCardScript").innerHTML
-						, view = document.getElementById('houseCardContainer');
-					laytpl(getTpl).render(res, function (html) {
-						view.innerHTML = html;
-					});
-				}
-			});
-		});
-
-		$(".layui-breadcrumb a").on("click", function () {
-			var viewType = $(this).attr("data-value");
-			window.location.replace(ctxPath + 'content/' + [[${region.regionId}]] + "?viewType=" + viewType);
-		});
+		$(window).resize(function () {
+			matingSalesDataEcharts.resize();
+			residenceSalesDataEcharts.resize();
+			regionSalesDataCharts.resize();
+		})
 	});
 </script>
 </body>
