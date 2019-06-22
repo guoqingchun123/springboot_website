@@ -14,6 +14,7 @@ public class SimpleRegion implements Serializable {
 	private String address;
 	private String preSaleDate;
 	private BigDecimal avgPrice;
+	private String logoPath;
 	private String divisionCode;
 	private String divisionName;
 	private BigDecimal x;
@@ -58,6 +59,14 @@ public class SimpleRegion implements Serializable {
 
 	public void setAvgPrice(BigDecimal avgPrice) {
 		this.avgPrice = avgPrice;
+	}
+
+	public String getLogoPath() {
+		return logoPath;
+	}
+
+	public void setLogoPath(String logoPath) {
+		this.logoPath = logoPath;
 	}
 
 	public String getDivisionCode() {

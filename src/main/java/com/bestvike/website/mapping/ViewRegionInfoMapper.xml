@@ -12,7 +12,7 @@
         ]]>
 	</select>
 
-	<select id = "selectRegionByKeywords" parameterType = "String" resultType = "com.bestvike.website.entity.SimpleRegion">
+	<select id = "selectRegionByParameter" parameterType = "String" resultType = "com.bestvike.website.entity.SimpleRegion">
 		<![CDATA[
            SELECT t1.region_id, t1.x, t1.y, region_name, address, pre_sale_date, t1.division_code, t2.division_name, proj.avg_price
            FROM view_regionInfo t1 LEFT JOIN view_divisionInfo t2 on t1.division_code = t2.division_code
@@ -24,7 +24,24 @@
 			<if test = "keywords != null">
 				t1.region_name like #{keywords} or t1.address like #{keywords}
 			</if>
+			<if test = "divisionCode != null">
+				t2.division_code = #{divisionCode}
+			</if>
+			<if test = "price != null">
+				proj.avg_price ${price}
+			</if>
+			<if test = "houseHold != null">
+				t1.remark like #{houseHold}
+			</if>
 		</where>
+		<choose>
+			<when test = "sort != null">
+				order by ${sort}
+			</when>
+			<otherwise>
+				order by pre_sale_date desc
+			</otherwise>
+		</choose>
 	</select>
 
 	<select id = "selectRegion" parameterType = "String" resultType = "ViewRegionInfo">

@@ -23,8 +23,10 @@ public class RegionControllerForWeixin extends BaseController {
 
 	@GetMapping(value = "/regions")
 	public Map<String, Object> regions(@RequestParam(required = false) String keywords,
-		@RequestParam int pageNo, @RequestParam int pageSize) {
-		return projectService.pageRegions(keywords, pageNo, pageSize);
+		@RequestParam int pageNo, @RequestParam int pageSize, @RequestParam(required = false) String divisionCode,
+		@RequestParam(required = false) String price, @RequestParam(required = false) String houseHold,
+		@RequestParam(required = false) String sort) {
+		return projectService.pageRegions(keywords, pageNo, pageSize, divisionCode, price, houseHold, sort);
 	}
 
 	@GetMapping(value = "/divisions")

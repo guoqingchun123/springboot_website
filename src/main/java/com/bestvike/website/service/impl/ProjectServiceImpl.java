@@ -87,7 +87,7 @@ public class ProjectServiceImpl implements ProjectService {
 		return viewHouseInfoDao.selectHouseInfoList(parameterMap);
 	}
 
-	public Map<String, Object> pageRegions(String keywords, int pageNo, int pageSize) {
+	public Map<String, Object> pageRegions(String keywords, int pageNo, int pageSize, String divisonCode, String price, String houseHold, String sort) {
 		PageInfo<SimpleRegion> simpleRegionPage = PageHelper.startPage(pageNo, pageSize).doSelectPageInfo(new ISelect() {
 			@Override
 			public void doSelect() {
@@ -95,7 +95,20 @@ public class ProjectServiceImpl implements ProjectService {
 				if (!StringUtils.isEmpty(keywords)) {
 					paramterMap.put("keywords", "%" + keywords + "%");
 				}
-				viewRegionInfoDao.selectRegionByKeywords(paramterMap);
+				if (!StringUtils.isEmpty(divisonCode)) {
+					paramterMap.put("divisonCode", divisonCode);
+				}
+				if (!StringUtils.isEmpty(price)) {
+					paramterMap.put("price", price);
+				}
+				if (!StringUtils.isEmpty(houseHold)) {
+					paramterMap.put("houseHold",  "%" + houseHold + "%");
+				}
+				if (!StringUtils.isEmpty(sort)) {
+					String querySort = sort.replaceAll("avgPrice", "avg_price").replaceAll("preSaleDate", "pre_sale_date");
+					paramterMap.put("sort", querySort);
+				}
+				viewRegionInfoDao.selectRegionByParameter(paramterMap);
 			}
 		});
 		Map<String, Object> result = new HashMap<>();

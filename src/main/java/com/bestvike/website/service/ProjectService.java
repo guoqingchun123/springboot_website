@@ -16,7 +16,7 @@ public interface ProjectService {
 
 	public List<ViewHouseInfo> selectCellHouse(String projectId, String bldId, String cellNo);
 
-	public Map<String, Object> pageRegions(String keywords, int pageNo, int pageSize);
+	public Map<String, Object> pageRegions(String keywords, int pageNo, int pageSize, String divisonCode, String price, String houseHold, String sort);
 
 	public List<Division> queryDivision();
 }

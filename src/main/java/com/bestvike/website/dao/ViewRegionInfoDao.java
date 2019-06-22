@@ -13,7 +13,7 @@ public interface ViewRegionInfoDao extends Mapper<ViewRegionInfo> {
 
 	public List<SimpleRegion> selectAllRegions(Map<String, Object> parameterMap);
 
-	public List<SimpleRegion> selectRegionByKeywords(Map<String, Object> parameterMap);
+	public List<SimpleRegion> selectRegionByParameter(Map<String, Object> parameterMap);
 
 	public ViewRegionInfo selectRegion(String regionId);
 

@@ -34,7 +34,7 @@ public class LayoutServiceImpl implements LayoutService {
 		if (!StringUtils.isEmpty(keywords)) {
 			maps.put("keywords", "%" + keywords + "%");
 		}
-		return viewRegionInfoDao.selectRegionByKeywords(maps);
+		return viewRegionInfoDao.selectRegionByParameter(maps);
 	}
 
 	@Override
