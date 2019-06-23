@@ -25,6 +25,8 @@ import java.util.Map;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -166,29 +168,28 @@ public class ProjectServiceImpl implements ProjectService {
 	 */
 	public List<Map<String, Object>> queryRegionDocs(String regionId, String type) {
 		List<Map<String, Object>> listResult = new ArrayList<>();
-		List<Map<String, Object>> houseHoldList = new ArrayList<>();
-		Map<String, Object> imageMap = new HashMap<>();
-		imageMap.put("imageId", "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1262922132,88008920&fm=26&gp=0.jpg");
-		imageMap.put("imageDesc", "户型图01");
-		houseHoldList.add(imageMap);
-		Map<String, Object> imageMap2 = new HashMap<>();
-		imageMap2.put("imageId", "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1262922132,88008920&fm=26&gp=0.jpg");
-		imageMap2.put("imageDesc", "户型图02");
-		houseHoldList.add(imageMap2);
 		if (!StringUtils.isEmpty(type)) {
 			switch (type) {
 				case "houseHold":
 					// 户型图
 					Map<String, Object> houseHold = new HashMap<>();
-					houseHold.put("docType", "houseHold");
+					houseHold.put("docType", "roomHold");
 					houseHold.put("docName", "户型图");
+					List<Map> houseHoldList = mongoTemplate.find(Query.query(Criteria.
+						where("keyId").is(regionId).
+						and("fileType").is("houseHold").
+						and("subType").is("roomHold")), Map.class, "log_file");
 					houseHold.put("imageList", houseHoldList);
 					listResult.add(houseHold);
 					// 样板间
 					Map<String, Object> prototypeRoom = new HashMap<>();
 					prototypeRoom.put("docType", "prototypeRoom");
 					prototypeRoom.put("docName", "样板间");
-					prototypeRoom.put("imageList", houseHoldList);
+					List<Map> prototypeRoomList = mongoTemplate.find(Query.query(Criteria.
+						where("keyId").is(regionId).
+						and("fileType").is("houseHold").
+						and("subType").is("prototypeRoom")), Map.class, "log_file");
+					prototypeRoom.put("imageList", prototypeRoomList);
 					listResult.add(prototypeRoom);
 					break;
 				case "regionImage":
@@ -196,13 +197,21 @@ public class ProjectServiceImpl implements ProjectService {
 					Map<String, Object> aerialView = new HashMap<>();
 					aerialView.put("docType", "aerialView");
 					aerialView.put("docName", "小区鸟瞰图");
-					aerialView.put("imageList", houseHoldList);
+					List<Map> aerialViewList = mongoTemplate.find(Query.query(Criteria.
+						where("keyId").is(regionId).
+						and("fileType").is("regionImage").
+						and("subType").is("aerialView")), Map.class, "log_file");
+					aerialView.put("imageList", aerialViewList);
 					listResult.add(aerialView);
 					// 施工现场
 					Map<String, Object> constructionSite = new HashMap<>();
 					constructionSite.put("docType", "constructionSite");
 					constructionSite.put("docName", "施工现场");
-					constructionSite.put("imageList", houseHoldList);
+					List<Map> constructionSiteList = mongoTemplate.find(Query.query(Criteria.
+						where("keyId").is(regionId).
+						and("fileType").is("regionImage").
+						and("subType").is("constructionSite")), Map.class, "log_file");
+					constructionSite.put("imageList", constructionSiteList);
 					listResult.add(constructionSite);
 					break;
 			}

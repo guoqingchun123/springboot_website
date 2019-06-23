@@ -7,7 +7,7 @@ app:
 server:
   port: 5000
   servlet:
-    context-path: /maps
+    context-path: /houses
 logging:
   level:
     root: info

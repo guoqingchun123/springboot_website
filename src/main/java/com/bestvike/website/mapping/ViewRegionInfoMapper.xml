@@ -15,7 +15,7 @@
 	<select id = "selectRegionByParameter" parameterType = "String" resultType = "com.bestvike.website.entity.Region">
 		<![CDATA[
            SELECT t1.region_id, t1.x, t1.y, region_name, address, pre_sale_date, t1.division_code, t2.division_name, proj.avg_price,
-           'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1262922132,88008920&fm=26&gp=0.jpg' logoPath
+           'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1262922132,88008920&fm=26&gp=0.jpg' logo_path
            FROM view_regionInfo t1 LEFT JOIN view_divisionInfo t2 on t1.division_code = t2.division_code
            LEFT JOIN (SELECT region_id, max(avg_price) avg_price
 				FROM view_projectinfo vpi LEFT JOIN Ass_RegBld arb ON vpi.project_id = arb.project_id GROUP BY region_id) proj
@@ -32,7 +32,7 @@
 				AND proj.avg_price ${price}
 			</if>
 			<if test = "houseHold != null">
-				AND t1.remark like #{houseHold}
+
 			</if>
 		</where>
 		<choose>
@@ -99,6 +99,7 @@
 			SELECT project_id, bld_no, bld_name || '#' bld_name FROM view_bldInfo t WHERE EXISTS (
 				SELECT 1 FROM ass_regbld WHERE region_id = #{regionId} AND project_id = t.project_id
 			)
+			ORDER BY bld_no ASC
 		]]>
 	</select>
 
@@ -106,6 +107,7 @@
 		<![CDATA[
 			SELECT cell_no, cell_name || '单元' as cell_name FROM view_houseinfo WHERE project_id = #{projectId} AND bld_no = #{bldNo}
 			GROUP BY cell_no, cell_name || '单元'
+			ORDER BY case when regexp_replace(cell_no,'[-0-9,.]', '') IS NULL then to_number(cell_no) else 9999 end asc
 		]]>
 	</select>
 </mapper>

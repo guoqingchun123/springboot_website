@@ -33,7 +33,7 @@
 	}
 	
 	.layui-breadcrumb a.selected {
-		color: green;
+		color: green !important;
 	}
 	
 	.summary-card:hover {
@@ -65,31 +65,31 @@
 			<blockquote class="layui-elem-quote layui-quote-nm">
 				区域范围：
 				<span class="layui-breadcrumb" lay-separator="|">
-					<a href="" class="selected">不限</a>
-					<a href="">松山区</a>
-					<a href="">洪山区</a>
-					<a href="">元宝山区</a>
+					<a href="javascript:;" data-value="" class="selected">不限</a>
+					<a href="javascript:;" data-value="150400">松山区</a>
+					<a href="javascript:;" data-value="150404">洪山区</a>
 				</span>
 			</blockquote>
 			<blockquote class="layui-elem-quote layui-quote-nm">
 				备案均价：
 				<span class="layui-breadcrumb" lay-separator="|">
-					<a href="" class="selected">不限</a>
-					<a href="">3千以下</a>
-					<a href="">3-5千</a>
-					<a href="">5-8千</a>
-					<a href="">8-10千</a>
-					<a href="">1万以上</a>
+					<a href="javascript:;" class="selected">不限</a>
+					<a href="javascript:;" data-value="avgPrice < 5000">5千以下</a>
+					<a href="javascript:;" data-value="avgPrice between 5000 and 8000">5-8千</a>
+					<a href="javascript:;" data-value="avgPrice between 8000 and 10000">8-10千</a>
+					<a href="javascript:;" data-value="avgPrice > 10000">1万以上</a>
 				</span>
 			</blockquote>
 			<blockquote class="layui-elem-quote layui-quote-nm">
 				房屋户型：
 				<span class="layui-breadcrumb" lay-separator="|">
-					<a href="" class="selected">不限</a>
-					<a href="">一室</a>
-					<a href="">二室</a>
-					<a href="">三室</a>
-					<a href="">四室及以上</a>
+					<a href="javascript:;" class="selected">不限</a>
+					<a href="javascript:;" data-value="一室">一室</a>
+					<a href="javascript:;" data-value="二室">二室</a>
+					<a href="javascript:;" data-value="三室">三室</a>
+					<a href="javascript:;" data-value="四室">四室</a>
+					<a href="javascript:;" data-value="五室">五室</a>
+					<a href="javascript:;" data-value="其他">其他</a>
 				</span>
 			</blockquote>
 		</div>
@@ -168,9 +168,13 @@
 		$(".summary-btn").on("click", function () {
 			window.open(ctxPath + 'content/' + $(this).val(), '_blank');
 		});
-		
+
 		$(".summary-card").on("click", function () {
 			window.open(ctxPath + 'content/' + $(this).attr("data-value"), '_blank');
+		});
+
+		$(".layui-breadcrumb a").on("click", function () {
+			$(this).parent().children().removeClass(".selected");
 		});
 	});
 </script>
