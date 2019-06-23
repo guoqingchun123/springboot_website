@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,5 +33,15 @@ public class RegionControllerForWeixin extends BaseController {
 	@GetMapping(value = "/divisions")
 	public List<Division> divisions() {
 		return projectService.queryDivision();
+	}
+
+	@GetMapping(value = "/regionSales/{regionId}")
+	public Map<String, Object> regionSalesData(@PathVariable String regionId) {
+		return projectService.queryRegionSales(regionId);
+	}
+
+	@GetMapping(value = "/regionDocs/{regionId}")
+	public List<Map<String, Object>> regionDocs(@PathVariable String regionId, @RequestParam String type) {
+		return projectService.queryRegionDocs(regionId, type);
 	}
 }
