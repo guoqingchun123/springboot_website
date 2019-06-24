@@ -151,7 +151,7 @@
 								+ region.regionName
 								+ "</div>"
 								+ "<div class=\"layui-card-body\">"
-								+ "<img src=\"https://pic4.ajkimg.com/display/xinfang/665944b5b39a56537506838714c4e8b4/129x115n.jpg\">"
+								+ "<img src="+ region.logoPath +" style='width:150px;height:150px'>"
 								+ "</div>"
 								+ "</div>";
 							infoWindow = new AMap.InfoWindow({
@@ -258,8 +258,8 @@
 				autoplay: true
 			};
 			var ins = carousel.render(options);
-			$("#region-form-header").children("div").html('<img src="/maps/themes/test/images/viewer/view01.jpg"/>'
-				+ '<img src="/maps/themes/test/images/viewer/view02.jpg"/>');
+			$("#region-form-header").children("div").html(
+				'<img src=""+ region.logoPath +"/>');
 			ins.reload(options);
 			$("#region-form-name").html(region.regionName);
 
