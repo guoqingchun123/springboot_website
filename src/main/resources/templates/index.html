@@ -64,7 +64,7 @@
 		<div class="layui-form-search" style="margin-top: 10px;background-color: white;">
 			<blockquote class="layui-elem-quote layui-quote-nm">
 				区域范围：
-				<span class="layui-breadcrumb" lay-separator="|">
+				<span class="layui-breadcrumb division" lay-separator="|">
 					<a href="javascript:;" data-value="" class="selected">不限</a>
 					<a href="javascript:;" data-value="150400">松山区</a>
 					<a href="javascript:;" data-value="150404">洪山区</a>
@@ -72,17 +72,17 @@
 			</blockquote>
 			<blockquote class="layui-elem-quote layui-quote-nm">
 				备案均价：
-				<span class="layui-breadcrumb" lay-separator="|">
+				<span class="layui-breadcrumb avgPrice" lay-separator="|">
 					<a href="javascript:;" class="selected">不限</a>
-					<a href="javascript:;" data-value="avgPrice < 5000">5千以下</a>
-					<a href="javascript:;" data-value="avgPrice between 5000 and 8000">5-8千</a>
-					<a href="javascript:;" data-value="avgPrice between 8000 and 10000">8-10千</a>
-					<a href="javascript:;" data-value="avgPrice > 10000">1万以上</a>
+					<a href="javascript:;" data-value=" < 5000">5千以下</a>
+					<a href="javascript:;" data-value="between 5000 and 8000">5-8千</a>
+					<a href="javascript:;" data-value="between 8000 and 10000">8-10千</a>
+					<a href="javascript:;" data-value=" > 10000">1万以上</a>
 				</span>
 			</blockquote>
 			<blockquote class="layui-elem-quote layui-quote-nm">
 				房屋户型：
-				<span class="layui-breadcrumb" lay-separator="|">
+				<span class="layui-breadcrumb houseHold" lay-separator="|">
 					<a href="javascript:;" class="selected">不限</a>
 					<a href="javascript:;" data-value="一室">一室</a>
 					<a href="javascript:;" data-value="二室">二室</a>
@@ -94,6 +94,7 @@
 			</blockquote>
 		</div>
 		<div id="regionCardContainer"></div>
+		<div id="page" style="text-align: right"></div>
 	</div>
 </div>
 <script id="regionCardScript" type="text/html">
@@ -135,7 +136,7 @@
 	}).extend({ //设定模块别名
 		autocomplete: 'autocomplete'
 	});
-	layui.use(['carousel', 'element', 'layer', 'autocomplete', 'laytpl'], function () {
+	layui.use(['laypage', 'carousel', 'element', 'layer', 'autocomplete', 'laytpl'], function () {
 		var $ = layui.jquery;
 		var autocomplete = layui.autocomplete;
 
@@ -174,9 +175,29 @@
 		});
 
 		$(".layui-breadcrumb a").on("click", function () {
-			$(this).parent().children().removeClass(".selected");
+			$(this).parent().find(".selected").removeClass("selected");
+			$(this).addClass("selected");
+			$.ajax({
+				url: ctxPath + 'filter-regions',
+				method: 'get',
+				data: {
+					divisionCode: $(".division").find(".selected").attr("data-value"),
+					price: $(".avgPrice").find(".selected").attr("data-value"),
+					houseHold: $(".houseHold").find(".selected").attr("data-value"),
+					pageNo: 1,
+					pageSize: 999
+				},
+				success: function (res) {
+					var regions = res.list;
+					var getTpl = document.getElementById("regionCardScript").innerHTML
+						, view = document.getElementById('regionCardContainer');
+					laytpl(getTpl).render(regions, function (html) {
+						view.innerHTML = html;
+					});
+				}
+			});
 		});
-
+		
 		$('img').error(function () {
 			$(this).attr('src', ctxPath + "themes/images/nothing.png");
 		})

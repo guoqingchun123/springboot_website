@@ -36,6 +36,14 @@ public class ProjectController extends BaseController {
 		return listRegionInfo;
 	}
 
+	@GetMapping(value = "/filter-regions")
+	public Map<String, Object> regions(@RequestParam(required = false) String keywords,
+		@RequestParam int pageNo, @RequestParam int pageSize, @RequestParam(required = false) String divisionCode,
+		@RequestParam(required = false) String price, @RequestParam(required = false) String houseHold,
+		@RequestParam(required = false) String sort) {
+		return projectService.pageRegions(keywords, pageNo, pageSize, divisionCode, price, houseHold, sort);
+	}
+
 	/**
 	 * 查询项目详情
 	 *
