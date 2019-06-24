@@ -9,26 +9,20 @@
 	<link th:href="@{/layui/css/maps.css}" rel="stylesheet" type="text/css">
 	<link th:href="@{/layui/viewer/css/viewer.min.css}" rel="stylesheet">
 	<style>
-		* {
-			margin: 0;
-			padding: 0;
-		}
-		
-		#jq22 {
-			width: 700px;
+		.viewer {
+			width: 95%;
 			margin: 0 auto;
 			font-size: 0;
 		}
 		
-		#jq22 li {
+		.viewer li {
 			display: inline-block;
-			width: 32%;
 			margin-left: 1%;
-			padding-top: 1%;
 		}
 		
-		#jq22 li img {
-			width: 100%;
+		.viewer li img {
+			width: 150px;
+			height: 150px
 		}
 	</style>
 </head>
@@ -82,17 +76,12 @@
 <script th:src="@{/layui/echarts/echarts.js}"></script>
 <script th:src="@{/layui/echarts/macarons.js}"></script>
 <script th:src="@{/layui/viewer/js/viewer.min.js}"></script>
-<script>
-	var viewer = new Viewer(document.getElementById('jq22'), {
-		url: 'data-original'
-	})
-</script>
 <script id="houseHoldDivScript" type="text/html">
 	{{# layui.each(d, function(index, docFiles){ }}
 	<p class="layui-elem-quote">{{docFiles.docName}}</p>
-	<ul id="jq22">
+	<ul class="viewer">
 		{{# layui.each(docFiles.imageList, function(indx, docFile){ }}
-			<li><img th:src="${docFile?.thumbUrl}"/></li>
+		<li><img src="{{=docFile.thumbUrl}}" data-original="{{=docFile.viewUrl}}"/></li>
 		{{# }); }}
 	</ul>
 	{{# }); }}
@@ -149,8 +138,13 @@
 			, view = document.getElementById('houseHoldDiv');
 		laytpl(getTpl).render([[${region.listDocFiles}]], function (html) {
 			view.innerHTML = html;
+			$.each($(".viewer"), function (item) {
+				var viewer = new Viewer($(this)[0], {
+					url: 'data-original'
+				})
+			});
 		});
-		
+
 		var option = {
 			tooltip: {
 				trigger: 'item',

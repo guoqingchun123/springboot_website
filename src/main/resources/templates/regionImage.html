@@ -9,94 +9,8 @@
 	<link th:href="@{/layui/css/maps.css}" rel="stylesheet" type="text/css">
 	<link th:href="@{/layui/viewer/css/viewer.min.css}" rel="stylesheet">
 	<style>
-		.room-list {
-			margin: 5px;
-			width: 150px;
-			color: #333;
-			font-size: 14px;
-			line-height: 32px;
-			cursor: pointer;
-			position: relative;
-			display: inline-block;
-		}
-		
-		.bg-gdcd {
-			height: 32px;
-			background: #dcdddd;
-			font-size: 16px;
-			padding: 0 8px;
-			font-weight: bold;
-		}
-		
-		.saled {
-			background: #007bdd;
-		}
-		
-		.mortgage {
-			background: #ddb400;
-		}
-		
-		.close {
-			background: #dd6600;
-		}
-		
-		.frozen {
-			background: #dd000e;
-		}
-		
-		.bg-gdcd span {
-			border: 1px solid #959595;
-			padding: 0 5px;
-			font-size: 14px;
-			margin: 0 5px;
-			font-weight: normal;
-		}
-		
-		.m-bott {
-			padding: 6px;
-			line-height: 20px;
-			border: 1px solid #dcdddd;
-		}
-		
-		.room-content {
-			width: 260px;
-			position: absolute;
-			z-index: 999;
-			top: -120px;
-			left: 160px;
-			display: none;
-		}
-		
-		.room-list:hover .room-content {
-			display: block;
-			z-index: 999;
-		}
-		
-		.content-box {
-			background: #fff;
-			padding: 15px;
-			box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-			border-radius: 5px;
-		}
-		
-		.content-box p {
-			margin: 0;
-			color: #999;
-		}
-		
-		.content-box p span {
-			color: #333;
-		}
-		
-		.box-title span {
-			font-size: 14px;
-			margin-left: 8px;
-			border: 1px solid #959595;
-			padding: 0 5px;
-		}
-		
 		.viewer {
-			width: 700px;
+			width: 95%;
 			margin: 0 auto;
 			font-size: 0;
 		}
@@ -162,9 +76,9 @@
 <script id="regionImageDivScript" type="text/html">
 	{{# layui.each(d, function(index, docFiles){ }}
 	<p class="layui-elem-quote">{{docFiles.docName}}</p>
-	<ul id="jq22">
+	<ul class="viewer">
 		{{# layui.each(docFiles.imageList, function(indx, docFile){ }}
-		<li><img th:src="${docFile?.thumbUrl}"/></li>
+		<li><img src="{{=docFile.thumbUrl}}" data-original="{{=docFile.viewUrl}}"/></li>
 		{{# }); }}
 	</ul>
 	{{# }); }}
@@ -173,15 +87,6 @@
 <script th:src="@{/layui/echarts/echarts.js}"></script>
 <script th:src="@{/layui/echarts/macarons.js}"></script>
 <script th:src="@{/layui/viewer/js/viewer.min.js}"></script>
-<script>
-	var viewer01 = new Viewer(document.getElementById('viewer01'), {
-		url: 'data-original',
-		navbar: true
-	});
-	var viewer02 = new Viewer(document.getElementById('viewer02'), {
-		url: 'data-original'
-	})
-</script>
 <script th:inline="javascript">
 	var ctxPath = /*[[@{/}]]*/'';
 	layui.config({
@@ -233,6 +138,11 @@
 			, view = document.getElementById('regionImageDiv');
 		laytpl(getTpl).render([[${region.listDocFiles}]], function (html) {
 			view.innerHTML = html;
+			$.each($(".viewer"), function (item) {
+				var viewer = new Viewer($(this)[0], {
+					url: 'data-original'
+				})
+			});
 		});
 
 		var option = {
