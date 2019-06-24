@@ -36,8 +36,14 @@
 				SUM(CASE WHEN t.presell_state = '已售' THEN 1 ELSE 0 END) over(partition BY bld_no, cell_no, floor_no) sale_num,
        			SUM(CASE WHEN t.presell_state = '未售' THEN 1 ELSE 0 END) over(partition BY bld_no, cell_no, floor_no) no_sale_Num,
        			SUM(1) over(partition BY bld_no, cell_no, floor_no) total_num
-			FROM view_houseinfo t WHERE project_id = #{projectId} and bld_no = #{bldNo} and cell_no = #{cellNo}
-			ORDER BY lpad(floor_no, 10, '0'), show_name, house_id
+			FROM view_houseinfo t WHERE project_id = #{projectId} and bld_no = #{bldNo}
+		]]>
+		<if test="cellNo != null">
+			and cell_name = #{cellNo}
+		</if>
+		<![CDATA[
+			ORDER BY case when regexp_replace(t.floor_no,'^[-\+]?\d+(\.\d+)?$','') is not null then 9999 else to_number(floor_no) end DESC,
+			show_name ASC, house_id ASC
 		]]>
 	</select>
 
@@ -48,7 +54,7 @@
 					WHEN close_flag = '是' THEN '查封'
 					WHEN frozen_flag = '是' THEN '冻结'
 					WHEN presell_state = '已售' THEN '已售'
-					WHEN sales_flag = '否' THEN '不予销售'
+					WHEN sales_flag = '否' THEN '非卖'
 					WHEN presell_state = '未售' THEN '未售'
 				ELSE '其他' END presell_state,
 				CASE WHEN mortgage_flag = '是' THEN 'ddb400'
@@ -60,22 +66,22 @@
 				ELSE '00dd02' END color_code,
 				CASE WHEN presell_state = '已售' THEN 0 ELSE presell_price END presell_price
 			FROM view_houseinfo
-			WHERE project_id = #{projectId} AND bld_no = #{bldNo} AND cell_no = #{cellNo}
-			ORDER BY case when regexp_replace(floor_no,'[-0-9,.]', '') IS NULL then to_number(floor_no) else 9999 end DESC,
+			WHERE project_id = #{projectId} AND bld_no = #{bldNo} AND cell_name = #{cellNo}
+			ORDER BY case when regexp_replace(t.floor_no,'^[-\+]?\d+(\.\d+)?$','') is not null then 9999 else to_number(floor_no) end DESC,
 			show_name ASC, house_id ASC
 		]]>
 	</select>
 
 	<select id = "selectFloorSummary" parameterType = "map" resultType = "com.bestvike.website.entity.FloorSummary">
 		<![CDATA[
-			SELECT floor_no, floor_name || '层' floor_name, COUNT(1) total_num,
-				sum(case when presell_state = '已售' then 1 else 0 END) saled_num,
+			SELECT nvl(floor_no, '-') floor_no, nvl(floor_name, '-') || '层' floor_name, COUNT(1) total_num,
+				sum(case when presell_state = '已售' then 1 else 0 END) sell_num,
 				sum(case when presell_state = '未售' then 1 else 0 END) nosaled_num,
 				sum(case when sales_flag != '是' then 1 else 0 END) nosale_num
 			FROM view_houseinfo t
-			WHERE t.project_id = #{projectId} AND t.bld_no = #{bldNo} AND t.cell_no = #{cellNo}
+			WHERE t.project_id = #{projectId} AND t.bld_no = #{bldNo} AND t.cell_name = #{cellNo}
 			GROUP BY floor_no, floor_name
-			ORDER BY case when regexp_replace(floor_no,'[-0-9,.]', '') IS NULL then to_number(floor_no) else 9999 end DESC
+			ORDER BY case when regexp_replace(t.floor_no,'^[-\+]?\d+(\.\d+)?$','') is not null then 9999 else to_number(floor_no) end DESC
 		]]>
 	</select>
 </mapper>

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.Entity;
-import org.bson.types.ObjectId;
+import javax.persistence.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Entity
@@ -13,20 +13,12 @@ public class Division implements Serializable {
 
 	private static final long serialVersionUID = -3566227575046071559L;
 
-	private ObjectId id;
+	@Id
 	private String code;
 	private String name;
 	private BigDecimal x;
 	private BigDecimal y;
 	private List<Division> children;
-
-	public ObjectId getId() {
-		return id;
-	}
-
-	public void setId(ObjectId id) {
-		this.id = id;
-	}
 
 	public List<Division> getChildren() {
 		return children;

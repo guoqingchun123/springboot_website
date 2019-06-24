@@ -5,7 +5,7 @@ app:
   file:
     uploadPath: d:\file\upload
 server:
-  port: 5000
+  port: 81
   servlet:
     context-path: /houses
 logging:
@@ -21,7 +21,7 @@ spring:
       force: true
   data:
     mongodb:
-      uri: mongodb://website:website@192.168.2.21:27017/website
+      uri: mongodb://website:website@10.10.12.1:27017/website
   servlet:
     multipart:
       max-file-size: 20MB # 最大文件大小
@@ -35,7 +35,7 @@ spring:
     prefix: classpath:/templates/
 datasources:
   website:
-    jdbc-url: jdbc:oracle:thin:@127.0.0.1:1521/orcl
+    jdbc-url: jdbc:oracle:thin:@10.10.11.254:22522/orcl
     username: mid_house
     password: mid_house
     hikari:

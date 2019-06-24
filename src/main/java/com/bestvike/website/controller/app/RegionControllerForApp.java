@@ -3,6 +3,7 @@ package com.bestvike.website.controller.app;
 import com.bestvike.website.controller.BaseController;
 import com.bestvike.website.document.Division;
 import com.bestvike.website.entity.BldCells;
+import com.bestvike.website.entity.DocFiles;
 import com.bestvike.website.entity.FloorSummary;
 import com.bestvike.website.service.ProjectService;
 import java.util.List;
@@ -43,7 +44,7 @@ public class RegionControllerForApp extends BaseController {
 	}
 
 	@GetMapping(value = "/regionDocs/{regionId}")
-	public List<Map<String, Object>> regionDocs(@PathVariable String regionId, @RequestParam String type) {
+	public List<DocFiles> regionDocs(@PathVariable String regionId, @RequestParam String type) {
 		return projectService.queryRegionDocs(regionId, type);
 	}
 
@@ -60,6 +61,7 @@ public class RegionControllerForApp extends BaseController {
 
 	/**
 	 * 查询楼层统计数据
+	 *
 	 * @param projectId
 	 * @param bldNo
 	 * @param cellNo

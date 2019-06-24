@@ -2,6 +2,7 @@ package com.bestvike.website.controller.app;
 
 import com.bestvike.website.controller.BaseController;
 import com.bestvike.website.document.Division;
+import com.bestvike.website.entity.DocFiles;
 import com.bestvike.website.service.ProjectService;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +42,7 @@ public class RegionControllerForWeixin extends BaseController {
 	}
 
 	@GetMapping(value = "/regionDocs/{regionId}")
-	public List<Map<String, Object>> regionDocs(@PathVariable String regionId, @RequestParam String type) {
+	public List<DocFiles> regionDocs(@PathVariable String regionId, @RequestParam String type) {
 		return projectService.queryRegionDocs(regionId, type);
 	}
 }

@@ -1,5 +1,8 @@
 package com.bestvike.website.data;
 
+import com.bestvike.website.entity.BldCells;
+import com.bestvike.website.entity.DocFiles;
+import com.bestvike.website.entity.FloorSummary;
 import com.bestvike.website.entity.HouseHoldSales;
 import com.bestvike.website.entity.RegionCell;
 import java.io.Serializable;
@@ -25,6 +28,7 @@ public class ViewRegionInfo implements Serializable {
 	private BigDecimal x;
 	private BigDecimal y;
 	private String remark;
+	private String logoPath;
 
 	@Transient
 	private String houseNum;
@@ -43,9 +47,13 @@ public class ViewRegionInfo implements Serializable {
 	@Transient
 	private List<HouseHoldSales> listHouseHold;
 	@Transient
-	private List<RegionCell> listCell;
+	private List<BldCells> listBldCells;
+	@Transient
+	private List<FloorSummary> listCellFloors;
 	@Transient
 	private List<ViewHouseInfo> listHouse;
+	@Transient
+	private List<DocFiles> listDocFiles;
 
 	public String getRegionId() {
 		return regionId;
@@ -167,12 +175,12 @@ public class ViewRegionInfo implements Serializable {
 		this.listHouseHold = listHouseHold;
 	}
 
-	public List<RegionCell> getListCell() {
-		return listCell;
+	public List<BldCells> getListBldCells() {
+		return listBldCells;
 	}
 
-	public void setListCell(List<RegionCell> listCell) {
-		this.listCell = listCell;
+	public void setListBldCells(List<BldCells> listBldCells) {
+		this.listBldCells = listBldCells;
 	}
 
 	public List<ViewHouseInfo> getListHouse() {
@@ -181,5 +189,29 @@ public class ViewRegionInfo implements Serializable {
 
 	public void setListHouse(List<ViewHouseInfo> listHouse) {
 		this.listHouse = listHouse;
+	}
+
+	public String getLogoPath() {
+		return logoPath;
+	}
+
+	public void setLogoPath(String logoPath) {
+		this.logoPath = logoPath;
+	}
+
+	public List<FloorSummary> getListCellFloors() {
+		return listCellFloors;
+	}
+
+	public void setListCellFloors(List<FloorSummary> listCellFloors) {
+		this.listCellFloors = listCellFloors;
+	}
+
+	public List<DocFiles> getListDocFiles() {
+		return listDocFiles;
+	}
+
+	public void setListDocFiles(List<DocFiles> listDocFiles) {
+		this.listDocFiles = listDocFiles;
 	}
 }

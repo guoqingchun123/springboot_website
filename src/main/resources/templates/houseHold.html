@@ -9,92 +9,6 @@
 	<link th:href="@{/layui/css/maps.css}" rel="stylesheet" type="text/css">
 	<link th:href="@{/layui/viewer/css/viewer.min.css}" rel="stylesheet">
 	<style>
-		.room-list {
-			margin: 5px;
-			width: 150px;
-			color: #333;
-			font-size: 14px;
-			line-height: 32px;
-			cursor: pointer;
-			position: relative;
-			display: inline-block;
-		}
-		
-		.bg-gdcd {
-			height: 32px;
-			background: #dcdddd;
-			font-size: 16px;
-			padding: 0 8px;
-			font-weight: bold;
-		}
-		
-		.saled {
-			background: #007bdd;
-		}
-		
-		.mortgage {
-			background: #ddb400;
-		}
-		
-		.close {
-			background: #dd6600;
-		}
-		
-		.frozen {
-			background: #dd000e;
-		}
-		
-		.bg-gdcd span {
-			border: 1px solid #959595;
-			padding: 0 5px;
-			font-size: 14px;
-			margin: 0 5px;
-			font-weight: normal;
-		}
-		
-		.m-bott {
-			padding: 6px;
-			line-height: 20px;
-			border: 1px solid #dcdddd;
-		}
-		
-		.room-content {
-			width: 260px;
-			position: absolute;
-			z-index: 999;
-			top: -120px;
-			left: 160px;
-			display: none;
-		}
-		
-		.room-list:hover .room-content {
-			display: block;
-			z-index: 999;
-		}
-		
-		.content-box {
-			background: #fff;
-			padding: 15px;
-			box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-			border-radius: 5px;
-		}
-		
-		.content-box p {
-			margin: 0;
-			color: #999;
-		}
-		
-		.content-box p span {
-			color: #333;
-		}
-		
-		.box-title span {
-			font-size: 14px;
-			margin-left: 8px;
-			border: 1px solid #959595;
-			padding: 0 5px;
-		}
-		
 		* {
 			margin: 0;
 			padding: 0;
@@ -149,7 +63,7 @@
 				<div class="layui-carousel" id="carousel">
 					<div carousel-item="">
 						<div id="regionSalesData"></div>
-						<div style="text-align:center"><img th:src="@{/themes/test/images/title/title01.png}" style="height: 350px"/></div>
+						<div style="text-align:center"><img th:src="${region.logoPath}" style="height: 350px"/></div>
 					</div>
 				</div>
 			</div>
@@ -160,12 +74,7 @@
 				<div id="matingSalesData" style="width: 100%;height: 350px"></div>
 			</div>
 		</div>
-		<div id="regionImageDiv" style="width: 100%;background-color: white;margin-top: 10px;height:auto;">
-			<p class="layui-elem-quote">户型图</p>
-			<ul id="jq22" class="viewer" style="width: 95%">
-				<li><img th:src="@{/themes/test/images/houseHold/houseHold01.jpg}"/></li>
-				<li><img th:src="@{/themes/test/images/houseHold/houseHold02.jpg}"/></li>
-			</ul>
+		<div id="houseHoldDiv" style="width: 100%;background-color: white;margin-top: 10px;height:auto;">
 		</div>
 	</div>
 </div>
@@ -177,6 +86,16 @@
 	var viewer = new Viewer(document.getElementById('jq22'), {
 		url: 'data-original'
 	})
+</script>
+<script id="houseHoldDivScript" type="text/html">
+	{{# layui.each(d, function(index, docFiles){ }}
+	<p class="layui-elem-quote">{{docFiles.docName}}</p>
+	<ul id="jq22">
+		{{# layui.each(docFiles.imageList, function(indx, docFile){ }}
+			<li><img th:src="${docFile?.thumbUrl}"/></li>
+		{{# }); }}
+	</ul>
+	{{# }); }}
 </script>
 <script th:inline="javascript">
 	var ctxPath = /*[[@{/}]]*/'';
@@ -225,6 +144,13 @@
 			var viewType = $(this).attr("data-value");
 			window.location.replace(ctxPath + 'content/' + [[${region.regionId}]] + "?viewType=" + viewType);
 		});
+
+		getTpl = document.getElementById("houseHoldDivScript").innerHTML
+			, view = document.getElementById('houseHoldDiv');
+		laytpl(getTpl).render([[${region.listDocFiles}]], function (html) {
+			view.innerHTML = html;
+		});
+		
 		var option = {
 			tooltip: {
 				trigger: 'item',
@@ -296,7 +222,7 @@
 				}
 			},
 			legend: {
-				data: ['已售', '未售', '不参与销售']
+				data: ['已售', '未售', '非卖']
 			},
 			grid: {
 				left: '3%',
@@ -329,7 +255,7 @@
 					data: matingSalesNoSaled
 				},
 				{
-					name: '不参与销售',
+					name: '非卖',
 					type: 'bar',
 					stack: '销售情况',
 					data: matingSalesNoSale
@@ -359,7 +285,7 @@
 				}
 			},
 			legend: {
-				data: ['已售', '未售', '不参与销售']
+				data: ['已售', '未售', '非卖']
 			},
 			grid: {
 				left: '3%',
@@ -392,7 +318,7 @@
 					data: residenceSalesNoSaled
 				},
 				{
-					name: '不参与销售',
+					name: '非卖',
 					type: 'bar',
 					stack: '销售情况',
 					data: residenceSalesNoSale

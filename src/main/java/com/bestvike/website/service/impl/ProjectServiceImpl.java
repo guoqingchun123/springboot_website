@@ -1,18 +1,21 @@
 package com.bestvike.website.service.impl;
 
+import com.bestvike.website.dao.ViewDivisionInfoDao;
 import com.bestvike.website.dao.ViewHouseInfoDao;
 import com.bestvike.website.dao.ViewRegionInfoDao;
+import com.bestvike.website.data.ViewDivisionInfo;
 import com.bestvike.website.data.ViewHouseInfo;
 import com.bestvike.website.data.ViewRegionInfo;
 import com.bestvike.website.document.Division;
 import com.bestvike.website.entity.BldCells;
 import com.bestvike.website.entity.Cell;
+import com.bestvike.website.entity.DocFiles;
 import com.bestvike.website.entity.FloorSummary;
 import com.bestvike.website.entity.House;
 import com.bestvike.website.entity.HouseHoldSales;
 import com.bestvike.website.entity.PageBean;
-import com.bestvike.website.entity.RegionCell;
 import com.bestvike.website.entity.Region;
+import com.bestvike.website.entity.RegionCell;
 import com.bestvike.website.service.ProjectService;
 import com.github.pagehelper.ISelect;
 import com.github.pagehelper.PageHelper;
@@ -22,7 +25,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -33,6 +35,8 @@ import org.springframework.util.StringUtils;
 @Service
 public class ProjectServiceImpl implements ProjectService {
 
+	@Autowired
+	private ViewDivisionInfoDao viewDivisionInfoDao;
 	@Autowired
 	private ViewRegionInfoDao viewRegionInfoDao;
 	@Autowired
@@ -65,36 +69,34 @@ public class ProjectServiceImpl implements ProjectService {
 		viewRegionInfo.setListHouseHold(listHouseHold);
 		if (StringUtils.isEmpty(viewType) || "salesData".equals(viewType)) {
 			// 楼盘图
-			List<RegionCell> listCellInfo = viewHouseInfoDao.selectRegionCellList(regionId);
-			viewRegionInfo.setListCell(listCellInfo);
-			parameterMap = new HashMap<>();
-			parameterMap.put("projectId", listCellInfo.get(0).getProjectId());
-			parameterMap.put("bldNo", listCellInfo.get(0).getBldNo());
-			parameterMap.put("cellNo", listCellInfo.get(0).getCellNo());
-			List<ViewHouseInfo> listHouseInfo = viewHouseInfoDao.selectHouseInfoList(parameterMap);
-			viewRegionInfo.setListHouse(listHouseInfo);
-		} else if ("houseHold".equals(viewType)) {
-			// 户型图
-
-		} else if ("regionImage".equals(viewType)) {
-
+//			List<RegionCell> listCellInfo = viewHouseInfoDao.selectRegionCellList(regionId);
+//			viewRegionInfo.setListCell(listCellInfo);
+			List<BldCells> listBldCells = queryRegionBldCells(regionId);
+			viewRegionInfo.setListBldCells(listBldCells);
+			if (listBldCells != null && listBldCells.size() > 0
+				&& listBldCells.get(0).getListCell() != null && listBldCells.get(0).getListCell().size() > 0){
+				parameterMap.put("projectId", listBldCells.get(0).getProjectId());
+				parameterMap.put("bldNo", listBldCells.get(0).getBldNo());
+//				parameterMap.put("cellNo", listBldCells.get(0).getListCell().get(0).getCellNo());
+				List<ViewHouseInfo> listHouseInfo = viewHouseInfoDao.selectHouseInfoList(parameterMap);
+				viewRegionInfo.setListHouse(listHouseInfo);
+			}
 		} else {
-			// 项目相册
-
+			List<DocFiles> listDocFiles = queryRegionDocs(regionId, viewType);
+			viewRegionInfo.setListDocFiles(listDocFiles);
 		}
 		return viewRegionInfo;
 	}
 
 	@Override
-	public List<ViewHouseInfo> selectCellHouse(String projectId, String bldNo, String cellNo) {
+	public List<ViewHouseInfo> selectBldHouses(String projectId, String bldNo) {
 		Map<String, Object> parameterMap = new HashMap<>();
 		parameterMap.put("projectId", projectId);
 		parameterMap.put("bldNo", bldNo);
-		parameterMap.put("cellNo", cellNo);
 		return viewHouseInfoDao.selectHouseInfoList(parameterMap);
 	}
 
-	public Map<String, Object> pageRegions(String keywords, int pageNo, int pageSize, String divisonCode, String price, String houseHold, String sort) {
+	public Map<String, Object> pageRegions(String keywords, int pageNo, int pageSize, String divisionCode, String price, String houseHold, String sort) {
 		PageInfo<Region> simpleRegionPage = PageHelper.startPage(pageNo, pageSize).doSelectPageInfo(new ISelect() {
 			@Override
 			public void doSelect() {
@@ -102,8 +104,8 @@ public class ProjectServiceImpl implements ProjectService {
 				if (!StringUtils.isEmpty(keywords)) {
 					paramterMap.put("keywords", "%" + keywords + "%");
 				}
-				if (!StringUtils.isEmpty(divisonCode)) {
-					paramterMap.put("divisonCode", divisonCode);
+				if (!StringUtils.isEmpty(divisionCode)) {
+					paramterMap.put("divisionCode", divisionCode);
 				}
 				if (!StringUtils.isEmpty(price)) {
 					paramterMap.put("price", price);
@@ -130,11 +132,15 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	public List<Division> queryDivision() {
-		com.bestvike.website.document.Region region = new com.bestvike.website.document.Region();
-		region.setRegionId(UUID.randomUUID().toString());
-		region.setRegionName("小眺望小区");
-		mongoTemplate.save(region);
-		return mongoTemplate.findAll(Division.class);
+		List<Division> listDivision = new ArrayList<>();
+		List<ViewDivisionInfo> listViewDivision = viewDivisionInfoDao.selectAll();
+		for (ViewDivisionInfo viewDivisionInfo : listViewDivision) {
+			Division division = new Division();
+			division.setCode(viewDivisionInfo.getDivisionCode());
+			division.setName(viewDivisionInfo.getDivisionName());
+			listDivision.add(division);
+		}
+		return listDivision;
 	}
 
 	/**
@@ -145,9 +151,14 @@ public class ProjectServiceImpl implements ProjectService {
 	 */
 	public Map<String, Object> queryRegionSales(String regionId) {
 		Map<String, Object> result = new HashMap<>();
+		List<Map> views = mongoTemplate.find(Query.query(Criteria.
+			where("keyId").is(regionId).
+			and("fileType").is("regionImage").
+			and("subType").is("aerialView")), Map.class, "log_file");
 		List<String> regionLogos = new ArrayList<>();
-		regionLogos.add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1262922132,88008920&fm=26&gp=0.jpg");
-		regionLogos.add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1262922132,88008920&fm=26&gp=0.jpg");
+		for (Map<String, Object> logos : views) {
+			regionLogos.add((String) logos.get("viewUrl"));
+		}
 		result.put("logos", regionLogos);
 		// 查询住宅销售情况
 		Map<String, Object> parameterMap = new HashMap<>();
@@ -166,57 +177,25 @@ public class ProjectServiceImpl implements ProjectService {
 	 * @param regionId
 	 * @return
 	 */
-	public List<Map<String, Object>> queryRegionDocs(String regionId, String type) {
-		List<Map<String, Object>> listResult = new ArrayList<>();
+	public List<DocFiles> queryRegionDocs(String regionId, String type) {
 		if (!StringUtils.isEmpty(type)) {
 			switch (type) {
 				case "houseHold":
 					// 户型图
-					Map<String, Object> houseHold = new HashMap<>();
-					houseHold.put("docType", "roomHold");
-					houseHold.put("docName", "户型图");
-					List<Map> houseHoldList = mongoTemplate.find(Query.query(Criteria.
+					List<DocFiles> docFiles = mongoTemplate.find(Query.query(Criteria.
 						where("keyId").is(regionId).
-						and("fileType").is("houseHold").
-						and("subType").is("roomHold")), Map.class, "log_file");
-					houseHold.put("imageList", houseHoldList);
-					listResult.add(houseHold);
-					// 样板间
-					Map<String, Object> prototypeRoom = new HashMap<>();
-					prototypeRoom.put("docType", "prototypeRoom");
-					prototypeRoom.put("docName", "样板间");
-					List<Map> prototypeRoomList = mongoTemplate.find(Query.query(Criteria.
-						where("keyId").is(regionId).
-						and("fileType").is("houseHold").
-						and("subType").is("prototypeRoom")), Map.class, "log_file");
-					prototypeRoom.put("imageList", prototypeRoomList);
-					listResult.add(prototypeRoom);
-					break;
+						and("fileType").is("houseHold")), DocFiles.class);
+					return docFiles;
 				case "regionImage":
 					// 鸟瞰图
-					Map<String, Object> aerialView = new HashMap<>();
-					aerialView.put("docType", "aerialView");
-					aerialView.put("docName", "小区鸟瞰图");
-					List<Map> aerialViewList = mongoTemplate.find(Query.query(Criteria.
+					// 户型图
+					docFiles = mongoTemplate.find(Query.query(Criteria.
 						where("keyId").is(regionId).
-						and("fileType").is("regionImage").
-						and("subType").is("aerialView")), Map.class, "log_file");
-					aerialView.put("imageList", aerialViewList);
-					listResult.add(aerialView);
-					// 施工现场
-					Map<String, Object> constructionSite = new HashMap<>();
-					constructionSite.put("docType", "constructionSite");
-					constructionSite.put("docName", "施工现场");
-					List<Map> constructionSiteList = mongoTemplate.find(Query.query(Criteria.
-						where("keyId").is(regionId).
-						and("fileType").is("regionImage").
-						and("subType").is("constructionSite")), Map.class, "log_file");
-					constructionSite.put("imageList", constructionSiteList);
-					listResult.add(constructionSite);
-					break;
+						and("fileType").is("regionImage")), DocFiles.class);
+					return docFiles;
 			}
 		}
-		return listResult;
+		return null;
 	}
 
 	@Override

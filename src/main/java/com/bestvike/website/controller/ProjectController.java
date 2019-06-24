@@ -82,8 +82,8 @@ public class ProjectController extends BaseController {
 		return paramterMap;
 	}
 
-	@GetMapping(value = "/cell-house")
-	public List<ViewHouseInfo> selectCellHouse(@RequestParam String projectId, @RequestParam String bldNo, @RequestParam String cellNo) {
-		return projectService.selectCellHouse(projectId, bldNo, cellNo);
+	@GetMapping(value = "/bldHouses")
+	public List<ViewHouseInfo> selectBldHouses(@RequestParam String projectId, @RequestParam String bldNo) {
+		return projectService.selectBldHouses(projectId, bldNo);
 	}
 }
