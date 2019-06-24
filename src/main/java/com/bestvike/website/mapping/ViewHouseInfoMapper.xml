@@ -24,7 +24,7 @@
 		<![CDATA[
 			SELECT t.project_id, t.bld_no, t.cell_no, t1.bld_name || '#' || t.cell_name || '单元' cell_name
 			FROM view_houseinfo t LEFT JOIN view_bldinfo t1 ON t.bld_no = t1.bld_no AND t.project_id = t1.project_id
-			WHERE EXISTS(SELECT 1 FROM ass_regbld WHERE region_id = #{regionId} AND project_id = t.project_id AND bld_no = t.bld_no)
+			 WHERE t.project_id in (select a.project_id from ASS_REGBLD a where a.region_id = #{regionId})
 			GROUP BY t.project_id, t.bld_no, t.cell_no, t1.bld_name, t.cell_name
 			ORDER BY t.project_id, t.bld_no, t.cell_no, t1.bld_name, t.cell_name
 		]]>

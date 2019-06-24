@@ -69,7 +69,7 @@
 	            SUM(CASE WHEN presell_state = '已售' THEN 1 ELSE 0 END) 已售,
 	            SUM(CASE WHEN presell_state = '未售' THEN 1 ELSE 0 END) 未售
             FROM view_houseinfo t
-            WHERE EXISTS(SELECT 1 FROM ass_regbld WHERE region_id = #{regionId} AND project_id = t.project_id AND bld_no = t.bld_no)
+             WHERE t.project_id in (select a.project_id from ASS_REGBLD a where a.region_id = #{regionId})
 		]]>
 	</select>
 
