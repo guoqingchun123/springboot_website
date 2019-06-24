@@ -418,7 +418,11 @@
 			matingSalesDataEcharts.resize();
 			residenceSalesDataEcharts.resize();
 			regionSalesDataCharts.resize();
-		})
+		});
+
+		$('img').error(function () {
+			$(this).attr('src', ctxPath + "themes/images/nothing.png");
+		});
 	});
 </script>
 </body>

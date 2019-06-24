@@ -113,7 +113,7 @@
 		<div class="layui-card-body" style="overflow: hidden">
 			<div class="layui-col-md9" style="float: left">
 				<div class="layui-col-md3" style="float: left">
-					<img th:src="@{/themes/test/images/title/title01.png}" style="width: 200px;height: 120px">
+					<img src="{{=item.logoPath}}" style="width: 200px;height: 120px">
 				</div>
 				<div class="layui-col-md9" style="padding-left: 30px">
 					<p class="layui-elem-quote">小区地址：<label>{{item.address}}</label></p>
@@ -176,6 +176,10 @@
 		$(".layui-breadcrumb a").on("click", function () {
 			$(this).parent().children().removeClass(".selected");
 		});
+
+		$('img').error(function () {
+			$(this).attr('src', ctxPath + "themes/images/nothing.png");
+		})
 	});
 </script>
 </body>

@@ -4,6 +4,7 @@
 	<select id = "selectAllRegions" parameterType = "Map" resultType = "ViewRegionInfo">
 		<![CDATA[
            SELECT t1.region_id, t1.x, t1.y, region_name, address, pre_sale_date, t1.division_code, t2.division_name, proj.avg_price
+           , t1.logo_path
            FROM view_regionInfo t1 LEFT JOIN view_divisionInfo t2 on t1.division_code = t2.division_code
            LEFT JOIN (SELECT region_id, max(avg_price) avg_price
            	FROM view_projectinfo vpi LEFT JOIN Ass_RegBld arb ON vpi.project_id = arb.project_id GROUP BY region_id) proj

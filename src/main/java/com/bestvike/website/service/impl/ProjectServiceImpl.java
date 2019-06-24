@@ -54,12 +54,14 @@ public class ProjectServiceImpl implements ProjectService {
 		ViewRegionInfo viewRegionInfo = viewRegionInfoDao.selectRegion(regionId);
 		Map<String, Object> salesMap = viewRegionInfoDao.selectRegionSalesData(regionId);
 		List<Map<String, Object>> salesData = new ArrayList<>();
-		for (String key : salesMap.keySet()) {
-			Map<String, Object> sales = new HashMap<>();
-			if (null != salesMap.get(key) && ((BigDecimal) salesMap.get(key)).compareTo(BigDecimal.ZERO) > 0) {
-				sales.put("value", salesMap.get(key));
-				sales.put("name", key);
-				salesData.add(sales);
+		if (null != salesMap) {
+			for (String key : salesMap.keySet()) {
+				Map<String, Object> sales = new HashMap<>();
+				if (null != salesMap.get(key) && ((BigDecimal) salesMap.get(key)).compareTo(BigDecimal.ZERO) > 0) {
+					sales.put("value", salesMap.get(key));
+					sales.put("name", key);
+					salesData.add(sales);
+				}
 			}
 		}
 		Map<String, Object> parameterMap = new HashMap<>();
@@ -74,7 +76,7 @@ public class ProjectServiceImpl implements ProjectService {
 			List<BldCells> listBldCells = queryRegionBldCells(regionId);
 			viewRegionInfo.setListBldCells(listBldCells);
 			if (listBldCells != null && listBldCells.size() > 0
-				&& listBldCells.get(0).getListCell() != null && listBldCells.get(0).getListCell().size() > 0){
+				&& listBldCells.get(0).getListCell() != null && listBldCells.get(0).getListCell().size() > 0) {
 				parameterMap.put("projectId", listBldCells.get(0).getProjectId());
 				parameterMap.put("bldNo", listBldCells.get(0).getBldNo());
 //				parameterMap.put("cellNo", listBldCells.get(0).getListCell().get(0).getCellNo());
