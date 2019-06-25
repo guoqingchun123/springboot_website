@@ -56,7 +56,7 @@
 	<select id = "selectRegion" parameterType = "String" resultType = "ViewRegionInfo">
 		<![CDATA[
 			SELECT * FROM view_regioninfo t1
-			LEFT JOIN (SELECT #{regionId} region_id, wm_concat(DISTINCT sale_phone) sale_phone, min(vpi.greening_rate) greening_rate, max(vpi.avg_price) avg_price
+			LEFT JOIN (SELECT #{regionId} region_id, wm_concat(DISTINCT sale_phone) sale_phone, min(vpi.greening_rate) greening_rate
 			from view_projectinfo vpi where exists(select 1 from ass_regbld where region_id = #{regionId} and project_id = vpi.project_id)) t2
 			on t1.region_id = t2.region_id
 			left join (select #{regionId} region_id, COUNT(1) house_num, wm_concat(distinct case when vhi.house_use like '%住宅%' then vhi.house_hold else '' end) houseHold,

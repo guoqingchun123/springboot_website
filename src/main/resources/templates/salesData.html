@@ -230,7 +230,7 @@
 							<div class="box-title"><span>{{house.houseUse}}</span><span>
 								{{# if(house.salesFlag === '否'){ }}
 								非卖
-								{{# } else { }}
+								{{# } else if (house.presellState === '未售') { }}
 								{{house.presellState}}
 								{{# } }}
 							</span></div>
