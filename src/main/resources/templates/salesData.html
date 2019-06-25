@@ -105,7 +105,7 @@
 			background-color: white;
 			height: 25px;
 			line-height: 25px;
-			border-radius:5px;
+			border-radius: 5px;
 			position: absolute;
 		}
 		
@@ -230,13 +230,13 @@
 							<div class="box-title"><span>{{house.houseUse}}</span><span>
 								{{# if(house.salesFlag === '否'){ }}
 								非卖
-								{{# } else if (house.presellState === '未售') { }}
+								{{# } else { }}
 								{{house.presellState}}
 								{{# } }}
 							</span></div>
 							<p>套内面积：<span>{{house.ownArea}}㎡</span>
 							<p>户型：<span>{{house.houseHold}}</span>
-								{{# if(house.presellState === '未售'){ }}
+								{{# if (house.presellState === '未售' && house.salesFlag === '是') { }}
 							<p>备案价格：<span>{{house.presellPrice}}元/㎡</span>
 								{{# } }}
 						</div>
@@ -304,7 +304,7 @@
 		laytpl(getTpl).render([[${region}]], function (html) {
 			view.innerHTML = html;
 		});
-		
+
 		$(".bldCellTab").on("click", function () {
 			var bld = $(this).attr("value");
 			$.ajax({

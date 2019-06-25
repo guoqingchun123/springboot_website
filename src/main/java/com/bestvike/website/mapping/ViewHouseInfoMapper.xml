@@ -50,7 +50,9 @@
 
 	<select id = "selectHouseByParameter" parameterType = "map" resultType = "com.bestvike.website.entity.House">
 		<![CDATA[
-			SELECT house_id, show_name, house_hold, house_use, floor_no, floor_name || '层' floor_name, construct_area,
+			SELECT house_id, show_name, house_hold, house_use, floor_no,
+				case when instr(floor_name, '层') > 0 THEN floor_name else floor_name || '层' as floor_name,
+				construct_area,
 				CASE WHEN mortgage_flag = '是' THEN '抵押'
 					WHEN close_flag = '是' THEN '查封'
 					WHEN frozen_flag = '是' THEN '冻结'
@@ -75,7 +77,9 @@
 
 	<select id = "selectFloorSummary" parameterType = "map" resultType = "com.bestvike.website.entity.FloorSummary">
 		<![CDATA[
-			SELECT nvl(floor_no, '-') floor_no, nvl(floor_name, '-') || '层' floor_name, COUNT(1) total_num,
+			SELECT nvl(floor_no, '-') floor_no,
+				case when instr(floor_name, '层') > 0 THEN floor_name else floor_name || '层' as floor_name,
+				COUNT(1) total_num,
 				sum(case when presell_state = '已售' then 1 else 0 END) sell_num,
 				sum(case when presell_state = '未售' then 1 else 0 END) nosaled_num,
 				sum(case when sales_flag != '是' and presell_state = '未售' then 1 else 0 END) nosale_num
