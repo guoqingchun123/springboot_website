@@ -99,9 +99,9 @@
 		
 		.bldSpan {
 			background-color: white;
-			width: 45px;
 			height: 25px;
 			line-height: 25px;
+			border-radius:5px;
 			position: absolute;
 		}
 		
@@ -168,7 +168,7 @@
 					</div>
 				</div>
 			</div>
-			<div id="viewImageDiv"></div>
+			<div id="viewImageDiv" class="layui-col-md8"></div>
 		</div>
 		<div id="salesDataDiv" style="width: 100%;background-color: white;margin-top: 10px;height:auto;">
 			<div class="layui-tab layui-tab-card">
@@ -184,7 +184,7 @@
 	</div>
 </div>
 <script id="viewImageScript" type="text/html">
-	<div style="width:100%;">
+	<div style="position: relative;height: auto;display:inline-block">
 		{{# if(d.viewPath != null){ }}
 		<image th:src="${region?.viewPath}" style="height:350px"></image>
 		{{# layui.each(d.listRegionBlds, function(index, bld){ }}
