@@ -51,4 +51,13 @@ public class LayoutController extends BaseController {
 		mv.setViewName(viewType);
 		return mv;
 	}
+
+	@GetMapping(value = "/api/app/maps")
+	public ModelAndView appMaps() {
+		ModelAndView mv = new ModelAndView();
+		List<Region> listViewRegionInfo = layoutService.selectAllRegions("default");
+		mv.addObject("regions", listViewRegionInfo);
+		mv.setViewName("appMaps");
+		return mv;
+	}
 }

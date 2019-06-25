@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>赤峰市房产信息网</title>
+	<link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}"/>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0">
+	<link th:href="@{/layui/css/layui.css}" rel="stylesheet" type="text/css">
+	<link th:href="@{/layui/css/maps.css}" rel="stylesheet" type="text/css">
+	<script type="text/javascript"
+			src="https://webapi.amap.com/maps?v=1.4.14&key=8493be8a99d103cbed76edb91479bf7f&plugin=AMap.ToolBar,AMap.DistrictSearch"></script>
+	<script type="text/javascript" src="https://webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+	<div class="layui-col-md12">
+		<div id="container"></div>
+	</div>
+</div>
+
+<script th:src="@{/layui/layui.js}"></script>
+<script th:inline="javascript">
+	var ctxPath = /*[[@{/}]]*/'';
+	var district = null;
+	var polygons = [];
+	var infoWindow = null;
+
+	var regions = [[${regions}]];
+
+	layui.use(['carousel', 'element', 'layer'], function () {
+		var $ = layui.jquery;
+
+		$("#container").height(window.innerHeight);
+		$("#container").width(window.innerWidth);
+
+		//创建地图
+		var map = new AMap.Map('container', {
+			center: [118.916202, 42.271235], //初始地图中心点
+			resizeEnable: true, //是否监控地图容器尺寸变化
+			zoom: 12,
+			zooms: [12, 15]
+		});
+
+		var toolBar = new AMap.ToolBar({
+			visible: true
+		});
+		toolBar.hideDirection();
+		map.addControl(toolBar);
+
+		map.on('zoomend', function () {
+			// 地图缩放，刷新业务数据
+			mapRefresh();
+		});
+
+		map.on('complete', function () {
+			// 地图加载完成，刷新业务数据
+			mapRefresh();
+		});
+
+		function mapRefresh() {
+			var zoom = map.getZoom();
+			if (zoom >= 14) { // 刷项目
+				map.clearMap();
+				// 获取项目加载点
+				$.get(ctxPath + "regions", {}, function (data) {
+					for (var i = 0; i < data.length; i++) {
+						var region = data[i];
+						if (isNaN(region.x) || isNaN(region.y)) {
+							continue;
+						}
+						if (region.x == null || region.y == null) {
+							continue;
+						}
+						// 点标记显示内容，HTML要素字符串
+						var markerContent =
+							'<div class="region" id="' + region.regionId + 'Div">'
+							+ '<p class="region-text">' + region.regionName + '</p>'
+							+ '<i class="region-jiantou"></i>'
+							+ '</div>';
+						var marker = new AMap.Marker({
+							position: [region.x, region.y],
+							content: markerContent,
+							// 以 icon 的 [center bottom] 为原点
+							offset: new AMap.Pixel(0, -27),
+							extData: {
+								id: region.regionId,
+								region: region
+							}
+						});
+						// 将 markers 添加到地图
+						map.add(marker);
+						// 鼠标滑过marker浮在最上层
+						marker.on("mouseover", function () {
+							$(".amap-marker").css("z-index", "100");
+							var region = $(this)[0].getExtData().region;
+							$("#" + region.regionId + "Div").parents(".amap-marker").css("z-index", "101");
+							// 添加infowindow项目简介
+							var content = "<div class=\"layui-card\">"
+								+ "<div class=\"layui-card-header\">"
+								+ region.regionName
+								+ "</div>"
+								+ "<div class=\"layui-card-body\">"
+								+ "<img src="+ region.logoPath +" style='width:150px;height:150px'>"
+								+ "</div>"
+								+ "</div>";
+							infoWindow = new AMap.InfoWindow({
+								content: content,  //使用默认信息窗体框样式，显示信息内容
+								offset: new AMap.Pixel(50, -27)
+							});
+							infoWindow.open(map, [region.x, region.y]);
+						});
+						marker.on("mouseout", function () {
+							if (infoWindow) {
+								infoWindow.close();
+							}
+						});
+						// 给marker附点击事件
+						marker.on("click", function () {
+							var region = $(this)[0].getExtData().region;
+							// 刷新获取region详情数据
+							$.get(ctxPath + "region/" + region.regionId, {}, function (data) {
+								regionShow(data);
+							});
+						});
+					}
+				})
+			} else if (zoom <= 13) { // 刷行政区
+				map.clearMap();
+				// 获取行政区加载点
+				$.get(ctxPath + "divisions", {}, function (data) {
+					for (var i = 0; i < data.length; i++) {
+						var division = data[i];
+
+						// 点标记显示内容，HTML要素字符串
+						var markerContent =
+							'<div class="division">'
+							+ division.divisionName
+							+ '</div>';
+						var marker = new AMap.Marker({
+							position: [division.x, division.y],
+							content: markerContent,
+							offset: new AMap.Pixel(0, 0),
+							extData: {
+								division: division
+							}
+						});
+						// 将 markers 添加到地图
+						map.add(marker);
+						// 给marker附焦点事件
+						marker.on("mouseover", function () {
+							divisionMousemove($(this)[0]);
+						});
+						// 给marker附焦点事件
+						marker.on("mouseout", function () {
+							map.remove(polygons); // 清除上次结果
+							polygons = [];
+						});
+						// 给marker附点击事件
+						marker.on("click", function () {
+							map.setZoom(14);
+							mapRefresh();
+						});
+					}
+				})
+			}
+		}
+
+		function divisionMousemove(marker) {
+			var division = marker.getExtData().division;
+			if (!district) {
+				//实例化DistrictSearch
+				var opts = {
+					subdistrict: 0,   //获取边界不需要返回下级行政区
+					extensions: 'all',  //返回行政区边界坐标组等具体信息
+					level: 'district'  //查询行政级别为 市
+				};
+				district = new AMap.DistrictSearch(opts);
+			}
+			//行政区查询
+			district.search(division.divisionName, function (status, result) {
+				map.remove(polygons)//清除上次结果
+				polygons = [];
+				var bounds = result.districtList[0].boundaries;
+				if (bounds) {
+					for (var i = 0, l = bounds.length; i < l; i++) {
+						//生成行政区划polygon
+						var polygon = new AMap.Polygon({
+							strokeWeight: 1,
+							path: bounds[i],
+							fillOpacity: 0.4,
+							fillColor: '#18ff41',
+							strokeColor: '#0bea9c'
+						});
+						polygons.push(polygon);
+					}
+				}
+				map.add(polygons)
+			});
+		}
+	});
+</script>
+</body>
+</html>
