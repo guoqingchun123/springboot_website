@@ -151,7 +151,7 @@
 								+ region.regionName
 								+ "</div>"
 								+ "<div class=\"layui-card-body\">"
-								+ "<img src="+ region.logoPath +" style='width:150px;height:150px'>"
+								+ "<img src='"+ region.logoPath +"' style='width:150px;height:150px'>"
 								+ "</div>"
 								+ "</div>";
 							infoWindow = new AMap.InfoWindow({
@@ -259,7 +259,7 @@
 			};
 			var ins = carousel.render(options);
 			$("#region-form-header").children("div").html(
-				'<img src=""+ region.logoPath +"/>');
+				"<img src= '"+ region.logoPath +"'/>");
 			ins.reload(options);
 			$("#region-form-name").html(region.regionName);
 
