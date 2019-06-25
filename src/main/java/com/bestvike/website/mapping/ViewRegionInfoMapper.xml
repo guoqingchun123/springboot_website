@@ -32,7 +32,7 @@
 				AND proj.avg_price ${price}
 			</if>
 			<if test = "houseHold != null">
-
+				AND t1.house_holds like #{houseHold}
 			</if>
 		</where>
 		<choose>

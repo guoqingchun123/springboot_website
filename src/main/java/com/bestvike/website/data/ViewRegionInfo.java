@@ -5,7 +5,6 @@ import com.bestvike.website.entity.DocFiles;
 import com.bestvike.website.entity.FloorSummary;
 import com.bestvike.website.entity.HouseHoldSales;
 import com.bestvike.website.entity.RegionBlds;
-import com.bestvike.website.entity.RegionCell;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
@@ -31,6 +30,7 @@ public class ViewRegionInfo implements Serializable {
 	private String remark;
 	private String logoPath;
 	private String viewPath;
+	private String houseHolds;
 
 	@Transient
 	private String houseNum;
@@ -233,5 +233,13 @@ public class ViewRegionInfo implements Serializable {
 
 	public void setListRegionBlds(List<RegionBlds> listRegionBlds) {
 		this.listRegionBlds = listRegionBlds;
+	}
+
+	public String getHouseHolds() {
+		return houseHolds;
+	}
+
+	public void setHouseHolds(String houseHolds) {
+		this.houseHolds = houseHolds;
 	}
 }
