@@ -3,22 +3,30 @@
 <mapper namespace = "com.bestvike.website.dao.ViewRegionInfoDao">
 	<select id = "selectAllRegions" parameterType = "Map" resultType = "ViewRegionInfo">
 		<![CDATA[
-           SELECT t1.region_id, t1.x, t1.y, region_name, address, pre_sale_date, t1.division_code, t2.division_name, proj.avg_price
-           , t1.logo_path
+           SELECT t1.region_id, t1.x, t1.y, region_name, address, pre_sale_date,
+           t1.division_code, t2.division_name, round(proj.avg_price, 2) avg_price, t1.logo_path
            FROM view_regionInfo t1 LEFT JOIN view_divisionInfo t2 on t1.division_code = t2.division_code
-           LEFT JOIN (SELECT region_id, max(avg_price) avg_price
-           	FROM view_projectinfo vpi LEFT JOIN Ass_RegBld arb ON vpi.project_id = arb.project_id GROUP BY region_id) proj
-           	ON t1.region_id = proj.region_id
+           LEFT JOIN (select arb.region_id, sum(case when vhi.house_use like '住宅' then vhi.presell_amount else 0 end)
+					/ sum(case when vhi.house_use like '住宅' then vhi.construct_area else 0 end) as avg_price
+				from view_houseinfo vhi
+				left join ass_regbld arb on vhi.project_id = arb.project_id and vhi.bld_no = arb.bld_no
+				group by arb.region_id) proj
+           ON t1.region_id = proj.region_id
            ORDER BY t1.pre_sale_date desc
         ]]>
 	</select>
 
 	<select id = "selectRegionByParameter" parameterType = "String" resultType = "com.bestvike.website.entity.Region">
 		<![CDATA[
-           SELECT t1.region_id, t1.x, t1.y, region_name, address, pre_sale_date, t1.division_code, t2.division_name, proj.avg_price, t1.logo_path
+           SELECT t1.region_id, t1.x, t1.y, region_name, address, pre_sale_date, t1.division_code, t2.division_name, round(proj.avg_price, 2) avg_price, t1.logo_path
            FROM view_regionInfo t1 LEFT JOIN view_divisionInfo t2 on t1.division_code = t2.division_code
-           LEFT JOIN (SELECT region_id, max(avg_price) avg_price
-				FROM view_projectinfo vpi LEFT JOIN Ass_RegBld arb ON vpi.project_id = arb.project_id GROUP BY region_id) proj
+           LEFT JOIN (
+        		select arb.region_id, sum(case when vhi.house_use like '住宅' then vhi.presell_amount else 0 end)
+					/ sum(case when vhi.house_use like '住宅' then vhi.construct_area else 0 end) as avg_price
+				from view_houseinfo vhi
+				left join ass_regbld arb on vhi.project_id = arb.project_id and vhi.bld_no = arb.bld_no
+				group by arb.region_id
+           ) proj
            ON t1.region_id = proj.region_id
         ]]>
 		<where>
@@ -63,11 +71,13 @@
 
 	<select id = "selectRegionSalesData" parameterType = "String" resultType = "map">
 		<![CDATA[
-			SELECT SUM(CASE WHEN mortgage_flag = '是' THEN 1 ELSE 0 END) 抵押,
+			SELECT
+				SUM(CASE WHEN sales_flag = '否' then 1 else 0 END) 非卖,
+				SUM(CASE WHEN mortgage_flag = '是' THEN 1 ELSE 0 END) 抵押,
 				SUM(CASE WHEN close_flag = '是' THEN 1 ELSE 0 END) 查封,
 	            SUM(CASE WHEN frozen_flag = '是' THEN 1 ELSE 0 END) 冻结,
 	            SUM(CASE WHEN presell_state = '已售' THEN 1 ELSE 0 END) 已售,
-	            SUM(CASE WHEN presell_state = '未售' THEN 1 ELSE 0 END) 未售
+	            SUM(CASE WHEN presell_state = '未售' AND sales_flag != '否' THEN 1 ELSE 0 END) 未售
             FROM view_houseinfo t
              WHERE t.project_id in (select a.project_id from ASS_REGBLD a where a.region_id = #{regionId})
 		]]>

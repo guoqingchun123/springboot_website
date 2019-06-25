@@ -44,6 +44,10 @@
 			background: #dd8800;
 		}
 		
+		.nosale {
+			background: #b9d8dd;
+		}
+		
 		.bg-gdcd span {
 			border: 1px solid #959595;
 			font-size: 14px;
@@ -208,6 +212,8 @@
 				<div class="room-list">
 					{{# if(house.presellState === '已售'){ }}
 					<div class="bg-gdcd saled">{{house.showName}}<span>{{house.presellState}}</span></div>
+					{{# } else if (house.salesFlag === '否') { }}
+					<div class="bg-gdcd nosale">{{house.showName}}<span>非卖</span></div>
 					{{# } else if (house.mortgageFlag === '是') { }}
 					<div class="bg-gdcd mortgage">{{house.showName}}<span>抵押</span></div>
 					{{# } else if (house.closeFlag === '是') { }}
@@ -221,7 +227,13 @@
 					<div class="room-content">
 						<img class="content-top" th:src="@{/themes/images/houseTitle.png}"/>
 						<div class="content-box">
-							<div class="box-title"><span>{{house.houseUse}}</span><span>{{house.presellState}}</span></div>
+							<div class="box-title"><span>{{house.houseUse}}</span><span>
+								{{# if(house.salesFlag === '否'){ }}
+								非卖
+								{{# } else { }}
+								{{house.presellState}}
+								{{# } }}
+							</span></div>
 							<p>套内面积：<span>{{house.ownArea}}㎡</span>
 							<p>户型：<span>{{house.houseHold}}</span>
 								{{# if(house.presellState === '未售'){ }}
