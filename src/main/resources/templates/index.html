@@ -193,6 +193,14 @@
 						, view = document.getElementById('regionCardContainer');
 					laytpl(getTpl).render(regions, function (html) {
 						view.innerHTML = html;
+						// 跳转到小区详情页面
+						$(".summary-btn").on("click", function () {
+							window.open(ctxPath + 'content/' + $(this).val(), '_blank');
+						});
+
+						$(".summary-card").on("click", function () {
+							window.open(ctxPath + 'content/' + $(this).attr("data-value"), '_blank');
+						});
 					});
 				}
 			});
