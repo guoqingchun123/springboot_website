@@ -15,6 +15,7 @@ import com.bestvike.website.entity.House;
 import com.bestvike.website.entity.HouseHoldSales;
 import com.bestvike.website.entity.PageBean;
 import com.bestvike.website.entity.Region;
+import com.bestvike.website.entity.RegionBlds;
 import com.bestvike.website.entity.RegionCell;
 import com.bestvike.website.service.ProjectService;
 import com.github.pagehelper.ISelect;
@@ -73,6 +74,9 @@ public class ProjectServiceImpl implements ProjectService {
 			// 楼盘图
 //			List<RegionCell> listCellInfo = viewHouseInfoDao.selectRegionCellList(regionId);
 //			viewRegionInfo.setListCell(listCellInfo);
+			// 查询小区楼栋列表
+			List<RegionBlds> listRegionBlds = viewRegionInfoDao.selectRegionBlds(regionId);
+			viewRegionInfo.setListRegionBlds(listRegionBlds);
 			List<BldCells> listBldCells = queryRegionBldCells(regionId);
 			viewRegionInfo.setListBldCells(listBldCells);
 			if (listBldCells != null && listBldCells.size() > 0
@@ -82,6 +86,7 @@ public class ProjectServiceImpl implements ProjectService {
 //				parameterMap.put("cellNo", listBldCells.get(0).getListCell().get(0).getCellNo());
 				List<ViewHouseInfo> listHouseInfo = viewHouseInfoDao.selectHouseInfoList(parameterMap);
 				viewRegionInfo.setListHouse(listHouseInfo);
+
 			}
 		} else {
 			List<DocFiles> listDocFiles = queryRegionDocs(regionId, viewType);

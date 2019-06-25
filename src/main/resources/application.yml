@@ -36,8 +36,8 @@ spring:
     prefix: classpath:/templates/
 datasources:
   website:
-    #jdbc-url: jdbc:oracle:thin:@10.10.11.254:22522/orcl
-    jdbc-url: jdbc:oracle:thin:@127.0.0.1:1521/orcl
+    jdbc-url: jdbc:oracle:thin:@10.10.11.254:22522/orcl
+    #jdbc-url: jdbc:oracle:thin:@127.0.0.1:1521/orcl
     username: mid_house
     password: mid_house
     hikari:

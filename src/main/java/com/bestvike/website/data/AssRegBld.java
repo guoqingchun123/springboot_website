@@ -18,6 +18,8 @@ public class AssRegBld implements Serializable {
 	private String regionId;
 	private String projectId;
 	private String bldNo;
+	private BigDecimal x;
+	private BigDecimal y;
 	private String remark;
 
 	@Transient
@@ -53,6 +55,22 @@ public class AssRegBld implements Serializable {
 
 	public void setBldNo(String bldNo) {
 		this.bldNo = bldNo;
+	}
+
+	public BigDecimal getX() {
+		return x;
+	}
+
+	public void setX(BigDecimal x) {
+		this.x = x;
+	}
+
+	public BigDecimal getY() {
+		return y;
+	}
+
+	public void setY(BigDecimal y) {
+		this.y = y;
 	}
 
 	public String getRemark() {

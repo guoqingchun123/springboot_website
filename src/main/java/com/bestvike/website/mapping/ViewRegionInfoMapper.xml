@@ -112,4 +112,14 @@
 			ORDER BY case when regexp_replace(cell_name,'[-0-9,.]', '') IS NULL then to_number(cell_name) else 9999 end asc
 		]]>
 	</select>
+
+	<select id = "selectRegionBlds" parameterType = "String" resultType = "com.bestvike.website.entity.RegionBlds">
+		<![CDATA[
+			SELECT t1.region_id, t2.project_id, t2.bld_no, case when t2.x is not null then
+			 'top:' || round(t2.y * 100) || '%;left:' ||  round(t2.x * 100) || '%' else '' end AS location,
+			CASE WHEN instr(bld_no, '#') > 0 THEN bld_no else bld_no || '#' end bld_name
+			FROM view_regionInfo t1 left join ass_regbld t2 on t1.region_id = t2.region_id
+			WHERE t1.region_id = #{regionId}
+		]]>
+	</select>
 </mapper>

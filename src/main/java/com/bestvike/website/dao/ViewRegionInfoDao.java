@@ -5,6 +5,7 @@ import com.bestvike.website.entity.BldCells;
 import com.bestvike.website.entity.Cell;
 import com.bestvike.website.entity.HouseHoldSales;
 import com.bestvike.website.entity.Region;
+import com.bestvike.website.entity.RegionBlds;
 import java.util.List;
 import java.util.Map;
 import org.springframework.stereotype.Repository;
@@ -26,4 +27,6 @@ public interface ViewRegionInfoDao extends Mapper<ViewRegionInfo> {
 	public List<BldCells> selectBlds(String regionId);
 
 	public List<Cell> selectBldCells(BldCells bldCells);
+
+	public List<RegionBlds> selectRegionBlds(String regionId);
 }
