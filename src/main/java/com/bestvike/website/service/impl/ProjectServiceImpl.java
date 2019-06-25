@@ -9,6 +9,7 @@ import com.bestvike.website.data.ViewRegionInfo;
 import com.bestvike.website.document.Division;
 import com.bestvike.website.entity.BldCells;
 import com.bestvike.website.entity.Cell;
+import com.bestvike.website.entity.DocFile;
 import com.bestvike.website.entity.DocFiles;
 import com.bestvike.website.entity.FloorSummary;
 import com.bestvike.website.entity.House;
@@ -158,15 +159,16 @@ public class ProjectServiceImpl implements ProjectService {
 	 */
 	public Map<String, Object> queryRegionSales(String regionId) {
 		Map<String, Object> result = new HashMap<>();
-		List<Map> views = mongoTemplate.find(Query.query(Criteria.
+		DocFiles docFiles = mongoTemplate.findOne(Query.query(Criteria.
 			where("keyId").is(regionId).
-			and("fileType").is("regionImage").
-			and("subType").is("aerialView")), Map.class, "log_file");
-		List<String> regionLogos = new ArrayList<>();
-		for (Map<String, Object> logos : views) {
-			regionLogos.add((String) logos.get("viewUrl"));
+			and("fileType").is("regionImage").and("aerialView")), DocFiles.class);
+		if (docFiles != null) {
+			List<String> regionLogos = new ArrayList<>();
+			for (DocFile docFile: docFiles.getImageList()) {
+				regionLogos.add(docFile.getViewUrl());
+			}
+			result.put("logos", regionLogos);
 		}
-		result.put("logos", regionLogos);
 		// 查询住宅销售情况
 		Map<String, Object> parameterMap = new HashMap<>();
 		parameterMap.put("regionId", regionId);
