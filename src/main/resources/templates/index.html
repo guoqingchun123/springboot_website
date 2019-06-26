@@ -122,7 +122,9 @@
 				</div>
 			</div>
 			<div class="layui-col-md3" style="text-align: right;padding-top: 50px">
+				{{# if(item.avgPrice != 0){ }}
 				备案均价：<label style="color: red;font-size: x-large">{{item.avgPrice}}元/㎡</label>
+				{{# } }}
 			</div>
 		</div>
 	</div>
@@ -167,7 +169,7 @@
 
 		// 跳转到小区详情页面
 		$(".summary-card").on("click", function () {
-			window.open(ctxPath + 'content/' + $(this).attr("data-value"),'_parent' );
+			window.open(ctxPath + 'content/' + $(this).attr("data-value"), '_parent');
 		});
 
 		$(".layui-breadcrumb a").on("click", function () {
@@ -197,7 +199,7 @@
 				}
 			});
 		});
-		
+
 		$('img').error(function () {
 			$(this).attr('src', ctxPath + "themes/images/nothing.png");
 		})
