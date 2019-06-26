@@ -12,6 +12,9 @@ public class Cell implements Serializable {
 	private String cellNo;
 	private String cellName;
 
+	private String id;
+	private String text;
+
 	public String getCellNo() {
 		return cellNo;
 	}
@@ -26,5 +29,21 @@ public class Cell implements Serializable {
 
 	public void setCellName(String cellName) {
 		this.cellName = cellName;
+	}
+
+	public String getId() {
+		return this.cellNo;
+	}
+
+	public void setId(String id) {
+		this.cellNo = id;
+	}
+
+	public String getText() {
+		return cellName;
+	}
+
+	public void setText(String text) {
+		this.cellName = text;
 	}
 }

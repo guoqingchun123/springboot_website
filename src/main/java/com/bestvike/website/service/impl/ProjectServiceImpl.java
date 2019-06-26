@@ -284,4 +284,19 @@ public class ProjectServiceImpl implements ProjectService {
 		parameterMap.put("cellNo", cellNo);
 		return viewHouseInfoDao.selectFloorSummary(parameterMap);
 	}
+
+	@Override
+	public List<FloorSummary> cellHouses(String projectId, String bldNo, String cellNo) {
+		Map<String, Object> parameterMap = new HashMap<>();
+		parameterMap.put("projectId", projectId);
+		parameterMap.put("bldNo", bldNo);
+		parameterMap.put("cellNo", cellNo);
+		List<FloorSummary> listFloorSummary = viewHouseInfoDao.selectFloorSummary(parameterMap);
+		for (FloorSummary floorSummary : listFloorSummary) {
+			parameterMap.put("floorNo", floorSummary.getFloorNo());
+			List<House> listHouse = viewHouseInfoDao.selectHouseByParameter(parameterMap);
+			floorSummary.setRooms(listHouse);
+		}
+		return listFloorSummary;
+	}
 }

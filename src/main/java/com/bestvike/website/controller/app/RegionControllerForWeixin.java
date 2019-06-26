@@ -4,12 +4,14 @@ import com.bestvike.website.controller.BaseController;
 import com.bestvike.website.document.Division;
 import com.bestvike.website.entity.BldCells;
 import com.bestvike.website.entity.DocFiles;
+import com.bestvike.website.entity.FloorSummary;
 import com.bestvike.website.entity.Region;
 import com.bestvike.website.service.LayoutService;
 import com.bestvike.website.service.ProjectService;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.aggregation.ArithmeticOperators.Floor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -66,5 +68,10 @@ public class RegionControllerForWeixin extends BaseController {
 	public Map<String, Object> houses(@RequestParam String projectId, @RequestParam String bldNo, @RequestParam String cellNo,
 		@RequestParam int pageNo, @RequestParam int pageSize) {
 		return projectService.pageHouses(projectId, bldNo, cellNo, pageNo, pageSize);
+	}
+
+	@GetMapping(value = "/cellHouses")
+	public List<FloorSummary> cellHouses(@RequestParam String projectId, @RequestParam String bldNo, @RequestParam String cellNo) {
+		return projectService.cellHouses(projectId, bldNo, cellNo);
 	}
 }

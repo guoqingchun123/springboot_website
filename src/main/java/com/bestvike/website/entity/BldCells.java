@@ -14,6 +14,10 @@ public class BldCells implements Serializable {
 	private String bldName;
 	private List<Cell> listCell;
 
+	private List<Cell> children;
+
+	private String text;
+
 	public String getProjectId() {
 		return projectId;
 	}
@@ -44,5 +48,21 @@ public class BldCells implements Serializable {
 
 	public void setListCell(List<Cell> listCell) {
 		this.listCell = listCell;
+	}
+
+	public String getText() {
+		return this.bldName;
+	}
+
+	public void setText(String text) {
+		this.bldName = text;
+	}
+
+	public List<Cell> getChildren() {
+		return listCell;
+	}
+
+	public void setChildren(List<Cell> children) {
+		this.listCell = children;
 	}
 }
