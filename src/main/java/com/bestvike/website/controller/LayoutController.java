@@ -27,8 +27,8 @@ public class LayoutController extends BaseController {
 	@GetMapping(value = "/")
 	public ModelAndView index() {
 		ModelAndView mv = new ModelAndView();
-		List<Region> listViewRegionInfo = layoutService.selectAllRegions("default");
-		mv.addObject("regions", listViewRegionInfo);
+//		List<Region> listViewRegionInfo = layoutService.selectAllRegions("default");
+//		mv.addObject("regions", listViewRegionInfo);
 		mv.setViewName("index");
 		return mv;
 	}

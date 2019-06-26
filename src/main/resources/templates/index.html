@@ -134,6 +134,11 @@
 <script th:src="@{/layui/layui.js}"></script>
 <script th:inline="javascript">
 	var ctxPath = /*[[@{/}]]*/'';
+	var page = {
+		pageNo: 1,
+		pageSize: 10,
+		totalSize: 1
+	};
 	layui.config({
 		base: ctxPath + 'layui/autocomplete/'
 	}).extend({ //设定模块别名
@@ -142,6 +147,7 @@
 	layui.use(['laypage', 'carousel', 'element', 'layer', 'autocomplete', 'laytpl'], function () {
 		var $ = layui.jquery;
 		var autocomplete = layui.autocomplete;
+		var laytpl = layui.laytpl;
 
 		// auto 快速定位，过滤小区
 		autocomplete.render({
@@ -155,13 +161,7 @@
 			}
 		});
 
-		var laytpl = layui.laytpl;
-		var regions = [[${regions}]];
-		var getTpl = document.getElementById("regionCardScript").innerHTML
-			, view = document.getElementById('regionCardContainer');
-		laytpl(getTpl).render(regions, function (html) {
-			view.innerHTML = html;
-		});
+		refreshData(1);
 
 		// 跳转到地图刷新页面
 		$(".layui-btn-maps").on("click", function () {
@@ -176,6 +176,31 @@
 		$(".layui-breadcrumb a").on("click", function () {
 			$(this).parent().find(".selected").removeClass("selected");
 			$(this).addClass("selected");
+			refreshData(1);
+		});
+
+		$('img').error(function () {
+			$(this).attr('src', ctxPath + "themes/images/nothing.png");
+		});
+		
+		function refreshPage(page) {
+			var laypage = layui.laypage;
+
+			laypage.render({
+				elem: 'page'
+				, count: page.totalSize
+				, limit: page.pageSize
+				, curr: page.pageNo
+				, theme: '#1E9FFF'
+				, jump: function (obj, first) {
+					if (!first) {
+						refreshData(obj.curr);
+					}
+				}
+			});
+		}
+
+		function refreshData(pageNo) {
 			$.ajax({
 				url: ctxPath + 'filter-regions',
 				method: 'get',
@@ -183,8 +208,8 @@
 					divisionCode: $(".division").find(".selected").attr("data-value"),
 					price: $(".avgPrice").find(".selected").attr("data-value"),
 					houseHold: $(".houseHold").find(".selected").attr("data-value"),
-					pageNo: 1,
-					pageSize: 999
+					pageNo: pageNo,
+					pageSize: page.pageSize
 				},
 				success: function (res) {
 					var regions = res.list;
@@ -197,13 +222,12 @@
 							window.open(ctxPath + 'content/' + $(this).attr("data-value"));
 						});
 					});
+					page.pageNo = pageNo;
+					page.totalSize = res.page.totalSize;
+					refreshPage(page);
 				}
 			});
-		});
-
-		$('img').error(function () {
-			$(this).attr('src', ctxPath + "themes/images/nothing.png");
-		})
+		}
 	});
 </script>
 </body>
