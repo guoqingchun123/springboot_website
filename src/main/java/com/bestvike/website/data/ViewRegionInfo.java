@@ -5,6 +5,7 @@ import com.bestvike.website.entity.BldSales;
 import com.bestvike.website.entity.DocFiles;
 import com.bestvike.website.entity.FloorSummary;
 import com.bestvike.website.entity.HouseHoldSales;
+import com.bestvike.website.entity.MonthSales;
 import com.bestvike.website.entity.RegionBlds;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -61,6 +62,8 @@ public class ViewRegionInfo implements Serializable {
 	private List<RegionBlds> listRegionBlds;
 	@Transient
 	private BldSales bldSales;
+	@Transient
+	private List<MonthSales> listRegionSales;
 
 	public String getRegionId() {
 		return regionId;
@@ -252,5 +255,13 @@ public class ViewRegionInfo implements Serializable {
 
 	public void setBldSales(BldSales bldSales) {
 		this.bldSales = bldSales;
+	}
+
+	public List<MonthSales> getListRegionSales() {
+		return listRegionSales;
+	}
+
+	public void setListRegionSales(List<MonthSales> listRegionSales) {
+		this.listRegionSales = listRegionSales;
 	}
 }

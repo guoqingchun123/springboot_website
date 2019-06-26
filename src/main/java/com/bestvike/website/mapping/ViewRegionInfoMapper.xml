@@ -134,4 +134,22 @@
 			ORDER BY to_number(nvl(regexp_replace(t3.bld_name, '[^0-9]'), -1)) asc, t3.bld_no asc
 		]]>
 	</select>
+
+	<select id = "selectRegionMonthSales" parameterType = "String" resultType = "com.bestvike.website.entity.MonthSales">
+		<![CDATA[
+			SELECT t1.sign_month, t2.residence_num, t2.business_num, t2.mating_num FROM
+			(SELECT TO_CHAR(ADD_MONTHS(TO_DATE(#{preSaleDate}, 'yyyy-MM-dd'), ROWNUM - 1),'YYYY-MM') sign_month
+				FROM DUAL CONNECT BY ROWNUM <= months_between (sysdate, to_date(#{preSaleDate}, 'yyyy-mm-dd')) + 1) t1
+			LEFT JOIN
+			(SELECT TO_CHAR(to_date(sign_date, 'yyyy-MM-dd'), 'yyyy-MM') sign_month,
+				SUM(CASE WHEN instr(house_use, '住宅') > 0 THEN 1 ELSE 0 END) residence_num,
+				SUM(CASE WHEN instr(house_use, '商业') > 0 THEN 1 ELSE 0 END) business_num,
+				SUM(CASE WHEN instr(house_use, '商业') = 0 AND instr(house_use, '住宅') = 0 THEN 1 ELSE 0 END) mating_num
+			FROM view_houseinfo
+				GROUP BY TO_CHAR(to_date(sign_date, 'yyyy-MM-dd'), 'yyyy-MM')) t2
+			ON t1.sign_month = t2.sign_month
+			WHERE to_date(t2.sign_month, 'yyyy-MM') >= add_months(to_date(#{preSaleDate}, 'yyyy-MM-dd'), -12)
+			ORDER BY t1.sign_month asc
+		]]>
+	</select>
 </mapper>

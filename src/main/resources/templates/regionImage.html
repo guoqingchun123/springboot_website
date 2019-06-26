@@ -1,348 +1,348 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-	<head>
-		<meta charset="UTF-8">
-		<title>赤峰市房产信息网</title>
-		<link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}"/>
-		<link th:href="@{/layui/css/layui.css}" rel="stylesheet" type="text/css">
-		<link th:href="@{/layui/autocomplete/autocomplete.css}" rel="stylesheet" type="text/css">
-		<link th:href="@{/layui/css/maps.css}" rel="stylesheet" type="text/css">
-		<link th:href="@{/layui/viewer/css/viewer.min.css}" rel="stylesheet">
-		<style>
-			.viewer {
-				width: 95%;
-				margin: 0 auto;
-				font-size: 0;
-			}
-
-			.viewer li {
-				display: inline-block;
-				margin-left: 1%;
-			}
-
-			.viewer li img {
-				width: 150px;
-				height: 150px
-			}
-		</style>
-	</head>
-	<body class="layui-layout-body" style="min-width: 1000px;overflow-x: auto;overflow-y: auto;background: #f1f1f1">
-		<div class="layui-layout layui-layout-admin">
-			<div class="layui-header layui-bg-blue" style="position: fixed;width: 100%;">
-				<div class="layui-col-md3" style="padding-left: 15px;padding-top: 15px">
-					<img th:src="@{/themes/images/logo.png}">
-				</div>
-				<div class="layui-col-md9" style="padding-right: 15px;">
-					<div style="float: right">
-						<input type='text' autocomplete="off" placeholder="请输入小区名称和小区地址检索" class="layui-input layui-input-search" name="auto-regions" id="auto-regions">
-						<a href="javascript:;"><i class="layui-icon layui-icon-search"></i></a>
-					</div>
-				</div>
+<head>
+	<meta charset="UTF-8">
+	<title>赤峰市房产信息网</title>
+	<link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}"/>
+	<link th:href="@{/layui/css/layui.css}" rel="stylesheet" type="text/css">
+	<link th:href="@{/layui/autocomplete/autocomplete.css}" rel="stylesheet" type="text/css">
+	<link th:href="@{/layui/css/maps.css}" rel="stylesheet" type="text/css">
+	<link th:href="@{/layui/viewer/css/viewer.min.css}" rel="stylesheet">
+	<style>
+		.viewer {
+			width: 95%;
+			margin: 0 auto;
+			font-size: 0;
+		}
+		
+		.viewer li {
+			display: inline-block;
+			margin-left: 1%;
+		}
+		
+		.viewer li img {
+			width: 150px;
+			height: 150px
+		}
+	</style>
+</head>
+<body class="layui-layout-body" style="min-width: 1000px;overflow-x: auto;overflow-y: auto;background: #f1f1f1">
+<div class="layui-layout layui-layout-admin">
+	<div class="layui-header layui-bg-blue" style="position: fixed;width: 100%;">
+		<div class="layui-col-md3" style="padding-left: 15px;padding-top: 15px">
+			<img th:src="@{/themes/images/logo.png}">
+		</div>
+		<div class="layui-col-md9" style="padding-right: 15px;">
+			<div style="float: right">
+				<input type='text' autocomplete="off" placeholder="请输入小区名称和小区地址检索" class="layui-input layui-input-search" name="auto-regions" id="auto-regions">
+				<a href="javascript:;"><i class="layui-icon layui-icon-search"></i></a>
 			</div>
-			<div id="layui-body" data-anim="layui-anim-upbit" style="width: 75%;min-width: 1000px;margin:0 auto;padding-top: 65px;">
-				<div style="width: 100%;height:60px;background-color: white;padding-top: 15px;line-height: 60px;">
-					<div class="layui-col-md3" style="padding-left: 15px">
-						<h1 th:text="${region.regionName}"></h1>
-					</div>
-					<div class="layui-col-md9">
+		</div>
+	</div>
+	<div id="layui-body" data-anim="layui-anim-upbit" style="width: 75%;min-width: 1000px;margin:0 auto;padding-top: 65px;">
+		<div style="width: 100%;height:60px;background-color: white;padding-top: 15px;line-height: 60px;">
+			<div class="layui-col-md3" style="padding-left: 15px">
+				<h1 th:text="${region.regionName}"></h1>
+			</div>
+			<div class="layui-col-md9">
 				<span class="layui-breadcrumb" lay-separator="|" style="font-size: 30px">
 					<a href="javascript:;" data-value="index">首页</a>
 				  <a href="javascript:;" data-value="salesData">销售情况</a>
 				  <a href="javascript:;" data-value="houseHold">户型图</a>
 				  <a href="javascript:;" data-value="regionImage">项目相册</a>
 				</span>
-					</div>
-				</div>
-				<div style="width: 100%;background-color: white;margin-top: 10px;height:auto;overflow:hidden;">
-					<div class="layui-col-md4">
-						<div class="layui-carousel" id="carousel">
-							<div carousel-item="">
-								<div id="regionSalesData"></div>
-								<div style="text-align:center">
-									<img th:src="${region.logoPath}" style="height: 350px"/>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="layui-col-md4" style="padding-left: 15px;">
-						<div id="residenceSalesData" style="width: 100%;height: 350px"></div>
-					</div>
-					<div class="layui-col-md4" style="padding-left: 15px;">
-						<div id="matingSalesData" style="width: 100%;height: 350px"></div>
-					</div>
-				</div>
-				<div id="regionImageDiv" style="width: 100%;background-color: white;margin-top: 10px;height:auto;">
-
-				</div>
 			</div>
 		</div>
-		<script id="regionImageDivScript" type="text/html">
-			{{# layui.each(d, function(index, docFiles){ }}
-			<p class="layui-elem-quote">{{docFiles.docName}}</p>
-			<ul class="viewer">
-				{{# layui.each(docFiles.imageList, function(indx, docFile){ }}
-				<li>
-					<img src="{{=docFile.thumbUrl}}" data-original="{{=docFile.viewUrl}}"/>
-				</li>
-				{{# }); }}
-			</ul>
-			{{# }); }}
-		</script>
-		<script th:src="@{/layui/layui.js}"></script>
-		<script th:src="@{/layui/echarts/echarts.js}"></script>
-		<script th:src="@{/layui/echarts/macarons.js}"></script>
-		<script th:src="@{/layui/viewer/js/viewer.min.js}"></script>
-		<script th:inline="javascript">
-			var ctxPath = /*[[@{/}]]*/'';
-			layui.config({
-							 base: ctxPath + 'layui/autocomplete/'
-						 }).extend({ //设定模块别名
-									   autocomplete: 'autocomplete'
-								   });
-			layui.use(['carousel', 'element', 'layer', 'autocomplete'], function () {
-				var $ = layui.jquery;
-				var autocomplete = layui.autocomplete;
+		<div style="width: 100%;background-color: white;margin-top: 10px;height:auto;overflow:hidden;">
+			<div class="layui-col-md4">
+				<div class="layui-carousel" id="carousel">
+					<div carousel-item="">
+						<div id="regionSalesData"></div>
+						<div style="text-align:center">
+							<img th:src="${region.logoPath}" style="height: 350px"/>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="layui-col-md4" style="padding-left: 15px;">
+				<div id="residenceSalesData" style="width: 100%;height: 350px"></div>
+			</div>
+			<div class="layui-col-md4" style="padding-left: 15px;">
+				<div id="matingSalesData" style="width: 100%;height: 350px"></div>
+			</div>
+		</div>
+		<div id="regionImageDiv" style="width: 100%;background-color: white;margin-top: 10px;height:auto;">
+		
+		</div>
+	</div>
+</div>
+<script id="regionImageDivScript" type="text/html">
+	{{# layui.each(d, function(index, docFiles){ }}
+	<p class="layui-elem-quote">{{docFiles.docName}}</p>
+	<ul class="viewer">
+		{{# layui.each(docFiles.imageList, function(indx, docFile){ }}
+		<li>
+			<img src="{{=docFile.thumbUrl}}" data-original="{{=docFile.viewUrl}}"/>
+		</li>
+		{{# }); }}
+	</ul>
+	{{# }); }}
+</script>
+<script th:src="@{/layui/layui.js}"></script>
+<script th:src="@{/layui/echarts/echarts.js}"></script>
+<script th:src="@{/layui/echarts/macarons.js}"></script>
+<script th:src="@{/layui/viewer/js/viewer.min.js}"></script>
+<script th:inline="javascript">
+	var ctxPath = /*[[@{/}]]*/'';
+	layui.config({
+		base: ctxPath + 'layui/autocomplete/'
+	}).extend({ //设定模块别名
+		autocomplete: 'autocomplete'
+	});
+	layui.use(['carousel', 'element', 'layer', 'autocomplete'], function () {
+		var $ = layui.jquery;
+		var autocomplete = layui.autocomplete;
 
-				$("#layui-body").height(window.innerHeight - 60);
+		$("#layui-body").height(window.innerHeight - 60);
 
-				// auto 快速定位，过滤小区
-				autocomplete.render({
-										elem: $('#auto-regions')[0],
-										url: ctxPath + 'auto-regions',
-										template_val: '{{d.regionName}}',
-										template_txt: '{{d.regionName}} <span class=\'layui-badge layui-bg-gray\'>{{d.address}}</span>',
-										onselect: function (resp) {
-											// 跳转到选择的项目详情页面
-											window.location.href = ctxPath + 'content/' + resp.regionId;
-										}
-									});
+		// auto 快速定位，过滤小区
+		autocomplete.render({
+			elem: $('#auto-regions')[0],
+			url: ctxPath + 'auto-regions',
+			template_val: '{{d.regionName}}',
+			template_txt: '{{d.regionName}} <span class=\'layui-badge layui-bg-gray\'>{{d.address}}</span>',
+			onselect: function (resp) {
+				// 跳转到选择的项目详情页面
+				window.location.href = ctxPath + 'content/' + resp.regionId;
+			}
+		});
 
-				var carousel = layui.carousel;
+		var carousel = layui.carousel;
 
-				carousel.render({
-									elem: '#carousel'
-									, width: '100%' //设置容器宽度
-									, height: '350px'
-									, arrow: 'always' //始终显示箭头
-								});
+		carousel.render({
+			elem: '#carousel'
+			, width: '100%' //设置容器宽度
+			, height: '350px'
+			, arrow: 'always' //始终显示箭头
+		});
 
-				var layid = location.hash.replace(/^#tab=/, '');
-				var element = layui.element;
-				element.tabChange('tab', layid);
+		var layid = location.hash.replace(/^#tab=/, '');
+		var element = layui.element;
+		element.tabChange('tab', layid);
 
-				element.on('tab(tab)', function (elem) {
-					location.hash = 'tab=' + $(this).attr('lay-id');
-				});
+		element.on('tab(tab)', function (elem) {
+			location.hash = 'tab=' + $(this).attr('lay-id');
+		});
 
-				$(".layui-breadcrumb a").on("click", function () {
-					var viewType = $(this).attr("data-value");
-					if (viewType === 'index') {
-						window.location.replace(ctxPath);
-					} else {
-						window.location.replace(ctxPath + 'content/' + [[${region.regionId}]] + "?viewType=" + viewType);
-					}
-				});
-				var laytpl = layui.laytpl;
-				getTpl = document.getElementById("regionImageDivScript").innerHTML
-					, view = document.getElementById('regionImageDiv');
-				laytpl(getTpl).render([[${region.listDocFiles}]], function (html) {
-					view.innerHTML = html;
-					$.each($(".viewer"), function (item) {
-						var viewer = new Viewer($(this)[0], {
-							url: 'data-original'
-						})
-					});
-				});
+		$(".layui-breadcrumb a").on("click", function () {
+			var viewType = $(this).attr("data-value");
+			if (viewType === 'index') {
+				window.location.replace(ctxPath);
+			} else {
+				window.location.replace(ctxPath + 'content/' + [[${region.regionId}]] + "?viewType=" + viewType);
+			}
+		});
+		var laytpl = layui.laytpl;
+		getTpl = document.getElementById("regionImageDivScript").innerHTML
+			, view = document.getElementById('regionImageDiv');
+		laytpl(getTpl).render([[${region.listDocFiles}]], function (html) {
+			view.innerHTML = html;
+			$.each($(".viewer"), function (item) {
+				var viewer = new Viewer($(this)[0], {
+					url: 'data-original'
+				})
+			});
+		});
 
-				var option = {
-					tooltip: {
-						trigger: 'item',
-						formatter: "{a} <br/>{b} : {c} ({d}%)"
-					},
-					series: [
-						{
-							type: 'pie',
-							radius: '85%',
-							data: [[${region.salesData}]],
-							label: {
-								normal: {
-									formatter(v) {
-										return Math.round(v.percent) + '%' + '' + v.name
-									},
-									textStyle: {
-										fontWeight: 300,
-										fontSize: 16    //文字的字体大小
-									}
-								}
+		var option = {
+			tooltip: {
+				trigger: 'item',
+				formatter: "{a} <br/>{b} : {c} ({d}%)"
+			},
+			series: [
+				{
+					type: 'pie',
+					radius: '85%',
+					data: [[${region.salesData}]],
+					label: {
+						normal: {
+							formatter(v) {
+								return Math.round(v.percent) + '%' + '' + v.name
+							},
+							textStyle: {
+								fontWeight: 300,
+								fontSize: 16    //文字的字体大小
 							}
 						}
-					]
-				};
-
-				var regionSalesDataCharts = echarts.init(document.getElementById('regionSalesData'), 'macarons');
-
-				regionSalesDataCharts.setOption(option);
-				var regionHouseHoldSalesData = [[${region.listHouseHold}]];
-
-				var matingSalesHouseHolds = [];
-				var matingSalesSell = [];
-				var matingSalesNoSaled = [];
-				var matingSalesNoSale = [];
-				var residenceHouseHolds = [];
-				var residenceSalesSell = [];
-				var residenceSalesNoSaled = [];
-				var residenceSalesNoSale = [];
-
-				for (var i = 0; i < regionHouseHoldSalesData.length; i++) {
-					if (regionHouseHoldSalesData[i].houseUse.indexOf('住宅') == -1) {
-						matingSalesHouseHolds.push(regionHouseHoldSalesData[i].houseUse + regionHouseHoldSalesData[i].houseHold);
-						matingSalesSell.push(regionHouseHoldSalesData[i].sellNum);
-						matingSalesNoSaled.push(regionHouseHoldSalesData[i].nosaledNum);
-						matingSalesNoSale.push(regionHouseHoldSalesData[i].nosaleNum);
-					} else {
-						residenceHouseHolds.push(regionHouseHoldSalesData[i].houseUse + regionHouseHoldSalesData[i].houseHold);
-						residenceSalesSell.push(regionHouseHoldSalesData[i].sellNum);
-						residenceSalesNoSaled.push(regionHouseHoldSalesData[i].nosaledNum);
-						residenceSalesNoSale.push(regionHouseHoldSalesData[i].nosaleNum);
 					}
 				}
+			]
+		};
 
-				option = {
-					title: {
-						text: '配套',
-						textStyle: {
-							//文字颜色
-							color: '#1a1b1a',
-							fontWeight: 'bold',
-							//字体大小
-							fontSize: 18
-						}
-					},
-					tooltip: {
-						trigger: 'axis',
-						axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-							type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-						}
-					},
-					legend: {
-						data: ['已售', '未售', '非卖']
-					},
-					grid: {
-						left: '3%',
-						right: '4%',
-						bottom: '3%',
-						containLabel: true
-					},
-					xAxis: [
-						{
-							type: 'category',
-							data: matingSalesHouseHolds
-						}
-					],
-					yAxis: [
-						{
-							type: 'value'
-						}
-					],
-					series: [
-						{
-							name: '已售',
-							type: 'bar',
-							stack: '销售情况',
-							data: matingSalesSell
-						},
-						{
-							name: '未售',
-							type: 'bar',
-							stack: '销售情况',
-							data: matingSalesNoSaled
-						},
-						{
-							name: '非卖',
-							type: 'bar',
-							stack: '销售情况',
-							data: matingSalesNoSale
-						},
-					]
-				};
+		var regionSalesDataCharts = echarts.init(document.getElementById('regionSalesData'), 'macarons');
 
-				var matingSalesDataEcharts = echarts.init(document.getElementById('matingSalesData'), 'macarons');
+		regionSalesDataCharts.setOption(option);
+		var regionHouseHoldSalesData = [[${region.listHouseHold}]];
 
-				matingSalesDataEcharts.setOption(option);
+		var matingSalesHouseHolds = [];
+		var matingSalesSell = [];
+		var matingSalesNoSaled = [];
+		var matingSalesNoSale = [];
+		var residenceHouseHolds = [];
+		var residenceSalesSell = [];
+		var residenceSalesNoSaled = [];
+		var residenceSalesNoSale = [];
 
-				option = {
-					title: {
-						text: '住宅',
-						textStyle: {
-							//文字颜色
-							color: '#1a1b1a',
-							fontWeight: 'bold',
-							//字体大小
-							fontSize: 18
-						}
-					},
-					tooltip: {
-						trigger: 'axis',
-						axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-							type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-						}
-					},
-					legend: {
-						data: ['已售', '未售', '非卖']
-					},
-					grid: {
-						left: '3%',
-						right: '4%',
-						bottom: '3%',
-						containLabel: true
-					},
-					xAxis: [
-						{
-							type: 'category',
-							data: residenceHouseHolds
-						}
-					],
-					yAxis: [
-						{
-							type: 'value'
-						}
-					],
-					series: [
-						{
-							name: '已售',
-							type: 'bar',
-							stack: '销售情况',
-							data: residenceSalesSell
-						},
-						{
-							name: '未售',
-							type: 'bar',
-							stack: '销售情况',
-							data: residenceSalesNoSaled
-						},
-						{
-							name: '非卖',
-							type: 'bar',
-							stack: '销售情况',
-							data: residenceSalesNoSale
-						},
-					]
-				};
+		for (var i = 0; i < regionHouseHoldSalesData.length; i++) {
+			if (regionHouseHoldSalesData[i].houseUse.indexOf('住宅') == -1) {
+				matingSalesHouseHolds.push(regionHouseHoldSalesData[i].houseUse + regionHouseHoldSalesData[i].houseHold);
+				matingSalesSell.push(regionHouseHoldSalesData[i].sellNum);
+				matingSalesNoSaled.push(regionHouseHoldSalesData[i].nosaledNum);
+				matingSalesNoSale.push(regionHouseHoldSalesData[i].nosaleNum);
+			} else {
+				residenceHouseHolds.push(regionHouseHoldSalesData[i].houseUse + regionHouseHoldSalesData[i].houseHold);
+				residenceSalesSell.push(regionHouseHoldSalesData[i].sellNum);
+				residenceSalesNoSaled.push(regionHouseHoldSalesData[i].nosaledNum);
+				residenceSalesNoSale.push(regionHouseHoldSalesData[i].nosaleNum);
+			}
+		}
 
-				var residenceSalesDataEcharts = echarts.init(document.getElementById('residenceSalesData'), 'macarons');
+		option = {
+			title: {
+				text: '配套',
+				textStyle: {
+					//文字颜色
+					color: '#1a1b1a',
+					fontWeight: 'bold',
+					//字体大小
+					fontSize: 18
+				}
+			},
+			tooltip: {
+				trigger: 'axis',
+				axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+					type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+				}
+			},
+			legend: {
+				data: ['已售', '未售', '非卖']
+			},
+			grid: {
+				left: '3%',
+				right: '4%',
+				bottom: '3%',
+				containLabel: true
+			},
+			xAxis: [
+				{
+					type: 'category',
+					data: matingSalesHouseHolds
+				}
+			],
+			yAxis: [
+				{
+					type: 'value'
+				}
+			],
+			series: [
+				{
+					name: '已售',
+					type: 'bar',
+					stack: '销售情况',
+					data: matingSalesSell
+				},
+				{
+					name: '未售',
+					type: 'bar',
+					stack: '销售情况',
+					data: matingSalesNoSaled
+				},
+				{
+					name: '非卖',
+					type: 'bar',
+					stack: '销售情况',
+					data: matingSalesNoSale
+				},
+			]
+		};
 
-				residenceSalesDataEcharts.setOption(option);
+		var matingSalesDataEcharts = echarts.init(document.getElementById('matingSalesData'), 'macarons');
 
-				$(window).resize(function () {
-					matingSalesDataEcharts.resize();
-					residenceSalesDataEcharts.resize();
-					regionSalesDataCharts.resize();
-				});
+		matingSalesDataEcharts.setOption(option);
 
-				$('img').error(function () {
-					$(this).attr('src', ctxPath + "themes/images/nothing.png");
-				});
-			});
-		</script>
-	</body>
+		option = {
+			title: {
+				text: '住宅',
+				textStyle: {
+					//文字颜色
+					color: '#1a1b1a',
+					fontWeight: 'bold',
+					//字体大小
+					fontSize: 18
+				}
+			},
+			tooltip: {
+				trigger: 'axis',
+				axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+					type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+				}
+			},
+			legend: {
+				data: ['已售', '未售', '非卖']
+			},
+			grid: {
+				left: '3%',
+				right: '4%',
+				bottom: '3%',
+				containLabel: true
+			},
+			xAxis: [
+				{
+					type: 'category',
+					data: residenceHouseHolds
+				}
+			],
+			yAxis: [
+				{
+					type: 'value'
+				}
+			],
+			series: [
+				{
+					name: '已售',
+					type: 'bar',
+					stack: '销售情况',
+					data: residenceSalesSell
+				},
+				{
+					name: '未售',
+					type: 'bar',
+					stack: '销售情况',
+					data: residenceSalesNoSaled
+				},
+				{
+					name: '非卖',
+					type: 'bar',
+					stack: '销售情况',
+					data: residenceSalesNoSale
+				},
+			]
+		};
+
+		var residenceSalesDataEcharts = echarts.init(document.getElementById('residenceSalesData'), 'macarons');
+
+		residenceSalesDataEcharts.setOption(option);
+
+		$(window).resize(function () {
+			matingSalesDataEcharts.resize();
+			residenceSalesDataEcharts.resize();
+			regionSalesDataCharts.resize();
+		});
+
+		$('img').error(function () {
+			$(this).attr('src', ctxPath + "themes/images/nothing.png");
+		});
+	});
+</script>
+</body>
 </html>

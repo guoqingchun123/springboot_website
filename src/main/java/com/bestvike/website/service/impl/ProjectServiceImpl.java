@@ -15,6 +15,7 @@ import com.bestvike.website.entity.DocFiles;
 import com.bestvike.website.entity.FloorSummary;
 import com.bestvike.website.entity.House;
 import com.bestvike.website.entity.HouseHoldSales;
+import com.bestvike.website.entity.MonthSales;
 import com.bestvike.website.entity.PageBean;
 import com.bestvike.website.entity.Region;
 import com.bestvike.website.entity.RegionBlds;
@@ -90,6 +91,15 @@ public class ProjectServiceImpl implements ProjectService {
 				BldSales bldSales = viewHouseInfoDao.selectBldSalesData(parameterMap);
 				viewRegionInfo.setBldSales(bldSales);
 			}
+		} else if ("houseHold".equalsIgnoreCase(viewType)) {
+			List<DocFiles> listDocFiles = queryRegionDocs(regionId, viewType);
+			viewRegionInfo.setListDocFiles(listDocFiles);
+			// 统计小区月销售量
+			parameterMap.clear();
+			parameterMap.put("regionId", regionId);
+			parameterMap.put("preSaleDate", viewRegionInfo.getPreSaleDate());
+			List<MonthSales> listRegionSales = viewRegionInfoDao.selectRegionMonthSales(parameterMap);
+			viewRegionInfo.setListRegionSales(listRegionSales);
 		} else {
 			List<DocFiles> listDocFiles = queryRegionDocs(regionId, viewType);
 			viewRegionInfo.setListDocFiles(listDocFiles);
