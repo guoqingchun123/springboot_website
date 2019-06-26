@@ -348,12 +348,17 @@
 		});
 
 		var option = {
+			title: {
+				text: '项目销售情况',
+				x: 'left'
+			},
 			tooltip: {
 				trigger: 'item',
 				formatter: "{a} <br/>{b} : {c} ({d}%)"
 			},
 			series: [
 				{
+					name: '房屋',
 					type: 'pie',
 					radius: '85%',
 					data: [[${region.salesData}]],
