@@ -161,7 +161,7 @@ public class ProjectServiceImpl implements ProjectService {
 		Map<String, Object> result = new HashMap<>();
 		DocFiles docFiles = mongoTemplate.findOne(Query.query(Criteria.
 			where("keyId").is(regionId).
-			and("fileType").is("regionImage").and("aerialView")), DocFiles.class);
+			and("fileType").is("regionImage").and("docType").is("aerialView")), DocFiles.class);
 		if (docFiles != null) {
 			List<String> regionLogos = new ArrayList<>();
 			for (DocFile docFile: docFiles.getImageList()) {

@@ -119,7 +119,7 @@
 			SELECT cell_name as cell_no, cell_name || '单元' as cell_name
 			FROM view_houseinfo WHERE project_id = #{projectId} AND bld_no = #{bldNo}
 			GROUP BY cell_name
-			ORDER BY case when regexp_replace(cell_name,'[-0-9,.]', '') IS NULL then to_number(cell_name) else 9999 end asc
+			ORDER BY lpad(cell_name, 10, '0') asc
 		]]>
 	</select>
 
