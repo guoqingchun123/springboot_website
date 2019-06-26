@@ -148,7 +148,7 @@
 			FROM view_houseinfo
 				GROUP BY TO_CHAR(to_date(sign_date, 'yyyy-MM-dd'), 'yyyy-MM')) t2
 			ON t1.sign_month = t2.sign_month
-			WHERE to_date(t2.sign_month, 'yyyy-MM') >= add_months(to_date(#{preSaleDate}, 'yyyy-MM-dd'), -12)
+			WHERE to_date(t2.sign_month, 'yyyy-MM') >= add_months(sysdate, -12)
 			ORDER BY t1.sign_month asc
 		]]>
 	</select>
