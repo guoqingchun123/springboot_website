@@ -1,6 +1,5 @@
 package com.bestvike.website.controller;
 
-import com.bestvike.website.data.ViewHouseInfo;
 import com.bestvike.website.data.ViewPresalecard;
 import com.bestvike.website.data.ViewRegionInfo;
 import com.bestvike.website.entity.Region;
