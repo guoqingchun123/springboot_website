@@ -58,8 +58,8 @@
 				<div class="layui-carousel" id="carousel">
 					<div carousel-item="">
 						<div id="regionSalesData"></div>
-						<div style="text-align:center">
-							<img th:src="${region.logoPath}" style="height: 350px"/>
+						<div style="padding-left: 2px;text-align: center">
+							<img th:each="str:${region?.regionLogos}" th:src="${str}" style="height: 350px"/>
 						</div>
 					</div>
 				</div>

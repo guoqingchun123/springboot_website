@@ -169,7 +169,8 @@
 					<div carousel-item="">
 						<div id="regionSalesData"></div>
 						<div style="padding-left: 2px;text-align: center">
-							<img th:src="${region?.logoPath}" style="height: 450px"/></div>
+							<img th:each="str:${region?.regionLogos}" th:src="${str}" style="height: 450px"/>
+						</div>
 					</div>
 				</div>
 			</div>

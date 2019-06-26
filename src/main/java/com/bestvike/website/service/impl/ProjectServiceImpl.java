@@ -67,6 +67,18 @@ public class ProjectServiceImpl implements ProjectService {
 				}
 			}
 		}
+
+		DocFiles docFiles = mongoTemplate.findOne(Query.query(Criteria.
+			where("keyId").is(regionId).
+			and("fileType").is("regionImage").and("docType").is("aerialView")), DocFiles.class);
+		if (docFiles != null) {
+			List<String> regionLogos = new ArrayList<>();
+			for (DocFile docFile : docFiles.getImageList()) {
+				regionLogos.add(docFile.getViewUrl());
+			}
+			viewRegionInfo.setRegionLogos(regionLogos);
+		}
+
 		Map<String, Object> parameterMap = new HashMap<>();
 		parameterMap.put("regionId", regionId);
 		List<HouseHoldSales> listHouseHold = viewRegionInfoDao.selectRegionHouseHoldData(parameterMap);
