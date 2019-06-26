@@ -26,13 +26,15 @@
 	var infoWindow = null;
 
 	var regions = [[${regions}]];
-
+	
+	function regionShow(data) {
+		RegionOnClick.postMessage(JSON.stringify(data));
+	}
+	
 	layui.use(['carousel', 'element', 'layer'], function () {
 		var $ = layui.jquery;
-
 		$("#container").height(window.innerHeight);
 		$("#container").width(window.innerWidth);
-
 		//创建地图
 		var map = new AMap.Map('container', {
 			center: [118.916202, 42.271235], //初始地图中心点
