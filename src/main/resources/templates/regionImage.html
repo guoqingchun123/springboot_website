@@ -155,6 +155,10 @@
 		});
 
 		var option = {
+			title: {
+				text: '项目销售情况',
+				x: 'left'
+			},
 			tooltip: {
 				trigger: 'item',
 				formatter: "{a} <br/>{b} : {c} ({d}%)"
@@ -195,12 +199,12 @@
 
 		for (var i = 0; i < regionHouseHoldSalesData.length; i++) {
 			if (regionHouseHoldSalesData[i].houseUse.indexOf('住宅') == -1) {
-				matingSalesHouseHolds.push(regionHouseHoldSalesData[i].houseUse + regionHouseHoldSalesData[i].houseHold);
+				matingSalesHouseHolds.push(regionHouseHoldSalesData[i].houseUse);
 				matingSalesSell.push(regionHouseHoldSalesData[i].sellNum);
 				matingSalesNoSaled.push(regionHouseHoldSalesData[i].nosaledNum);
 				matingSalesNoSale.push(regionHouseHoldSalesData[i].nosaleNum);
 			} else {
-				residenceHouseHolds.push(regionHouseHoldSalesData[i].houseUse + regionHouseHoldSalesData[i].houseHold);
+				residenceHouseHolds.push(regionHouseHoldSalesData[i].houseHold);
 				residenceSalesSell.push(regionHouseHoldSalesData[i].sellNum);
 				residenceSalesNoSaled.push(regionHouseHoldSalesData[i].nosaledNum);
 				residenceSalesNoSale.push(regionHouseHoldSalesData[i].nosaleNum);
