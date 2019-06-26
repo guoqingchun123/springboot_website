@@ -143,7 +143,7 @@
 		</div>
 		<div class="layui-col-md9" style="padding-right: 15px;">
 			<div style="float: right">
-				<input type='text' autocomplete="off" placeholder="请输入项目名称或项目地址检索"
+				<input type='text' autocomplete="off" placeholder="请输入小区名称和小区地址检索"
 					   class="layui-input layui-input-search" name="auto-regions" id="auto-regions">
 				<a href="javascript:;"><i class="layui-icon layui-icon-search"></i></a>
 			</div>
@@ -164,26 +164,18 @@
 			</div>
 		</div>
 		<div style="width: 100%;background-color: white;margin-top: 10px;height:auto;overflow:hidden;">
-			<div class="layui-col-md4" style="width: 45%">
+			<div class="layui-col-md6">
 				<div class="layui-carousel" id="carousel">
 					<div carousel-item="">
 						<div id="regionSalesData"></div>
-						<div style="text-align:center">
-							<img th:src="${region?.logoPath}" style="height: 350px"/></div>
+						<div style="padding-left: 2px;text-align: center">
+							<img th:src="${region?.logoPath}" style="height: 450px"/></div>
 					</div>
 				</div>
 			</div>
-			<div id="viewImageDiv" class="layui-col-md8" style="width: 50%"></div>
+			<div id="viewImageDiv" class="layui-col-md6"></div>
 		</div>
 		<div id="salesDataDiv" style="width: 100%;background-color: white;margin-top: 10px;height:auto;">
-			<div class="layui-tab layui-tab-card">
-				<ul class="layui-tab-title">
-					<li th:each="bld,bldStat : ${region.listBldCells}"
-						th:value="${bld.projectId} + '|' + ${bld.bldNo}" th:class="${bldStat.index == 0 ? 'layui-this bldCellTab' : 'bldCellTab'}">
-						<label th:text="${bld.bldName}"></label>
-					</li>
-				</ul>
-			</div>
 			<div id="houseCardContainer" class="layui-tab-content"></div>
 		</div>
 	</div>
@@ -191,20 +183,28 @@
 <script id="viewImageScript" type="text/html">
 	<div style="position: relative;height: auto;display:inline-block">
 		{{# if(d.viewPath != null){ }}
-		<image th:src="${region?.viewPath}" style="height:350px"></image>
+		<image th:src="${region?.viewPath}" style="height:450px"></image>
 		{{# layui.each(d.listRegionBlds, function(index, bld){ }}
+		{{# if(index === 0){ }}
+		<span class="bldSpan selectedBld" value="{{=bld.projectId}}|{{=bld.bldNo}}" style="{{=bld.location}}">{{bld.bldName}}</span>
+		{{# } else { }}
 		<span class="bldSpan" value="{{=bld.projectId}}|{{=bld.bldNo}}" style="{{=bld.location}}">{{bld.bldName}}</span>
+		{{# } }}
 		{{# }); }}
 		{{# } else { }}
 		{{# layui.each(d.listRegionBlds, function(index, bld){ }}
+		{{# if(index === 0){ }}
+		<span class="bldDiv selectedBld" value="{{=bld.projectId}}|{{=bld.bldNo}}">{{bld.bldName}}</span>
+		{{# } else { }}
 		<span class="bldDiv" value="{{=bld.projectId}}|{{=bld.bldNo}}">{{bld.bldName}}</span>
+		{{# } }}
 		{{# }); }}
 		{{# } }}
 	</div>
 </script>
 <script id="houseCardScript" type="text/html">
 	<p class="layui-elem-quote">
-		<label style="color: #959595;font-size: large;font-weight: bold">本幢销售情况：</label>
+		<label style="color: #959595;font-size: large;font-weight: bold">{{d.bldSales.bldName}}销售情况：</label>
 		总套数：<label style="color: #333333;font-size: large;font-weight: bold">{{d.bldSales.totalNum}}</label>，
 		已售套数：<label style="color: red;font-size: large;font-weight: bold">{{d.bldSales.sellNum}}</label>，
 		未售套数：<label style="color: #00dd02;font-size: large;font-weight: bold">{{d.bldSales.noSaledNum}}</label>
@@ -292,7 +292,7 @@
 		carousel.render({
 			elem: '#carousel'
 			, width: '100%' //设置容器宽度
-			, height: '350px'
+			, height: '450px'
 			, arrow: 'always' //始终显示箭头
 		});
 
@@ -316,25 +316,6 @@
 			view.innerHTML = html;
 		});
 
-		$(".bldCellTab").on("click", function () {
-			var bld = $(this).attr("value");
-			$.ajax({
-				url: ctxPath + 'bldHouses',
-				method: 'get',
-				data: {
-					projectId: bld.split("|")[0],
-					bldNo: bld.split("|")[1]
-				},
-				success: function (res) {
-					getTpl = document.getElementById("houseCardScript").innerHTML
-						, view = document.getElementById('houseCardContainer');
-					laytpl(getTpl).render(res, function (html) {
-						view.innerHTML = html;
-					});
-				}
-			});
-		});
-
 		$(".layui-breadcrumb a").on("click", function () {
 			var viewType = $(this).attr("data-value");
 			if (viewType === 'index') {
@@ -344,20 +325,29 @@
 			}
 		});
 
-		$(".bldSpan").on("click", function () {
+		$(".bldSpan,.bldDiv").on("click", function () {
 			var bldId = $(this).attr("value");
-			$("li[value='" + bldId + "']").trigger("click");
-			$(".bldSpan").removeClass("selectedBld");
+
+			$.ajax({
+				url: ctxPath + 'bldHouses',
+				method: 'get',
+				data: {
+					projectId: bldId.split("|")[0],
+					bldNo: bldId.split("|")[1]
+				},
+				success: function (res) {
+					getTpl = document.getElementById("houseCardScript").innerHTML
+						, view = document.getElementById('houseCardContainer');
+					laytpl(getTpl).render(res, function (html) {
+						view.innerHTML = html;
+					});
+				}
+			});
+
+			$(".bldSpan,.bldDiv").removeClass("selectedBld");
 			$(this).addClass("selectedBld");
 		});
-
-		$(".bldDiv").on("click", function () {
-			var bldId = $(this).attr("value");
-			$("li[value='" + bldId + "']").trigger("click");
-			$(".bldDiv").removeClass("selectedBld");
-			$(this).addClass("selectedBld");
-		});
-
+		
 		var option = {
 			title: {
 				text: '项目销售情况',

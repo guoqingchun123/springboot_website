@@ -127,9 +127,11 @@
 		<![CDATA[
 			SELECT t1.region_id, t2.project_id, t2.bld_no, case when t2.x is not null then
 			 'top:' || round(t2.y * 100) || '%;left:' ||  round(t2.x * 100) || '%' else '' end AS location,
-			CASE WHEN instr(bld_no, '#') > 0 THEN bld_no else bld_no || '#' end bld_name
+			CASE WHEN instr(bld_name, '#') > 0 THEN bld_name else bld_name || '#' end bld_name
 			FROM view_regionInfo t1 left join ass_regbld t2 on t1.region_id = t2.region_id
+			LEFT JOIN view_bldInfo t3 on t2.project_id = t3.project_id and t2.bld_no = t3.bld_no
 			WHERE t1.region_id = #{regionId}
+			ORDER BY to_number(nvl(regexp_replace(t3.bld_name, '[^0-9]'), -1)) asc, t3.bld_no asc
 		]]>
 	</select>
 </mapper>

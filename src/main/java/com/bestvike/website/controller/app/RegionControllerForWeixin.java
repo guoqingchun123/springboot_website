@@ -3,6 +3,8 @@ package com.bestvike.website.controller.app;
 import com.bestvike.website.controller.BaseController;
 import com.bestvike.website.document.Division;
 import com.bestvike.website.entity.DocFiles;
+import com.bestvike.website.entity.Region;
+import com.bestvike.website.service.LayoutService;
 import com.bestvike.website.service.ProjectService;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/api/weixin")
 public class RegionControllerForWeixin extends BaseController {
 
+	@Autowired
+	private LayoutService layoutService;
 	@Autowired
 	private ProjectService projectService;
 
@@ -44,5 +48,11 @@ public class RegionControllerForWeixin extends BaseController {
 	@GetMapping(value = "/regionDocs/{regionId}")
 	public List<DocFiles> regionDocs(@PathVariable String regionId, @RequestParam String type) {
 		return projectService.queryRegionDocs(regionId, type);
+	}
+
+	@GetMapping(value = "/mapRegions")
+	public List<Region> mapRegions(@RequestParam(required = false) String order) {
+		List<Region> listRegionInfo = layoutService.selectAllRegions(order);
+		return listRegionInfo;
 	}
 }
