@@ -11,6 +11,7 @@ public class HouseHoldSales implements Serializable {
 
 	private String houseUse;
 	private String houseHold;
+	private String nosaleReason;
 	private BigDecimal totalNum;
 	private BigDecimal sellNum;
 	private BigDecimal nosaledNum;
@@ -30,6 +31,14 @@ public class HouseHoldSales implements Serializable {
 
 	public void setHouseHold(String houseHold) {
 		this.houseHold = houseHold;
+	}
+
+	public String getNosaleReason() {
+		return nosaleReason;
+	}
+
+	public void setNosaleReason(String nosaleReason) {
+		this.nosaleReason = nosaleReason;
 	}
 
 	public BigDecimal getTotalNum() {

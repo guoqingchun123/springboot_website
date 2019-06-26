@@ -2,6 +2,7 @@ package com.bestvike.website.controller.app;
 
 import com.bestvike.website.controller.BaseController;
 import com.bestvike.website.document.Division;
+import com.bestvike.website.entity.BldCells;
 import com.bestvike.website.entity.DocFiles;
 import com.bestvike.website.entity.Region;
 import com.bestvike.website.service.LayoutService;
@@ -54,5 +55,16 @@ public class RegionControllerForWeixin extends BaseController {
 	public List<Region> mapRegions(@RequestParam(required = false) String order) {
 		List<Region> listRegionInfo = layoutService.selectAllRegions(order);
 		return listRegionInfo;
+	}
+
+	@GetMapping(value = "/regionBldCells/{regionId}")
+	public List<BldCells> regionBldCells(@PathVariable String regionId) {
+		return projectService.queryRegionBldCells(regionId);
+	}
+
+	@GetMapping(value = "/houses")
+	public Map<String, Object> houses(@RequestParam String projectId, @RequestParam String bldNo, @RequestParam String cellNo,
+		@RequestParam int pageNo, @RequestParam int pageSize) {
+		return projectService.pageHouses(projectId, bldNo, cellNo, pageNo, pageSize);
 	}
 }

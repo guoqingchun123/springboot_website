@@ -22,7 +22,7 @@
            FROM view_regionInfo t1 LEFT JOIN view_divisionInfo t2 on t1.division_code = t2.division_code
            LEFT JOIN (
         		select arb.region_id, sum(case when vhi.house_use like '住宅' then vhi.presell_amount else 0 end)
-					/ sum(case when vhi.house_use like '住宅' then vhi.construct_area else 0 end) as avg_price
+					/ sum(case when vhi.house_use like '住宅' then vhi.construct_area else 0.00001 end) as avg_price
 				from view_houseinfo vhi
 				left join ass_regbld arb on vhi.project_id = arb.project_id and vhi.bld_no = arb.bld_no
 				group by arb.region_id
@@ -88,7 +88,8 @@
 			SELECT house_use, house_hold, COUNT(1) total_num,
 			sum(case when t.presell_state = '已售' then 1 else 0 end) sell_num,
 			sum(case when t.presell_state = '未售' AND t.sales_flag = '是' then 1 else 0 end) nosaled_num,
-			sum(case when t.sales_flag = '否' then 1 else 0 end) nosale_num
+			sum(case when t.sales_flag = '否' THEN 1 ELSE 0 END) nosale_num,
+			replace(WM_CONCAT(DISTINCT CASE WHEN t.sales_flag = '否' THEN t.nosale_reason else '' end), ',', '/') nosale_reason
             FROM view_houseinfo t
             WHERE EXISTS(select 1 from ass_regbld WHERE region_id = #{regionId} AND project_id = t.project_id AND bld_no = t.bld_no)
         ]]>

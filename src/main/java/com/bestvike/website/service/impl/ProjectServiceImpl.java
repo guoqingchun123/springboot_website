@@ -174,6 +174,8 @@ public class ProjectServiceImpl implements ProjectService {
 			Division division = new Division();
 			division.setCode(viewDivisionInfo.getDivisionCode());
 			division.setName(viewDivisionInfo.getDivisionName());
+			division.setX(viewDivisionInfo.getX());
+			division.setY(viewDivisionInfo.getY());
 			listDivision.add(division);
 		}
 		return listDivision;
