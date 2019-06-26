@@ -8,6 +8,7 @@ import com.bestvike.website.data.ViewHouseInfo;
 import com.bestvike.website.data.ViewRegionInfo;
 import com.bestvike.website.document.Division;
 import com.bestvike.website.entity.BldCells;
+import com.bestvike.website.entity.BldSales;
 import com.bestvike.website.entity.Cell;
 import com.bestvike.website.entity.DocFile;
 import com.bestvike.website.entity.DocFiles;
@@ -17,7 +18,6 @@ import com.bestvike.website.entity.HouseHoldSales;
 import com.bestvike.website.entity.PageBean;
 import com.bestvike.website.entity.Region;
 import com.bestvike.website.entity.RegionBlds;
-import com.bestvike.website.entity.RegionCell;
 import com.bestvike.website.service.ProjectService;
 import com.github.pagehelper.ISelect;
 import com.github.pagehelper.PageHelper;
@@ -87,7 +87,8 @@ public class ProjectServiceImpl implements ProjectService {
 //				parameterMap.put("cellNo", listBldCells.get(0).getListCell().get(0).getCellNo());
 				List<ViewHouseInfo> listHouseInfo = viewHouseInfoDao.selectHouseInfoList(parameterMap);
 				viewRegionInfo.setListHouse(listHouseInfo);
-
+				BldSales bldSales = viewHouseInfoDao.selectBldSalesData(parameterMap);
+				viewRegionInfo.setBldSales(bldSales);
 			}
 		} else {
 			List<DocFiles> listDocFiles = queryRegionDocs(regionId, viewType);
@@ -97,11 +98,16 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	@Override
-	public List<ViewHouseInfo> selectBldHouses(String projectId, String bldNo) {
+	public Map<String, Object> selectBldHouses(String projectId, String bldNo) {
 		Map<String, Object> parameterMap = new HashMap<>();
 		parameterMap.put("projectId", projectId);
 		parameterMap.put("bldNo", bldNo);
-		return viewHouseInfoDao.selectHouseInfoList(parameterMap);
+		List<ViewHouseInfo> listViewHouseInfo = viewHouseInfoDao.selectHouseInfoList(parameterMap);
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("listHouse", listViewHouseInfo);
+		BldSales bldSales = viewHouseInfoDao.selectBldSalesData(parameterMap);
+		resultMap.put("bldSales", bldSales);
+		return resultMap;
 	}
 
 	public Map<String, Object> pageRegions(String keywords, int pageNo, int pageSize, String divisionCode, String price, String houseHold, String sort) {
@@ -164,7 +170,7 @@ public class ProjectServiceImpl implements ProjectService {
 			and("fileType").is("regionImage").and("docType").is("aerialView")), DocFiles.class);
 		if (docFiles != null) {
 			List<String> regionLogos = new ArrayList<>();
-			for (DocFile docFile: docFiles.getImageList()) {
+			for (DocFile docFile : docFiles.getImageList()) {
 				regionLogos.add(docFile.getViewUrl());
 			}
 			result.put("logos", regionLogos);

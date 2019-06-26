@@ -2,6 +2,7 @@ package com.bestvike.website.dao;
 
 import com.bestvike.website.data.ViewDivisionInfo;
 import com.bestvike.website.data.ViewHouseInfo;
+import com.bestvike.website.entity.BldSales;
 import com.bestvike.website.entity.FloorSummary;
 import com.bestvike.website.entity.House;
 import java.util.List;
@@ -21,4 +22,6 @@ public interface ViewHouseInfoDao extends Mapper<ViewHouseInfo> {
 	public List<House> selectHouseByParameter(Map<String, Object> parameterMap);
 
 	public List<FloorSummary> selectFloorSummary(Map<String, Object> parameterMap);
+
+	public BldSales selectBldSalesData(Map<String, Object> parameterMap);
 }

@@ -1,6 +1,7 @@
 package com.bestvike.website.data;
 
 import com.bestvike.website.entity.BldCells;
+import com.bestvike.website.entity.BldSales;
 import com.bestvike.website.entity.DocFiles;
 import com.bestvike.website.entity.FloorSummary;
 import com.bestvike.website.entity.HouseHoldSales;
@@ -58,6 +59,8 @@ public class ViewRegionInfo implements Serializable {
 	private List<DocFiles> listDocFiles;
 	@Transient
 	private List<RegionBlds> listRegionBlds;
+	@Transient
+	private BldSales bldSales;
 
 	public String getRegionId() {
 		return regionId;
@@ -241,5 +244,13 @@ public class ViewRegionInfo implements Serializable {
 
 	public void setHouseHolds(String houseHolds) {
 		this.houseHolds = houseHolds;
+	}
+
+	public BldSales getBldSales() {
+		return bldSales;
+	}
+
+	public void setBldSales(BldSales bldSales) {
+		this.bldSales = bldSales;
 	}
 }

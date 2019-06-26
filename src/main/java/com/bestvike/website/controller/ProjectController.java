@@ -91,7 +91,7 @@ public class ProjectController extends BaseController {
 	}
 
 	@GetMapping(value = "/bldHouses")
-	public List<ViewHouseInfo> selectBldHouses(@RequestParam String projectId, @RequestParam String bldNo) {
+	public Map<String, Object> selectBldHouses(@RequestParam String projectId, @RequestParam String bldNo) {
 		return projectService.selectBldHouses(projectId, bldNo);
 	}
 }

@@ -203,8 +203,10 @@
 	</div>
 </script>
 <script id="houseCardScript" type="text/html">
+	<p class="layui-elem-quote">总套数：{{d.bldSales.totalNum}}，已售套数：{{d.bldSales.sellNum}}，
+		未售套数：{{d.bldSales.noSaledNum}}[抵押：{{d.bldSales.mortgageNum}}，查封：{{d.bldSales.closeNum}}，冻结：{{d.bldSales.frozenNum}}]，非卖套数：{{d.bldSales.noSaleNum}}</p>
 	<ul class="layui-timeline">
-		{{# layui.each(d, function(index, house){ }}
+		{{# layui.each(d.listHouse, function(index, house){ }}
 		{{# if(house.initRoom === 1){ }}
 		<li class="layui-timeline-item">
 			<i class="layui-icon layui-timeline-axis">{{house.floorName}}层</i>
@@ -295,7 +297,7 @@
 
 		getTpl = document.getElementById("houseCardScript").innerHTML
 			, view = document.getElementById('houseCardContainer');
-		laytpl(getTpl).render([[${region.listHouse}]], function (html) {
+		laytpl(getTpl).render([[${region}]], function (html) {
 			view.innerHTML = html;
 		});
 

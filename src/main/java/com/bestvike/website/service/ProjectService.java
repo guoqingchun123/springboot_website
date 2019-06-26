@@ -17,7 +17,7 @@ public interface ProjectService {
 
 	public ViewRegionInfo region(String regionId, String viewType);
 
-	public List<ViewHouseInfo> selectBldHouses(String projectId, String bldId);
+	public Map<String, Object> selectBldHouses(String projectId, String bldId);
 
 	public Map<String, Object> pageRegions(String keywords, int pageNo, int pageSize, String divisionCode, String price, String houseHold, String sort);
 
