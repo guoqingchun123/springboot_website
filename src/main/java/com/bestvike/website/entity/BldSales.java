@@ -11,6 +11,7 @@ public class BldSales implements Serializable {
 
 	private String projectId;
 	private String bldNo;
+	private String bldName;
 	private BigDecimal totalNum;
 	private BigDecimal sellNum;
 	private BigDecimal noSaledNum;
@@ -18,6 +19,30 @@ public class BldSales implements Serializable {
 	private BigDecimal closeNum;
 	private BigDecimal mortgageNum;
 	private BigDecimal frozenNum;
+
+	public String getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
+
+	public String getBldNo() {
+		return bldNo;
+	}
+
+	public void setBldNo(String bldNo) {
+		this.bldNo = bldNo;
+	}
+
+	public String getBldName() {
+		return bldName;
+	}
+
+	public void setBldName(String bldName) {
+		this.bldName = bldName;
+	}
 
 	public BigDecimal getTotalNum() {
 		return totalNum;
@@ -49,22 +74,6 @@ public class BldSales implements Serializable {
 
 	public void setNoSaleNum(BigDecimal noSaleNum) {
 		this.noSaleNum = noSaleNum;
-	}
-
-	public String getProjectId() {
-		return projectId;
-	}
-
-	public void setProjectId(String projectId) {
-		this.projectId = projectId;
-	}
-
-	public String getBldNo() {
-		return bldNo;
-	}
-
-	public void setBldNo(String bldNo) {
-		this.bldNo = bldNo;
 	}
 
 	public BigDecimal getCloseNum() {

@@ -29,7 +29,7 @@
 		}
 		
 		.saled {
-			background: #dd6a62;
+			background: red;
 		}
 		
 		.mortgage {
@@ -203,8 +203,17 @@
 	</div>
 </script>
 <script id="houseCardScript" type="text/html">
-	<p class="layui-elem-quote">总套数：{{d.bldSales.totalNum}}，已售套数：{{d.bldSales.sellNum}}，
-		未售套数：{{d.bldSales.noSaledNum}}[抵押：{{d.bldSales.mortgageNum}}，查封：{{d.bldSales.closeNum}}，冻结：{{d.bldSales.frozenNum}}]，非卖套数：{{d.bldSales.noSaleNum}}</p>
+	<p class="layui-elem-quote">
+		<label style="color: #959595;font-size: large;font-weight: bold">{{d.bldSales.bldName}}销售情况：</label>
+		总套数：<label style="color: #333333;font-size: large;font-weight: bold">{{d.bldSales.totalNum}}</label>，
+		已售套数：<label style="color: red;font-size: large;font-weight: bold">{{d.bldSales.sellNum}}</label>，
+		未售套数：<label style="color: #00dd02;font-size: large;font-weight: bold">{{d.bldSales.noSaledNum}}</label>
+		[抵押：<label style="color: #ddb400;font-size: large;font-weight: bold">{{d.bldSales.mortgageNum}}</label>，
+		查封：<label style="color: #dd6600;font-size: large;font-weight: bold">{{d.bldSales.closeNum}}</label>，
+		冻结：<label style="color: #dd8800;font-size: large;font-weight: bold">{{d.bldSales.frozenNum}}</label>]，
+		非卖套数：<label style="color: #b9d8dd;font-size: large;font-weight: bold">{{d.bldSales.noSaleNum}}</label>
+	</p>
+	<p></p>
 	<ul class="layui-timeline">
 		{{# layui.each(d.listHouse, function(index, house){ }}
 		{{# if(house.initRoom === 1){ }}

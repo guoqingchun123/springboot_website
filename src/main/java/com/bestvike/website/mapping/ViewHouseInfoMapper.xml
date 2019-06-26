@@ -92,7 +92,8 @@
 
 	<select id = "selectBldSalesData" parameterType="map" resultType="com.bestvike.website.entity.BldSales">
 		<![CDATA[
-			SELECT project_id, bld_no,
+			SELECT t.project_id, t.bld_no,
+				CASE WHEN instr(t2.bld_name, '#') > 0 THEN t2.bld_name else t2.bld_name || '#' end bld_name,
 				count(1) total_num,
 				SUM(CASE WHEN presell_state = '已售' then 1 else 0 end) sell_num,
 				sum(case when sales_flag = '否' then 1 else 0 end) no_sale_num,
@@ -100,9 +101,9 @@
 				SUM(case when close_flag = '是' then 1 else 0 end) close_num,
 				SUM(case when frozen_flag = '是' then 1 else 0 end) frozen_num,
 				sum(case when presell_state = '未售' and sales_flag = '是' then 1 else 0 end) no_saled_num
-			FROM view_houseinfo t
+			FROM view_houseinfo t left join view_bldInfo t2 on t.project_id = t2.project_id and t.bld_no = t2.bld_no
 			WHERE t.project_id = #{projectId} AND t.bld_no = #{bldNo}
-			group by t.project_id, t.bld_no
+			group by t.project_id, t.bld_no, t2.bld_name
 		]]>
 	</select>
 </mapper>
