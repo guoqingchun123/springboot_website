@@ -6,7 +6,7 @@
 	<link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}"/>
 	<meta name="viewport" content="width=device-width,initial-scale=1.0">
 	<link th:href="@{/layui/css/layui.css}" rel="stylesheet" type="text/css">
-	<link th:href="@{/layui/css/maps.css}" rel="stylesheet" type="text/css">
+	<link th:href="@{/layui/css/maps.css?v=1.0}" rel="stylesheet" type="text/css">
 	<script type="text/javascript"
 			src="https://webapi.amap.com/maps?v=1.4.14&key=8493be8a99d103cbed76edb91479bf7f&plugin=AMap.ToolBar,AMap.DistrictSearch"></script>
 	<script type="text/javascript" src="https://webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
@@ -17,15 +17,12 @@
 		<div id="container"></div>
 	</div>
 </div>
-
 <script th:src="@{/layui/layui.js}"></script>
 <script th:inline="javascript">
 	var ctxPath = /*[[@{/}]]*/'';
 	var district = null;
 	var polygons = [];
 	var infoWindow = null;
-	
-	var data = [[data]];
 	
 	function regionShow(data) {
 		RegionOnClick.postMessage(JSON.stringify(data));
@@ -59,7 +56,13 @@
 			mapRefresh();
 		});
 
-		function mapRefresh() {
+		var _data = [[${data}]];
+
+		if (_data) {
+			map.setZoomAndCenter(14, [_data.x, _data.y]);
+		}
+
+		function mapRefresh(regionId, x, y) {
 			var zoom = map.getZoom();
 			if (zoom >= 14) { // 刷项目
 				map.clearMap();
@@ -73,12 +76,20 @@
 						if (region.x == null || region.y == null) {
 							continue;
 						}
+						var markerContent = "";
 						// 点标记显示内容，HTML要素字符串
-						var markerContent =
-							'<div class="region" id="' + region.regionId + 'Div">'
-							+ '<p class="region-text">' + region.regionName + '</p>'
-							+ '<i class="region-jiantou"></i>'
-							+ '</div>';
+						if (_data && _data.regionId && _data.regionId === region.regionId) {
+							markerContent = '<div class="region" id="' + region.regionId + 'Div">'
+								+ '<p class="region-text region-text-select">' + region.regionName + '</p>'
+								+ '<i class="region-jiantou region-jiantou-select"></i>'
+								+ '</div>';
+						} else {
+							markerContent = '<div class="region" id="' + region.regionId + 'Div">'
+								+ '<p class="region-text">' + region.regionName + '</p>'
+								+ '<i class="region-jiantou"></i>'
+								+ '</div>';
+						}
+						
 						var marker = new AMap.Marker({
 							position: [region.x, region.y],
 							content: markerContent,
