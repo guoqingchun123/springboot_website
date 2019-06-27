@@ -148,7 +148,8 @@
 				SUM(CASE WHEN instr(house_use, '住宅') > 0 THEN 1 ELSE 0 END) residence_num,
 				SUM(CASE WHEN instr(house_use, '商业') > 0 THEN 1 ELSE 0 END) business_num,
 				SUM(CASE WHEN instr(house_use, '商业') = 0 AND instr(house_use, '住宅') = 0 THEN 1 ELSE 0 END) mating_num
-			FROM view_houseinfo
+			FROM view_houseinfo vhi
+			WHERE EXISTS (SELECT 1 FROM ass_regbld WHERE project_id = vhi.project_id AND bld_no = vhi.bld_no AND region_id = #{regionId})
 				GROUP BY TO_CHAR(to_date(sign_date, 'yyyy-MM-dd'), 'yyyy-MM')) t2
 			ON t1.sign_month = t2.sign_month
 			WHERE to_date(t2.sign_month, 'yyyy-MM') >= add_months(sysdate, -12)
