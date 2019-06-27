@@ -67,8 +67,8 @@ public class RegionControllerForApp extends BaseController {
 	 * @param cellNo
 	 * @return
 	 */
-	@GetMapping(value = "/floorSummary")
-	public List<FloorSummary> floorSummary(@RequestParam String projectId, @RequestParam String bldNo, @RequestParam String cellNo) {
-		return projectService.floorSummary(projectId, bldNo, cellNo);
+	@GetMapping(value = "/cellFloorSummary")
+	public Map<String, Object> cellFloorSummary(@RequestParam String projectId, @RequestParam String bldNo, @RequestParam String cellNo) {
+		return projectService.cellFloorSummary(projectId, bldNo, cellNo);
 	}
 }

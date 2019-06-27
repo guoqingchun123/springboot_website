@@ -10,6 +10,7 @@ import com.bestvike.website.document.Division;
 import com.bestvike.website.entity.BldCells;
 import com.bestvike.website.entity.BldSales;
 import com.bestvike.website.entity.Cell;
+import com.bestvike.website.entity.CellSummary;
 import com.bestvike.website.entity.DocFile;
 import com.bestvike.website.entity.DocFiles;
 import com.bestvike.website.entity.FloorSummary;
@@ -274,12 +275,21 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	@Override
-	public List<FloorSummary> floorSummary(String projectId, String bldNo, String cellNo) {
+	public Map<String, Object> cellFloorSummary(String projectId, String bldNo, String cellNo) {
 		Map<String, Object> parameterMap = new HashMap<>();
 		parameterMap.put("projectId", projectId);
 		parameterMap.put("bldNo", bldNo);
 		parameterMap.put("cellNo", cellNo);
-		return viewHouseInfoDao.selectFloorSummary(parameterMap);
+		List<FloorSummary> listFloorSummary = viewHouseInfoDao.selectFloorSummary(parameterMap);
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("listFloorSummary", listFloorSummary);
+		CellSummary cellSummary = viewHouseInfoDao.selectCellSummary(parameterMap);
+		resultMap.put("cellSummary", cellSummary);
+		ViewRegionInfo viewRegionInfo = viewRegionInfoDao.selectRegionByProjectId(projectId);
+		List<String> imageList = new ArrayList<>();
+		imageList.add(viewRegionInfo.getViewPath());
+		resultMap.put("imageList", imageList);
+		return resultMap;
 	}
 
 	@Override

@@ -6,7 +6,7 @@ import java.util.List;
 import javax.persistence.Entity;
 
 @Entity
-public class FloorSummary implements Serializable {
+public class CellSummary implements Serializable {
 
 	private static final long serialVersionUID = -5473611323025796123L;
 

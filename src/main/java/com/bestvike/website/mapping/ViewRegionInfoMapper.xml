@@ -153,4 +153,12 @@
 			ORDER BY t1.sign_month asc
 		]]>
 	</select>
+
+	<select id = "selectRegionByProjectId" parameterType = "String" resultType = "ViewRegionInfo">
+		<![CDATA[
+			SELECT * FROM view_regioninfo t WHERE exists(
+				select 1 FROM ass_regbld where project_id = #{projectId} and region_id = t.region_id
+			)
+		]]>
+	</select>
 </mapper>

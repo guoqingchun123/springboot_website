@@ -32,4 +32,6 @@ public interface ViewRegionInfoDao extends Mapper<ViewRegionInfo> {
 	public List<RegionBlds> selectRegionBlds(String regionId);
 
 	public List<MonthSales> selectRegionMonthSales(Map<String, Object> parameterMap);
+
+	public ViewRegionInfo selectRegionByProjectId(String projectId);
 }
