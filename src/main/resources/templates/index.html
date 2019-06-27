@@ -36,7 +36,29 @@
 		}
 
 		.summary-card:hover {
-			background-color: #e1f0f3;
+			background-color: #fafafa;
+		}
+
+		.summary-card:hover .region-name {
+			color: green;
+		}
+
+		.layui-form-search .layui-elem-quote {
+			border-left: none;
+		}
+
+		.layui-card .layui-elem-quote {
+			border-left: none;
+			background-color: transparent;
+			padding: 0;
+		}
+		.layui-card .region-info .layui-elem-quote.region-name {
+			font-size: 24px;
+			font-weight: bold;
+			padding: 10px 0;
+		}
+		.region-info {
+			font-size:16px;
 		}
 	</style>
 </head>
@@ -99,25 +121,26 @@
 	</div>
 </div>
 <script id="regionCardScript" type="text/html">
-	<blockquote class="layui-elem-quote layui-quote-nm" style="background-color: #e1f0f3">
+	<blockquote class="layui-elem-quote layui-quote-nm" style="background-color: #fafafa">
 		小区列表：共为您筛选出<label style="color: red">{{d.length}}</label>个小区
 	</blockquote>
 	{{#  layui.each(d, function(index, item){ }}
 	<div class="layui-card summary-card" data-value="{{=item.regionId}}" style="cursor: pointer;">
-		<div class="layui-card-header">
+		<!--<div class="layui-card-header">
 			<div style="float: left;">
 				<label style="color: green;font-weight:bold;font-size: large">{{item.regionName}}</label>
 			</div>
 			<div style="float: right">
 				<button type="button" class="layui-btn layui-btn-primary summary-btn" value="{{=item.regionId }}">查看详情</button>
 			</div>
-		</div>
+		</div>-->
 		<div class="layui-card-body" style="overflow: hidden">
 			<div class="layui-col-md9" style="float: left">
 				<div class="layui-col-md3" style="float: left">
-					<img src="{{=item.logoPath}}" style="width: 200px;height: 120px">
+					<img src="{{=item.logoPath}}" style="width: 250px;height: 150px">
 				</div>
-				<div class="layui-col-md9" style="float: left; padding-left: 30px">
+				<div class="layui-col-md9 region-info" style="float: left; padding-left: 30px">
+					<p class="layui-elem-quote region-name">{{item.regionName}}</p>
 					<p class="layui-elem-quote">小区地址：<label>{{item.address}}</label></p>
 					<p class="layui-elem-quote">预售许可日期：<label>{{item.preSaleDate}}</label></p>
 				</div>
