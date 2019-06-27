@@ -70,8 +70,8 @@ public class RegionControllerForWeixin extends BaseController {
 		return projectService.pageHouses(projectId, bldNo, cellNo, pageNo, pageSize);
 	}
 
-	@GetMapping(value = "/cellHouses")
-	public List<FloorSummary> cellHouses(@RequestParam String projectId, @RequestParam String bldNo, @RequestParam String cellNo) {
-		return projectService.cellHouses(projectId, bldNo, cellNo);
+	@GetMapping(value = "/cellFloorSummary")
+	public Map<String, Object> cellFloorSummary(@RequestParam String projectId, @RequestParam String bldNo, @RequestParam String cellNo) {
+		return projectService.cellFloorSummary(projectId, bldNo, cellNo);
 	}
 }

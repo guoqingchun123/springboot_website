@@ -22,7 +22,6 @@
 	var ctxPath = /*[[@{/}]]*/'';
 	var district = null;
 	var polygons = [];
-	var infoWindow = null;
 	
 	function regionShow(data) {
 		RegionOnClick.postMessage(JSON.stringify(data));
@@ -105,29 +104,16 @@
 						});
 						// 将 markers 添加到地图
 						map.add(marker);
-						// 鼠标滑过marker浮在最上层
-						marker.on("mouseover", function () {
+						// 给marker附点击事件
+						marker.on("click", function () {
 							$(".amap-marker").css("z-index", "100");
 							var region = $(this)[0].getExtData().region;
 							$("#" + region.regionId + "Div").parents(".amap-marker").css("z-index", "101");
-						});
-						marker.on("mouseout", function () {
-							if (infoWindow) {
-								infoWindow.close();
-							}
-						});
-						// 给marker附点击事件
-						marker.on("click", function () {
-							var region = $(this)[0].getExtData().region;
 							// 刷新获取region详情数据
 							$.get(ctxPath + "region/" + region.regionId, {}, function (data) {
 								regionShow(data);
 							});
 						});
-					}
-					if (_data && _data.regionId) {
-						$(".amap-marker").css("z-index", "100");
-						$("#" + _data.regionId + "Div").parents(".amap-marker").css("z-index", "101");
 					}
 				})
 			} else if (zoom <= 13) { // 刷行政区
@@ -152,15 +138,6 @@
 						});
 						// 将 markers 添加到地图
 						map.add(marker);
-						// 给marker附焦点事件
-						marker.on("mouseover", function () {
-							divisionMousemove($(this)[0]);
-						});
-						// 给marker附焦点事件
-						marker.on("mouseout", function () {
-							map.remove(polygons); // 清除上次结果
-							polygons = [];
-						});
 						// 给marker附点击事件
 						marker.on("click", function () {
 							map.setZoom(14);
@@ -169,39 +146,6 @@
 					}
 				})
 			}
-		}
-
-		function divisionMousemove(marker) {
-			var division = marker.getExtData().division;
-			if (!district) {
-				//实例化DistrictSearch
-				var opts = {
-					subdistrict: 0,   //获取边界不需要返回下级行政区
-					extensions: 'all',  //返回行政区边界坐标组等具体信息
-					level: 'district'  //查询行政级别为 市
-				};
-				district = new AMap.DistrictSearch(opts);
-			}
-			//行政区查询
-			district.search(division.divisionName, function (status, result) {
-				map.remove(polygons)//清除上次结果
-				polygons = [];
-				var bounds = result.districtList[0].boundaries;
-				if (bounds) {
-					for (var i = 0, l = bounds.length; i < l; i++) {
-						//生成行政区划polygon
-						var polygon = new AMap.Polygon({
-							strokeWeight: 1,
-							path: bounds[i],
-							fillOpacity: 0.4,
-							fillColor: '#18ff41',
-							strokeColor: '#0bea9c'
-						});
-						polygons.push(polygon);
-					}
-				}
-				map.add(polygons)
-			});
 		}
 	});
 </script>
