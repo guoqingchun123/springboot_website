@@ -55,14 +55,6 @@
 	border-top-color: rgba(255, 0, 0, 0.9);
 }
 
-.region-text-select {
-	background-color: rgba(255, 0, 0, 0.9);
-}
-
-.region-jiantou-select {
-	border-top-color: rgba(255, 0, 0, 0.9);
-}
-
 .layui-input-search {
 	width: 300px;
 	margin: 10px;
