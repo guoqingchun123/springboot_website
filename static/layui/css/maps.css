@@ -38,6 +38,10 @@
 	white-space: nowrap;
 }
 
+.region.current .region-text {
+	background-color: rgba(255, 0, 0, 0.9);
+}
+
 .region-jiantou {
 	border: 5px solid transparent;
 	display: block;
@@ -45,6 +49,10 @@
 	height: 0;
 	margin: 0 auto;
 	border-top-color: rgba(0, 167, 91, 0.9);
+}
+
+.region.current .region-jiantou {
+	border-top-color: rgba(255, 0, 0, 0.9);
 }
 
 .region:hover .region-text {

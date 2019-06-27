@@ -77,9 +77,11 @@
 							continue;
 						}
 						var markerContent = "";
+						var zIndex = 100;
 						// 点标记显示内容，HTML要素字符串
 						if (_data && _data.regionId && _data.regionId === region.regionId) {
-							markerContent = '<div class="region" id="' + region.regionId + 'Div">'
+							zIndex = 9000;
+							markerContent = '<div class="region current" id="' + region.regionId + 'Div">'
 								+ '<p class="region-text">' + region.regionName + '</p>'
 								+ '<i class="region-jiantou"></i>'
 								+ '</div>';
@@ -93,6 +95,7 @@
 						var marker = new AMap.Marker({
 							position: [region.x, region.y],
 							content: markerContent,
+							zIndex: zIndex,
 							// 以 icon 的 [center bottom] 为原点
 							offset: new AMap.Pixel(0, -27),
 							extData: {
