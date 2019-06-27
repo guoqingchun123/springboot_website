@@ -103,7 +103,7 @@ public class ProjectServiceImpl implements ProjectService {
 				BldSales bldSales = viewHouseInfoDao.selectBldSalesData(parameterMap);
 				viewRegionInfo.setBldSales(bldSales);
 			}
-		} else if ("houseHold".equalsIgnoreCase(viewType)) {
+		} else {
 			List<DocFiles> listDocFiles = queryRegionDocs(regionId, viewType);
 			viewRegionInfo.setListDocFiles(listDocFiles);
 			// 统计小区月销售量
@@ -112,9 +112,6 @@ public class ProjectServiceImpl implements ProjectService {
 			parameterMap.put("preSaleDate", viewRegionInfo.getPreSaleDate());
 			List<MonthSales> listRegionSales = viewRegionInfoDao.selectRegionMonthSales(parameterMap);
 			viewRegionInfo.setListRegionSales(listRegionSales);
-		} else {
-			List<DocFiles> listDocFiles = queryRegionDocs(regionId, viewType);
-			viewRegionInfo.setListDocFiles(listDocFiles);
 		}
 		return viewRegionInfo;
 	}

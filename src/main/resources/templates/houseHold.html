@@ -60,8 +60,8 @@
 				<div class="layui-carousel" id="carousel">
 					<div carousel-item="">
 						<div id="regionSalesData"></div>
-						<div style="padding-left: 2px;text-align: center">
-							<img th:each="str:${region?.regionLogos}" th:src="${str}" style="height: 450px"/>
+						<div style="padding-left: 2px;text-align: center" th:each="str:${region?.regionLogos}" >
+							<img th:src="${str}" style="height: 450px"/>
 						</div>
 					</div>
 				</div>
@@ -80,6 +80,7 @@
 <script th:src="@{/layui/viewer/js/viewer.min.js}"></script>
 <script id="houseHoldDivScript" type="text/html">
 	{{# layui.each(d, function(index, docFiles){ }}
+	{{# if(docFiles != null && docFiles.imageList != null && docFiles.imageList.length > 0){ }}
 	<p class="layui-elem-quote">{{docFiles.docName}}</p>
 	<ul class="viewer">
 		{{# layui.each(docFiles.imageList, function(indx, docFile){ }}
@@ -88,6 +89,7 @@
 		</li>
 		{{# }); }}
 	</ul>
+	{{# } }}
 	{{# }); }}
 </script>
 <script th:inline="javascript">
@@ -251,7 +253,7 @@
 
 		$(window).resize(function () {
 			regionSalesDataCharts.resize();
-			regionMonthSalesDataCharts.resize()
+			regionMonthSalesDataCharts.resize();
 		});
 
 		$('img').error(function () {
