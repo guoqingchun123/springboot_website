@@ -283,27 +283,20 @@ public class ProjectServiceImpl implements ProjectService {
 		List<FloorSummary> listFloorSummary = viewHouseInfoDao.selectFloorSummary(parameterMap);
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("listFloorSummary", listFloorSummary);
-		CellSummary cellSummary = viewHouseInfoDao.selectCellSummary(parameterMap);
-		resultMap.put("cellSummary", cellSummary);
-		ViewRegionInfo viewRegionInfo = viewRegionInfoDao.selectRegionByProjectId(projectId);
-		List<String> imageList = new ArrayList<>();
-		imageList.add(viewRegionInfo.getViewPath());
-		resultMap.put("imageList", imageList);
-		return resultMap;
-	}
-
-	@Override
-	public List<FloorSummary> cellHouses(String projectId, String bldNo, String cellNo) {
-		Map<String, Object> parameterMap = new HashMap<>();
-		parameterMap.put("projectId", projectId);
-		parameterMap.put("bldNo", bldNo);
-		parameterMap.put("cellNo", cellNo);
-		List<FloorSummary> listFloorSummary = viewHouseInfoDao.selectFloorSummary(parameterMap);
 		for (FloorSummary floorSummary : listFloorSummary) {
 			parameterMap.put("floorNo", floorSummary.getFloorNo());
 			List<House> listHouse = viewHouseInfoDao.selectHouseByParameter(parameterMap);
 			floorSummary.setRooms(listHouse);
 		}
-		return listFloorSummary;
+		CellSummary cellSummary = viewHouseInfoDao.selectCellSummary(parameterMap);
+		resultMap.put("cellSummary", cellSummary);
+		cellSummary.setSellColor("dd6a62");
+		cellSummary.setNosaledColor("959595");
+		cellSummary.setNosaleColor("00dd02");
+		ViewRegionInfo viewRegionInfo = viewRegionInfoDao.selectRegionByProjectId(projectId);
+		List<String> imageList = new ArrayList<>();
+		imageList.add(viewRegionInfo.getViewPath());
+		resultMap.put("imageList", imageList);
+		return resultMap;
 	}
 }

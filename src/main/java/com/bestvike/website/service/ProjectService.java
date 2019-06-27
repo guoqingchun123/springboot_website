@@ -31,6 +31,4 @@ public interface ProjectService {
 	public Map<String, Object> pageHouses(String projectId, String bldNo, String cellNo, int pageNo, int pageSize);
 
 	public Map<String, Object> cellFloorSummary(String projectId, String bldNo, String cellNo);
-
-	public List<FloorSummary> cellHouses(String projectId, String bldNo, String cellNo);
 }

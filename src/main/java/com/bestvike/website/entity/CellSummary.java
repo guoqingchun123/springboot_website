@@ -14,8 +14,11 @@ public class CellSummary implements Serializable {
 	private String floorName;
 	private BigDecimal totalNum;
 	private BigDecimal sellNum;
+	private String sellColor;
 	private BigDecimal nosaledNum;
+	private String nosaledColor;
 	private BigDecimal nosaleNum;
+	private String nosaleColor;
 
 	// 微信端使用
 	private List<House> rooms;
@@ -74,5 +77,29 @@ public class CellSummary implements Serializable {
 
 	public void setRooms(List<House> rooms) {
 		this.rooms = rooms;
+	}
+
+	public String getSellColor() {
+		return sellColor;
+	}
+
+	public void setSellColor(String sellColor) {
+		this.sellColor = sellColor;
+	}
+
+	public String getNosaledColor() {
+		return nosaledColor;
+	}
+
+	public void setNosaledColor(String nosaledColor) {
+		this.nosaledColor = nosaledColor;
+	}
+
+	public String getNosaleColor() {
+		return nosaleColor;
+	}
+
+	public void setNosaleColor(String nosaleColor) {
+		this.nosaleColor = nosaleColor;
 	}
 }
