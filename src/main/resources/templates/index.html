@@ -6,40 +6,40 @@
 	<link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}"/>
 	<link th:href="@{/layui/css/layui.css}" rel="stylesheet" type="text/css">
 	<link th:href="@{/layui/autocomplete/autocomplete.css}" rel="stylesheet" type="text/css">
+	<style type="text/css">
+		.layui-div-search {
+			display: inline-block;
+			position: relative;
+		}
+
+		.layui-input-search {
+			width: 400px;
+			padding: 8px 20px;
+			border-radius: 20px;
+			box-shadow: none;
+			background: #fff;
+			border: 1px solid #1E9EFF;
+			outline: none;
+			font-size: 16px;
+		}
+
+		.layui-icon-search {
+			position: relative;
+			right: -400px;
+			top: -30px;
+			font-size: 23px;
+			color: #1E9FFF;
+		}
+
+		.layui-breadcrumb a.selected {
+			color: green !important;
+		}
+
+		.summary-card:hover {
+			background-color: #e1f0f3;
+		}
+	</style>
 </head>
-<style type="text/css">
-	.layui-div-search {
-		display: inline-block;
-		position: relative;
-	}
-	
-	.layui-input-search {
-		width: 400px;
-		padding: 8px 20px;
-		border-radius: 20px;
-		box-shadow: none;
-		background: #fff;
-		border: 1px solid #1E9EFF;
-		outline: none;
-		font-size: 16px;
-	}
-	
-	.layui-icon-search {
-		position: relative;
-		right: -400px;
-		top: -30px;
-		font-size: 23px;
-		color: #1E9FFF;
-	}
-	
-	.layui-breadcrumb a.selected {
-		color: green !important;
-	}
-	
-	.summary-card:hover {
-		background-color: #e1f0f3;
-	}
-</style>
 <body class="layui-layout-body" style="min-width: 1000px;overflow-x: auto;overflow-y: auto;background: #f1f1f1">
 <div class="layui-layout layui-layout-admin">
 	<div class="layui-header layui-bg-blue" style="position: fixed;width: 100%;">

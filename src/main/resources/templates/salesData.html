@@ -366,7 +366,7 @@
 					data: [[${region.salesData}]],
 					label: {
 						normal: {
-							formatter(v) {
+							formatter: function(v) {
 								return Math.round(v.percent) + '%' + '' + v.name
 							},
 							textStyle: {

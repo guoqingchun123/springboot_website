@@ -71,10 +71,13 @@ layui.define(['jquery', 'laytpl', 'layer'], function (e) {
             _dom = _container.find('dl');
         if (!_config.filter) return _self.renderData([]);
         if (_config.cache && Object.keys(_config.data).length > 0) return _self.renderData(_config.data);
+        var _data = {};
+        _data[_config.request.keywords] = _config.filter;
+        _data.t = new Date().getTime();
         $.ajax($.extend({
             type: _config.method || "get",
             url: _config.url,
-            data: $.extend({[_config.request.keywords]: _config.filter, t: new Date().getTime()}, _config.params),
+            data: $.extend(_data, _config.params),
             contentType: 'text/json,charset=utf-8',
             dataType: "json",
             beforeSend: function () {
@@ -117,7 +120,7 @@ layui.define(['jquery', 'laytpl', 'layer'], function (e) {
         _dom.html(_list.join('')), _list.length > 0 ? _container.addClass(container_focus) : _container.removeClass(container_focus)
     },
     job.prototype.handles = {
-    	addData (data) {
+    	addData: function(data) {
     		var _self = this,
     			_config = _self.config;
 			if (data instanceof Array) {
@@ -126,7 +129,7 @@ layui.define(['jquery', 'laytpl', 'layer'], function (e) {
 				_config.data.push(data)
 			}
     	},
-        setData (data) {
+        setData: function(data) {
             var _self = this,
                 _config = _self.config;
             _config.data = data;
