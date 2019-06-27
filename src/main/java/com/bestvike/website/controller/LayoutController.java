@@ -4,7 +4,9 @@ import com.bestvike.website.data.ViewRegionInfo;
 import com.bestvike.website.entity.Region;
 import com.bestvike.website.service.LayoutService;
 import com.bestvike.website.service.ProjectService;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -45,7 +47,7 @@ public class LayoutController extends BaseController {
 	@GetMapping(value = "/content/{regionId}")
 	public ModelAndView content(@PathVariable String regionId, @RequestParam(required = false) String viewType) {
 		ModelAndView mv = new ModelAndView();
-		viewType =  StringUtils.isEmpty(viewType) ? "salesData" : viewType;
+		viewType = StringUtils.isEmpty(viewType) ? "salesData" : viewType;
 		ViewRegionInfo viewRegionInfo = projectService.region(regionId, viewType);
 		mv.addObject("region", viewRegionInfo);
 		mv.setViewName(viewType);
@@ -53,10 +55,14 @@ public class LayoutController extends BaseController {
 	}
 
 	@GetMapping(value = "/api/app/maps")
-	public ModelAndView appMaps() {
+	public ModelAndView appMaps(@RequestParam(required = false) String regionId,
+		@RequestParam(required = false) String x, @RequestParam(required = false) String y) {
 		ModelAndView mv = new ModelAndView();
-		List<Region> listViewRegionInfo = layoutService.selectAllRegions("default");
-		mv.addObject("regions", listViewRegionInfo);
+		Map<String, Object> data = new HashMap<>();
+		data.put("regionId", regionId);
+		data.put("x", x);
+		data.put("y", y);
+		mv.addObject("data", data);
 		mv.setViewName("appMaps");
 		return mv;
 	}
