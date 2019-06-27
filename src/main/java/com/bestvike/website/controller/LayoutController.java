@@ -59,10 +59,16 @@ public class LayoutController extends BaseController {
 		@RequestParam(required = false) String x, @RequestParam(required = false) String y) {
 		ModelAndView mv = new ModelAndView();
 		Map<String, Object> data = new HashMap<>();
-		data.put("regionId", regionId);
-		data.put("x", x);
-		data.put("y", y);
-		mv.addObject("data", data);
+		if (!StringUtils.isEmpty(regionId)) {
+			data.put("regionId", regionId);
+		}
+		if (!StringUtils.isEmpty(x) && !StringUtils.isEmpty(y)) {
+			data.put("x", x);
+			data.put("y", y);
+		}
+		if (!data.isEmpty()) {
+			mv.addObject("data", data);
+		}
 		mv.setViewName("appMaps");
 		return mv;
 	}
