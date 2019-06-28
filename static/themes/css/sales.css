@@ -1,5 +1,4 @@
 .return-to {
-    display: none;
     width: 40px;
     height: 40px;
     color: #ffffff;
@@ -15,10 +14,6 @@
 .return-to:hover {
     color: #ffffff;
     opacity: 1;
-}
-
-.has-return .return-to {
-    display: block;
 }
 
 .room-list {
@@ -103,7 +98,7 @@
     padding: 0 5px;
 }
 
-.bldSpan {
+.bldSpan, .cellSpan {
     background-color: white;
     height: 25px;
     line-height: 25px;
@@ -125,7 +120,7 @@
     display: inline-block;
 }
 
-.bldSpan:hover {
+.bldSpan:hover, .cellSpan:hover {
     background-color: #09ff11;
 }
 

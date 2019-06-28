@@ -55,17 +55,17 @@
 				<div style="position: relative;height: auto;display:inline-block">
                     <div th:if="${cellNo == null}">
                         <img th:src="${region?.viewPath}" class="view-url" style="height:450px">
-                        <a class="return-to" href="javascript:;">返回</a>
                         <div th:each="regionBld, iterStat:${region?.listRegionBlds}" th:if="${region.listRegionBlds}">
-						<span th:class="${region.viewPath != null ? 'bldSpan' : 'bldDiv'}" th:classappend="${bldNo == null ? iterStat.index == 0 : bldNo == regionBld.bldNo} ? 'selectedBld'"
-                              th:index="${iterStat.index}" th:style="${regionBld.location}" th:text="${regionBld.bldName}"></span>
+							<span th:class="${region.viewPath != null ? 'bldSpan' : 'bldDiv'}" th:classappend="${bldNo == null ? iterStat.index == 0 : bldNo == regionBld.bldNo} ? 'selectedBld'"
+                              th:data-project-id="${regionBld.projectId}" th:data-bld-no="${regionBld.bldNo}" th:style="${regionBld.location}" th:text="${regionBld.bldName}"></span>
                         </div>
                     </div>
                     <div th:if="${cellNo != null}">
                         <img th:src="${region.bldView.viewPath}" class="view-url" style="height:450px">
+						<a class="return-to" href="javascript:;">返回</a>
                         <div th:each="cell, iterStat:${region.bldView.cells}" th:if="${cell.location != null}">
-                            <span th:class="bldSpan" th:classappend="${cellNo == cell.CellNo} ? 'selectedCell'"
-                                  th:index="${cell.index}" th:style="${cell.location}" th:text="${cell.cellName}"></span>
+                            <span th:class="cellSpan" th:classappend="${cellNo == cell.CellNo} ? 'selectedCell'"
+                                  th:data-project-id="${cell.projectId}" th:data-bld-no="${cell.bldNo}" th:data-cell-no="${cell.cellNo}" th:style="${cell.location}" th:text="${cell.cellName}"></span>
                         </div>
                     </div>
 				</div>
@@ -177,13 +177,25 @@
 
 		$(".bldSpan,.bldDiv").on("click", function () {
 			// var bldId = $(this).attr("value");
-			var index = parseInt($(this).attr('index'), 10);
+			var projectId = $(this).attr('data-project-id');
+			var bldNo = $(this).attr('data-bld-no');
 
-			window.location.replace(ctxPath + 'content/' + [[${region.regionId}]] + '/' + [[${region.listRegionBlds}]][index].projectId + '/' + encodeURIComponent([[${region.listRegionBlds}]][index].bldNo));
+			window.location.replace(ctxPath + 'content/' + [[${region.regionId}]] + '/' + projectId + '/' + encodeURIComponent(bldNo));
 
 
 			// $(".bldSpan,.bldDiv").removeClass("selectedBld");
 			// $(this).addClass("selectedBld");
+		});
+		$(".cellSpan").on("click", function () {
+			var projectId = $(this).attr('data-project-id');
+			var bldNo = $(this).attr('data-bld-no');
+			var cellNo = $(this).attr('data-cell-no');
+
+			window.location.replace(ctxPath + 'content/' + [[${region.regionId}]] + '/' + projectId + '/' + encodeURIComponent(bldNo)) + '/' + encodeURIComponent(cellNo);
+		});
+
+		$('.return-to').on('click', function () {
+			window.location.replace(ctxPath + 'content/' + [[${region.regionId}]]);
 		});
 
 		var option = {
