@@ -65,7 +65,7 @@
 			<div id="houseCardContainer" class="layui-tab-content">
 				<div class="layui-elem-quote">
 					<label style="color: #959595;font-size: large;font-weight: bold"
-						   th:text="${region.bldView.bldSales.saleName}"></label>
+						   th:text="${region.bldView.bldSales.cellName != null ? region.bldView.bldSales.cellName : region.bldView.bldSales.bldName}"></label>
 					<label style="color: #959595;font-size: large;font-weight: bold">销售情况：</label>
 					总套数：<label style="color: #333333;font-size: large;font-weight: bold" th:text="${region.bldView.bldSales.totalNum}"></label>
 					已售套数：<label style="color: red;font-size: large;font-weight: bold" th:text="${region.bldView.bldSales.sellNum}"></label>
