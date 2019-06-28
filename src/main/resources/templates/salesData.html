@@ -36,46 +36,6 @@
 			font-size: 24px;
 			vertical-align: middle;
 		}
-
-		.legends .saled {
-			color: red;
-		}
-
-		.legends .mortgage {
-			color: #ddb400;
-		}
-
-		.legends .close {
-			color: #dd6600;
-		}
-
-		.legends .frozen {
-			color: #dd8800;
-		}
-
-		.legends .noSale {
-			color: #b9d8dd;
-		}
-		
-		.floor .saled {
-			background: red;
-		}
-
-		.floor .mortgage {
-			background: #ddb400;
-		}
-
-		.floor .close {
-			background: #dd6600;
-		}
-
-		.floor .frozen {
-			background: #dd8800;
-		}
-
-		.floor .nosale {
-			background: #b9d8dd;
-		}
 		
 		.bg-gdcd span.sell-state {
 			border: 1px solid #959595;
@@ -184,9 +144,8 @@
 			margin-top: 3px;
 		}
 		.cells {
-			width: 100%;
 			display: inline-block;
-			margin-left: 30px;
+			margin: auto 20px;
 		}
 		.cells .cell-name {
 			float: left;
@@ -202,6 +161,9 @@
 		.floor {
 			display: inline-block;
 			width: 100%;
+		}
+		.floor .layui-timeline-axis {
+			height: auto;
 		}
 		.floor.layui-timeline-item {
 			padding-bottom: 0;
@@ -279,15 +241,11 @@
 					非卖套数：<label style="color: #b9d8dd;font-size: large;font-weight: bold" th:text="${region.bldView.bldSales.noSaleNum}"></label>
 				</div>
 				<div class="legends">
-					<div class="legend"><i class="iconfont icon-home-fill saled"></i><span>已售</span></div>
-					<div class="legend"><i class="iconfont icon-home-fill noSaled"></i><span>未售</span></div>
-					<div class="legend"><i class="iconfont icon-home-fill mortgage"></i><span>抵押</span></div>
-					<div class="legend"><i class="iconfont icon-home-fill close"></i><span>查封</span></div>
-					<div class="legend"><i class="iconfont icon-home-fill noSale"></i><span>非卖</span></div>
+					<div th:each="legend:${region.bldView?.legends}" class="legend"><i class="iconfont icon-home-fill" th:style="'color: #' + ${legend.color}"></i><span th:text="${legend.name}"></span></div>
 				</div>
 				<div th:if="${region.bldView.showCell}" class="cells">
-					<div th:each="cell, iterStat:${region.bldView?.cells}" th:text="${cell.cellName}"
-						 th:style="'width: ' + (${cell.showHouseNum} * 152 + ${iterStat.index == 0 ? 10 : 18}) + 'px'" class="cell-name"></div>
+					<div th:each="cell:${region.bldView?.cells}" th:text="${cell.cellName}"
+						 th:style="'width: ' + (${cell.showHouseNum} * 152 + 18) + 'px'" class="cell-name"></div>
 				</div>
 				<ul class="layui-timeline">
 					<li th:each="floor:${region.bldView?.floors}" class="layui-timeline-item floor">
@@ -296,7 +254,7 @@
 							<div th:each="cell, iterStat:${floor?.cells}" class="cell" th:classappend="${iterStat.index == 0 ? 'first' : 'normal'}"
 								 th:styleappend="${region.bldView.showCell && floor.showCell} ? 'width: ' + (${cell.showHouseNum} * 152 + 10) + 'px' : ''">
 								<div th:each="house:${cell?.houses}" class="room-list">
-									<div class="bg-gdcd" th:classappend="${house.presellStateCode}"><span th:text="${house.showName}"></span><span class="sell-state" th:text="${house.presellStateName}"></span></div>
+									<div class="bg-gdcd" th:style="'background: #' + ${house.presellStateCode}"><span th:text="${house.showName}"></span><span class="sell-state" th:text="${house.presellStateName}"></span></div>
 									<div class="m-bott">建筑面积：<span th:text="${house.constructArea}">㎡</span></div>
 									<div class="room-content">
 										<div class="content-top" th:style="'background: url(' + @{/themes/images/houseTitle.png} + ')'">
@@ -306,7 +264,7 @@
 											<div class="box-title"><span th:text="${house.houseUse}"></span><span th:text="${house.presellStateName}"></span></div>
 											<p>套内面积：<span th:text="${house.ownArea}"></span>㎡</p>
 											<p>户型：<span th:text="${house.houseHold}"></span></p>
-											<p th:if="${house.presellStateCode == 'noSale' && house.salesFlag == '是'}">备案价格：<span th:text="${house.presellPrice}"></span>元/㎡</p>
+											<p th:if="${house.presellPrice != null && house.presellPrice > 0 && house.salesFlag == '是'}">备案价格：<span th:text="${house.presellPrice}"></span>元/㎡</p>
 										</div>
 									</div>
 								</div>
