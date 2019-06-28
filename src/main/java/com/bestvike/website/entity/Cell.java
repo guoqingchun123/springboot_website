@@ -12,6 +12,7 @@ public class Cell implements Serializable {
 
 	private static final long serialVersionUID = -588508668089733059L;
 
+	private String projectId;
 	private String bldNo;
 	private String bldName;
 	private String cellNo;
@@ -26,6 +27,14 @@ public class Cell implements Serializable {
 	private Integer showHouseNum;
 	@Transient
 	private List<ViewHouseInfo> houses;
+
+	public String getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
 
 	public String getBldNo() {
 		return bldNo;

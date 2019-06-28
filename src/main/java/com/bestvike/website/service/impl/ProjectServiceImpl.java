@@ -110,7 +110,7 @@ public class ProjectServiceImpl implements ProjectService {
 					// 查询楼层单元信息
 					parameterMap.put("floorNo", floor.getFloorNo());
 					List<Cell> listFloorCell = viewRegionInfoDao.selectFloorCells(parameterMap);
-					if (BigDecimal.valueOf(8).compareTo(bldView.getCellFloorNum()) > 0) {
+					if (BigDecimal.valueOf(8).compareTo(bldView.getCellFloorNum()) < 0) {
 						// 每层每单元户数大于8， 不按单元显示，房屋都放到单元上
 						Cell cell = listFloorCell.get(0);
 						List<ViewHouseInfo> listHouse = viewHouseInfoDao.selectBldHouse(parameterMap);

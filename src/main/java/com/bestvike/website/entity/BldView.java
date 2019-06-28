@@ -1,8 +1,10 @@
 package com.bestvike.website.entity;
 
+import com.bestvike.website.config.Const;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.Entity;
 
 @Entity
@@ -17,6 +19,8 @@ public class BldView implements Serializable {
 	private List<Cell> cells;
 	private List<Floor> floors;
 	private BldSales bldSales;
+
+	private List<Map> legends;
 
 	private boolean showCell;
 
@@ -82,5 +86,13 @@ public class BldView implements Serializable {
 
 	public void setShowCell(boolean showCell) {
 		this.showCell = showCell;
+	}
+
+	public List<Map> getLegends() {
+		return Const.legends;
+	}
+
+	public void setLegends(List<Map> legends) {
+		this.legends = legends;
 	}
 }

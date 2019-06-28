@@ -119,7 +119,7 @@
 
 	<select id = "selectBldCells" parameterType = "map" resultType = "com.bestvike.website.entity.Cell">
 		<![CDATA[
-			SELECT bld_name, bld_no, cell_no, cell_name, max(house_num) max_house_num, max(house_num) show_house_num
+			SELECT #{projectId} project_id, bld_name, bld_no, cell_no, cell_name, max(house_num) max_house_num, max(house_num) show_house_num
 			from (
 				SELECT t1.cell_name as cell_no, t1.cell_name || '单元' as cell_name, t2.bld_name, t2.bld_no,
 				COUNT(1) over(partition BY t1.bld_no, t1.cell_no, t1.floor_no) house_num
