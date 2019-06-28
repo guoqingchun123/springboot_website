@@ -119,9 +119,12 @@
 
 	<select id = "selectBldCells" parameterType = "map" resultType = "com.bestvike.website.entity.Cell">
 		<![CDATA[
-			SELECT #{projectId} project_id, bld_name, bld_no, cell_no, cell_name, max(house_num) max_house_num, max(house_num) show_house_num
+			SELECT t.project_id, t.bld_name, t.bld_no, t.cell_no, t.cell_name,
+				max(t.house_num) max_house_num, max(t.house_num) show_house_num,
+				case when vci.x is not null then
+				 'top:' || round(vci.y * 100) || '%;left:' ||  round(vci.x * 100) || '%' else '' end AS location
 			from (
-				SELECT t1.cell_name as cell_no, t1.cell_name || '单元' as cell_name, t2.bld_name, t2.bld_no,
+				SELECT #{projectId} project_id, t1.cell_name as cell_no, t1.cell_name || '单元' as cell_name, t2.bld_name, t2.bld_no,
 				count(1) over(partition BY t1.bld_no, t1.cell_name, t1.floor_no) house_num
 				FROM view_houseinfo t1 left join view_bldinfo t2
 				on t1.project_id = t2.project_id AND t1.bld_no = t2.bld_no
@@ -131,9 +134,9 @@
 			AND t1.cell_name = #{cellNo}
 		</if>
 		<![CDATA[
-			) t
-			GROUP BY cell_no, cell_name, bld_name, bld_no
-			ORDER BY lpad(cell_name, 10, '0') asc
+			) t LEFT JOIN view_cellInfo vci on t.project_id = vci.project_id and t.bld_no = vci.bld_no and t.cell_no = vci.cell_name
+			GROUP BY t.project_id, t.cell_no, t.cell_name, t.bld_name, t.bld_no, vci.x, vci.y
+			ORDER BY lpad(t.cell_name, 10, '0') asc
 		]]>
 	</select>
 

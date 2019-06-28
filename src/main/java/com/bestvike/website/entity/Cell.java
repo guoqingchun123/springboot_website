@@ -2,6 +2,7 @@ package com.bestvike.website.entity;
 
 import com.bestvike.website.data.ViewHouseInfo;
 
+import java.math.BigDecimal;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 import java.io.Serializable;
@@ -27,6 +28,8 @@ public class Cell implements Serializable {
 	private Integer showHouseNum;
 	@Transient
 	private List<ViewHouseInfo> houses;
+	@Transient
+	private String location;
 
 	public String getProjectId() {
 		return projectId;
@@ -106,5 +109,13 @@ public class Cell implements Serializable {
 
 	public void setHouses(List<ViewHouseInfo> houses) {
 		this.houses = houses;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
 	}
 }

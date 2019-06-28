@@ -19,7 +19,7 @@ public interface ViewHouseInfoDao extends Mapper<ViewHouseInfo> {
 
 //	public List<RegionCell> selectRegionCellList(String regionId);
 
-	public List<ViewHouseInfo> selectHouseInfoList(Map<String, Object> parameterMap);
+//	public List<ViewHouseInfo> selectHouseInfoList(Map<String, Object> parameterMap);
 
 	public List<House> selectHouseByParameter(Map<String, Object> parameterMap);
 

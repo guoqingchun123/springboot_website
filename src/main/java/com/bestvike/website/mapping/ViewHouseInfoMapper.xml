@@ -165,16 +165,17 @@
 
 	<select id = "selectBldView" parameterType="map" resultType="com.bestvike.website.entity.BldView">
 		<![CDATA[
-			SELECT project_id, bld_no, bld_name, max(house_num) cell_floor_num
+			SELECT project_id, bld_no, bld_name, view_url, max(house_num) cell_floor_num
 			FROM (
-				SELECT t1.project_id, t1.bld_no, t1.bld_name, t2.house_num
-				FROM view_bldinfo t1 LEFT JOIN
-				(SELECT project_id, bld_no,
+				SELECT t1.project_id, t1.bld_no, t1.bld_name, t2.house_num, t3.view_url
+				FROM view_bldinfo t1
+				LEFT JOIN ass_regbld t3 on t1.project_id = t3.project_id and t1.bld_no = t3.bld_no
+				LEFT JOIN (SELECT project_id, bld_no,
 					count(1) over(partition BY bld_no, cell_name, floor_no) house_num FROM view_houseinfo
 					WHERE project_id = #{projectId} AND bld_no = #{bldNo}) t2
 				ON t1.project_id = t2.project_id AND t1.bld_no = t2.bld_no
 				WHERE t1.project_id = #{projectId} AND t1.bld_no = #{bldNo})
-			GROUP BY project_id, bld_no, bld_name
+			GROUP BY project_id, bld_no, bld_name, view_url
 		]]>
 	</select>
 
