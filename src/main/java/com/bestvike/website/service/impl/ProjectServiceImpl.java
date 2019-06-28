@@ -110,7 +110,7 @@ public class ProjectServiceImpl implements ProjectService {
 				// 楼栋下有单元标记，以单元显示房屋，并提供单元选择刷新功能
 				Cell cell = listCell.get(0);
 				viewRegionInfo = region(regionId, projectId, bldNo, cell.getCellNo());
-				viewRegionInfo.setViewPath(bldView.getViewUrl());
+				viewRegionInfo.setCellNo(cell.getCellNo());
 				return viewRegionInfo;
 			}
 			// 查询楼栋楼层列表

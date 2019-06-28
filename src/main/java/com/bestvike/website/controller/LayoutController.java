@@ -65,6 +65,9 @@ public class LayoutController extends BaseController {
 		mv.addObject("region", viewRegionInfo);
 		mv.addObject("projectId", projectId);
 		mv.addObject("bldNo", bldNo);
+		if (!StringUtils.isEmpty(viewRegionInfo.getCellNo())) {
+			mv.addObject("cellNo", viewRegionInfo.getCellNo());
+		}
 		mv.setViewName("salesData");
 		return mv;
 	}
@@ -74,6 +77,9 @@ public class LayoutController extends BaseController {
 		ModelAndView mv = new ModelAndView();
 		ViewRegionInfo viewRegionInfo = projectService.region(regionId, projectId, bldNo, cellNo);
 		mv.addObject("region", viewRegionInfo);
+		mv.addObject("projectId", projectId);
+		mv.addObject("bldNo", bldNo);
+		mv.addObject("cellNo", cellNo);
 		mv.setViewName("salesData");
 		return mv;
 	}
