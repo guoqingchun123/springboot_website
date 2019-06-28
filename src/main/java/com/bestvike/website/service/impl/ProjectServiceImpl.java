@@ -123,6 +123,8 @@ public class ProjectServiceImpl implements ProjectService {
 						parameterMap.put("cellNo", cell.getCellNo());
 						List<ViewHouseInfo> listHouse = viewHouseInfoDao.selectFloorCellHouses(parameterMap);
 						cell.setHouses(listHouse);
+						// 防止遍历过程中串单元
+						parameterMap.remove("cellNo");
 					}
 					bldView.setShowCell(true);
 				}
