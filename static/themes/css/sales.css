@@ -99,12 +99,16 @@
 }
 
 .bldSpan, .cellSpan {
-    background-color: white;
+    background-color: #F53081;
     height: 25px;
     line-height: 25px;
     border-radius: 5px;
     position: absolute;
     cursor: pointer;
+    color: #ffffff;
+}
+.bldSpan:hover, .cellSpan:hover {
+    background-color: #FF0000;
 }
 
 .bldDiv {
@@ -120,16 +124,12 @@
     display: inline-block;
 }
 
-.bldSpan:hover, .cellSpan:hover {
-    background-color: #09ff11;
-}
-
 .bldDiv:hover {
     background-color: #09ff11;
 }
 
 .selectedBld, .selectedCell {
-    background-color: #09ff11;
+    background-color: #FF0000;
 }
 
 .legends {

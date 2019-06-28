@@ -191,7 +191,7 @@
 			var bldNo = $(this).attr('data-bld-no');
 			var cellNo = $(this).attr('data-cell-no');
 
-			window.location.replace(ctxPath + 'content/' + [[${region.regionId}]] + '/' + projectId + '/' + encodeURIComponent(bldNo)) + '/' + encodeURIComponent(cellNo);
+			window.location.replace(ctxPath + 'content/' + [[${region.regionId}]] + '/' + projectId + '/' + encodeURIComponent(bldNo) + '/' + encodeURIComponent(cellNo));
 		});
 
 		$('.return-to').on('click', function () {
