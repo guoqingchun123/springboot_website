@@ -262,7 +262,8 @@
 					<li th:each="floor:${region?.floors}" class="layui-timeline-item floor">
 						<i class="layui-icon layui-timeline-axis" th:text="${floor.floorName}"></i>
 						<div class="layui-timeline-content layui-text">
-							<div th:each="cell, iterStat:${floor?.cells}" class="cell" th:classappend="${iterStat.index == 0 ? 'first' : 'normal'}" th:style="'width: ' + (${cell.showHouseNum} * 152 + 10) + 'px'">
+							<div th:each="cell, iterStat:${floor?.cells}" class="cell" th:classappend="${iterStat.index == 0 ? 'first' : 'normal'}"
+								 th:styleappend="${region.showCell && floor.showCell} ? 'width: ' + (${cell.showHouseNum} * 152 + 10) + 'px' : ''">
 								<div th:each="house:${cell?.houses}" class="room-list">
 									<div class="bg-gdcd" th:classappend="${house.presellStateCode}"><span th:text="${house.showName}"></span><span class="sell-state" th:text="${house.presellStateName}"></span></div>
 									<div class="m-bott">建筑面积：<span th:text="${house.constructArea}">㎡</span></div>
