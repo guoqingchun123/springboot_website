@@ -106,7 +106,7 @@ public class ProjectServiceImpl implements ProjectService {
 			// 查询楼栋单元列表
 			List<Cell> listCell = viewRegionInfoDao.selectBldCells(parameterMap);
 			bldView.setCells(listCell);
-			if (!StringUtils.isEmpty(bldView.getViewUrl())) {
+			if (!StringUtils.isEmpty(bldView.getViewPath())) {
 				// 楼栋下有单元标记，以单元显示房屋，并提供单元选择刷新功能
 				Cell cell = listCell.get(0);
 				viewRegionInfo = region(regionId, projectId, bldNo, cell.getCellNo());

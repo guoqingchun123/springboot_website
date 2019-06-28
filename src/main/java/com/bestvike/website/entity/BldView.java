@@ -19,7 +19,7 @@ public class BldView implements Serializable {
 	private List<Cell> cells;
 	private List<Floor> floors;
 	private BldSales bldSales;
-	private String viewUrl;
+	private String viewPath;
 
 	private List<Map> legends;
 
@@ -93,11 +93,11 @@ public class BldView implements Serializable {
 		return Const.legends;
 	}
 
-	public String getViewUrl() {
-		return viewUrl;
+	public String getViewPath() {
+		return viewPath;
 	}
 
-	public void setViewUrl(String viewUrl) {
-		this.viewUrl = viewUrl;
+	public void setViewPath(String viewPath) {
+		this.viewPath = viewPath;
 	}
 }
