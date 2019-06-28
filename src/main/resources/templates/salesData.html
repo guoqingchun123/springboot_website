@@ -64,7 +64,8 @@
 		<div id="salesDataDiv" style="width: 100%;background-color: white;margin-top: 10px;height:auto;">
 			<div id="houseCardContainer" class="layui-tab-content">
 				<div class="layui-elem-quote">
-					<label style="color: #959595;font-size: large;font-weight: bold" th:text="${region.bldView.bldSales.bldName}"></label>
+					<label style="color: #959595;font-size: large;font-weight: bold"
+						   th:text="${region.bldView.bldSales.saleName}"></label>
 					<label style="color: #959595;font-size: large;font-weight: bold">销售情况：</label>
 					总套数：<label style="color: #333333;font-size: large;font-weight: bold" th:text="${region.bldView.bldSales.totalNum}"></label>
 					已售套数：<label style="color: red;font-size: large;font-weight: bold" th:text="${region.bldView.bldSales.sellNum}"></label>
@@ -85,7 +86,7 @@
 					<li th:each="floor:${region.bldView?.floors}" class="layui-timeline-item floor">
 						<i class="layui-icon layui-timeline-axis" th:text="${floor.floorName}"></i>
 						<div class="layui-timeline-content layui-text">
-							<div th:each="cell, iterStat:${floor?.cells}" class="cell" th:classappend="${iterStat.index == 0 ? 'first' : 'normal'}"
+							<div th:each="cell:${floor?.cells}" class="cell"
 								 th:styleappend="${region.bldView.showCell && floor.showCell} ? 'width: ' + (${cell.showHouseNum} * 152 + 10) + 'px' : ''">
 								<div th:each="house:${cell?.houses}" class="room-list">
 									<div class="bg-gdcd" th:style="'background: #' + ${house.presellStateCode}"><span th:text="${house.showName}"></span><span class="sell-state" th:text="${house.presellStateName}"></span></div>
