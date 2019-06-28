@@ -278,9 +278,9 @@
 			$(".region-form").show();
 
 			map.panTo([region.x, region.y]);
-			
+
 			// 跳转到新页面
-			$(".layui-btn-normal").off("click").on("click", function () {
+			$(".layui-btn-normal").on("click", function () {
 				window.open(ctxPath + 'content/' + region.regionId, '_blank');
 			});
 		}
