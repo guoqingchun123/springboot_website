@@ -238,15 +238,15 @@
 		<div id="salesDataDiv" style="width: 100%;background-color: white;margin-top: 10px;height:auto;">
 			<div id="houseCardContainer" class="layui-tab-content">
 				<div class="layui-elem-quote">
-					<label style="color: #959595;font-size: large;font-weight: bold" th:text="${region.bldSales.bldName}"></label>
+					<label style="color: #959595;font-size: large;font-weight: bold" th:text="${region.bldView.bldSales.bldName}"></label>
 					<label style="color: #959595;font-size: large;font-weight: bold">销售情况：</label>
-					总套数：<label style="color: #333333;font-size: large;font-weight: bold" th:text="${region.bldSales.totalNum}"></label>
-					已售套数：<label style="color: red;font-size: large;font-weight: bold" th:text="${region.bldSales.sellNum}"></label>
-					未售套数：<label style="color: #00dd02;font-size: large;font-weight: bold" th:text="${region.bldSales.noSaledNum}"></label>
-					[抵押：<label style="color: #ddb400;font-size: large;font-weight: bold" th:text="${region.bldSales.mortgageNum}"></label>
-					查封：<label style="color: #dd6600;font-size: large;font-weight: bold" th:text="${region.bldSales.closeNum}"></label>
-					冻结：<label style="color: #dd8800;font-size: large;font-weight: bold" th:text="${region.bldSales.frozenNum}"></label>]
-					非卖套数：<label style="color: #b9d8dd;font-size: large;font-weight: bold" th:text="${region.bldSales.noSaleNum}"></label>
+					总套数：<label style="color: #333333;font-size: large;font-weight: bold" th:text="${region.bldView.bldSales.totalNum}"></label>
+					已售套数：<label style="color: red;font-size: large;font-weight: bold" th:text="${region.bldView.bldSales.sellNum}"></label>
+					未售套数：<label style="color: #00dd02;font-size: large;font-weight: bold" th:text="${region.bldView.bldSales.noSaledNum}"></label>
+					[抵押：<label style="color: #ddb400;font-size: large;font-weight: bold" th:text="${region.bldView.bldSales.mortgageNum}"></label>
+					查封：<label style="color: #dd6600;font-size: large;font-weight: bold" th:text="${region.bldView.bldSales.closeNum}"></label>
+					冻结：<label style="color: #dd8800;font-size: large;font-weight: bold" th:text="${region.bldView.bldSales.frozenNum}"></label>]
+					非卖套数：<label style="color: #b9d8dd;font-size: large;font-weight: bold" th:text="${region.bldView.bldSales.noSaleNum}"></label>
 				</div>
 				<div class="legends">
 					<label><img th:src="@{/themes/images/legends/sell.png}">已售</label>
@@ -255,11 +255,12 @@
 					<label><img th:src="@{/themes/images/legends/close.png}">查封</label>
 					<label><img th:src="@{/themes/images/legends/noSale.png}">非卖</label>
 				</div>
-				<div th:if="${region.showCell}" class="cells">
-					<div th:each="cell, iterStat:${region?.cells}" th:text="${cell.cellName}" th:style="'width: ' + (${cell.showHouseNum} * 152 + ${iterStat.index == 0 ? 10 : 18}) + 'px'" class="cell-name"></div>
+				<div th:if="${region.bldView.showCell}" class="cells">
+					<div th:each="cell, iterStat:${region.bldView?.cells}" th:text="${cell.cellName}"
+						 th:style="'width: ' + (${cell.showHouseNum} * 152 + ${iterStat.index == 0 ? 10 : 18}) + 'px'" class="cell-name"></div>
 				</div>
 				<ul class="layui-timeline">
-					<li th:each="floor:${region?.floors}" class="layui-timeline-item floor">
+					<li th:each="floor:${region.bldView?.floors}" class="layui-timeline-item floor">
 						<i class="layui-icon layui-timeline-axis" th:text="${floor.floorName}"></i>
 						<div class="layui-timeline-content layui-text">
 							<div th:each="cell, iterStat:${floor?.cells}" class="cell" th:classappend="${iterStat.index == 0 ? 'first' : 'normal'}" th:style="'width: ' + (${cell.showHouseNum} * 152 + 10) + 'px'">

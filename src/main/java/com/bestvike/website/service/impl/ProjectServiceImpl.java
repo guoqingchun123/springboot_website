@@ -9,10 +9,12 @@ import com.bestvike.website.data.ViewRegionInfo;
 import com.bestvike.website.document.Division;
 import com.bestvike.website.entity.BldCells;
 import com.bestvike.website.entity.BldSales;
+import com.bestvike.website.entity.BldView;
 import com.bestvike.website.entity.Cell;
 import com.bestvike.website.entity.CellSummary;
 import com.bestvike.website.entity.DocFile;
 import com.bestvike.website.entity.DocFiles;
+import com.bestvike.website.entity.Floor;
 import com.bestvike.website.entity.FloorSummary;
 import com.bestvike.website.entity.House;
 import com.bestvike.website.entity.HouseHoldSales;
@@ -92,18 +94,57 @@ public class ProjectServiceImpl implements ProjectService {
 			// 查询小区楼栋列表
 			List<RegionBlds> listRegionBlds = viewRegionInfoDao.selectRegionBlds(regionId);
 			viewRegionInfo.setListRegionBlds(listRegionBlds);
-			List<BldCells> listBldCells = queryRegionBldCells(regionId);
-			viewRegionInfo.setListBldCells(listBldCells);
-			if (listBldCells != null && listBldCells.size() > 0
-				&& listBldCells.get(0).getListCell() != null && listBldCells.get(0).getListCell().size() > 0) {
-				parameterMap.put("projectId", listBldCells.get(0).getProjectId());
-				parameterMap.put("bldNo", listBldCells.get(0).getBldNo());
-//				parameterMap.put("cellNo", listBldCells.get(0).getListCell().get(0).getCellNo());
-				List<ViewHouseInfo> listHouseInfo = viewHouseInfoDao.selectHouseInfoList(parameterMap);
-				viewRegionInfo.setListHouse(listHouseInfo);
+			// 增加按楼按单元显示房屋
+			if (listRegionBlds != null && listRegionBlds.size() > 0) {
+				String projectId = listRegionBlds.get(0).getProjectId();
+				String bldNo = listRegionBlds.get(0).getBldNo();
+				parameterMap.put("projectId", projectId);
+				parameterMap.put("bldNo", bldNo);
+				BldView bldView = viewHouseInfoDao.selectBldView(parameterMap);
+				// 查询楼栋单元列表
+				List<Cell> listCell = viewRegionInfoDao.selectBldCells(parameterMap);
+				bldView.setCells(listCell);
+				// 查询楼栋楼层列表
+				List<Floor> listFloor = viewRegionInfoDao.selectBldFloors(parameterMap);
+				for (Floor floor : listFloor) {
+					// 查询楼层单元信息
+					parameterMap.put("floorNo", floor.getFloorNo());
+					List<Cell> listFloorCell = viewRegionInfoDao.selectFloorCells(parameterMap);
+					if (BigDecimal.valueOf(8).compareTo(bldView.getCellFloorNum()) > 0) {
+						// 每层每单元户数大于8， 不按单元显示，房屋都放到单元上
+						Cell cell = listFloorCell.get(0);
+						List<ViewHouseInfo> listHouse = viewHouseInfoDao.selectBldHouse(parameterMap);
+						cell.setHouses(listHouse);
+						bldView.setShowCell(false);
+					} else {
+						for (Cell cell : listFloorCell) {
+							parameterMap.put("cellNo", cell.getCellNo());
+							List<ViewHouseInfo> listHouse = viewHouseInfoDao.selectFloorCellHouses(parameterMap);
+							cell.setHouses(listHouse);
+						}
+						bldView.setShowCell(true);
+					}
+					floor.setCells(listFloorCell);
+				}
+				// 查询楼栋销售情况
 				BldSales bldSales = viewHouseInfoDao.selectBldSalesData(parameterMap);
-				viewRegionInfo.setBldSales(bldSales);
+				bldView.setBldSales(bldSales);
+				viewRegionInfo.setBldView(bldView);
 			}
+
+			// 不按单元显示房屋
+//			List<BldCells> listBldCells = queryRegionBldCells(regionId);
+//			viewRegionInfo.setListBldCells(listBldCells);
+//			if (listBldCells != null && listBldCells.size() > 0
+//				&& listBldCells.get(0).getListCell() != null && listBldCells.get(0).getListCell().size() > 0) {
+//				parameterMap.put("projectId", listBldCells.get(0).getProjectId());
+//				parameterMap.put("bldNo", listBldCells.get(0).getBldNo());
+////				parameterMap.put("cellNo", listBldCells.get(0).getListCell().get(0).getCellNo());
+//				List<ViewHouseInfo> listHouseInfo = viewHouseInfoDao.selectHouseInfoList(parameterMap);
+//				viewRegionInfo.setListHouse(listHouseInfo);
+//				BldSales bldSales = viewHouseInfoDao.selectBldSalesData(parameterMap);
+//				viewRegionInfo.setBldSales(bldSales);
+//			}
 		} else {
 			List<DocFiles> listDocFiles = queryRegionDocs(regionId, viewType);
 			viewRegionInfo.setListDocFiles(listDocFiles);
@@ -239,7 +280,10 @@ public class ProjectServiceImpl implements ProjectService {
 	public List<BldCells> queryRegionBldCells(String regionId) {
 		List<BldCells> listBldCells = viewRegionInfoDao.selectBlds(regionId);
 		for (BldCells bldCells : listBldCells) {
-			List<Cell> listCell = viewRegionInfoDao.selectBldCells(bldCells);
+			Map<String, Object> parameterMap = new HashMap<>();
+			parameterMap.put("projectId", bldCells.getProjectId());
+			parameterMap.put("bldNo", bldCells.getBldNo());
+			List<Cell> listCell = viewRegionInfoDao.selectBldCells(parameterMap);
 			bldCells.setListCell(listCell);
 		}
 		return listBldCells;

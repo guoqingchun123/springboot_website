@@ -3,6 +3,7 @@ package com.bestvike.website.dao;
 import com.bestvike.website.data.ViewDivisionInfo;
 import com.bestvike.website.data.ViewHouseInfo;
 import com.bestvike.website.entity.BldSales;
+import com.bestvike.website.entity.BldView;
 import com.bestvike.website.entity.CellSummary;
 import com.bestvike.website.entity.FloorSummary;
 import com.bestvike.website.entity.House;
@@ -27,4 +28,10 @@ public interface ViewHouseInfoDao extends Mapper<ViewHouseInfo> {
 	public BldSales selectBldSalesData(Map<String, Object> parameterMap);
 
 	public CellSummary selectCellSummary(Map<String, Object> parameterMap);
+
+	public List<ViewHouseInfo> selectFloorCellHouses(Map<String, Object> parameterMap);
+
+	public BldView selectBldView(Map<String, Object> parameterMap);
+
+	public List<ViewHouseInfo> selectBldHouse(Map<String, Object> parameterMap);
 }

@@ -3,6 +3,7 @@ package com.bestvike.website.dao;
 import com.bestvike.website.data.ViewRegionInfo;
 import com.bestvike.website.entity.BldCells;
 import com.bestvike.website.entity.Cell;
+import com.bestvike.website.entity.Floor;
 import com.bestvike.website.entity.HouseHoldSales;
 import com.bestvike.website.entity.MonthSales;
 import com.bestvike.website.entity.Region;
@@ -27,7 +28,11 @@ public interface ViewRegionInfoDao extends Mapper<ViewRegionInfo> {
 
 	public List<BldCells> selectBlds(String regionId);
 
-	public List<Cell> selectBldCells(BldCells bldCells);
+	public List<Cell> selectBldCells(Map<String, Object> parameterMap);
+
+	public List<Floor> selectBldFloors(Map<String, Object> parameterMap);
+
+	public List<Cell> selectFloorCells(Map<String, Object> parameterMap);
 
 	public List<RegionBlds> selectRegionBlds(String regionId);
 

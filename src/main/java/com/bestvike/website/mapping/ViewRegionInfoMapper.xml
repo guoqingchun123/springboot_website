@@ -117,11 +117,36 @@
 		]]>
 	</select>
 
-	<select id = "selectBldCells" parameterType = "com.bestvike.website.entity.BldCells" resultType = "com.bestvike.website.entity.Cell">
+	<select id = "selectBldCells" parameterType = "map" resultType = "com.bestvike.website.entity.Cell">
 		<![CDATA[
-			SELECT cell_name as cell_no, cell_name || '单元' as cell_name
+			SELECT cell_no, cell_name, max(house_num) max_house_num, max(house_num) show_house_num
+			from (
+				SELECT cell_name as cell_no, cell_name || '单元' as cell_name,
+				COUNT(1) over(partition BY bld_no, cell_no, floor_no) house_num
+				FROM view_houseinfo WHERE project_id = #{projectId} AND bld_no = #{bldNo})
+			GROUP BY cell_no, cell_name
+			ORDER BY lpad(cell_name, 10, '0') asc
+		]]>
+	</select>
+
+	<select id = "selectBldFloors" parameterType="map" resultType="com.bestvike.website.entity.Floor">
+		<![CDATA[
+			SELECT nvl(floor_no, '-') floor_no,
+				case when instr(floor_name, '层') > 0 THEN floor_name else floor_name || '层' end as floor_name
 			FROM view_houseinfo WHERE project_id = #{projectId} AND bld_no = #{bldNo}
-			GROUP BY cell_name
+			GROUP BY floor_no, floor_name
+			ORDER BY case when regexp_replace(floor_no,'^[-\+]?\d+(\.\d+)?$','') is not null then 9999 else to_number(floor_no) end DESC
+		]]>
+	</select>
+
+	<select id = "selectFloorCells" parameterType="map" resultType="com.bestvike.website.entity.Cell">
+		<![CDATA[
+			SELECT cell_no, cell_name, max(house_num) max_house_num, max(house_num) show_house_num
+			from (
+				SELECT cell_name as cell_no, cell_name || '单元' as cell_name,
+				COUNT(1) over(partition BY bld_no, cell_no, floor_no) house_num
+				FROM view_houseinfo WHERE project_id = #{projectId} AND bld_no = #{bldNo} AND floor_no = #{floorNo})
+			GROUP BY cell_no, cell_name
 			ORDER BY lpad(cell_name, 10, '0') asc
 		]]>
 	</select>

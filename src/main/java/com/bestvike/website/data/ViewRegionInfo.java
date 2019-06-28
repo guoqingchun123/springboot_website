@@ -68,6 +68,8 @@ public class ViewRegionInfo implements Serializable {
 	private List<Floor> floors;
 	@Transient
 	private List<Cell> cells;
+	@Transient
+	private BldView bldView;
 
 	public String getRegionId() {
 		return regionId;
@@ -299,5 +301,13 @@ public class ViewRegionInfo implements Serializable {
 
 	public void setCells(List<Cell> cells) {
 		this.cells = cells;
+	}
+
+	public BldView getBldView() {
+		return bldView;
+	}
+
+	public void setBldView(BldView bldView) {
+		this.bldView = bldView;
 	}
 }
