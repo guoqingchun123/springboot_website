@@ -126,6 +126,7 @@ public class ProjectServiceImpl implements ProjectService {
 					}
 					floor.setCells(listFloorCell);
 				}
+				bldView.setFloors(listFloor);
 				// 查询楼栋销售情况
 				BldSales bldSales = viewHouseInfoDao.selectBldSalesData(parameterMap);
 				bldView.setBldSales(bldSales);
