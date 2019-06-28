@@ -99,7 +99,7 @@
 		<![CDATA[
 			SELECT t.project_id, t.bld_no,
 				CASE WHEN instr(t2.bld_name, '#') > 0 THEN t2.bld_name else t2.bld_name || '#' end bld_name,
-				t.cell_name || '单元' cell_name,
+				CASE WHEN instr(t2.bld_name, '#') > 0 THEN t2.bld_name else t2.bld_name || '#' || t.cell_name || '单元' cell_name,
 				count(1) total_num,
 				SUM(CASE WHEN presell_state = '已售' then 1 else 0 end) sell_num,
 				sum(case when sales_flag = '否' then 1 else 0 end) no_sale_num,
