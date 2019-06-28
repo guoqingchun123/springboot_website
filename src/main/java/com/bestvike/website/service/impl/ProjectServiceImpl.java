@@ -106,6 +106,12 @@ public class ProjectServiceImpl implements ProjectService {
 			// 查询楼栋单元列表
 			List<Cell> listCell = viewRegionInfoDao.selectBldCells(parameterMap);
 			bldView.setCells(listCell);
+			if (!StringUtils.isEmpty(bldView.getViewUrl())) {
+				// 楼栋下有单元标记，以单元显示房屋，并提供单元选择刷新功能
+				Cell cell = listCell.get(0);
+				viewRegionInfo.setViewPath(bldView.getViewUrl());
+				return region(regionId, projectId, bldNo, cell.getCellNo());
+			}
 			// 查询楼栋楼层列表
 			List<Floor> listFloor = viewRegionInfoDao.selectBldFloors(parameterMap);
 			for (Floor floor : listFloor) {
