@@ -9,6 +9,7 @@
 	<link th:href="@{/layui/css/layui.css}" rel="stylesheet" type="text/css">
 	<link th:href="@{/layui/autocomplete/autocomplete.css}" rel="stylesheet" type="text/css">
 	<link th:href="@{/layui/css/maps.css}" rel="stylesheet" type="text/css">
+	<link th:href="@{/themes/iconfont/iconfont.css}" rel="stylesheet" type="text/css">
 	<style>
 		.room-list {
 			margin: 0;
@@ -30,24 +31,48 @@
 			font-weight: bold;
 			position: relative;
 		}
+
+		.legends .iconfont {
+			font-size: 24px;
+		}
+
+		.legends .saled {
+			color: red;
+		}
+
+		.legends .mortgage {
+			color: #ddb400;
+		}
+
+		.legends .close {
+			color: #dd6600;
+		}
+
+		.legends .frozen {
+			color: #dd8800;
+		}
+
+		.legends .noSale {
+			color: #b9d8dd;
+		}
 		
-		.saled {
+		.floor .saled {
 			background: red;
 		}
-		
-		.mortgage {
+
+		.floor .mortgage {
 			background: #ddb400;
 		}
-		
-		.close {
+
+		.floor .close {
 			background: #dd6600;
 		}
-		
-		.frozen {
+
+		.floor .frozen {
 			background: #dd8800;
 		}
-		
-		.nosale {
+
+		.floor .nosale {
 			background: #b9d8dd;
 		}
 		
@@ -249,11 +274,11 @@
 					非卖套数：<label style="color: #b9d8dd;font-size: large;font-weight: bold" th:text="${region.bldSales.noSaleNum}"></label>
 				</div>
 				<div class="legends">
-					<label><img th:src="@{/themes/images/legends/sell.png}">已售</label>
-					<label><img th:src="@{/themes/images/legends/noSaled.png}">未售</label>
-					<label><img th:src="@{/themes/images/legends/mortgage.png}">抵押</label>
-					<label><img th:src="@{/themes/images/legends/close.png}">查封</label>
-					<label><img th:src="@{/themes/images/legends/noSale.png}">非卖</label>
+					<label><i class="iconfont icon-home saled"></i><span>已售</span></label>
+					<label><i class="iconfont icon-home noSaled"></i><span>未售</span></label>
+					<label><i class="iconfont icon-home mortgage"></i><span>抵押</span></label>
+					<label><i class="iconfont icon-home close"></i><span>查封</span></label>
+					<label><i class="iconfont icon-home noSale"></i><span>非卖</span></label>
 				</div>
 				<div th:if="${region.showCell}" class="cells">
 					<div th:each="cell, iterStat:${region?.cells}" th:text="${cell.cellName}" th:style="'width: ' + (${cell.showHouseNum} * 152 + ${iterStat.index == 0 ? 10 : 18}) + 'px'" class="cell-name"></div>
