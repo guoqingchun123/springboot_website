@@ -122,7 +122,7 @@
 			SELECT #{projectId} project_id, bld_name, bld_no, cell_no, cell_name, max(house_num) max_house_num, max(house_num) show_house_num
 			from (
 				SELECT t1.cell_name as cell_no, t1.cell_name || '单元' as cell_name, t2.bld_name, t2.bld_no,
-				COUNT(1) over(partition BY t1.bld_no, t1.cell_no, t1.floor_no) house_num
+				count(1) over(partition BY t1.bld_no, t1.cell_name, t1.floor_no) house_num
 				FROM view_houseinfo t1 left join view_bldinfo t2
 				on t1.project_id = t2.project_id AND t1.bld_no = t2.bld_no
 				WHERE t1.project_id = #{projectId} AND t1.bld_no = #{bldNo}) t
@@ -146,7 +146,7 @@
 			SELECT cell_no, cell_name, max(house_num) max_house_num, max(house_num) show_house_num
 			from (
 				SELECT cell_name as cell_no, cell_name || '单元' as cell_name,
-				COUNT(1) over(partition BY bld_no, cell_no, floor_no) house_num
+				count(1) over(partition BY bld_no, cell_name, floor_no) house_num
 				FROM view_houseinfo WHERE project_id = #{projectId} AND bld_no = #{bldNo} AND floor_no = #{floorNo})
 			GROUP BY cell_no, cell_name
 			ORDER BY lpad(cell_name, 10, '0') asc

@@ -33,10 +33,10 @@
 	<select id = "selectHouseInfoList" parameterType = "map" resultType = "ViewHouseInfo">
 		<![CDATA[
 			SELECT t.*, row_number() over(partition by bld_no, cell_no, floor_no order by lpad(floor_no, 10, '0'), show_name, house_id) init_room,
-				SUM(CASE WHEN t.presell_state = '已售' THEN 1 ELSE 0 END) over(partition BY bld_no, cell_no, floor_no) sale_num,
-       			SUM(CASE WHEN t.presell_state = '未售' and t.sales_flag = '是' THEN 1 ELSE 0 END) over(partition BY bld_no, cell_no, floor_no) no_sale_Num,
-       			SUM(CASE WHEN t.presell_state = '未售' and t.sales_flag != '是' THEN 1 ELSE 0 END) over(partition BY bld_no, cell_no, floor_no) no_saled_Num,
-       			SUM(1) over(partition BY bld_no, cell_no, floor_no) total_num
+				SUM(CASE WHEN t.presell_state = '已售' THEN 1 ELSE 0 END) over(partition BY bld_no, cell_name, floor_no) sale_num,
+       			SUM(CASE WHEN t.presell_state = '未售' and t.sales_flag = '是' THEN 1 ELSE 0 END) over(partition BY bld_no, cell_name, floor_no) no_sale_Num,
+       			SUM(CASE WHEN t.presell_state = '未售' and t.sales_flag != '是' THEN 1 ELSE 0 END) over(partition BY bld_no, cell_name, floor_no) no_saled_Num,
+       			SUM(1) over(partition BY bld_no, cell_name, floor_no) total_num
 			FROM view_houseinfo t WHERE project_id = #{projectId} and bld_no = #{bldNo}
 		]]>
 		<if test="cellNo != null">
