@@ -70,6 +70,11 @@
 				CASE WHEN presell_state = '已售' THEN 0 ELSE presell_price END presell_price
 			FROM view_houseinfo t
 			WHERE project_id = #{projectId} AND bld_no = #{bldNo} AND cell_name = #{cellNo}
+		]]>
+		<if test="floorNo != null">
+			AND floor_no = #{floorNo}
+		</if>
+		<![CDATA[
 			ORDER BY case when regexp_replace(t.floor_no,'^[-\+]?\d+(\.\d+)?$','') is not null then 9999 else to_number(floor_no) end DESC,
 			show_name ASC, house_id ASC
 		]]>
@@ -109,7 +114,7 @@
 
 	<select id = "selectCellSummary" parameterType="map" resultType="com.bestvike.website.entity.CellSummary">
 		<![CDATA[
-			SELECT t.project_id, t.bld_no, t.cell_no, t.cell_name || '单元' cell_name,
+			SELECT t.project_id, t.bld_no, t.cell_name cell_no, t.cell_name || '单元' cell_name,
 				count(1) total_num,
 				SUM(CASE WHEN presell_state = '已售' then 1 else 0 end) sell_num,
 				sum(case when sales_flag = '否' then 1 else 0 end) no_sale_num,
