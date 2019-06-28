@@ -221,8 +221,8 @@
 				<div style="position: relative;height: auto;display:inline-block">
 					<image th:if="${region.viewPath != null}" th:src="${region?.viewPath}" style="height:450px"></image>
 					<div th:each="regionBld, iterStat:${region?.listRegionBlds}">
-						<span th:class="${region.viewPath != null ? 'bldSpan' : 'bldDiv'}" th:classappend="${iterStat.index == 0} ? 'selectedBld'"
-							  th:value="${regionBld.projectId} + '|' + ${regionBld.bldNo}" th:style="${regionBld.location}" th:text="${regionBld.bldName}"></span>
+						<span th:class="${region.viewPath != null ? 'bldSpan' : 'bldDiv'}" th:classappend="${bldNo == null ? iterStat.index == 0 : bldNo == regionBld.bldNo} ? 'selectedBld'"
+							  th:index="${iterStat.index}" th:style="${regionBld.location}" th:text="${regionBld.bldName}"></span>
 					</div>
 				</div>
 			</div>
@@ -321,18 +321,6 @@
 			location.hash = 'tab=' + $(this).attr('value');
 		});
 
-		/*getTpl = document.getElementById("houseCardScript").innerHTML
-			, view = document.getElementById('houseCardContainer');
-		laytpl(getTpl).render([[${region}]], function (html) {
-			view.innerHTML = html;
-		});
-
-		getTpl = document.getElementById("viewImageScript").innerHTML
-			, view = document.getElementById('viewImageDiv');
-		laytpl(getTpl).render([[${region}]], function (html) {
-			view.innerHTML = html;
-		});*/
-
 		$(".layui-breadcrumb a").on("click", function () {
 			var viewType = $(this).attr("data-value");
 			if (viewType === 'index') {
@@ -343,23 +331,10 @@
 		});
 
 		$(".bldSpan,.bldDiv").on("click", function () {
-			var bldId = $(this).attr("value");
+			// var bldId = $(this).attr("value");
+			var index = parseInt($(this).attr('index'), 10);
 
-			$.ajax({
-				url: ctxPath + 'bldHouses',
-				method: 'get',
-				data: {
-					projectId: bldId.split("|")[0],
-					bldNo: bldId.split("|")[1]
-				},
-				success: function (res) {
-					getTpl = document.getElementById("houseCardScript").innerHTML
-						, view = document.getElementById('houseCardContainer');
-					laytpl(getTpl).render(res, function (html) {
-						view.innerHTML = html;
-					});
-				}
-			});
+			window.location.replace(ctxPath + 'content/' + [[${region.regionId}]] + '/' + [[${region.listRegionBlds}]][index].projectId + '/' + [[${region.listRegionBlds}]][index].bldNo);
 
 			$(".bldSpan,.bldDiv").removeClass("selectedBld");
 			$(this).addClass("selectedBld");
