@@ -34,6 +34,7 @@
 
 		.legends .iconfont {
 			font-size: 24px;
+			vertical-align: middle;
 		}
 
 		.legends .saled {
@@ -171,12 +172,16 @@
 			width: 100%;
 			display: inline-block;
 		}
-		.legends label {
+		.legends .legend {
 			float: left;
 			padding: 5px;
 		}
-		.legends img {
-			margin-bottom: 6px;
+		.legends .legend i, .legends .legend span {
+			float: left;
+			display: block;
+		}
+		.legends .legend span {
+			margin-top: 3px;
 		}
 		.cells {
 			width: 100%;
@@ -274,11 +279,11 @@
 					非卖套数：<label style="color: #b9d8dd;font-size: large;font-weight: bold" th:text="${region.bldView.bldSales.noSaleNum}"></label>
 				</div>
 				<div class="legends">
-					<label><i class="iconfont icon-home saled"></i><span>已售</span></label>
-					<label><i class="iconfont icon-home noSaled"></i><span>未售</span></label>
-					<label><i class="iconfont icon-home mortgage"></i><span>抵押</span></label>
-					<label><i class="iconfont icon-home close"></i><span>查封</span></label>
-					<label><i class="iconfont icon-home noSale"></i><span>非卖</span></label>
+					<div class="legend"><i class="iconfont icon-home-fill saled"></i><span>已售</span></div>
+					<div class="legend"><i class="iconfont icon-home-fill noSaled"></i><span>未售</span></div>
+					<div class="legend"><i class="iconfont icon-home-fill mortgage"></i><span>抵押</span></div>
+					<div class="legend"><i class="iconfont icon-home-fill close"></i><span>查封</span></div>
+					<div class="legend"><i class="iconfont icon-home-fill noSale"></i><span>非卖</span></div>
 				</div>
 				<div th:if="${region.bldView.showCell}" class="cells">
 					<div th:each="cell, iterStat:${region.bldView?.cells}" th:text="${cell.cellName}"
@@ -289,7 +294,7 @@
 						<i class="layui-icon layui-timeline-axis" th:text="${floor.floorName}"></i>
 						<div class="layui-timeline-content layui-text">
 							<div th:each="cell, iterStat:${floor?.cells}" class="cell" th:classappend="${iterStat.index == 0 ? 'first' : 'normal'}"
-								 th:styleappend="${region.showCell && floor.showCell} ? 'width: ' + (${cell.showHouseNum} * 152 + 10) + 'px' : ''">
+								 th:styleappend="${region.bldView.showCell && floor.showCell} ? 'width: ' + (${cell.showHouseNum} * 152 + 10) + 'px' : ''">
 								<div th:each="house:${cell?.houses}" class="room-list">
 									<div class="bg-gdcd" th:classappend="${house.presellStateCode}"><span th:text="${house.showName}"></span><span class="sell-state" th:text="${house.presellStateName}"></span></div>
 									<div class="m-bott">建筑面积：<span th:text="${house.constructArea}">㎡</span></div>

@@ -125,6 +125,7 @@ public class ProjectServiceImpl implements ProjectService {
 						bldView.setShowCell(true);
 					}
 					floor.setCells(listFloorCell);
+					floor.setShowCell(true);
 				}
 				bldView.setFloors(listFloor);
 				// 查询楼栋销售情况

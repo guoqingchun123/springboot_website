@@ -247,6 +247,7 @@
 		}
 
 		function refreshData(pageNo) {
+			var loadingIndex = layer.load(2);
 			$.ajax({
 				url: ctxPath + 'filter-regions',
 				method: 'get',
@@ -270,6 +271,9 @@
 					page.pageNo = pageNo;
 					page.totalSize = res.page.totalSize;
 					refreshPage(page);
+				},
+				complete: function (res) {
+					layer.close(loadingIndex);
 				}
 			});
 		}

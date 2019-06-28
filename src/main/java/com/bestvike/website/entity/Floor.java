@@ -14,6 +14,8 @@ public class Floor implements Serializable {
 	private String floorName;
 
 	@Transient
+	private Boolean showCell;
+	@Transient
 	private List<Cell> cells;
 
 	public String getFloorNo() {
@@ -30,6 +32,14 @@ public class Floor implements Serializable {
 
 	public void setFloorName(String floorName) {
 		this.floorName = floorName;
+	}
+
+	public Boolean getShowCell() {
+		return showCell;
+	}
+
+	public void setShowCell(Boolean showCell) {
+		this.showCell = showCell;
 	}
 
 	public List<Cell> getCells() {
