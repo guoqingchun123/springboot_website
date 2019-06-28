@@ -121,7 +121,7 @@
 		<![CDATA[
 			SELECT t.project_id, t.bld_name, t.bld_no, t.cell_no, t.cell_name,
 				max(t.house_num) max_house_num, max(t.house_num) show_house_num,
-				case when vci.x is not null or vci.x = 0 then
+				case when vci.x is not null and vci.x != 0 then
 				 'top:' || round(vci.y * 100) || '%;left:' ||  round(vci.x * 100) || '%' else '' end AS location
 			from (
 				SELECT #{projectId} project_id, t1.cell_name as cell_no, t1.cell_name || '单元' as cell_name, t2.bld_name, t2.bld_no,
