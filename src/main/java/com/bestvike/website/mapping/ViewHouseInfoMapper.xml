@@ -183,7 +183,7 @@
 					WHEN presell_state = '未售' THEN '00dd02'
 				ELSE '00dd02' END presell_state_code
 			FROM view_houseinfo t
-			WHERE t.project_id = #{projectId} AND t.bld_no = #{bldNo}
+			WHERE t.project_id = #{projectId} AND t.bld_no = #{bldNo} AND t.floor_no = #{floorNo}
 			ORDER BY case when regexp_replace(t.floor_no,'^[-\+]?\d+(\.\d+)?$','') is not null then 9999 else to_number(floor_no) end DESC,
 			show_name ASC, house_id ASC
 		]]>

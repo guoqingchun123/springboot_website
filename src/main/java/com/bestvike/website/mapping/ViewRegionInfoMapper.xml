@@ -147,7 +147,13 @@
 			from (
 				SELECT cell_name as cell_no, cell_name || '单元' as cell_name,
 				count(1) over(partition BY bld_no, cell_name, floor_no) house_num
-				FROM view_houseinfo WHERE project_id = #{projectId} AND bld_no = #{bldNo} AND floor_no = #{floorNo})
+				FROM view_houseinfo WHERE project_id = #{projectId} AND bld_no = #{bldNo} AND floor_no = #{floorNo}
+		]]>
+		<if test="cellNo != null">
+			AND cell_name = #{cellNo}
+		</if>
+		<![CDATA[
+			)
 			GROUP BY cell_no, cell_name
 			ORDER BY lpad(cell_name, 10, '0') asc
 		]]>

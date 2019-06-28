@@ -194,23 +194,15 @@ public class ProjectServiceImpl implements ProjectService {
 			for (Floor floor : listFloor) {
 				// 查询楼层单元信息
 				parameterMap.put("floorNo", floor.getFloorNo());
+				parameterMap.put("cellNo", cellNo);
 				List<Cell> listFloorCell = viewRegionInfoDao.selectFloorCells(parameterMap);
-				if (BigDecimal.valueOf(8).compareTo(bldView.getCellFloorNum()) < 0) {
-					// 每层每单元户数大于8， 不按单元显示，房屋都放到单元上
-					Cell cell = listFloorCell.get(0);
-					List<ViewHouseInfo> listHouse = viewHouseInfoDao.selectBldHouse(parameterMap);
-					cell.setHouses(listHouse);
-					bldView.setShowCell(false);
-				} else {
-					for (Cell cell : listFloorCell) {
-						parameterMap.put("cellNo", cell.getCellNo());
-						List<ViewHouseInfo> listHouse = viewHouseInfoDao.selectFloorCellHouses(parameterMap);
-						cell.setHouses(listHouse);
-					}
-					bldView.setShowCell(true);
-				}
+				// 只有一个单元
+				Cell cell = listFloorCell.get(0);
+				List<ViewHouseInfo> listHouse = viewHouseInfoDao.selectBldHouse(parameterMap);
+				cell.setHouses(listHouse);
+				bldView.setShowCell(false);
 				floor.setCells(listFloorCell);
-				floor.setShowCell(true);
+				floor.setShowCell(false);
 			}
 			bldView.setFloors(listFloor);
 			// 查询楼栋销售情况
@@ -254,9 +246,6 @@ public class ProjectServiceImpl implements ProjectService {
 		viewRegionInfo.setSalesData(salesData);
 		viewRegionInfo.setListHouseHold(listHouseHold);
 		if (StringUtils.isEmpty(viewType) || "salesData".equals(viewType)) {
-			// 楼盘图
-//			List<RegionCell> listCellInfo = viewHouseInfoDao.selectRegionCellList(regionId);
-//			viewRegionInfo.setListCell(listCellInfo);
 			// 查询小区楼栋列表
 			List<RegionBlds> listRegionBlds = viewRegionInfoDao.selectRegionBlds(regionId);
 			viewRegionInfo.setListRegionBlds(listRegionBlds);
@@ -299,20 +288,6 @@ public class ProjectServiceImpl implements ProjectService {
 				bldView.setBldSales(bldSales);
 				viewRegionInfo.setBldView(bldView);
 			}
-
-			// 不按单元显示房屋
-//			List<BldCells> listBldCells = queryRegionBldCells(regionId);
-//			viewRegionInfo.setListBldCells(listBldCells);
-//			if (listBldCells != null && listBldCells.size() > 0
-//				&& listBldCells.get(0).getListCell() != null && listBldCells.get(0).getListCell().size() > 0) {
-//				parameterMap.put("projectId", listBldCells.get(0).getProjectId());
-//				parameterMap.put("bldNo", listBldCells.get(0).getBldNo());
-////				parameterMap.put("cellNo", listBldCells.get(0).getListCell().get(0).getCellNo());
-//				List<ViewHouseInfo> listHouseInfo = viewHouseInfoDao.selectHouseInfoList(parameterMap);
-//				viewRegionInfo.setListHouse(listHouseInfo);
-//				BldSales bldSales = viewHouseInfoDao.selectBldSalesData(parameterMap);
-//				viewRegionInfo.setBldSales(bldSales);
-//			}
 		} else {
 			List<DocFiles> listDocFiles = queryRegionDocs(regionId, viewType);
 			viewRegionInfo.setListDocFiles(listDocFiles);

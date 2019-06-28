@@ -21,6 +21,7 @@ public class AssRegBld implements Serializable {
 	private BigDecimal x;
 	private BigDecimal y;
 	private String remark;
+	private String viewUrl;
 
 	@Transient
 	private String bldName;
@@ -87,5 +88,13 @@ public class AssRegBld implements Serializable {
 
 	public void setBldName(String bldName) {
 		this.bldName = bldName;
+	}
+
+	public String getViewUrl() {
+		return viewUrl;
+	}
+
+	public void setViewUrl(String viewUrl) {
+		this.viewUrl = viewUrl;
 	}
 }

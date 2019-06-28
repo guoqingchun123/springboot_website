@@ -54,36 +54,6 @@ public class LayoutController extends BaseController {
 		viewType = StringUtils.isEmpty(viewType) ? "salesData" : viewType;
 		ViewRegionInfo viewRegionInfo = projectService.region(regionId, viewType);
 		mv.addObject("region", viewRegionInfo);
-		// presellState -> presellStateName & presellStateClass
-		/*String houses = "{\"regionName\": \"测试小区\", \"showCell\": false,"
-					+ "\"viewPath\": \"http://222.74.69.146:180/file/group1/M00/00/07/CgoMAV0SJGKAVAGoABBEyaTS-qg876.jpg\","
-					+ "\"cells\": [{\"cellNo\": \"001\", \"cellName\": \"1单元\", \"showHouseNum\": 2, \"maxHouseNum\": 2}, {\"cellNo\": \"002\", \"cellName\": \"2单元\", \"showHouseNum\": 3, \"maxHouseNum\": 3}, {\"cellNo\": \"003\", \"cellName\": \"3单元\", \"showHouseNum\": 3, \"maxHouseNum\": 3}],"
-					+ "\"floors\": ["
-						+ "{\"floorNo\": \"001\", \"floorName\": \"1层\", "
-						+ "\"cells\": ["
-							+ "{\"showHouseNum\": 2, \"maxHouseNum\": 2, \"houses\": [{\"showName\": \"1-001\", \"presellStateName\": \"已售\", \"presellStateCode\": \"saled\", \"constructArea\": 100.23, \"ownArea\": 90.23, \"houseUse\": \"仓库\", \"houseHold\": \"敞开式\"}, {\"showName\": \"1-002\", \"presellStateName\": \"未售\", \"presellStateCode\": \"noSaled\", \"constructArea\": 100.23, \"ownArea\": 90.23, \"houseUse\": \"仓库\", \"houseHold\": \"敞开式\"}]},"
-							+ "{\"showHouseNum\": 3, \"maxHouseNum\": 3, \"houses\": [{\"showName\": \"1-003\", \"presellStateName\": \"已售\", \"presellStateCode\": \"saled\", \"constructArea\": 100.23, \"ownArea\": 90.23, \"houseUse\": \"仓库\", \"houseHold\": \"敞开式\"}, {\"showName\": \"1-004\", \"presellStateName\": \"未售\", \"presellStateCode\": \"noSaled\", \"constructArea\": 100.23, \"ownArea\": 90.23, \"houseUse\": \"仓库\", \"houseHold\": \"敞开式\"}, {\"showName\": \"1-004\", \"presellStateName\": \"未售\", \"presellStateCode\": \"noSaled\", \"constructArea\": 100.23, \"ownArea\": 90.23, \"houseUse\": \"仓库\", \"houseHold\": \"敞开式\"}, {\"showName\": \"1-004\", \"presellStateName\": \"未售\", \"presellStateCode\": \"noSaled\", \"constructArea\": 100.23, \"ownArea\": 90.23, \"houseUse\": \"仓库\", \"houseHold\": \"敞开式\"}, {\"showName\": \"1-004\", \"presellStateName\": \"未售\", \"presellStateCode\": \"noSaled\", \"constructArea\": 100.23, \"ownArea\": 90.23, \"houseUse\": \"仓库\", \"houseHold\": \"敞开式\"}, {\"showName\": \"1-004\", \"presellStateName\": \"未售\", \"presellStateCode\": \"noSaled\", \"constructArea\": 100.23, \"ownArea\": 90.23, \"houseUse\": \"仓库\", \"houseHold\": \"敞开式\"}, {\"showName\": \"1-004\", \"presellStateName\": \"未售\", \"presellStateCode\": \"noSaled\", \"constructArea\": 100.23, \"ownArea\": 90.23, \"houseUse\": \"仓库\", \"houseHold\": \"敞开式\"}]},"
-							+ "{\"showHouseNum\": 3, \"maxHouseNum\": 3, \"houses\": [{\"showName\": \"1-003\", \"presellStateName\": \"已售\", \"presellStateCode\": \"saled\", \"constructArea\": 100.23, \"ownArea\": 90.23, \"houseUse\": \"仓库\", \"houseHold\": \"敞开式\"}, {\"showName\": \"1-004\", \"presellStateName\": \"未售\", \"presellStateCode\": \"noSaled\", \"constructArea\": 100.23, \"ownArea\": 90.23, \"houseUse\": \"仓库\", \"houseHold\": \"敞开式\"}]}"
-							+ "]"
-						+ "},"
-						+ "{\"floorNo\": \"002\", \"floorName\": \"2层\","
-						+ "\"cells\": ["
-							+ "{\"showHouseNum\": 2, \"maxHouseNum\": 2, \"houses\": [{\"showName\": \"2-001\", \"presellStateName\": \"已售\", \"presellStateCode\": \"saled\", \"constructArea\": 100.23, \"ownArea\": 90.23, \"houseUse\": \"仓库\", \"houseHold\": \"敞开式\"}, {\"showName\": \"2-002\", \"presellStateName\": \"未售\", \"presellStateCode\": \"noSaled\", \"constructArea\": 100.23, \"ownArea\": 90.23, \"houseUse\": \"仓库\", \"houseHold\": \"敞开式\"}]},"
-							+ "{\"showHouseNum\": 3, \"maxHouseNum\": 3, \"houses\": [{\"showName\": \"2-001\", \"presellStateName\": \"已售\", \"presellStateCode\": \"saled\", \"constructArea\": 100.23, \"ownArea\": 90.23, \"houseUse\": \"仓库\", \"houseHold\": \"敞开式\"}, {\"showName\": \"2-002\", \"presellStateName\": \"未售\", \"presellStateCode\": \"noSaled\", \"constructArea\": 100.23, \"ownArea\": 90.23, \"houseUse\": \"仓库\", \"houseHold\": \"敞开式\"}]},"
-							+ "{\"showHouseNum\": 3, \"maxHouseNum\": 3, \"houses\": [{\"showName\": \"2-003\", \"presellStateName\": \"已售\", \"presellStateCode\": \"saled\", \"constructArea\": 100.23, \"ownArea\": 90.23, \"houseUse\": \"仓库\", \"houseHold\": \"敞开式\"}, {\"showName\": \"2-004\", \"presellStateName\": \"未售\", \"presellStateCode\": \"noSaled\", \"constructArea\": 100.23, \"ownArea\": 90.23, \"houseUse\": \"仓库\", \"houseHold\": \"敞开式\"}]}"
-							+ "]"
-						+ "}"
-					+ "],"
-					+ "\"bldSales\": {\"projectId\": \"11207019000623\",\"bldNo\": \"14\",\"bldName\": \"14#\",\"totalNum\": 68,\"sellNum\": 0,\"noSaledNum\": 68,\"noSaleNum\": 0,\"closeNum\": 0,\"mortgageNum\": 0,\"frozenNum\": 0},"
-					+ "\"listRegionBlds\": [{\"projectId\": \"100001\", \"bldNo\": \"0001\", \"bldName\": \"1号楼\", \"location\": \"top:44%;left:22%\"}]"
-					+ "}";
-		ObjectMapper objectMapper = new ObjectMapper();
-		try {
-			ViewRegionInfo viewRegionInfo = objectMapper.readValue(houses, ViewRegionInfo.class);
-			mv.addObject("region", viewRegionInfo);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}*/
 		mv.setViewName(viewType);
 		return mv;
 	}
