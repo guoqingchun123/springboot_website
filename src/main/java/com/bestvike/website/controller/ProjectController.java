@@ -88,9 +88,4 @@ public class ProjectController extends BaseController {
 		}
 		return paramterMap;
 	}
-
-	@GetMapping(value = "/bldHouses")
-	public Map<String, Object> selectBldHouses(@RequestParam String projectId, @RequestParam String bldNo) {
-		return projectService.selectBldHouses(projectId, bldNo);
-	}
 }

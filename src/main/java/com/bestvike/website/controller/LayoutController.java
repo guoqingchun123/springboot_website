@@ -88,6 +88,14 @@ public class LayoutController extends BaseController {
 		return mv;
 	}
 
+	@GetMapping(value = "/content/{projectId}/{bldNo}")
+	public ModelAndView selectBldHouses(@PathVariable String projectId, @PathVariable String bldNo) {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("bldSalesData");
+		// return projectService.selectBldHouses(projectId, bldNo);
+		return mv;
+	}
+
 	@GetMapping(value = "/api/app/maps")
 	public ModelAndView appMaps(@RequestParam(required = false) String regionId,
 		@RequestParam(required = false) String x, @RequestParam(required = false) String y) {
