@@ -145,6 +145,11 @@
 			SELECT nvl(floor_no, '-') floor_no,
 				case when instr(floor_name, '层') > 0 THEN floor_name else floor_name || '层' end as floor_name
 			FROM view_houseinfo WHERE project_id = #{projectId} AND bld_no = #{bldNo}
+		]]>
+		<if test="cellNo != null">
+			AND cell_name = #{cellNo}
+		</if>
+		<![CDATA[
 			GROUP BY floor_no, floor_name
 			ORDER BY case when regexp_replace(floor_no,'^[-\+]?\d+(\.\d+)?$','') is not null then 9999 else to_number(floor_no) end DESC
 		]]>

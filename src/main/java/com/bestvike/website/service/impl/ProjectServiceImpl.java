@@ -65,6 +65,19 @@ public class ProjectServiceImpl implements ProjectService {
 	 */
 	@Override
 	public ViewRegionInfo region(String regionId, String projectId, String bldNo) {
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put("projectId", projectId);
+		parameters.put("bldNo", bldNo);
+		BldView bldView = viewHouseInfoDao.selectBldView(parameters);
+		List<Cell> listCell = viewRegionInfoDao.selectBldCells(parameters);
+		bldView.setCells(listCell);
+		if (!StringUtils.isEmpty(bldView.getViewPath())) {
+			// 楼栋下有单元标记，以单元显示房屋，并提供单元选择刷新功能
+			Cell cell = listCell.get(0);
+			ViewRegionInfo viewRegionInfo = region(regionId, projectId, bldNo, cell.getCellNo());
+			viewRegionInfo.setCellNo(cell.getCellNo());
+			return viewRegionInfo;
+		}
 		ViewRegionInfo viewRegionInfo = viewRegionInfoDao.selectRegion(regionId);
 		Map<String, Object> salesMap = viewRegionInfoDao.selectRegionSalesData(regionId);
 		List<Map<String, Object>> salesData = new ArrayList<>();
@@ -102,17 +115,6 @@ public class ProjectServiceImpl implements ProjectService {
 		if (listRegionBlds != null && listRegionBlds.size() > 0) {
 			parameterMap.put("projectId", projectId);
 			parameterMap.put("bldNo", bldNo);
-			BldView bldView = viewHouseInfoDao.selectBldView(parameterMap);
-			// 查询楼栋单元列表
-			List<Cell> listCell = viewRegionInfoDao.selectBldCells(parameterMap);
-			bldView.setCells(listCell);
-			if (!StringUtils.isEmpty(bldView.getViewPath())) {
-				// 楼栋下有单元标记，以单元显示房屋，并提供单元选择刷新功能
-				Cell cell = listCell.get(0);
-				viewRegionInfo = region(regionId, projectId, bldNo, cell.getCellNo());
-				viewRegionInfo.setCellNo(cell.getCellNo());
-				return viewRegionInfo;
-			}
 			// 查询楼栋楼层列表
 			List<Floor> listFloor = viewRegionInfoDao.selectBldFloors(parameterMap);
 			for (Floor floor : listFloor) {
@@ -198,12 +200,12 @@ public class ProjectServiceImpl implements ProjectService {
 			// 查询楼栋单元列表
 			List<Cell> listCell = viewRegionInfoDao.selectBldCells(parameterMap);
 			bldView.setCells(listCell);
-			// 查询楼栋楼层列表
+			// 查询楼栋单元楼层列表
+			parameterMap.put("cellNo", cellNo);
 			List<Floor> listFloor = viewRegionInfoDao.selectBldFloors(parameterMap);
 			for (Floor floor : listFloor) {
 				// 查询楼层单元信息
 				parameterMap.put("floorNo", floor.getFloorNo());
-				parameterMap.put("cellNo", cellNo);
 				List<Cell> listFloorCell = viewRegionInfoDao.selectFloorCells(parameterMap);
 				// 只有一个单元
 				if (listFloorCell != null && listFloorCell.size() > 0) {
@@ -287,6 +289,7 @@ public class ProjectServiceImpl implements ProjectService {
 							parameterMap.put("cellNo", cell.getCellNo());
 							List<ViewHouseInfo> listHouse = viewHouseInfoDao.selectFloorCellHouses(parameterMap);
 							cell.setHouses(listHouse);
+							parameterMap.remove("cellNo");
 						}
 						bldView.setShowCell(true);
 					}
