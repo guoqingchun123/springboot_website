@@ -3,6 +3,7 @@ package com.bestvike.website.entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.Entity;
+import javax.persistence.Transient;
 
 @Entity
 public class BldSales implements Serializable {
@@ -19,6 +20,9 @@ public class BldSales implements Serializable {
 	private BigDecimal closeNum;
 	private BigDecimal mortgageNum;
 	private BigDecimal frozenNum;
+
+	@Transient
+	private String cellName;
 
 	public String getProjectId() {
 		return projectId;
@@ -98,5 +102,13 @@ public class BldSales implements Serializable {
 
 	public void setFrozenNum(BigDecimal frozenNum) {
 		this.frozenNum = frozenNum;
+	}
+
+	public String getCellName() {
+		return cellName;
+	}
+
+	public void setCellName(String cellName) {
+		this.cellName = cellName;
 	}
 }

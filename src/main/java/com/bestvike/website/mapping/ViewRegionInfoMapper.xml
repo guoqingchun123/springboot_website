@@ -125,7 +125,13 @@
 				count(1) over(partition BY t1.bld_no, t1.cell_name, t1.floor_no) house_num
 				FROM view_houseinfo t1 left join view_bldinfo t2
 				on t1.project_id = t2.project_id AND t1.bld_no = t2.bld_no
-				WHERE t1.project_id = #{projectId} AND t1.bld_no = #{bldNo}) t
+				WHERE t1.project_id = #{projectId} AND t1.bld_no = #{bldNo}
+		]]>
+		<if test="cellNo != null">
+			AND t1.cell_name = #{cellNo}
+		</if>
+		<![CDATA[
+			) t
 			GROUP BY cell_no, cell_name, bld_name, bld_no
 			ORDER BY lpad(cell_name, 10, '0') asc
 		]]>

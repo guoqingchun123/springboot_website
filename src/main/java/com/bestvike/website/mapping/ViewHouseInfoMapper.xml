@@ -99,6 +99,7 @@
 		<![CDATA[
 			SELECT t.project_id, t.bld_no,
 				CASE WHEN instr(t2.bld_name, '#') > 0 THEN t2.bld_name else t2.bld_name || '#' end bld_name,
+				t.cell_name || '单元' cell_name,
 				count(1) total_num,
 				SUM(CASE WHEN presell_state = '已售' then 1 else 0 end) sell_num,
 				sum(case when sales_flag = '否' then 1 else 0 end) no_sale_num,
@@ -108,8 +109,16 @@
 				sum(case when presell_state = '未售' and sales_flag = '是' then 1 else 0 end) no_saled_num
 			FROM view_houseinfo t left join view_bldInfo t2 on t.project_id = t2.project_id and t.bld_no = t2.bld_no
 			WHERE t.project_id = #{projectId} AND t.bld_no = #{bldNo}
-			group by t.project_id, t.bld_no, t2.bld_name
 		]]>
+		<if test="cellNo != null">
+			AND t.cell_name = #{cellNo}
+		</if>
+		<![CDATA[
+			group by t.project_id, t.bld_no, t2.bld_name
+			]]>
+		<if test="cellNo != null">
+			, t.cell_name
+		</if>
 	</select>
 
 	<select id = "selectCellSummary" parameterType="map" resultType="com.bestvike.website.entity.CellSummary">
@@ -184,6 +193,11 @@
 				ELSE '00dd02' END presell_state_code
 			FROM view_houseinfo t
 			WHERE t.project_id = #{projectId} AND t.bld_no = #{bldNo} AND t.floor_no = #{floorNo}
+		]]>
+		<if test="cellNo != null">
+			AND cell_name = #{cellNo}
+		</if>
+		<![CDATA[
 			ORDER BY case when regexp_replace(t.floor_no,'^[-\+]?\d+(\.\d+)?$','') is not null then 9999 else to_number(floor_no) end DESC,
 			show_name ASC, house_id ASC
 		]]>

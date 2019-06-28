@@ -197,9 +197,11 @@ public class ProjectServiceImpl implements ProjectService {
 				parameterMap.put("cellNo", cellNo);
 				List<Cell> listFloorCell = viewRegionInfoDao.selectFloorCells(parameterMap);
 				// 只有一个单元
-				Cell cell = listFloorCell.get(0);
-				List<ViewHouseInfo> listHouse = viewHouseInfoDao.selectBldHouse(parameterMap);
-				cell.setHouses(listHouse);
+				if (listFloorCell != null && listFloorCell.size() > 0) {
+					Cell cell = listFloorCell.get(0);
+					List<ViewHouseInfo> listHouse = viewHouseInfoDao.selectBldHouse(parameterMap);
+					cell.setHouses(listHouse);
+				}
 				bldView.setShowCell(false);
 				floor.setCells(listFloorCell);
 				floor.setShowCell(false);
