@@ -88,11 +88,23 @@ public class LayoutController extends BaseController {
 		return mv;
 	}
 
-	@GetMapping(value = "/content/{projectId}/{bldNo}")
-	public ModelAndView selectBldHouses(@PathVariable String projectId, @PathVariable String bldNo) {
+	@GetMapping(value = "/content/{regionId}/{projectId}/{bldNo}")
+	public ModelAndView content(@PathVariable String regionId, @PathVariable String projectId, @PathVariable String bldNo) {
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("bldSalesData");
-		// return projectService.selectBldHouses(projectId, bldNo);
+		ViewRegionInfo viewRegionInfo = projectService.region(regionId, projectId, bldNo);
+		mv.addObject("region", viewRegionInfo);
+		mv.addObject("projectId", projectId);
+		mv.addObject("bldNo", bldNo);
+		mv.setViewName("salesData");
+		return mv;
+	}
+
+	@GetMapping(value = "/content/{regionId}/{projectId}/{bldNo}/{cellNo}")
+	public ModelAndView content(@PathVariable String regionId, @PathVariable String projectId, @PathVariable String bldNo, @PathVariable String cellNo) {
+		ModelAndView mv = new ModelAndView();
+		ViewRegionInfo viewRegionInfo = projectService.region(regionId, projectId, bldNo, cellNo);
+		mv.addObject("region", viewRegionInfo);
+		mv.setViewName("salesData");
 		return mv;
 	}
 
