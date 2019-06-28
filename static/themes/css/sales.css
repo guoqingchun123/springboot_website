@@ -1,3 +1,26 @@
+.return-to {
+    display: none;
+    width: 40px;
+    height: 40px;
+    color: #ffffff;
+    background-color: #1e9fff;
+    opacity: 0.5;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 40px;
+}
+.return-to:hover {
+    color: #ffffff;
+    opacity: 1;
+}
+
+.has-return .return-to {
+    display: block;
+}
+
 .room-list {
     margin: 0;
     padding: 5px 0;
@@ -25,13 +48,12 @@
 }
 
 .bg-gdcd span.sell-state {
-    border: 1px solid #959595;
     font-size: 14px;
     height: 20px;
     line-height: 20px;
     position: absolute;
-    top: 0px;
-    right: 0px;
+    top: 5px;
+    right: 5px;
 }
 
 .m-bott {
@@ -111,7 +133,7 @@
     background-color: #09ff11;
 }
 
-.selectedBld {
+.selectedBld, .selectedCell {
     background-color: #09ff11;
 }
 
