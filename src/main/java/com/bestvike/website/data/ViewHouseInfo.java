@@ -77,6 +77,10 @@ public class ViewHouseInfo implements Serializable {
 	private BigDecimal noSaledNum;
 	@Transient
 	private BigDecimal totalNum;
+	@Transient
+	private String presellStateName;
+	@Transient
+	private String presellStateCode;
 
 	public String getHouseId() {
 		return houseId;
@@ -532,5 +536,21 @@ public class ViewHouseInfo implements Serializable {
 
 	public void setNoSaledNum(BigDecimal noSaledNum) {
 		this.noSaledNum = noSaledNum;
+	}
+
+	public String getPresellStateName() {
+		return presellStateName;
+	}
+
+	public void setPresellStateName(String presellStateName) {
+		this.presellStateName = presellStateName;
+	}
+
+	public String getPresellStateCode() {
+		return presellStateCode;
+	}
+
+	public void setPresellStateCode(String presellStateCode) {
+		this.presellStateCode = presellStateCode;
 	}
 }

@@ -1,8 +1,11 @@
 package com.bestvike.website.entity;
 
+import com.bestvike.website.data.ViewHouseInfo;
+
+import javax.persistence.Entity;
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.List;
-import javax.persistence.Entity;
 
 @Entity
 public class Cell implements Serializable {
@@ -14,6 +17,13 @@ public class Cell implements Serializable {
 
 	private String id;
 	private String text;
+
+	@Transient
+	private Integer maxHouseNum;
+	@Transient
+	private Integer showHouseNum;
+	@Transient
+	private List<ViewHouseInfo> houses;
 
 	public String getCellNo() {
 		return cellNo;
@@ -45,5 +55,29 @@ public class Cell implements Serializable {
 
 	public void setText(String text) {
 		this.cellName = text;
+	}
+
+	public Integer getMaxHouseNum() {
+		return maxHouseNum;
+	}
+
+	public void setMaxHouseNum(Integer maxHouseNum) {
+		this.maxHouseNum = maxHouseNum;
+	}
+
+	public Integer getShowHouseNum() {
+		return showHouseNum;
+	}
+
+	public void setShowHouseNum(Integer showHouseNum) {
+		this.showHouseNum = showHouseNum;
+	}
+
+	public List<ViewHouseInfo> getHouses() {
+		return houses;
+	}
+
+	public void setHouses(List<ViewHouseInfo> houses) {
+		this.houses = houses;
 	}
 }

@@ -48,7 +48,7 @@ repositories {
     }
 }
 
-jar {
+bootJar {
     baseName = project.name
     version = project.version
     from('static') {

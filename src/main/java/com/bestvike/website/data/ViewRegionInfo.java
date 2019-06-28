@@ -1,12 +1,7 @@
 package com.bestvike.website.data;
 
-import com.bestvike.website.entity.BldCells;
-import com.bestvike.website.entity.BldSales;
-import com.bestvike.website.entity.DocFiles;
-import com.bestvike.website.entity.FloorSummary;
-import com.bestvike.website.entity.HouseHoldSales;
-import com.bestvike.website.entity.MonthSales;
-import com.bestvike.website.entity.RegionBlds;
+import com.bestvike.website.entity.*;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
@@ -66,6 +61,13 @@ public class ViewRegionInfo implements Serializable {
 	private List<MonthSales> listRegionSales;
 	@Transient
 	private List<String> regionLogos;
+
+	@Transient
+	private Boolean showCell;
+	@Transient
+	private List<Floor> floors;
+	@Transient
+	private List<Cell> cells;
 
 	public String getRegionId() {
 		return regionId;
@@ -273,5 +275,29 @@ public class ViewRegionInfo implements Serializable {
 
 	public void setRegionLogos(List<String> regionLogos) {
 		this.regionLogos = regionLogos;
+	}
+
+	public Boolean getShowCell() {
+		return showCell;
+	}
+
+	public void setShowCell(Boolean showCell) {
+		this.showCell = showCell;
+	}
+
+	public List<Floor> getFloors() {
+		return floors;
+	}
+
+	public void setFloors(List<Floor> floors) {
+		this.floors = floors;
+	}
+
+	public List<Cell> getCells() {
+		return cells;
+	}
+
+	public void setCells(List<Cell> cells) {
+		this.cells = cells;
 	}
 }

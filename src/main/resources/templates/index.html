@@ -35,16 +35,34 @@
 			color: green !important;
 		}
 
+		.summary-card {
+			cursor: pointer;
+			margin-bottom: 1px;
+		}
 		.summary-card:hover {
 			background-color: #fafafa;
 		}
 
-		.summary-card:hover .region-name {
+		.summary-card .region-name {
 			color: green;
 		}
 
+		.summary-card:hover .region-info button {
+			background-color: #1e9fff;
+			border: 1px solid #1e9fff;
+			color: #ffffff;
+		}
+
+		.layui-form-search {
+			margin-bottom: 10px;
+			padding-top: 10px;
+		}
+
 		.layui-form-search .layui-elem-quote {
-			border-left: none;
+			border: none;
+			margin-bottom: 0;
+			padding-top: 10px;
+			padding-bottom: 10px;
 		}
 
 		.layui-card .layui-elem-quote {
@@ -123,7 +141,7 @@
 	</div>
 </div>
 <script id="regionCardScript" type="text/html">
-	<blockquote class="layui-elem-quote layui-quote-nm" style="background-color: #fafafa">
+	<blockquote class="layui-elem-quote layui-quote-nm" style="background-color: #fafafa; margin-bottom: 0; border-left: 0;">
 		小区列表：共为您筛选出<label style="color: red">{{d.page.totalSize}}</label>个小区
 	</blockquote>
 	{{#  layui.each(d.list, function(index, item){ }}
@@ -143,8 +161,9 @@
 				</div>
 				<div class="layui-col-md9 region-info" style="float: left; padding-left: 30px">
 					<p class="layui-elem-quote region-name">{{item.regionName}}</p>
-					<p class="layui-elem-quote">小区地址：<label>{{item.address}}</label></p>
-					<p class="layui-elem-quote">预售许可日期：<label>{{item.preSaleDate}}</label></p>
+					<p class="layui-elem-quote"><span class="gray">小区地址：</span><label>{{item.address}}</label></p>
+					<p class="layui-elem-quote"><span class="gray">预售许可日期：</span><label>{{item.preSaleDate}}</label></p>
+					<p class="layui-elem-quote"><button type="button" class="layui-btn layui-btn-primary summary-btn" value="{{=item.regionId }}">查看详情</button></p>
 				</div>
 			</div>
 			<div class="layui-col-md3" style="text-align: right;padding-top: 50px">
