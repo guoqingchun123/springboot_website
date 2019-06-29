@@ -244,15 +244,9 @@
 
 	<select id = "selectMonthData" resultType = "com.bestvike.website.entity.MonthData">
 		<![CDATA[
-			SELECT t1.sign_month, t2.construct_area
-		  	FROM (SELECT TO_CHAR(add_months(sysdate, rownum - 12), 'yyyy-MM') sign_month FROM DUAL CONNECT BY ROWNUM <= 12) t1
-				LEFT JOIN
-				(SELECT TO_CHAR(to_date(sign_date, 'yyyy-MM-dd'), 'yyyy-MM') sign_month,
-					SUM(case when vhi.construct_area) construct_area
-			    FROM view_houseinfo vhi LEFT JOIN view_bldinfo vbi on vhi.project_id = vbi.project_id and vhi.bld_no = vbi.bld_no
-			    GROUP BY TO_CHAR(to_date(sign_date, 'yyyy-MM-dd'), 'yyyy-MM')) t2
-			ON t1.sign_month = t2.sign_month
-			ORDER BY t1.sign_month asc
+			SELECT * from view_monthdata
+			WHERE data_month >= TO_CHAR(add_months(sysdate, -12), 'yyyy-MM')
+			ORDER BY data_month asc
 		]]>
 	</select>
 
