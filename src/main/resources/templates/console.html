@@ -92,6 +92,7 @@
 		}
 		
 		.list-trade h3 {
+			text-align: center;
 			font-size: 18px;
 			color: #333333;
 			padding: 5px 5px 0px 5px;;
@@ -158,7 +159,7 @@
 		<div id="content-price" class="container chart-price"></div>
 	</div>
 	<div class="layui-col-md4">
-		<div id="content-map" class="container chart-map">地图</div>
+		<div id="content-map" class="container chart-map"></div>
 	</div>
 	<div id="content-right" class="layui-col-md4">
 		<div class="container list-trade">
@@ -181,17 +182,22 @@
 		saleChart.setOption({
 			title: {
 				text: '商品房供给和销售情况示意图',
+				x: 'center',
 				textStyle: {
 					fontSize: '18',
 					color: '#333333'
-				}
+				},
+                subtext: '单位：万平方米',
+                subtextStyle: {
+                    color: '#333333'
+                }
 			},
 			tooltip: {
 				trigger: 'axis'
 			},
 			legend: {
 				y: 'bottom',
-				data: ['商品房(供给)', '商品房(销售)', '商品房住宅(供给)', '商品房住宅(销售)']
+				data: ['住宅(供给)', '住宅(销售)', '商业(供给)', '商业(销售)', '配套(供给)', '配套(销售)']
 			},
 			xAxis: [
 				{
@@ -251,17 +257,22 @@
 		priceChart.setOption({
 			title: {
 				text: '商品房销售均价示意图',
+				x: 'center',
 				textStyle: {
 					fontSize: '18',
 					color: '#333333'
-				}
+				},
+                subtext: '单位：元/平方米',
+                subtextStyle: {
+                    color: '#333333'
+                }
 			},
 			tooltip: {
 				trigger: 'axis'
 			},
 			legend: {
 				y: 'bottom',
-				data: ['住宅均价', '商业均价', '配套均价']
+				data: ['住宅', '商业', '配套']
 			},
 			xAxis: [
 				{
@@ -307,10 +318,15 @@
 		stockChart.setOption({
 			title: {
 				text: '商品房库存情况示意图',
+				x: 'center',
 				textStyle: {
 					fontSize: '18',
 					color: '#333333'
-				}
+				},
+                subtext: '单位：万平方米',
+                subtextStyle: {
+                    color: '#333333'
+                }
 			},
 			tooltip: {
 				trigger: 'axis'
@@ -368,6 +384,7 @@
 			mapChart.setOption(option = {
 				title: {
 					text: '房源热度图',
+					x: 'center',
 					textStyle: {
 						fontSize: '18',
 						color: '#333333'
