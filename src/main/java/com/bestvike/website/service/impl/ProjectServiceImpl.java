@@ -18,7 +18,7 @@ import com.bestvike.website.entity.Floor;
 import com.bestvike.website.entity.FloorSummary;
 import com.bestvike.website.entity.House;
 import com.bestvike.website.entity.HouseHoldSales;
-import com.bestvike.website.entity.MonthSales;
+import com.bestvike.website.entity.MonthData;
 import com.bestvike.website.entity.PageBean;
 import com.bestvike.website.entity.Region;
 import com.bestvike.website.entity.RegionBlds;
@@ -309,7 +309,7 @@ public class ProjectServiceImpl implements ProjectService {
 			parameterMap.clear();
 			parameterMap.put("regionId", regionId);
 			parameterMap.put("preSaleDate", viewRegionInfo.getPreSaleDate());
-			List<MonthSales> listRegionSales = viewRegionInfoDao.selectRegionMonthSales(parameterMap);
+			List<MonthData> listRegionSales = viewRegionInfoDao.selectRegionMonthSale(parameterMap);
 			viewRegionInfo.setListRegionSales(listRegionSales);
 		}
 		return viewRegionInfo;

@@ -130,7 +130,7 @@
 				on t1.project_id = t2.project_id AND t1.bld_no = t2.bld_no
 				WHERE t1.project_id = #{projectId} AND t1.bld_no = #{bldNo}
 		]]>
-		<if test="cellNo != null">
+		<if test = "cellNo != null">
 			AND t1.cell_name = #{cellNo}
 		</if>
 		<![CDATA[
@@ -140,13 +140,13 @@
 		]]>
 	</select>
 
-	<select id = "selectBldFloors" parameterType="map" resultType="com.bestvike.website.entity.Floor">
+	<select id = "selectBldFloors" parameterType = "map" resultType = "com.bestvike.website.entity.Floor">
 		<![CDATA[
 			SELECT nvl(floor_no, '-') floor_no,
 				case when instr(floor_name, '层') > 0 THEN floor_name else floor_name || '层' end as floor_name
 			FROM view_houseinfo WHERE project_id = #{projectId} AND bld_no = #{bldNo}
 		]]>
-		<if test="cellNo != null">
+		<if test = "cellNo != null">
 			AND cell_name = #{cellNo}
 		</if>
 		<![CDATA[
@@ -155,7 +155,7 @@
 		]]>
 	</select>
 
-	<select id = "selectFloorCells" parameterType="map" resultType="com.bestvike.website.entity.Cell">
+	<select id = "selectFloorCells" parameterType = "map" resultType = "com.bestvike.website.entity.Cell">
 		<![CDATA[
 			SELECT cell_no, cell_name, max(house_num) max_house_num, max(house_num) show_house_num
 			from (
@@ -163,7 +163,7 @@
 				count(1) over(partition BY bld_no, cell_name, floor_no) house_num
 				FROM view_houseinfo WHERE project_id = #{projectId} AND bld_no = #{bldNo} AND floor_no = #{floorNo}
 		]]>
-		<if test="cellNo != null">
+		<if test = "cellNo != null">
 			AND cell_name = #{cellNo}
 		</if>
 		<![CDATA[
@@ -185,7 +185,7 @@
 		]]>
 	</select>
 
-	<select id = "selectRegionMonthSales" parameterType = "String" resultType = "com.bestvike.website.entity.MonthSales">
+	<select id = "selectRegionMonthSale" parameterType = "String" resultType = "com.bestvike.website.entity.MonthData">
 		<![CDATA[
 			SELECT t1.sign_month, t2.residence_num, t2.business_num, t2.mating_num FROM
 			(SELECT TO_CHAR(ADD_MONTHS(TO_DATE(#{preSaleDate}, 'yyyy-MM-dd'), ROWNUM - 1),'YYYY-MM') sign_month
@@ -209,6 +209,59 @@
 			SELECT * FROM view_regioninfo t WHERE exists(
 				select 1 FROM ass_regbld where project_id = #{projectId} and region_id = t.region_id
 			)
+		]]>
+	</select>
+
+	<select id = "selectRegionNum" resultType = "BigDecimal">
+		<![CDATA[
+			SELECT count(1) FROM view_regioninfo
+		]]>
+	</select>
+
+	<select id = "selectStockArea" resultType = "BigDecimal">
+		<![CDATA[
+			select sum(t.construct_area) from view_houseinfo t
+			where exists(select 1 from ass_regbld where bld_no = t.bld_no and project_id = t.project_id)
+			and t.presell_state = '未售' and t.sales_flag = '是'
+		]]>
+	</select>
+
+	<select id = "selectYesterdayTradingArea" resultType = "BigDecimal">
+		<![CDATA[
+			SELECT sum(t.construct_area) from view_houseinfo t
+			where exists(select 1 from ass_regbld where bld_no = t.bld_no and project_id = t.project_id)
+			and t.sign_date = to_char(TRUNC(sysdate - 1), 'yyyy-mm-dd')
+		]]>
+	</select>
+
+	<select id = "selectTodayTradingArea" resultType = "BigDecimal">
+		<![CDATA[
+			SELECT sum(t.construct_area) from view_houseinfo t
+			where exists(select 1 from ass_regbld where bld_no = t.bld_no and project_id = t.project_id)
+			and t.sign_date = to_char(TRUNC(sysdate), 'yyyy-mm-dd')
+		]]>
+	</select>
+
+	<select id = "selectMonthData" resultType = "com.bestvike.website.entity.MonthData">
+		<![CDATA[
+			SELECT t1.sign_month, t2.construct_area
+		  	FROM (SELECT TO_CHAR(add_months(sysdate, rownum - 12), 'yyyy-MM') sign_month FROM DUAL CONNECT BY ROWNUM <= 12) t1
+				LEFT JOIN
+				(SELECT TO_CHAR(to_date(sign_date, 'yyyy-MM-dd'), 'yyyy-MM') sign_month,
+					SUM(case when vhi.construct_area) construct_area
+			    FROM view_houseinfo vhi LEFT JOIN view_bldinfo vbi on vhi.project_id = vbi.project_id and vhi.bld_no = vbi.bld_no
+			    GROUP BY TO_CHAR(to_date(sign_date, 'yyyy-MM-dd'), 'yyyy-MM')) t2
+			ON t1.sign_month = t2.sign_month
+			ORDER BY t1.sign_month asc
+		]]>
+	</select>
+
+	<select id = "selectTodayTrade" resultType="com.bestvike.website.entity.Trade">
+		<![CDATA[
+			SELECT t3.region_name, t1.sign_date, t1.address, t1.house_hold, t1.record_date, t1.pay_type
+			FROM view_houseinfo t1 LEFT JOIN ass_regbld t2 on t1.project_id = t2.project_id and t1.bld_no = t2.bld_no
+			LEFT JOIN view_regioninfo t3 ON t2.region_id = t3.region_id
+			WHERE t1.sign_date = to_char(sysdate, 'yyyy-mm-dd')
 		]]>
 	</select>
 </mapper>

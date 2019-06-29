@@ -5,9 +5,11 @@ import com.bestvike.website.entity.BldCells;
 import com.bestvike.website.entity.Cell;
 import com.bestvike.website.entity.Floor;
 import com.bestvike.website.entity.HouseHoldSales;
-import com.bestvike.website.entity.MonthSales;
+import com.bestvike.website.entity.MonthData;
 import com.bestvike.website.entity.Region;
 import com.bestvike.website.entity.RegionBlds;
+import com.bestvike.website.entity.Trade;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import org.springframework.stereotype.Repository;
@@ -36,7 +38,19 @@ public interface ViewRegionInfoDao extends Mapper<ViewRegionInfo> {
 
 	public List<RegionBlds> selectRegionBlds(String regionId);
 
-	public List<MonthSales> selectRegionMonthSales(Map<String, Object> parameterMap);
+	public List<MonthData> selectRegionMonthSale(Map<String, Object> parameterMap);
 
 	public ViewRegionInfo selectRegionByProjectId(String projectId);
+
+	public BigDecimal selectRegionNum();
+
+	public BigDecimal selectStockArea();
+
+	public BigDecimal selectYesterdayTradingArea();
+
+	public BigDecimal selectTodayTradingArea();
+
+	public List<MonthData> selectMonthData();
+
+	public List<Trade> selectTodayTrade();
 }

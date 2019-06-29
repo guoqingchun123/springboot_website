@@ -102,4 +102,17 @@ public class LayoutController extends BaseController {
 		mv.setViewName("appMaps");
 		return mv;
 	}
+
+	/**
+	 * 大数据屏数据返回
+	 * @return
+	 */
+	@GetMapping(value = "/console")
+	public ModelAndView console() {
+		ModelAndView mv = new ModelAndView();
+		Map<String, Object> data = layoutService.selectConsoleData();
+		mv.addObject("data", data);
+		mv.setViewName("console");
+		return mv;
+	}
 }

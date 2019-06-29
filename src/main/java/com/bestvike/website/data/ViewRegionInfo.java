@@ -58,7 +58,7 @@ public class ViewRegionInfo implements Serializable {
 	@Transient
 	private BldSales bldSales;
 	@Transient
-	private List<MonthSales> listRegionSales;
+	private List<MonthData> listRegionSales;
 	@Transient
 	private List<String> regionLogos;
 
@@ -265,11 +265,11 @@ public class ViewRegionInfo implements Serializable {
 		this.bldSales = bldSales;
 	}
 
-	public List<MonthSales> getListRegionSales() {
+	public List<MonthData> getListRegionSales() {
 		return listRegionSales;
 	}
 
-	public void setListRegionSales(List<MonthSales> listRegionSales) {
+	public void setListRegionSales(List<MonthData> listRegionSales) {
 		this.listRegionSales = listRegionSales;
 	}
 
