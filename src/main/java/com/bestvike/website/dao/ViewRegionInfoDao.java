@@ -5,7 +5,7 @@ import com.bestvike.website.entity.BldCells;
 import com.bestvike.website.entity.Cell;
 import com.bestvike.website.entity.DivisionTrade;
 import com.bestvike.website.entity.Floor;
-import com.bestvike.website.entity.HouseHoldSales;
+import com.bestvike.website.entity.HouseHoldSale;
 import com.bestvike.website.entity.MonthData;
 import com.bestvike.website.entity.Region;
 import com.bestvike.website.entity.RegionBlds;
@@ -27,7 +27,7 @@ public interface ViewRegionInfoDao extends Mapper<ViewRegionInfo> {
 
 	public Map<String, Object> selectRegionSalesData(String regionId);
 
-	public List<HouseHoldSales> selectRegionHouseHoldData(Map<String, Object> parameterMap);
+	public List<HouseHoldSale> selectRegionHouseHoldData(Map<String, Object> parameterMap);
 
 	public List<BldCells> selectBlds(String regionId);
 

@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import javax.persistence.Entity;
 
 @Entity
-public class HouseHoldSales implements Serializable {
+public class HouseHoldSale implements Serializable {
 
 	private static final long serialVersionUID = -8881290539595052784L;
 
@@ -16,6 +16,7 @@ public class HouseHoldSales implements Serializable {
 	private BigDecimal sellNum;
 	private BigDecimal nosaledNum;
 	private BigDecimal nosaleNum;
+	private BigDecimal sellPrice;
 
 	public String getHouseUse() {
 		return houseUse;
@@ -71,5 +72,13 @@ public class HouseHoldSales implements Serializable {
 
 	public void setNosaleNum(BigDecimal nosaleNum) {
 		this.nosaleNum = nosaleNum;
+	}
+
+	public BigDecimal getSellPrice() {
+		return sellPrice;
+	}
+
+	public void setSellPrice(BigDecimal sellPrice) {
+		this.sellPrice = sellPrice;
 	}
 }

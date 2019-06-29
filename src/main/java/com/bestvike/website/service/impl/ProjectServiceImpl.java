@@ -17,7 +17,7 @@ import com.bestvike.website.entity.DocFiles;
 import com.bestvike.website.entity.Floor;
 import com.bestvike.website.entity.FloorSummary;
 import com.bestvike.website.entity.House;
-import com.bestvike.website.entity.HouseHoldSales;
+import com.bestvike.website.entity.HouseHoldSale;
 import com.bestvike.website.entity.MonthData;
 import com.bestvike.website.entity.PageBean;
 import com.bestvike.website.entity.Region;
@@ -105,7 +105,7 @@ public class ProjectServiceImpl implements ProjectService {
 
 		Map<String, Object> parameterMap = new HashMap<>();
 		parameterMap.put("regionId", regionId);
-		List<HouseHoldSales> listHouseHold = viewRegionInfoDao.selectRegionHouseHoldData(parameterMap);
+		List<HouseHoldSale> listHouseHold = viewRegionInfoDao.selectRegionHouseHoldData(parameterMap);
 		viewRegionInfo.setSalesData(salesData);
 		viewRegionInfo.setListHouseHold(listHouseHold);
 		// 查询小区楼栋列表
@@ -186,7 +186,7 @@ public class ProjectServiceImpl implements ProjectService {
 
 		Map<String, Object> parameterMap = new HashMap<>();
 		parameterMap.put("regionId", regionId);
-		List<HouseHoldSales> listHouseHold = viewRegionInfoDao.selectRegionHouseHoldData(parameterMap);
+		List<HouseHoldSale> listHouseHold = viewRegionInfoDao.selectRegionHouseHoldData(parameterMap);
 		viewRegionInfo.setSalesData(salesData);
 		viewRegionInfo.setListHouseHold(listHouseHold);
 		// 查询小区楼栋列表
@@ -229,6 +229,7 @@ public class ProjectServiceImpl implements ProjectService {
 	@Override
 	public ViewRegionInfo region(String regionId, String viewType) {
 		ViewRegionInfo viewRegionInfo = viewRegionInfoDao.selectRegion(regionId);
+
 		Map<String, Object> salesMap = viewRegionInfoDao.selectRegionSalesData(regionId);
 		List<Map<String, Object>> salesData = new ArrayList<>();
 		if (null != salesMap) {
@@ -255,7 +256,7 @@ public class ProjectServiceImpl implements ProjectService {
 
 		Map<String, Object> parameterMap = new HashMap<>();
 		parameterMap.put("regionId", regionId);
-		List<HouseHoldSales> listHouseHold = viewRegionInfoDao.selectRegionHouseHoldData(parameterMap);
+		List<HouseHoldSale> listHouseHold = viewRegionInfoDao.selectRegionHouseHoldData(parameterMap);
 		viewRegionInfo.setSalesData(salesData);
 		viewRegionInfo.setListHouseHold(listHouseHold);
 		if (StringUtils.isEmpty(viewType) || "salesData".equals(viewType)) {
@@ -386,11 +387,11 @@ public class ProjectServiceImpl implements ProjectService {
 		Map<String, Object> parameterMap = new HashMap<>();
 		parameterMap.put("regionId", regionId);
 		parameterMap.put("houseUse", "01");
-		List<HouseHoldSales> residence = viewRegionInfoDao.selectRegionHouseHoldData(parameterMap);
+		List<HouseHoldSale> residence = viewRegionInfoDao.selectRegionHouseHoldData(parameterMap);
 		result.put("residence", residence);
 		// 查询配套销售情况
 		parameterMap.put("houseUse", "99");
-		List<HouseHoldSales> mating = viewRegionInfoDao.selectRegionHouseHoldData(parameterMap);
+		List<HouseHoldSale> mating = viewRegionInfoDao.selectRegionHouseHoldData(parameterMap);
 		result.put("mating", mating);
 		// 查询各种房屋类型的销售均价
 //		List<HousePrice> housePrices = viewRegionInfoDao.selectHousePrices(regionId);
