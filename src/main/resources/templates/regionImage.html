@@ -1,11 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta charset="UTF-8">
-	<title>赤峰市房产信息网</title>
-	<link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}"/>
-	<link th:href="@{/layui/css/layui.css}" rel="stylesheet" type="text/css">
-	<link th:href="@{/layui/autocomplete/autocomplete.css}" rel="stylesheet" type="text/css">
+	<div th:replace="common :: header"></div>
 	<link th:href="@{/layui/css/maps.css}" rel="stylesheet" type="text/css">
 	<link th:href="@{/layui/viewer/css/viewer.min.css}" rel="stylesheet">
 	<style>
@@ -26,7 +22,7 @@
 		}
 	</style>
 </head>
-<body class="layui-layout-body" style="min-width: 1000px;overflow-x: auto;overflow-y: auto;background: #f1f1f1">
+<body class="layui-layout-body layout-body">
 <div class="layui-layout layui-layout-admin">
 	<div class="layui-header layui-bg-blue" style="position: fixed;width: 100%;">
 		<div class="layui-col-md3" style="padding-left: 15px;padding-top: 15px">
@@ -72,6 +68,7 @@
 		</div>
 	</div>
 </div>
+<div th:replace="common :: footer"></div>
 <script id="regionImageDivScript" type="text/html">
 	{{# layui.each(d, function(index, docFiles){ }}
 	{{# if(docFiles != null && docFiles.imageList != null && docFiles.imageList.length > 0){ }}
@@ -101,7 +98,7 @@
 		var $ = layui.jquery;
 		var autocomplete = layui.autocomplete;
 
-		$("#layui-body").height(window.innerHeight - 60);
+		// $("#layui-body").height(window.innerHeight - 60);
 
 		// auto 快速定位，过滤小区
 		autocomplete.render({
@@ -136,7 +133,9 @@
 			var viewType = $(this).attr("data-value");
 			if (viewType === 'index') {
 				window.location.replace(ctxPath);
-			} else {
+			} else if (viewType === 'salesData') {
+                window.location.replace(ctxPath + 'content/' + [[${region.regionId}]]);
+            } else {
 				window.location.replace(ctxPath + 'content/' + [[${region.regionId}]] + "?viewType=" + viewType);
 			}
 		});

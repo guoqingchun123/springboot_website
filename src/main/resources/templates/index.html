@@ -1,11 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta charset="UTF-8">
-	<title>赤峰市房产信息网</title>
-	<link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}"/>
-	<link th:href="@{/layui/css/layui.css}" rel="stylesheet" type="text/css">
-	<link th:href="@{/layui/autocomplete/autocomplete.css}" rel="stylesheet" type="text/css">
+	<div th:replace="common :: header"></div>
 	<style type="text/css">
 		.layui-div-search {
 			display: inline-block;
@@ -80,7 +76,7 @@
 		}
 	</style>
 </head>
-<body class="layui-layout-body" style="min-width: 1000px;overflow-x: auto;overflow-y: auto;background: #f1f1f1">
+<body class="layui-layout-body layout-body">
 <div class="layui-layout layui-layout-admin">
 	<div class="layui-header layui-bg-blue" style="position: fixed;width: 100%;">
 		<div class="layui-col-md3" style="padding-left: 15px;padding-top: 15px">
@@ -140,6 +136,7 @@
 		<div id="page" style="text-align: right"></div>
 	</div>
 </div>
+<div th:replace="common :: footer"></div>
 <script id="regionCardScript" type="text/html">
 	<blockquote class="layui-elem-quote layui-quote-nm" style="background-color: #fafafa; margin-bottom: 0; border-left: 0;">
 		小区列表：共为您筛选出<label style="color: red">{{d.page.totalSize}}</label>个小区

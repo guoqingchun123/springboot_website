@@ -1,0 +1,28 @@
+.layout-body {
+    min-width: 1000px;
+    overflow-x: auto;
+    overflow-y: auto;
+    background: #f1f1f1;
+}
+.layout-footer {
+    width: 600px;
+    margin: 20px auto 30px;
+    position: relative;
+}
+.layout-footer .shiye {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+.layout-footer .zc {
+    position: absolute;
+    right: -80px;
+    bottom: 0;
+}
+.layout-footer .description {
+    text-align: center;
+    font-size: 14px;
+}
+.layout-footer .description span {
+    padding: 0 10px;
+}
