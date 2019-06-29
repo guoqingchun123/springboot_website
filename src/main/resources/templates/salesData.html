@@ -32,6 +32,9 @@
 				  <a href="javascript:;" data-value="houseHold">户型图</a>
 				  <a href="javascript:;" data-value="regionImage">项目相册</a>
 				</span>
+				<p th:each="houseHold:${region.listHouseHold}">
+					<span th:text="${houseHold.houseUse}"></span>
+				</p>
 			</div>
 		</div>
 		<div style="width: 100%;background-color: white;margin-top: 10px;height:auto;overflow:hidden;">

@@ -88,6 +88,7 @@
 	<select id = "selectRegionHouseHoldData" parameterType = "map" resultType = "com.bestvike.website.entity.HouseHoldSale">
 		<![CDATA[
 			SELECT house_use, house_hold, COUNT(1) total_num,
+			case when instr(house_use, '住宅') > 0 THEN house_hold else house_use END house_show,
 			sum(case when t.presell_state = '已售' then 1 else 0 end) sell_num,
 			sum(case when t.presell_state = '已售' then t.sale_amount else 0 end)
 				/ (sum(case when t.presell_state = '已售' then t.construct_area else 0 end) + 0.00001) sell_price,

@@ -9,6 +9,7 @@ public class HouseHoldSale implements Serializable {
 
 	private static final long serialVersionUID = -8881290539595052784L;
 
+	private String houseShow;
 	private String houseUse;
 	private String houseHold;
 	private String nosaleReason;
@@ -17,6 +18,14 @@ public class HouseHoldSale implements Serializable {
 	private BigDecimal nosaledNum;
 	private BigDecimal nosaleNum;
 	private BigDecimal sellPrice;
+
+	public String getHouseShow() {
+		return houseShow;
+	}
+
+	public void setHouseShow(String houseShow) {
+		this.houseShow = houseShow;
+	}
 
 	public String getHouseUse() {
 		return houseUse;
