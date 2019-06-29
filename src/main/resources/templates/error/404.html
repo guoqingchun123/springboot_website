@@ -1,12 +1,48 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="renderer" content="webkit">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>赤峰市房产信息网</title>
-    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}"/>
+    <div th:replace="common :: header"></div>
+    <style>
+        html {
+            height: 100%;
+        }
+        body {
+            height: 100%;
+        }
+        .description {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-left: -480px;
+            margin-top: -60px;
+            font-size: 16px;
+        }
+        .description h3 {
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .description .operate {
+            margin-top: 10px;
+        }
+    </style>
 </head>
-<body>
-404错误
+<body th:style="'background: url(' + @{/themes/images/404.png} + ') no-repeat center center'">
+    <div class="description">
+        <h3>页面找不到了！！</h3>
+        <div>可能原因有：</div>
+        <div>网站可能在进行维护或出现了程序问题</div>
+        <div class="operate">
+            <button type="button" class="layui-btn layui-btn-primary" onclick="doRefresh()">刷新网页</button>
+            <button type="button" class="layui-btn" onclick="toIndex()">回到首页</button>
+        </div>
+    </div>
+<script th:inline="javascript">
+    var ctxPath = /*[[@{/}]]*/'';
+    function doRefresh() {
+        window.location.reload();
+    }
+    function toIndex () {
+        window.location.replace(ctxPath);
+    }
+</script>
 </body>
