@@ -392,6 +392,8 @@ public class ProjectServiceImpl implements ProjectService {
 		parameterMap.put("houseUse", "99");
 		List<HouseHoldSales> mating = viewRegionInfoDao.selectRegionHouseHoldData(parameterMap);
 		result.put("mating", mating);
+		// 查询各种房屋类型的销售均价
+//		List<HousePrice> housePrices = viewRegionInfoDao.selectHousePrices(regionId);
 		return result;
 	}
 

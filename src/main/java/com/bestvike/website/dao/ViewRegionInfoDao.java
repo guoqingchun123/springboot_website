@@ -3,6 +3,7 @@ package com.bestvike.website.dao;
 import com.bestvike.website.data.ViewRegionInfo;
 import com.bestvike.website.entity.BldCells;
 import com.bestvike.website.entity.Cell;
+import com.bestvike.website.entity.DivisionTrade;
 import com.bestvike.website.entity.Floor;
 import com.bestvike.website.entity.HouseHoldSales;
 import com.bestvike.website.entity.MonthData;
@@ -53,4 +54,6 @@ public interface ViewRegionInfoDao extends Mapper<ViewRegionInfo> {
 	public List<MonthData> selectMonthData();
 
 	public List<Trade> selectTodayTrade();
+
+	public List<DivisionTrade> selectDivisionTrade();
 }

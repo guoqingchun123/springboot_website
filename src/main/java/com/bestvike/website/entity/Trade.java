@@ -2,6 +2,7 @@ package com.bestvike.website.entity;
 
 import java.io.Serializable;
 import javax.persistence.Entity;
+import org.springframework.util.StringUtils;
 
 @Entity
 public class Trade implements Serializable {
@@ -14,6 +15,8 @@ public class Trade implements Serializable {
 	private String signDate;
 	private String recordDate;
 	private String payType;
+	private String buyerNames;
+	private String contractNo;
 
 	public String getRegionName() {
 		return regionName;
@@ -61,5 +64,21 @@ public class Trade implements Serializable {
 
 	public void setPayType(String payType) {
 		this.payType = payType;
+	}
+
+	public String getBuyerNames() {
+		return buyerNames;
+	}
+
+	public void setBuyerNames(String buyerNames) {
+		this.buyerNames = buyerNames;
+	}
+
+	public String getContractNo() {
+		return contractNo;
+	}
+
+	public void setContractNo(String contractNo) {
+		this.contractNo = contractNo;
 	}
 }

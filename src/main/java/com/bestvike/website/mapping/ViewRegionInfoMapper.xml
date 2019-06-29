@@ -230,16 +230,18 @@
 		<![CDATA[
 			SELECT sum(t.construct_area) from view_houseinfo t
 			where exists(select 1 from ass_regbld where bld_no = t.bld_no and project_id = t.project_id)
-			and t.sign_date = to_char(TRUNC(sysdate - 1), 'yyyy-mm-dd')
+			and t.sign_date is null
 		]]>
+		<!--to_char(TRUNC(sysdate - 1), 'yyyy-mm-dd')-->
 	</select>
 
 	<select id = "selectTodayTradingArea" resultType = "BigDecimal">
 		<![CDATA[
 			SELECT sum(t.construct_area) from view_houseinfo t
 			where exists(select 1 from ass_regbld where bld_no = t.bld_no and project_id = t.project_id)
-			and t.sign_date = to_char(TRUNC(sysdate), 'yyyy-mm-dd')
+			and t.sign_date is null
 		]]>
+		<!--to_char(TRUNC(sysdate), 'yyyy-mm-dd')-->
 	</select>
 
 	<select id = "selectMonthData" resultType = "com.bestvike.website.entity.MonthData">
@@ -252,10 +254,23 @@
 
 	<select id = "selectTodayTrade" resultType="com.bestvike.website.entity.Trade">
 		<![CDATA[
-			SELECT t3.region_name, t1.sign_date, t1.address, t1.house_hold, t1.record_date, t1.pay_type
+			SELECT t3.region_name, t1.sign_date, t1.address, t1.house_hold, t1.record_date, t1.buyer_names, t1.contract_no
 			FROM view_houseinfo t1 LEFT JOIN ass_regbld t2 on t1.project_id = t2.project_id and t1.bld_no = t2.bld_no
 			LEFT JOIN view_regioninfo t3 ON t2.region_id = t3.region_id
-			WHERE t1.sign_date = to_char(sysdate, 'yyyy-mm-dd')
+			WHERE t1.sign_date is null
+		]]>
+		<!--WHERE t1.sign_date = to_char(sysdate, 'yyyy-mm-dd')-->
+	</select>
+
+	<select id = "selectDivisionTrade" resultType="com.bestvike.website.entity.DivisionTrade">
+		<![CDATA[
+			SELECT t1.division_name name, count(1) as value
+			from view_regionInfo t2
+			left JOIN ass_regbld t3 on t2.region_id = t3.region_id
+			left join view_houseinfo t4 on t3.project_id = t4.project_id and t3.bld_no = t4.bld_no
+			left JOIN view_divisioninfo t1 on t2.division_code = t1.division_code
+			group by t1.division_name
 		]]>
 	</select>
+	<!--WHERE t4.sign_date BETWEEN  to_char(add_months(sysdate, -3), 'yyyy-mm-dd') and to_char(sysdate, 'yyyy-mm-dd')-->
 </mapper>

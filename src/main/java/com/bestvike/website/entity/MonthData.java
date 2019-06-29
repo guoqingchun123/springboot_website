@@ -38,6 +38,12 @@ public class MonthData implements Serializable {
 	private BigDecimal matingStockNum;
 	// 配套存量面积
 	private BigDecimal matingStockArea;
+	// 住宅均价
+	private BigDecimal residencePrice;
+	// 商业均价
+	private BigDecimal businessPrice;
+	// 配套均价
+	private BigDecimal matingPrice;
 
 	public String getDataMonth() {
 		return dataMonth;
@@ -173,5 +179,29 @@ public class MonthData implements Serializable {
 
 	public void setMatingStockArea(BigDecimal matingStockArea) {
 		this.matingStockArea = matingStockArea;
+	}
+
+	public BigDecimal getResidencePrice() {
+		return residencePrice;
+	}
+
+	public void setResidencePrice(BigDecimal residencePrice) {
+		this.residencePrice = residencePrice;
+	}
+
+	public BigDecimal getBusinessPrice() {
+		return businessPrice;
+	}
+
+	public void setBusinessPrice(BigDecimal businessPrice) {
+		this.businessPrice = businessPrice;
+	}
+
+	public BigDecimal getMatingPrice() {
+		return matingPrice;
+	}
+
+	public void setMatingPrice(BigDecimal matingPrice) {
+		this.matingPrice = matingPrice;
 	}
 }

@@ -20,6 +20,7 @@ public class ViewRegionInfo implements Serializable {
 	@Id
 	private String regionId;
 	private String regionName;
+	private String divisionCode;
 	private String address;
 	private String preSaleDate;
 	private BigDecimal x;
@@ -61,7 +62,6 @@ public class ViewRegionInfo implements Serializable {
 	private List<MonthData> listRegionSales;
 	@Transient
 	private List<String> regionLogos;
-
 	@Transient
 	private Boolean showCell;
 	@Transient
@@ -87,6 +87,14 @@ public class ViewRegionInfo implements Serializable {
 
 	public void setRegionName(String regionName) {
 		this.regionName = regionName;
+	}
+
+	public String getDivisionCode() {
+		return divisionCode;
+	}
+
+	public void setDivisionCode(String divisionCode) {
+		this.divisionCode = divisionCode;
 	}
 
 	public String getAddress() {

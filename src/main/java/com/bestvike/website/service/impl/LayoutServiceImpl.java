@@ -3,10 +3,14 @@ package com.bestvike.website.service.impl;
 import com.bestvike.website.dao.ViewProjectInfoDao;
 import com.bestvike.website.dao.ViewRegionInfoDao;
 import com.bestvike.website.data.ViewPresalecard;
+import com.bestvike.website.entity.DivisionTrade;
 import com.bestvike.website.entity.MonthData;
 import com.bestvike.website.entity.Region;
 import com.bestvike.website.entity.Trade;
 import com.bestvike.website.service.LayoutService;
+import com.github.pagehelper.ISelect;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -77,11 +81,64 @@ public class LayoutServiceImpl implements LayoutService {
 		}
 		resultMap.put("todayTradingArea", new DecimalFormat("###,##0").format(todayTradingArea));
 		// 月交易量
-		List<MonthData> monthData = viewRegionInfoDao.selectMonthData();
-		resultMap.put("monthData", monthData);
+		List<MonthData> monthDatas = viewRegionInfoDao.selectMonthData();
+		if (monthDatas != null && monthDatas.size() > 0) {
+			String[] months = new String[monthDatas.size()];
+			BigDecimal[] residences = new BigDecimal[monthDatas.size()];
+			BigDecimal[] businesses = new BigDecimal[monthDatas.size()];
+			BigDecimal[] matings = new BigDecimal[monthDatas.size()];
+			BigDecimal[] residenceStocks = new BigDecimal[monthDatas.size()];
+			BigDecimal[] businessStocks = new BigDecimal[monthDatas.size()];
+			BigDecimal[] matingStocks = new BigDecimal[monthDatas.size()];
+			BigDecimal[] residenceTotals = new BigDecimal[monthDatas.size()];
+			BigDecimal[] businessTotals = new BigDecimal[monthDatas.size()];
+			BigDecimal[] matingTotals = new BigDecimal[monthDatas.size()];
+			BigDecimal[] residencePrices = new BigDecimal[monthDatas.size()];
+			BigDecimal[] businessPrices = new BigDecimal[monthDatas.size()];
+			BigDecimal[] matingPrices = new BigDecimal[monthDatas.size()];
+			for (int i = 0; i < monthDatas.size(); i++) {
+				MonthData monthData = monthDatas.get(i);
+				months[i] = monthData.getDataMonth();
+				residences[i] = monthData.getResidenceArea();
+				businesses[i] = monthData.getBusinessNum();
+				matings[i] = monthData.getMatingArea();
+				residenceStocks[i] = monthData.getResidenceStockArea();
+				businessStocks[i] = monthData.getBusinessStockArea();
+				matingStocks[i] = monthData.getMatingStockArea();
+				residenceTotals[i] = monthData.getResidenceArea().add(monthData.getResidenceArea());
+				businessTotals[i] = monthData.getBusinessStockArea().add(monthData.getBusinessArea());
+				matingTotals[i] = monthData.getMatingStockArea().add(monthData.getMatingArea());
+				residencePrices[i] = monthData.getResidencePrice();
+				businessPrices[i] = monthData.getBusinessPrice();
+				matingPrices[i] = monthData.getMatingPrice();
+			}
+			resultMap.put("months", months);
+			resultMap.put("residences", residences);
+			resultMap.put("businesses", businesses);
+			resultMap.put("matings", matings);
+			resultMap.put("residenceStocks", residenceStocks);
+			resultMap.put("businessStocks", businessStocks);
+			resultMap.put("matingStocks", matingStocks);
+			resultMap.put("residenceTotals", residenceTotals);
+			resultMap.put("businessTotals", businessTotals);
+			resultMap.put("matingTotals", matingTotals);
+			resultMap.put("residencePrices", residencePrices);
+			resultMap.put("businessPrices", businessPrices);
+			resultMap.put("matingPrices", matingPrices);
+		}
+
 		// 今日交易流水
-		List<Trade> todayTrades = viewRegionInfoDao.selectTodayTrade();
-		resultMap.put("todayTrades", todayTrades);
+		PageInfo<Trade> tradePage = PageHelper.startPage(1, 15).doSelectPageInfo(new ISelect() {
+			@Override
+			public void doSelect() {
+				viewRegionInfoDao.selectTodayTrade();
+			}
+		});
+		resultMap.put("todayTrades", tradePage.getList());
+		// 按区查询三月内交易情况
+		List<DivisionTrade> divisionTrades = viewRegionInfoDao.selectDivisionTrade();
+		resultMap.put("divisionTrades", divisionTrades);
+
 		return resultMap;
 	}
 }
