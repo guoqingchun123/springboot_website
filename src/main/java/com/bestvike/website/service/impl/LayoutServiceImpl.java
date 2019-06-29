@@ -8,6 +8,7 @@ import com.bestvike.website.entity.Region;
 import com.bestvike.website.entity.Trade;
 import com.bestvike.website.service.LayoutService;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,16 +54,28 @@ public class LayoutServiceImpl implements LayoutService {
 		Map<String, Object> resultMap = new HashMap<>();
 		// 在售项目数
 		BigDecimal regionNum = viewRegionInfoDao.selectRegionNum();
-		resultMap.put("regionNum", regionNum);
+		if (regionNum == null) {
+			regionNum = BigDecimal.valueOf(0);
+		}
+		resultMap.put("regionNum", new DecimalFormat("###,##0").format(regionNum));
 		// 总体存量面积
 		BigDecimal stockArea = viewRegionInfoDao.selectStockArea();
-		resultMap.put("stockArea", stockArea);
+		if (stockArea == null) {
+			stockArea = BigDecimal.valueOf(0);
+		}
+		resultMap.put("stockArea", new DecimalFormat("###,##0.00").format(stockArea));
 		// 昨日交易量
 		BigDecimal yesterdayTradingArea = viewRegionInfoDao.selectYesterdayTradingArea();
-		resultMap.put("yesterdayTradingArea", yesterdayTradingArea);
+		if (yesterdayTradingArea == null) {
+			yesterdayTradingArea = BigDecimal.valueOf(0);
+		}
+		resultMap.put("yesterdayTradingArea", new DecimalFormat("###,##0").format(yesterdayTradingArea));
 		// 今日交易量
 		BigDecimal todayTradingArea = viewRegionInfoDao.selectTodayTradingArea();
-		resultMap.put("todayTradingArea", todayTradingArea);
+		if (todayTradingArea == null) {
+			todayTradingArea = BigDecimal.valueOf(0);
+		}
+		resultMap.put("todayTradingArea", new DecimalFormat("###,##0").format(todayTradingArea));
 		// 月交易量
 		List<MonthData> monthData = viewRegionInfoDao.selectMonthData();
 		resultMap.put("monthData", monthData);
