@@ -84,14 +84,14 @@
 				</div>
 				<div th:if="${region.bldView.showCell}" class="cells">
 					<div th:each="cell:${region.bldView?.cells}" th:text="${cell.cellName}"
-						 th:style="'width: ' + (${cell.showHouseNum} * 152 + 26) + 'px'" class="cell-name"></div>
+						 th:style="'width: ' + (${cell.showHouseNum} * 154 + 24) + 'px'" class="cell-name"></div>
 				</div>
 				<ul class="layui-timeline">
 					<li th:each="floor:${region.bldView?.floors}" class="layui-timeline-item floor">
 						<i class="layui-icon layui-timeline-axis" th:text="${floor.floorName}"></i>
 						<div class="layui-timeline-content layui-text">
 							<div th:each="cell:${floor?.cells}" class="cell"
-								 th:styleappend="${region.bldView.showCell && floor.showCell} ? 'width: ' + (${cell.showHouseNum} * 152 + 6) + 'px' : ''">
+								 th:styleappend="${region.bldView.showCell && floor.showCell} ? 'width: ' + (${cell.showHouseNum} * 154 + 4) + 'px' : ''">
 								<div th:each="house:${cell?.houses}" class="room-list">
 									<div class="bg-gdcd" th:style="'background: #' + ${house.presellStateCode}"><span th:text="${house.showName}"></span><span class="sell-state" th:text="${house.presellStateName}"></span></div>
 									<div class="m-bott">建筑面积：<span th:text="${house.constructArea}">㎡</span></div>
