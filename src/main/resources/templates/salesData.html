@@ -40,7 +40,7 @@
 					<div carousel-item="">
 						<div id="regionSalesData"></div>
 						<div style="padding-left: 2px;text-align: center" th:each="str:${region?.regionLogos}">
-							<img th:src="${str}" style="height: 450px"/>
+							<img th:src="${str}" style="height: 400px"/>
 						</div>
 					</div>
 				</div>
@@ -48,14 +48,14 @@
 			<div id="viewImageDiv" class="layui-col-md6" style="padding-left: 3px">
 				<div style="position: relative;height: auto;display:inline-block">
                     <div th:if="${cellNo == null}">
-                        <img th:src="${region?.viewPath}" class="view-url" style="height:450px">
+                        <img th:src="${region?.viewPath}" class="view-url" style="height:400px">
                         <div th:each="regionBld, iterStat:${region?.listRegionBlds}" th:if="${region.listRegionBlds}">
 							<span th:class="${region.viewPath != null ? 'bldSpan' : 'bldDiv'}" th:classappend="${bldNo == null ? iterStat.index == 0 : bldNo == regionBld.bldNo} ? 'selectedBld'"
                               th:data-project-id="${regionBld.projectId}" th:data-bld-no="${regionBld.bldNo}" th:style="${regionBld.location}" th:text="${regionBld.bldName}"></span>
                         </div>
                     </div>
                     <div th:if="${cellNo != null}">
-                        <img th:src="${region.bldView.viewPath}" class="view-url" style="height:450px">
+                        <img th:src="${region.bldView.viewPath}" class="view-url" style="height:400px">
 						<a class="return-to" href="javascript:;">返回</a>
                         <div th:each="cell, iterStat:${region.bldView.cells}" th:if="${cell.location != null}">
                             <span th:class="cellSpan" th:classappend="${cellNo == cell.CellNo} ? 'selectedCell'"
@@ -150,7 +150,7 @@
 		carousel.render({
 			elem: '#carousel'
 			, width: '100%' //设置容器宽度
-			, height: '450px'
+			, height: '400px'
 			, arrow: 'always' //始终显示箭头
 		});
 
