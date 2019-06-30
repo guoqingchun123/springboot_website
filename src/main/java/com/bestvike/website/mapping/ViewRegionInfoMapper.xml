@@ -255,7 +255,7 @@
 		]]>
 	</select>
 
-	<select id = "selectTodayTrade" resultType="com.bestvike.website.entity.Trade">
+	<select id = "selectTodayTrade" resultType = "com.bestvike.website.entity.Trade">
 		<![CDATA[
 			SELECT t3.region_name, t1.sign_date, t1.address, t1.house_hold, t1.record_date, t1.buyer_names, t1.contract_no
 			FROM view_houseinfo t1 LEFT JOIN ass_regbld t2 on t1.project_id = t2.project_id and t1.bld_no = t2.bld_no
@@ -265,7 +265,7 @@
 		<!--WHERE t1.sign_date = to_char(sysdate, 'yyyy-mm-dd')-->
 	</select>
 
-	<select id = "selectDivisionTrade" resultType="com.bestvike.website.entity.DivisionTrade">
+	<select id = "selectDivisionTrade" resultType = "com.bestvike.website.entity.DivisionTrade">
 		<![CDATA[
 			SELECT t1.division_name name, count(1) as value
 			from view_regionInfo t2
@@ -276,4 +276,19 @@
 		]]>
 	</select>
 	<!--WHERE t4.sign_date BETWEEN  to_char(add_months(sysdate, -3), 'yyyy-mm-dd') and to_char(sysdate, 'yyyy-mm-dd')-->
+
+	<select id = "selectPriceMap" parameterType = "String" resultType = "map">
+		<![CDATA[
+			select
+				sum(case when instr(t.house_use, '住宅') > 0 then t.presell_price * t.construct_area else 0 end)
+				/ (sum(case when instr(t.house_use, '住宅') > 0 then t.construct_area else 0 end) + 0.00001) residence_price,
+				sum(case when instr(t.house_use, '商业') > 0 then t.presell_price * t.construct_area else 0 end)
+				/ (sum(case when instr(t.house_use, '商业') > 0 then t.construct_area else 0 end) + 0.00001) business_price,
+				sum(case when instr(t.house_use, '住宅') = 0 or instr(t.house_use, '商业') = 0 then t.presell_price * t.construct_area else 0 end)
+				/ (sum(case when instr(t.house_use, '住宅') = 0 or instr(t.house_use, '商业') = 0 then t.construct_area else 0 end) + 0.00001) mating_price
+			from view_houseinfo t
+			where t.sales_flag = '是'
+				and exists(SELECT 1 FROM ass_regbld WHERE region_id = #{regionId} AND project_id = t.project_id and bld_no = t.bld_no)
+		]]>
+	</select>
 </mapper>

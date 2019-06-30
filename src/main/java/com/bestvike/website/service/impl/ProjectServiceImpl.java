@@ -18,6 +18,8 @@ import com.bestvike.website.entity.Floor;
 import com.bestvike.website.entity.FloorSummary;
 import com.bestvike.website.entity.House;
 import com.bestvike.website.entity.HouseHoldSale;
+import com.bestvike.website.entity.HousePrice;
+import com.bestvike.website.entity.PriceShow;
 import com.bestvike.website.entity.MonthData;
 import com.bestvike.website.entity.PageBean;
 import com.bestvike.website.entity.Region;
@@ -151,6 +153,7 @@ public class ProjectServiceImpl implements ProjectService {
 
 	/**
 	 * 刷新单元数据
+	 *
 	 * @param regionId
 	 * @param projectId
 	 * @param bldNo
@@ -394,7 +397,49 @@ public class ProjectServiceImpl implements ProjectService {
 		List<HouseHoldSale> mating = viewRegionInfoDao.selectRegionHouseHoldData(parameterMap);
 		result.put("mating", mating);
 		// 查询各种房屋类型的销售均价
-//		List<HousePrice> housePrices = viewRegionInfoDao.selectHousePrices(regionId);
+		Map<String, Object> priceMap = viewRegionInfoDao.selectPriceMap(regionId);
+		if (null != priceMap && !priceMap.isEmpty()) {
+			List<PriceShow> priceShows = new ArrayList<>();
+			List<HousePrice> housePrices = new ArrayList<>();
+			String houseShow = "";
+			PriceShow priceShow = new PriceShow();
+			if (priceMap.containsKey("RESIDENCE_PRICE") && ((BigDecimal) priceMap.get("RESIDENCE_PRICE")).compareTo(BigDecimal.ZERO) > 0) {
+				HousePrice housePrice = new HousePrice();
+				houseShow += "住宅";
+				housePrice.setHouseHold("住宅");
+				housePrice.setPrice(((BigDecimal) priceMap.get("RESIDENCE_PRICE")).setScale(2, BigDecimal.ROUND_HALF_UP));
+				housePrices.add(housePrice);
+			}
+			if (priceMap.containsKey("BUSINESS_PRICE") && ((BigDecimal) priceMap.get("BUSINESS_PRICE")).compareTo(BigDecimal.ZERO) > 0) {
+				if (StringUtils.isEmpty(houseShow)) {
+					houseShow += "商业";
+				} else {
+					houseShow += "/商业";
+				}
+				HousePrice housePrice = new HousePrice();
+				housePrice.setHouseHold("商业");
+				housePrice.setPrice(((BigDecimal) priceMap.get("BUSINESS_PRICE")).setScale(2, BigDecimal.ROUND_HALF_UP));
+				housePrices.add(housePrice);
+			}
+			if (!StringUtils.isEmpty(houseShow)) {
+				priceShow.setHouseShow(houseShow);
+				priceShow.setHousePrices(housePrices);
+				priceShows.add(priceShow);
+			}
+			if (priceMap.containsKey("MATING_PRICE") && ((BigDecimal) priceMap.get("MATING_PRICE")).compareTo(BigDecimal.ZERO) > 0) {
+				housePrices = new ArrayList<>();
+				HousePrice housePrice = new HousePrice();
+				housePrice.setHouseHold("配套");
+				housePrice.setPrice(((BigDecimal) priceMap.get("MATING_PRICE")).setScale(2, BigDecimal.ROUND_HALF_UP));
+				housePrices.add(housePrice);
+				PriceShow priceShow1 = new PriceShow();
+				priceShow1.setHouseShow("配套");
+				housePrices.add(housePrice);
+				priceShow1.setHousePrices(housePrices);
+				priceShows.add(priceShow1);
+			}
+			result.put("priceShows", priceShows);
+		}
 		return result;
 	}
 

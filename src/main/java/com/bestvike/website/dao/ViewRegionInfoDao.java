@@ -56,4 +56,6 @@ public interface ViewRegionInfoDao extends Mapper<ViewRegionInfo> {
 	public List<Trade> selectTodayTrade();
 
 	public List<DivisionTrade> selectDivisionTrade();
+
+	public Map<String, Object> selectPriceMap(String regionId);
 }
