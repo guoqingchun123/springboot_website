@@ -16,6 +16,7 @@ public class House implements Serializable {
 	private String floorNo;
 	private String floorName;
 	private BigDecimal constructArea;
+	private BigDecimal ownArea;
 	private String presellState;
 	private String colorCode;
 	private BigDecimal presellPrice;
@@ -74,6 +75,14 @@ public class House implements Serializable {
 
 	public void setConstructArea(BigDecimal constructArea) {
 		this.constructArea = constructArea;
+	}
+
+	public BigDecimal getOwnArea() {
+		return ownArea;
+	}
+
+	public void setOwnArea(BigDecimal ownArea) {
+		this.ownArea = ownArea;
 	}
 
 	public String getPresellState() {

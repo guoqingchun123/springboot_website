@@ -53,7 +53,7 @@
 		<![CDATA[
 			SELECT house_id, show_name, house_hold, house_use, floor_no,
 				case when instr(floor_name, '层') > 0 THEN floor_name else floor_name || '层' end as floor_name,
-				construct_area,
+				construct_area, own_area,
 				CASE WHEN mortgage_flag = '是' THEN '抵押'
 					WHEN close_flag = '是' THEN '查封'
 					WHEN frozen_flag = '是' THEN '冻结'
