@@ -72,7 +72,16 @@
 				</div>
 			</div>
 		</div>
-		<div id="salesDataDiv" style="width: 100%;background-color: white;margin-top: 10px;height:auto;">
+		<div class="sale-summary" th:if="region?.priceShows">
+			<span>项目备案情况：</span>
+			<span th:each="price:${region.priceShows}">
+				<span th:text="${price.houseShow}"></span>
+				（<span th:each="housePrice, iterStat:${price.housePrices}">
+					<span th:if="${iterStat.index > 0}">，</span>
+					<span th:text="${housePrice.houseHold}"></span>：<span th:text="${housePrice.price}"></span>元/平方米</span>）
+			</span>
+		</div>
+		<div id="salesDataDiv" style="width: 100%;background-color: white;height:auto;">
 			<div id="houseCardContainer" class="layui-tab-content">
 				<div class="layui-elem-quote">
 					<label style="color: #959595;font-size: large;font-weight: bold"

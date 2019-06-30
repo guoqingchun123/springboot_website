@@ -66,6 +66,9 @@
 			background-color: transparent;
 			padding: 0;
 		}
+		.layui-card .region-info .layui-elem-quote {
+			margin-bottom: 7px;
+		}
 		.layui-card .region-info .layui-elem-quote.region-name {
 			font-size: 24px;
 			font-weight: bold;
@@ -156,7 +159,7 @@
 		<div class="layui-card-body" style="overflow: hidden">
 			<div class="layui-col-md9" style="float: left">
 				<div class="layui-col-md3" style="float: left">
-					<img src="{{=item.logoPath}}" style="width: 250px;height: 150px">
+					<img src="{{=item.logoPath}}" style="width: 100%; max-width: 260px;">
 				</div>
 				<div class="layui-col-md9 region-info" style="float: left; padding-left: 30px">
 					<p class="layui-elem-quote region-name">{{item.regionName}}</p>

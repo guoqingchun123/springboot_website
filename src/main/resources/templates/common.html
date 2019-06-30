@@ -10,7 +10,9 @@
     <link th:href="@{/layui/css/layui.css}" rel="stylesheet" type="text/css">
     <link th:href="@{/layui/autocomplete/autocomplete.css}" rel="stylesheet" type="text/css">
     <link th:href="@{/themes/css/common.css}" rel="stylesheet" type="text/css">
-    <!--/* Per-page placeholder for additional links */-->
+    <!--[if lt IE 9]>
+    <script th:src="@{/js/respond.min.js}"></script>
+    <![endif]-->
 </head>
 <body>
     <script th:fragment="ready" th:inline="javascript">
@@ -27,24 +29,24 @@
             document.getElementById('layui-body').style.minHeight = (window.innerHeight - 60) + 'px';
         });
     </script>
-</body>
-<footer th:fragment="footer" class="layout-footer">
-    <!--<div class="shiye">
-        <a target="_blank" href="http://bszs.conac.cn/sitename?method=show&amp;id=069D7D248AE75E02E053012819AC7D94"><img th:src="@{/themes/images/dzjg.png}"></a>
-    </div>-->
-    <div class="description">
-        <div><span>欢迎光临本站！</span></div>
-        <div>
-            <span>主办单位：赤峰房产信息网</span>
-            <span>主管单位：赤峰住房和城乡建设局</span>
-            <!--<span class="beian">备案号：</span>-->
+    <div th:fragment="footer" class="layout-footer">
+        <!--<div class="shiye">
+            <a target="_blank" href="http://bszs.conac.cn/sitename?method=show&amp;id=069D7D248AE75E02E053012819AC7D94"><img th:src="@{/themes/images/dzjg.png}"></a>
+        </div>-->
+        <div class="description">
+            <div><span>欢迎光临本站！</span></div>
+            <div>
+                <span>主办单位：赤峰房产信息网</span>
+                <span>主管单位：赤峰住房和城乡建设局</span>
+                <!--<span class="beian">备案号：</span>-->
+            </div>
+            <div>
+                <span>信息支持单位：济南百思为科信息工程有限公司</span>
+            </div>
         </div>
-        <div>
-            <span>信息支持单位：济南百思为科信息工程有限公司</span>
-        </div>
+        <!--<div class="zc">
+            <a target="_blank" href="http://121.43.68.40/exposure/jiucuo.html?site_code=1504000017&amp;url=http%3A%2F%2Ffgj.chifeng.gov.cn"><img th:src="@{/themes/images/zc.jpg}"></a>
+        </div>-->
     </div>
-    <!--<div class="zc">
-        <a target="_blank" href="http://121.43.68.40/exposure/jiucuo.html?site_code=1504000017&amp;url=http%3A%2F%2Ffgj.chifeng.gov.cn"><img th:src="@{/themes/images/zc.jpg}"></a>
-    </div>-->
-</footer>
+</body>
 </html>

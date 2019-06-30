@@ -73,7 +73,16 @@
 				<div id="regionMonthSalesData" style="width: 100%;height: 400px"></div>
 			</div>
 		</div>
-		<div id="houseHoldDiv" style="width: 100%;background-color: white;margin-top: 10px;height:auto;margin-bottom: 10px; padding-bottom: 10px;">
+        <div class="sale-summary" th:if="region?.priceShows">
+            <span>项目备案情况：</span>
+            <span th:each="price:${region.priceShows}">
+				<span th:text="${price.houseShow}"></span>
+				（<span th:each="housePrice, iterStat:${price.housePrices}">
+					<span th:if="${iterStat.index > 0}">，</span>
+					<span th:text="${housePrice.houseHold}"></span>：<span th:text="${housePrice.price}"></span>元/平方米</span>）
+			</span>
+        </div>
+		<div id="houseHoldDiv" style="width: 100%;background-color: white;height:auto;margin-bottom: 10px; padding-bottom: 10px;">
 		</div>
 	</div>
 </div>

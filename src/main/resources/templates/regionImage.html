@@ -3,9 +3,9 @@
 <head>
 	<div th:replace="common :: header"></div>
 	<link th:href="@{/layui/css/maps.css}" rel="stylesheet" type="text/css">
-	<link th:href="@{/layui/viewer/css/viewer.min.css}" rel="stylesheet">
+	<!--<link th:href="@{/layui/viewer/css/viewer.min.css}" rel="stylesheet">-->
 	<style>
-		.viewer {
+		/*.viewer {
 			width: 95%;
 			margin: 0 auto;
 			font-size: 0;
@@ -19,11 +19,30 @@
 		.viewer li img {
 			width: 150px;
 			height: 150px
+		}*/
+		.region-images {
+			margin-bottom: 20px;
+		}
+		.region-images .layui-elem-quote {
+			margin-bottom: 0;
+		}
+		.image-container {
+			display: inline-block;
+		}
+		.image-container > img {
+			cursor: pointer;
+			float: left;
+			padding: 5px;
+			height: 150px;
+		}
+
+		.image-view {
+			display: none;
 		}
 	</style>
 </head>
 <body class="layui-layout-body layout-body">
-<div class="layui-layout layui-layout-admin">
+<div class="layui-layout layui-layout-admin" style="display: inline-block; width: 100%; margin: 0 auto;">
 	<div class="layui-header layui-bg-blue" style="position: fixed;width: 100%;">
 		<div class="layui-col-md3" style="padding-left: 15px;padding-top: 15px">
 			<img th:src="@{/themes/images/logo.png}">
@@ -64,7 +83,24 @@
 				<div id="regionMonthSalesData" style="width: 100%;height: 400px"></div>
 			</div>
 		</div>
-		<div id="regionImageDiv" style="width: 100%;background-color: white;margin-top: 10px;height:auto; margin-bottom: 10px; padding-bottom: 10px;">
+		<div class="sale-summary" th:if="region?.priceShows">
+			<span>项目备案情况：</span>
+			<span th:each="price:${region.priceShows}">
+				<span th:text="${price.houseShow}"></span>
+				（<span th:each="housePrice, iterStat:${price.housePrices}">
+					<span th:if="${iterStat.index > 0}">，</span>
+					<span th:text="${housePrice.houseHold}"></span>：<span th:text="${housePrice.price}"></span>元/平方米</span>）
+			</span>
+		</div>
+		<!--<div id="regionImageDiv" style="width: 100%;background-color: white;height:auto; margin-bottom: 10px; padding-bottom: 10px;">
+		</div>-->
+		<div class="layui-col-md12 region-images">
+			<div th:each="file:${region.listDocFiles}" th:if="${file.imageList != null && file.imageList.size() > 0}">
+				<p class="layui-elem-quote" th:text="${file.docName}"></p>
+				<div class="image-container">
+					<img th:each="image:${file.imageList}" th:data-id="${file.id}" th:src="${image.thumbUrl}" th:layer-src="${image.viewUrl}">
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
@@ -86,7 +122,7 @@
 <script th:src="@{/layui/layui.js}"></script>
 <script th:src="@{/layui/echarts/echarts.js}"></script>
 <script th:src="@{/layui/echarts/macarons.js}"></script>
-<script th:src="@{/layui/viewer/js/viewer.min.js}"></script>
+<!--<script th:src="@{/layui/viewer/js/viewer.min.js}"></script>-->
 <script th:inline="javascript">
 	var ctxPath = /*[[@{/}]]*/'';
 	layui.config({
@@ -139,7 +175,13 @@
 				window.location.replace(ctxPath + 'content/' + [[${region.regionId}]] + "?viewType=" + viewType);
 			}
 		});
-		var laytpl = layui.laytpl;
+
+		$('.image-container').each(function () {
+			layer.photos({
+				photos: $(this).closest('.image-container')
+			});
+		});
+		/*var laytpl = layui.laytpl;
 		getTpl = document.getElementById("regionImageDivScript").innerHTML
 			, view = document.getElementById('regionImageDiv');
 		laytpl(getTpl).render([[${region.listDocFiles}]], function (html) {
@@ -149,7 +191,7 @@
 					url: 'data-original'
 				})
 			});
-		});
+		});*/
 
 		var option = {
 			title: {
