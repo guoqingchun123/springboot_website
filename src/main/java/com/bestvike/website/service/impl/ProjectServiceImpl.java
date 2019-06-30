@@ -468,7 +468,6 @@ public class ProjectServiceImpl implements ProjectService {
 				priceShow.setHousePrices(housePrices);
 				priceShows.add(priceShow);
 			}
-			houseShow = "";
 			housePrices = new ArrayList<>();
 			if (priceMap.containsKey("CARPORT_PRICE") && ((BigDecimal) priceMap.get("CARPORT_PRICE")).compareTo(BigDecimal.ZERO) > 0) {
 				HousePrice housePrice = new HousePrice();
