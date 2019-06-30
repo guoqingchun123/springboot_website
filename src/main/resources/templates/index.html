@@ -3,7 +3,15 @@
 <head>
 	<div th:replace="common :: header"></div>
 	<style type="text/css">
-		.layui-div-search {
+		/* 操作区 */
+		.website-toolbar {
+			width: 100%;
+			height: 60px;
+			background-color: #ffffff;
+			padding-top: 15px;
+		}
+
+		.website-search {
 			display: inline-block;
 			position: relative;
 		}
@@ -79,52 +87,45 @@
 		}
 	</style>
 </head>
-<body class="layui-layout-body layout-body">
-<div class="layui-layout layui-layout-admin">
-	<div class="layui-header layui-bg-blue" style="position: fixed;width: 100%;">
-		<div class="layui-col-md3" style="padding-left: 15px;padding-top: 15px">
-			<img th:src="@{/themes/images/logo.png}">
+<body class="website-body">
+<div class="website-header"></div>
+<div class="website-content">
+	<div class="website-toolbar">
+		<div class="website-search layui-col-md6">
+			<input id="auto-regions" name="auto-regions" class="layui-input-search" placeholder="请输入小区名称或小区地址进行检索" />
+			<i class="layui-icon layui-icon-search"></i>
+		</div>
+		<div class="layui-col-md6" style="padding-right: 15px;">
+			<button type="button" class="layui-btn layui-btn-lg layui-btn-normal layui-btn-maps" style="float:right;">
+				<i class="layui-icon layui-icon-location layui-btn-maps" style="color: #ff0813;"></i>地图导航
+			</button>
 		</div>
 	</div>
-	<div id="layui-body" data-anim="layui-anim-upbit" style="width: 75%;min-width: 1000px;margin:0 auto;padding-top: 65px;">
-		<div style="width: 100%;height:60px;background-color: white;padding-top: 15px;">
-			<div class="layui-col-md6" style="padding-left: 15px;">
-				<div class="layui-div-search">
-					<input placeholder="请输入小区名称或小区地址进行检索" class="layui-input-search" id="auto-regions" name="auto-regions">
-					<i class="layui-icon layui-icon-search"></i>
-				</div>
-			</div>
-			<div class="layui-col-md6" style="padding-right: 15px;">
-				<button type="button" class="layui-btn layui-btn-lg layui-btn-normal layui-btn-maps" style="float:right;">
-					<i class="layui-icon layui-icon-location layui-btn-maps" style="color: #ff0813;"></i>地图导航
-				</button>
-			</div>
-		</div>
-		<div class="layui-form-search" style="margin-top: 10px;background-color: white;">
-			<blockquote class="layui-elem-quote layui-quote-nm">
-				区域范围：
-				<span class="layui-breadcrumb division" lay-separator="|">
+	<div class="layui-form-search" style="margin-top: 10px;background-color: white;">
+		<blockquote class="layui-elem-quote layui-quote-nm">
+			区域范围：
+			<span class="layui-breadcrumb division" lay-separator="|">
 					<a href="javascript:;" data-value="" class="selected">不限</a>
 					<a href="javascript:;" data-value="150404">松山区</a>
 					<a href="javascript:;" data-value="150402">红山区</a>
 				</span>
-			</blockquote>
-			<!--
-			<blockquote class="layui-elem-quote layui-quote-nm">
-				备案均价：
-				<span class="layui-breadcrumb avgPrice" lay-separator="|">
-					<a href="javascript:;" class="selected">不限</a>
-					<a href="javascript:;" data-value=" < 7000">7000元/㎡以下</a>
-					<a href="javascript:;" data-value="between 7000 and 8000">7000~8000元/㎡</a>
-					<a href="javascript:;" data-value="between 8000 and 9000">8000~9000元/㎡</a>
-					<a href="javascript:;" data-value="between 9000 and 10000">9000~10000元/㎡</a>
-					<a href="javascript:;" data-value=" > 10000">10000元/㎡以上</a>
-				</span>
-			</blockquote>
-			-->
-			<blockquote class="layui-elem-quote layui-quote-nm">
-				房屋户型：
-				<span class="layui-breadcrumb houseHold" lay-separator="|">
+		</blockquote>
+		<!--
+        <blockquote class="layui-elem-quote layui-quote-nm">
+            备案均价：
+            <span class="layui-breadcrumb avgPrice" lay-separator="|">
+                <a href="javascript:;" class="selected">不限</a>
+                <a href="javascript:;" data-value=" < 7000">7000元/㎡以下</a>
+                <a href="javascript:;" data-value="between 7000 and 8000">7000~8000元/㎡</a>
+                <a href="javascript:;" data-value="between 8000 and 9000">8000~9000元/㎡</a>
+                <a href="javascript:;" data-value="between 9000 and 10000">9000~10000元/㎡</a>
+                <a href="javascript:;" data-value=" > 10000">10000元/㎡以上</a>
+            </span>
+        </blockquote>
+        -->
+		<blockquote class="layui-elem-quote layui-quote-nm">
+			房屋户型：
+			<span class="layui-breadcrumb houseHold" lay-separator="|">
 					<a href="javascript:;" class="selected">不限</a>
 					<a href="javascript:;" data-value="一室">一室</a>
 					<a href="javascript:;" data-value="二室">二室</a>
@@ -133,11 +134,10 @@
 					<a href="javascript:;" data-value="五室">五室</a>
 					<a href="javascript:;" data-value="其他">其他</a>
 				</span>
-			</blockquote>
-		</div>
-		<div id="regionCardContainer"></div>
-		<div id="page" style="text-align: right"></div>
+		</blockquote>
 	</div>
+	<div id="regionCardContainer"></div>
+	<div id="page" style="text-align: right"></div>
 </div>
 <div th:replace="common :: ready"></div>
 <div th:replace="common :: body-height"></div>

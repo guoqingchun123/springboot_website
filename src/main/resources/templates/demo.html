@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<div th:replace="common :: header"></div>
+	<div th:replace="demo-content :: style"></div>
+</head>
+<body class="layui-layout-body layout-body">
+	<div th:replace="demo-content :: loading"></div>
+	<div id="content"></div>
+<script th:src="@{/layui/layui.js}"></script>
+<script th:inline="javascript">
+	var ctxPath = /*[[@{/}]]*/'';
+	layui.use(['layer'], function () {
+		var $ = layui.jquery;
+
+		$('#content').load(ctxPath + '/demo/content', function () {
+			$('#loading-container').hide();
+		});
+	});
+</script>
+</body>
+</html>
