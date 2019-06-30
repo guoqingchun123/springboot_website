@@ -75,7 +75,8 @@
 			AND floor_no = #{floorNo}
 		</if>
 		<![CDATA[
-			ORDER BY case when regexp_replace(t.floor_no,'^[-\+]?\d+(\.\d+)?$','') is not null then 9999 else to_number(floor_no) end DESC,
+			ORDER BY case when instr(t.floor_no, '阁楼') > 0 or instr(t.floor_no, '顶') > 0 then 9999
+				when regexp_replace(t.floor_no,'^[-\+]?\d+(\.\d+)?$','') is not null then -100 else to_number(t.floor_no) end DESC,
 			show_name ASC, house_id ASC
 		]]>
 	</select>
@@ -91,7 +92,8 @@
 			FROM view_houseinfo t
 			WHERE t.project_id = #{projectId} AND t.bld_no = #{bldNo} AND t.cell_name = #{cellNo}
 			GROUP BY floor_no, floor_name
-			ORDER BY case when regexp_replace(t.floor_no,'^[-\+]?\d+(\.\d+)?$','') is not null then 9999 else to_number(floor_no) end DESC
+			ORDER BY CASE WHEN instr(t.floor_no, '阁楼') > 0 or instr(t.floor_no, '顶') > 0 then 9999
+				when regexp_replace(t.floor_no,'^[-\+]?\d+(\.\d+)?$','') is not null then -100 else to_number(t.floor_no) end DESC
 		]]>
 	</select>
 
@@ -203,7 +205,8 @@
 			AND cell_name = #{cellNo}
 		</if>
 		<![CDATA[
-			ORDER BY case when regexp_replace(t.floor_no,'^[-\+]?\d+(\.\d+)?$','') is not null then 9999 else to_number(floor_no) end DESC,
+			order by case when instr(t.floor_no, '阁楼') > 0 or instr(t.floor_no, '顶') > 0 then 9999
+				when regexp_replace(t.floor_no,'^[-\+]?\d+(\.\d+)?$','') is not null then -100 else to_number(t.floor_no) end DESC,
 			show_name ASC, house_id ASC
 		]]>
 	</select>
