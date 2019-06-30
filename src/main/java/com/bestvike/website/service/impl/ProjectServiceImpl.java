@@ -472,7 +472,6 @@ public class ProjectServiceImpl implements ProjectService {
 			housePrices = new ArrayList<>();
 			if (priceMap.containsKey("CARPORT_PRICE") && ((BigDecimal) priceMap.get("CARPORT_PRICE")).compareTo(BigDecimal.ZERO) > 0) {
 				HousePrice housePrice = new HousePrice();
-				houseShow += "配套";
 				housePrice.setHouseHold("车位");
 				housePrice.setPrice(((BigDecimal) priceMap.get("CARPORT_PRICE")).setScale(2, BigDecimal.ROUND_HALF_UP));
 				housePrices.add(housePrice);
@@ -483,9 +482,9 @@ public class ProjectServiceImpl implements ProjectService {
 				housePrice.setPrice(((BigDecimal) priceMap.get("WAREHOUSE_PRICE")).setScale(2, BigDecimal.ROUND_HALF_UP));
 				housePrices.add(housePrice);
 			}
-			if (!StringUtils.isEmpty(houseShow)) {
+			if (housePrices.size() > 0) {
 				PriceShow priceShow = new PriceShow();
-				priceShow.setHouseShow(houseShow);
+				priceShow.setHouseShow("配套(按套内计算)");
 				priceShow.setHousePrices(housePrices);
 				priceShows.add(priceShow);
 			}
