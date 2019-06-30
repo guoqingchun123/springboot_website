@@ -1,14 +1,14 @@
 package com.bestvike.website.controller.app;
 
 import com.bestvike.website.controller.BaseController;
-import com.bestvike.website.data.AppVersion;
 import com.bestvike.website.document.Division;
 import com.bestvike.website.entity.BldCells;
 import com.bestvike.website.entity.DocFiles;
-import com.bestvike.website.entity.FloorSummary;
 import com.bestvike.website.service.ProjectService;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -74,7 +74,12 @@ public class RegionControllerForApp extends BaseController {
 	}
 
 	@GetMapping(value = "/version/{versionId}")
-	public AppVersion selectAppVersion(@PathVariable String versionId) {
+	public <T> T selectAppVersion(@PathVariable String versionId) {
 		return projectService.selectAppVersion(versionId);
+	}
+
+	@GetMapping(value = "/download")
+	public void download(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws Exception {
+		projectService.download(httpServletRequest, httpServletResponse);
 	}
 }

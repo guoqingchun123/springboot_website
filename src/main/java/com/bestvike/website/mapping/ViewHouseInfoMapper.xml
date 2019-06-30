@@ -4,10 +4,11 @@
 	<select id = "selectDivisions" resultType = "ViewDivisionInfo">
         <![CDATA[
 		  SELECT t1.*, t2.region_num, t3.bld_num FROM view_divisionInfo t1
-		  LEFT JOIN (SELECT COUNT(1) region_num, division_code FROM view_regioninfo GROUP BY division_code) t2
+		  LEFT JOIN (SELECT COUNT(1) region_num, division_code FROM view_regioninfo WHERE state = '0000' GROUP BY division_code) t2
 		  ON t1.division_code = t2.division_code
 		  LEFT JOIN (SELECT COUNT(1) bld_num, division_code FROM view_regioninfo vr
 		  	INNER JOIN ass_regbld ar on vr.region_id = ar.region_id
+		  	WHERE vr.state = '0000'
 		  GROUP BY division_code) t3
 		  ON t1.division_code = t3.division_code
         ]]>

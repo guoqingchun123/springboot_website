@@ -20,6 +20,7 @@ public class ViewRegionInfo implements Serializable {
 	@Id
 	private String regionId;
 	private String regionName;
+	private String state;
 	private String divisionCode;
 	private String address;
 	private String preSaleDate;
@@ -89,6 +90,14 @@ public class ViewRegionInfo implements Serializable {
 
 	public void setRegionName(String regionName) {
 		this.regionName = regionName;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
 	}
 
 	public String getDivisionCode() {

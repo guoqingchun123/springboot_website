@@ -21,20 +21,25 @@ import com.bestvike.website.entity.FloorSummary;
 import com.bestvike.website.entity.House;
 import com.bestvike.website.entity.HouseHoldSale;
 import com.bestvike.website.entity.HousePrice;
-import com.bestvike.website.entity.PriceShow;
 import com.bestvike.website.entity.MonthData;
 import com.bestvike.website.entity.PageBean;
+import com.bestvike.website.entity.PriceShow;
 import com.bestvike.website.entity.Region;
 import com.bestvike.website.entity.RegionBlds;
 import com.bestvike.website.service.ProjectService;
 import com.github.pagehelper.ISelect;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -439,7 +444,6 @@ public class ProjectServiceImpl implements ProjectService {
 		if (null != priceMap && !priceMap.isEmpty()) {
 			List<HousePrice> housePrices = new ArrayList<>();
 			String houseShow = "";
-			PriceShow priceShow = new PriceShow();
 			if (priceMap.containsKey("RESIDENCE_PRICE") && ((BigDecimal) priceMap.get("RESIDENCE_PRICE")).compareTo(BigDecimal.ZERO) > 0) {
 				HousePrice housePrice = new HousePrice();
 				houseShow += "住宅";
@@ -459,20 +463,31 @@ public class ProjectServiceImpl implements ProjectService {
 				housePrices.add(housePrice);
 			}
 			if (!StringUtils.isEmpty(houseShow)) {
+				PriceShow priceShow = new PriceShow();
 				priceShow.setHouseShow(houseShow);
 				priceShow.setHousePrices(housePrices);
 				priceShows.add(priceShow);
 			}
-			if (priceMap.containsKey("MATING_PRICE") && ((BigDecimal) priceMap.get("MATING_PRICE")).compareTo(BigDecimal.ZERO) > 0) {
-				housePrices = new ArrayList<>();
+			houseShow = "";
+			housePrices = new ArrayList<>();
+			if (priceMap.containsKey("CARPORT_PRICE") && ((BigDecimal) priceMap.get("CARPORT_PRICE")).compareTo(BigDecimal.ZERO) > 0) {
 				HousePrice housePrice = new HousePrice();
-				housePrice.setHouseHold("配套");
-				housePrice.setPrice(((BigDecimal) priceMap.get("MATING_PRICE")).setScale(2, BigDecimal.ROUND_HALF_UP));
+				houseShow += "配套";
+				housePrice.setHouseHold("车位");
+				housePrice.setPrice(((BigDecimal) priceMap.get("CARPORT_PRICE")).setScale(2, BigDecimal.ROUND_HALF_UP));
 				housePrices.add(housePrice);
-				PriceShow priceShow1 = new PriceShow();
-				priceShow1.setHouseShow("配套");
-				priceShow1.setHousePrices(housePrices);
-				priceShows.add(priceShow1);
+			}
+			if (priceMap.containsKey("WAREHOUSE_PRICE") && ((BigDecimal) priceMap.get("WAREHOUSE_PRICE")).compareTo(BigDecimal.ZERO) > 0) {
+				HousePrice housePrice = new HousePrice();
+				housePrice.setHouseHold("仓库");
+				housePrice.setPrice(((BigDecimal) priceMap.get("WAREHOUSE_PRICE")).setScale(2, BigDecimal.ROUND_HALF_UP));
+				housePrices.add(housePrice);
+			}
+			if (!StringUtils.isEmpty(houseShow)) {
+				PriceShow priceShow = new PriceShow();
+				priceShow.setHouseShow(houseShow);
+				priceShow.setHousePrices(housePrices);
+				priceShows.add(priceShow);
 			}
 		}
 		return priceShows;
@@ -572,13 +587,34 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	@Override
-	public AppVersion selectAppVersion(String versionId) {
+	public <T> T selectAppVersion(String versionId) {
 		// 查询当前版本以后是否有需要强制更新版本
 		AppVersion appVersion = appVersionDao.selectAppVersion(versionId);
 		if (null != appVersion) {
 			appVersion.setUpdateUrl(updateUrl);
-			return appVersion;
+			return (T) appVersion;
 		}
-		return new AppVersion();
+		return (T) "{}";
+	}
+
+	@Override
+	public void download(HttpServletRequest httpServletRequest, HttpServletResponse response) throws Exception {
+		InputStream fileStream = (InputStream) new FileInputStream("D:\\cffg.apk");
+		response.setContentType("application/vnd.android.package-archive");
+		response.setHeader("content-disposition", "attachment; filename=cffg.apk");
+		if (fileStream instanceof FileInputStream) {
+			response.setContentLength(((FileInputStream) fileStream).available());
+		}
+
+		ServletOutputStream os = response.getOutputStream();
+		byte[] buf = new byte[4096];
+
+		int readLength;
+		while ((readLength = fileStream.read(buf)) != -1) {
+			os.write(buf, 0, readLength);
+		}
+
+		os.flush();
+		fileStream.close();
 	}
 }

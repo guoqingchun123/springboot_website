@@ -5,6 +5,7 @@
 		<![CDATA[
            SELECT t1.project_id, x, y, avg_price, popularity, project_name, address
            FROM view_regionInfo t1 INNER JOIN view_projectinfo t2 on t1.project_id = t2.project_id
+           WHERE t1.state = '0000'
         ]]>
 		<choose>
 			<when test = "order == 'popularity'">

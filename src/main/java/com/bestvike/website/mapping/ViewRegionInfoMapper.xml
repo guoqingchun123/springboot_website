@@ -12,6 +12,7 @@
 				left join ass_regbld arb on vhi.project_id = arb.project_id and vhi.bld_no = arb.bld_no
 				group by arb.region_id) proj
            ON t1.region_id = proj.region_id
+           WHERE t1.state = '0000'
            ORDER BY t1.pre_sale_date desc
         ]]>
 	</select>
@@ -28,21 +29,20 @@
 				group by arb.region_id
            ) proj
            ON t1.region_id = proj.region_id
+           WHERE t1.state = '0000'
         ]]>
-		<where>
-			<if test = "keywords != null">
-				t1.region_name like #{keywords} or t1.address like #{keywords}
-			</if>
-			<if test = "divisionCode != null">
-				AND t2.division_code = #{divisionCode}
-			</if>
-			<if test = "price != null">
-				AND proj.avg_price ${price}
-			</if>
-			<if test = "houseHold != null">
-				AND t1.house_holds like #{houseHold}
-			</if>
-		</where>
+		<if test = "keywords != null">
+			AND t1.region_name like #{keywords} or t1.address like #{keywords}
+		</if>
+		<if test = "divisionCode != null">
+			AND t2.division_code = #{divisionCode}
+		</if>
+		<if test = "price != null">
+			AND proj.avg_price ${price}
+		</if>
+		<if test = "houseHold != null">
+			AND t1.house_holds like #{houseHold}
+		</if>
 		<choose>
 			<when test = "sort != null">
 				order by ${sort}
@@ -65,7 +65,7 @@
 			from view_houseinfo vhi
 			WHERE EXISTS(select 1 from ass_regbld WHERE region_id = #{regionId} AND project_id = vhi.project_id AND bld_no = vhi.bld_no)) t3
 			on t1.region_id = t3.region_id
-			WHERE t1.region_id = #{regionId}
+			WHERE t1.region_id = #{regionId} AND t1.state = '0000'
 		]]>
 	</select>
 
@@ -181,7 +181,7 @@
 			CASE WHEN instr(bld_name, '#') > 0 THEN bld_name else bld_name || '#' end bld_name
 			FROM view_regionInfo t1 left join ass_regbld t2 on t1.region_id = t2.region_id
 			LEFT JOIN view_bldInfo t3 on t2.project_id = t3.project_id and t2.bld_no = t3.bld_no
-			WHERE t1.region_id = #{regionId}
+			WHERE t1.region_id = #{regionId} AND t1.state = '0000'
 			ORDER BY to_number(nvl(regexp_replace(t3.bld_name, '[^0-9]'), -1)) asc, t3.bld_no asc
 		]]>
 	</select>
@@ -209,13 +209,13 @@
 		<![CDATA[
 			SELECT * FROM view_regioninfo t WHERE exists(
 				select 1 FROM ass_regbld where project_id = #{projectId} and region_id = t.region_id
-			)
+			) AND t.state = '0000'
 		]]>
 	</select>
 
 	<select id = "selectRegionNum" resultType = "BigDecimal">
 		<![CDATA[
-			SELECT count(1) FROM view_regioninfo
+			SELECT count(1) FROM view_regioninfo WHERE state = '0000'
 		]]>
 	</select>
 
@@ -258,9 +258,8 @@
 			SELECT t3.region_name, t1.sign_date, t1.address, t1.house_hold, t1.record_date, t1.buyer_names, t1.contract_no
 			FROM view_houseinfo t1 LEFT JOIN ass_regbld t2 on t1.project_id = t2.project_id and t1.bld_no = t2.bld_no
 			LEFT JOIN view_regioninfo t3 ON t2.region_id = t3.region_id
-			WHERE t1.sign_date is null
+			WHERE t3.state = '0000' and t1.sign_date = to_char(sysdate, 'yyyy-mm-dd')
 		]]>
-		<!--WHERE t1.sign_date = to_char(sysdate, 'yyyy-mm-dd')-->
 	</select>
 
 	<select id = "selectDivisionTrade" resultType = "com.bestvike.website.entity.DivisionTrade">
@@ -270,10 +269,10 @@
 			left JOIN ass_regbld t3 on t2.region_id = t3.region_id
 			left join view_houseinfo t4 on t3.project_id = t4.project_id and t3.bld_no = t4.bld_no
 			left JOIN view_divisioninfo t1 on t2.division_code = t1.division_code
+			WHERE t2.state = '0000' and t4.sign_date BETWEEN to_char(add_months(sysdate, -3), 'yyyy-mm-dd') and to_char(sysdate, 'yyyy-mm-dd')
 			group by t1.division_name
 		]]>
 	</select>
-	<!--WHERE t4.sign_date BETWEEN  to_char(add_months(sysdate, -3), 'yyyy-mm-dd') and to_char(sysdate, 'yyyy-mm-dd')-->
 
 	<select id = "selectPriceMap" parameterType = "String" resultType = "map">
 		<![CDATA[
@@ -282,8 +281,10 @@
 				/ (sum(case when instr(t.house_use, '住宅') > 0 then t.construct_area else 0 end) + 0.00001) residence_price,
 				sum(case when instr(t.house_use, '商业') > 0 then t.presell_price * t.construct_area else 0 end)
 				/ (sum(case when instr(t.house_use, '商业') > 0 then t.construct_area else 0 end) + 0.00001) business_price,
-				sum(case when instr(t.house_use, '住宅') = 0 and instr(t.house_use, '商业') = 0 then t.presell_price * t.construct_area else 0 end)
-				/ (sum(case when instr(t.house_use, '住宅') = 0 and instr(t.house_use, '商业') = 0 then t.construct_area else 0 end) + 0.00001) mating_price
+				sum(case when instr(t.house_use, '车位') > 0 then t.presell_price * t.construct_area else 0 end)
+				/ (sum(case when instr(t.house_use, '车位') > 0 then t.construct_area else 0 end) + 0.00001) carport_price,
+				sum(case when instr(t.house_use, '仓库') > 0 then t.presell_price * t.construct_area else 0 end)
+				/ (sum(case when instr(t.house_use, '仓库') > 0 then t.construct_area else 0 end) + 0.00001) warehouse_price
 			from view_houseinfo t
 			where t.sales_flag = '是'
 				and exists(SELECT 1 FROM ass_regbld WHERE region_id = #{regionId} AND project_id = t.project_id and bld_no = t.bld_no)

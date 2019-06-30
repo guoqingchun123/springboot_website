@@ -1,13 +1,13 @@
 package com.bestvike.website.service;
 
-import com.bestvike.website.data.AppVersion;
 import com.bestvike.website.data.ViewRegionInfo;
 import com.bestvike.website.document.Division;
 import com.bestvike.website.entity.BldCells;
 import com.bestvike.website.entity.DocFiles;
-import com.bestvike.website.entity.FloorSummary;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -35,5 +35,7 @@ public interface ProjectService {
 
 	public Map<String, Object> cellFloorSummary(String projectId, String bldNo, String cellNo);
 
-	public AppVersion selectAppVersion(String versionId);
+	public <T> T selectAppVersion(String versionId);
+
+	public void download(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws Exception;
 }
