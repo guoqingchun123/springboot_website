@@ -577,7 +577,8 @@ public class ProjectServiceImpl implements ProjectService {
 		AppVersion appVersion = appVersionDao.selectAppVersion(versionId);
 		if (null != appVersion) {
 			appVersion.setUpdateUrl(updateUrl);
+			return appVersion;
 		}
-		return appVersion;
+		return new AppVersion();
 	}
 }
