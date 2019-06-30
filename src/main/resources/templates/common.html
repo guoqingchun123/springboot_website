@@ -29,6 +29,20 @@
             document.getElementById('layui-body').style.minHeight = (window.innerHeight - 60) + 'px';
         });
     </script>
+    <div th:fragment="loading"class="loading-container">
+        <div id="loading-container" style="display: none; position: fixed; left: 50%; top: 50%; margin-left: -110px; margin-top:-35px; border: 1px solid #f2f2f2; background: #ffffff; padding: 10px 20px; box-shadow: 0px 0px 30px rgba(0,0,0,0.3);">
+            <img th:src="@{/themes/images/loading.gif}" style="width: 200px;">
+        </div>
+        <script th:inline="javascript">
+            function loading(hide) {
+                if (!hide) {
+                    document.getElementById('loading-container').style.display = 'block';
+                } else {
+                    document.getElementById('loading-container').style.display = 'none';
+                }
+            }
+        </script>
+    </div>
     <div th:fragment="footer" class="layout-footer">
         <!--<div class="shiye">
             <a target="_blank" href="http://bszs.conac.cn/sitename?method=show&amp;id=069D7D248AE75E02E053012819AC7D94"><img th:src="@{/themes/images/dzjg.png}"></a>

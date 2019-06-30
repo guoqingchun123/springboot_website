@@ -115,4 +115,20 @@ public class LayoutController extends BaseController {
 		mv.setViewName("console");
 		return mv;
 	}
+
+	@GetMapping(value = "/demo/init")
+	public ModelAndView demoInit() {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("demo");
+		return mv;
+	}
+
+	@GetMapping(value = "/demo/content")
+	public ModelAndView demoContent() throws InterruptedException {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("demo-content :: layout");
+		mv.addObject("data", "hello!");
+		Thread.sleep(3000);
+		return mv;
+	}
 }

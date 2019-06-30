@@ -141,7 +141,9 @@
 </div>
 <div th:replace="common :: ready"></div>
 <div th:replace="common :: body-height"></div>
+<div th:replace="common :: loading"></div>
 <div th:replace="common :: footer"></div>
+
 <script id="regionCardScript" type="text/html">
 	<blockquote class="layui-elem-quote layui-quote-nm" style="background-color: #fafafa; margin-bottom: 0; border-left: 0;">
 		小区列表：共为您筛选出<label style="color: red">{{d.page.totalSize}}</label>个小区
@@ -249,7 +251,7 @@
 		}
 
 		function refreshData(pageNo) {
-			var loadingIndex = layer.load(2);
+			loading();
 			$.ajax({
 				url: ctxPath + 'filter-regions',
 				method: 'get',
@@ -275,7 +277,7 @@
 					refreshPage(page);
 				},
 				complete: function (res) {
-					layer.close(loadingIndex);
+					loading('hide');
 				}
 			});
 		}
