@@ -1,5 +1,6 @@
 package com.bestvike.website.service;
 
+import com.bestvike.website.data.AppVersion;
 import com.bestvike.website.data.ViewRegionInfo;
 import com.bestvike.website.document.Division;
 import com.bestvike.website.entity.BldCells;
@@ -33,4 +34,6 @@ public interface ProjectService {
 	public Map<String, Object> pageHouses(String projectId, String bldNo, String cellNo, int pageNo, int pageSize);
 
 	public Map<String, Object> cellFloorSummary(String projectId, String bldNo, String cellNo);
+
+	public AppVersion selectAppVersion(String versionId);
 }

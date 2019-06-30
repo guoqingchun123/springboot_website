@@ -1,6 +1,7 @@
 package com.bestvike.website.controller.app;
 
 import com.bestvike.website.controller.BaseController;
+import com.bestvike.website.data.AppVersion;
 import com.bestvike.website.document.Division;
 import com.bestvike.website.entity.BldCells;
 import com.bestvike.website.entity.DocFiles;
@@ -70,5 +71,10 @@ public class RegionControllerForApp extends BaseController {
 	@GetMapping(value = "/cellFloorSummary")
 	public Map<String, Object> cellFloorSummary(@RequestParam String projectId, @RequestParam String bldNo, @RequestParam String cellNo) {
 		return projectService.cellFloorSummary(projectId, bldNo, cellNo);
+	}
+
+	@GetMapping(value = "/version/{versionId}")
+	public AppVersion selectAppVersion(@PathVariable String versionId) {
+		return projectService.selectAppVersion(versionId);
 	}
 }

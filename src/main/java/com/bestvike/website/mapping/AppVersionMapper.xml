@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "com.bestvike.website.dao.AppVersionDao">
+	<select id = "selectAppVersion" parameterType="String" resultType="AppVersion">
+		<![CDATA[
+			SELECT
+			max(version_id) version_id,
+			case when count(1) > 0 then 'Y' else 'N' end has_newer,
+			case when sum(case when is_force = 'Y' then 1 else 0 end) > 0 then 'Y' else 'N' end is_force FROM app_version WHERE version_id > '1.0.0'
+		]]>
+	</select>
+</mapper>

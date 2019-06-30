@@ -4,6 +4,7 @@ app:
     profile: dev
   file:
     uploadPath: d:\file\upload
+  updateUrl: http://fgj.chifeng.gov.cn:180/download/cffg.apk
 server:
   port: 81
   servlet:

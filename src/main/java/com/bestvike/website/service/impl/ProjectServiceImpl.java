@@ -1,8 +1,10 @@
 package com.bestvike.website.service.impl;
 
+import com.bestvike.website.dao.AppVersionDao;
 import com.bestvike.website.dao.ViewDivisionInfoDao;
 import com.bestvike.website.dao.ViewHouseInfoDao;
 import com.bestvike.website.dao.ViewRegionInfoDao;
+import com.bestvike.website.data.AppVersion;
 import com.bestvike.website.data.ViewDivisionInfo;
 import com.bestvike.website.data.ViewHouseInfo;
 import com.bestvike.website.data.ViewRegionInfo;
@@ -34,6 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -51,6 +54,11 @@ public class ProjectServiceImpl implements ProjectService {
 	private ViewHouseInfoDao viewHouseInfoDao;
 	@Autowired
 	private MongoTemplate mongoTemplate;
+	@Autowired
+	private AppVersionDao appVersionDao;
+
+	@Value("${app.updateUrl}")
+	private String updateUrl;
 
 	@Override
 	public ViewRegionInfo region(String regionId) {
@@ -421,6 +429,7 @@ public class ProjectServiceImpl implements ProjectService {
 
 	/**
 	 * 取销售价格
+	 *
 	 * @param regionId
 	 * @return
 	 */
@@ -560,5 +569,15 @@ public class ProjectServiceImpl implements ProjectService {
 		imageList.add(viewRegionInfo.getViewPath());
 		resultMap.put("imageList", imageList);
 		return resultMap;
+	}
+
+	@Override
+	public AppVersion selectAppVersion(String versionId) {
+		// 查询当前版本以后是否有需要强制更新版本
+		AppVersion appVersion = appVersionDao.selectAppVersion(versionId);
+		if (null != appVersion) {
+			appVersion.setUpdateUrl(updateUrl);
+		}
+		return appVersion;
 	}
 }
