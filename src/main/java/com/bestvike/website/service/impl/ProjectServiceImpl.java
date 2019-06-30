@@ -148,6 +148,11 @@ public class ProjectServiceImpl implements ProjectService {
 			bldView.setBldSales(bldSales);
 			viewRegionInfo.setBldView(bldView);
 		}
+		// 查询各种房屋类型的销售均价
+		List<PriceShow> priceShows = selectPriceShow(regionId);
+		if (priceShows.size() > 0) {
+			viewRegionInfo.setPriceShows(priceShows);
+		}
 		return viewRegionInfo;
 	}
 
@@ -225,6 +230,11 @@ public class ProjectServiceImpl implements ProjectService {
 			BldSales bldSales = viewHouseInfoDao.selectBldSalesData(parameterMap);
 			bldView.setBldSales(bldSales);
 			viewRegionInfo.setBldView(bldView);
+		}
+		// 查询各种房屋类型的销售均价
+		List<PriceShow> priceShows = selectPriceShow(regionId);
+		if (priceShows.size() > 0) {
+			viewRegionInfo.setPriceShows(priceShows);
 		}
 		return viewRegionInfo;
 	}
@@ -316,6 +326,11 @@ public class ProjectServiceImpl implements ProjectService {
 			List<MonthData> listRegionSales = viewRegionInfoDao.selectRegionMonthSale(parameterMap);
 			viewRegionInfo.setListRegionSales(listRegionSales);
 		}
+		// 查询各种房屋类型的销售均价
+		List<PriceShow> priceShows = selectPriceShow(regionId);
+		if (priceShows.size() > 0) {
+			viewRegionInfo.setPriceShows(priceShows);
+		}
 		return viewRegionInfo;
 	}
 
@@ -397,9 +412,22 @@ public class ProjectServiceImpl implements ProjectService {
 		List<HouseHoldSale> mating = viewRegionInfoDao.selectRegionHouseHoldData(parameterMap);
 		result.put("mating", mating);
 		// 查询各种房屋类型的销售均价
+		List<PriceShow> priceShows = selectPriceShow(regionId);
+		if (priceShows.size() > 0) {
+			result.put("priceShows", priceShows);
+		}
+		return result;
+	}
+
+	/**
+	 * 取销售价格
+	 * @param regionId
+	 * @return
+	 */
+	public List<PriceShow> selectPriceShow(String regionId) {
+		List<PriceShow> priceShows = new ArrayList<>();
 		Map<String, Object> priceMap = viewRegionInfoDao.selectPriceMap(regionId);
 		if (null != priceMap && !priceMap.isEmpty()) {
-			List<PriceShow> priceShows = new ArrayList<>();
 			List<HousePrice> housePrices = new ArrayList<>();
 			String houseShow = "";
 			PriceShow priceShow = new PriceShow();
@@ -434,13 +462,11 @@ public class ProjectServiceImpl implements ProjectService {
 				housePrices.add(housePrice);
 				PriceShow priceShow1 = new PriceShow();
 				priceShow1.setHouseShow("配套");
-				housePrices.add(housePrice);
 				priceShow1.setHousePrices(housePrices);
 				priceShows.add(priceShow1);
 			}
-			result.put("priceShows", priceShows);
 		}
-		return result;
+		return priceShows;
 	}
 
 	/**

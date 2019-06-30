@@ -17,7 +17,6 @@ public class HouseHoldSale implements Serializable {
 	private BigDecimal sellNum;
 	private BigDecimal nosaledNum;
 	private BigDecimal nosaleNum;
-	private BigDecimal sellPrice;
 
 	public String getHouseShow() {
 		return houseShow;
@@ -81,13 +80,5 @@ public class HouseHoldSale implements Serializable {
 
 	public void setNosaleNum(BigDecimal nosaleNum) {
 		this.nosaleNum = nosaleNum;
-	}
-
-	public BigDecimal getSellPrice() {
-		return sellPrice;
-	}
-
-	public void setSellPrice(BigDecimal sellPrice) {
-		this.sellPrice = sellPrice;
 	}
 }
