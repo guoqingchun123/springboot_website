@@ -64,7 +64,7 @@
 			</div>
 		</div>
 		<div class="sale-summary" th:if="region?.priceShows">
-			<span>项目备案情况：</span>
+			<span>价格备案情况：</span>
 			<span th:each="price:${region.priceShows}">
 				<span th:text="${price.houseShow}"></span>
 				（<span th:each="housePrice, iterStat:${price.housePrices}">
