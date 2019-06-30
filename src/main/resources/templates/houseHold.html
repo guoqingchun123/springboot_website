@@ -49,6 +49,13 @@
 				  <a href="javascript:;" data-value="houseHold">户型图</a>
 				  <a href="javascript:;" data-value="regionImage">项目相册</a>
 				</span>
+				<!--
+                <span class="sale-summary">
+                    <span th:each="houseHold:${region.listHouseHold}" th:if="${houseHold.sellNum > 0}">
+                        <span th:text="${houseHold.houseShow}"></span>：<span th:text="${houseHold.sellPrice}"></span>
+                    </span>
+                </span>
+                -->
 			</div>
 		</div>
 		<div style="width: 100%;background-color: white;margin-top: 10px;height:auto;overflow:hidden;">
@@ -161,7 +168,7 @@
 			},
 			tooltip: {
 				trigger: 'item',
-				formatter: "{a} <br/>{b} : {c} ({d}%)"
+				formatter: "{b} : {c} ({d}%)"
 			},
 			series: [
 				{
