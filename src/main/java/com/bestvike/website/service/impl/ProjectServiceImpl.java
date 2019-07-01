@@ -483,7 +483,7 @@ public class ProjectServiceImpl implements ProjectService {
 			}
 			if (housePrices.size() > 0) {
 				PriceShow priceShow = new PriceShow();
-				priceShow.setHouseShow("配套(按套内计算)");
+				priceShow.setHouseShow("配套");
 				priceShow.setHousePrices(housePrices);
 				priceShows.add(priceShow);
 			}

@@ -53,7 +53,10 @@
 
 	<select id = "selectHouseByParameter" parameterType = "map" resultType = "com.bestvike.website.entity.House">
 		<![CDATA[
-			SELECT house_id, show_name, house_hold, house_use, floor_no,
+			SELECT house_id, show_name, house_hold, house_use,
+				case when instr(t.cell_name, 'B') > 0 then t.cell_name
+				when instr(t.bld_no, '地下') > 0 THEN 'B' || t.cell_name ELSE t.cell_name || '单元' END cell_name,
+				floor_no, cell_name as cell_no,
 				case when instr(floor_name, '层') > 0 THEN floor_name else floor_name || '层' end as floor_name,
 				construct_area, own_area,
 				CASE WHEN mortgage_flag = '是' THEN '抵押'

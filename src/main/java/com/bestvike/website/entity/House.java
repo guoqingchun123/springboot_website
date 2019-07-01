@@ -13,6 +13,8 @@ public class House implements Serializable {
 	private String showName;
 	private String houseHold;
 	private String houseUse;
+	private String cellNo;
+	private String cellName;
 	private String floorNo;
 	private String floorName;
 	private BigDecimal constructArea;
@@ -51,6 +53,22 @@ public class House implements Serializable {
 
 	public void setHouseUse(String houseUse) {
 		this.houseUse = houseUse;
+	}
+
+	public String getCellNo() {
+		return cellNo;
+	}
+
+	public void setCellNo(String cellNo) {
+		this.cellNo = cellNo;
+	}
+
+	public String getCellName() {
+		return cellName;
+	}
+
+	public void setCellName(String cellName) {
+		this.cellName = cellName;
 	}
 
 	public String getFloorNo() {
