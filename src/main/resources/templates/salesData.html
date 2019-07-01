@@ -92,7 +92,7 @@
 					非卖套数：<label style="color: #b9d8dd;font-size: large;font-weight: bold" th:text="${region.bldView.bldSales.noSaleNum}"></label>
 				</div>
 				<div class="legends">
-					<div th:each="legend:${region.bldView?.legends}" class="legend"><i class="iconfont icon-home-fill" th:style="'color: #' + ${legend.color}"></i><span th:text="${legend.name}"></span></div>
+					图例：<div th:each="legend:${region.bldView?.legends}" class="legend"><i class="iconfont icon-home-fill" th:style="'color: #' + ${legend.color}"></i><span th:text="${legend.name}"></span></div>
 				</div>
 				<div th:if="${region.bldView.showCell}" class="cells">
 					<div th:each="cell:${region.bldView?.cells}" th:text="${cell.cellName}"
