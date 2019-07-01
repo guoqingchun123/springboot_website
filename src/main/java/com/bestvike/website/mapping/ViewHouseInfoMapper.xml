@@ -24,7 +24,8 @@
 	<select id = "selectRegionCellList" parameterType = "String" resultType = "com.bestvike.website.entity.RegionCell">
 		<![CDATA[
 			SELECT t.project_id, t.bld_no, t.cell_no,
-			case when instr(t1.bld_name, '地下') > 0 THEN 'B' || t.cell_name ELSE t.cell_name || '单元' END cell_name
+			case when instr(t.cell_name, 'B') > 0 then t.cell_name
+				when instr(t1.bld_name, '地下') > 0 THEN 'B' || t.cell_name ELSE t.cell_name || '单元' END cell_name,
 			FROM view_houseinfo t LEFT JOIN view_bldinfo t1 ON t.bld_no = t1.bld_no AND t.project_id = t1.project_id
 			WHERE t.project_id in (select a.project_id from ASS_REGBLD a where a.region_id = #{regionId})
 			GROUP BY t.project_id, t.bld_no, t.cell_no, t1.bld_name, t.cell_name
@@ -41,7 +42,7 @@
        			SUM(1) over(partition BY bld_no, cell_name, floor_no) total_num
 			FROM view_houseinfo t WHERE project_id = #{projectId} and bld_no = #{bldNo}
 		]]>
-		<if test="cellNo != null">
+		<if test = "cellNo != null">
 			and cell_name = #{cellNo}
 		</if>
 		<![CDATA[
@@ -59,6 +60,7 @@
 					WHEN close_flag = '是' THEN '查封'
 					WHEN frozen_flag = '是' THEN '冻结'
 					WHEN presell_state = '已售' THEN '已售'
+					WHEN presell_state = '关闭' THEN '关闭'
 					WHEN sales_flag = '否' THEN t.nosale_reason
 					WHEN presell_state = '未售' THEN '未售'
 				ELSE '其他' END presell_state,
@@ -66,6 +68,7 @@
 					WHEN close_flag = '是' THEN 'dd6600'
 					WHEN frozen_flag = '是' THEN 'dd8800'
 					WHEN presell_state = '已售' THEN 'dd6a62'
+					WHEN presell_state = '关闭' THEN '959595'
 					WHEN sales_flag = '否' THEN '959595'
 					WHEN presell_state = '未售' THEN '00dd02'
 				ELSE '00dd02' END color_code,
@@ -73,7 +76,7 @@
 			FROM view_houseinfo t
 			WHERE project_id = #{projectId} AND bld_no = #{bldNo} AND cell_name = #{cellNo}
 		]]>
-		<if test="floorNo != null">
+		<if test = "floorNo != null">
 			AND floor_no = #{floorNo}
 		</if>
 		<![CDATA[
@@ -99,14 +102,15 @@
 		]]>
 	</select>
 
-	<select id = "selectBldSalesData" parameterType="map" resultType="com.bestvike.website.entity.BldSales">
+	<select id = "selectBldSalesData" parameterType = "map" resultType = "com.bestvike.website.entity.BldSales">
 		<![CDATA[
 			SELECT t.project_id, t.bld_no,
 				CASE WHEN instr(t2.bld_name, '#') > 0 THEN t2.bld_name else t2.bld_name || '#' end bld_name,
 		]]>
-		<if test="cellNo != null">
+		<if test = "cellNo != null">
 			CASE WHEN instr(t2.bld_name, '#') > 0 THEN t2.bld_name else t2.bld_name || '#' end ||
-				case when instr(t2.bld_name, '地下') > 0 THEN 'B' || t.cell_name ELSE t.cell_name || '单元' END cell_name,
+			case when instr(t.cell_name, 'B') > 0 then t.cell_name
+				when instr(t2.bld_name, '地下') > 0 THEN 'B' || t.cell_name ELSE t.cell_name || '单元' END cell_name,
 		</if>
 		<![CDATA[
 				count(1) total_num,
@@ -119,21 +123,22 @@
 			FROM view_houseinfo t left join view_bldInfo t2 on t.project_id = t2.project_id and t.bld_no = t2.bld_no
 			WHERE t.project_id = #{projectId} AND t.bld_no = #{bldNo}
 		]]>
-		<if test="cellNo != null">
+		<if test = "cellNo != null">
 			AND t.cell_name = #{cellNo}
 		</if>
 		<![CDATA[
 			group by t.project_id, t.bld_no, t2.bld_name
 			]]>
-		<if test="cellNo != null">
+		<if test = "cellNo != null">
 			, t.cell_name
 		</if>
 	</select>
 
-	<select id = "selectCellSummary" parameterType="map" resultType="com.bestvike.website.entity.CellSummary">
+	<select id = "selectCellSummary" parameterType = "map" resultType = "com.bestvike.website.entity.CellSummary">
 		<![CDATA[
 			SELECT t.project_id, t.bld_no, t.cell_name cell_no,
-				case when instr(t.bld_no, '地下') > 0 THEN 'B' || t.cell_name ELSE t.cell_name || '单元' END cell_name,
+				case when instr(t.cell_name, 'B') > 0 then t.cell_name
+					when instr(t.bld_no, '地下') > 0 THEN 'B' || t.cell_name ELSE t.cell_name || '单元' END cell_name,
 				count(1) total_num,
 				SUM(CASE WHEN presell_state = '已售' then 1 else 0 end) sell_num,
 				sum(case when sales_flag = '否' then 1 else 0 end) no_sale_num,
@@ -147,13 +152,14 @@
 		]]>
 	</select>
 
-	<select id = "selectFloorCellHouses" parameterType="map" resultType="ViewHouseInfo">
+	<select id = "selectFloorCellHouses" parameterType = "map" resultType = "ViewHouseInfo">
 		<![CDATA[
 			SELECT t.*,
 			CASE WHEN mortgage_flag = '是' THEN '抵押'
 					WHEN close_flag = '是' THEN '查封'
 					WHEN frozen_flag = '是' THEN '冻结'
 					WHEN presell_state = '已售' THEN '已售'
+					WHEN presell_state = '关闭' THEN '关闭'
 					WHEN sales_flag = '否' THEN t.nosale_reason
 					WHEN presell_state = '未售' THEN '未售'
 				ELSE '其他' END presell_state_name,
@@ -161,6 +167,7 @@
 					WHEN close_flag = '是' THEN 'dd6600'
 					WHEN frozen_flag = '是' THEN 'dd8800'
 					WHEN presell_state = '已售' THEN 'dd6a62'
+					WHEN presell_state = '关闭' THEN '959595'
 					WHEN sales_flag = '否' THEN '959595'
 					WHEN presell_state = '未售' THEN '00dd02'
 				ELSE '00dd02' END presell_state_code
@@ -169,7 +176,7 @@
 		]]>
 	</select>
 
-	<select id = "selectBldView" parameterType="map" resultType="com.bestvike.website.entity.BldView">
+	<select id = "selectBldView" parameterType = "map" resultType = "com.bestvike.website.entity.BldView">
 		<![CDATA[
 			SELECT project_id, bld_no, bld_name, view_path, max(house_num) cell_floor_num
 			FROM (
@@ -185,13 +192,14 @@
 		]]>
 	</select>
 
-	<select id = "selectBldHouse" parameterType="map" resultType="ViewHouseInfo">
+	<select id = "selectBldHouse" parameterType = "map" resultType = "ViewHouseInfo">
 		<![CDATA[
 			SELECT t.*,
 			CASE WHEN mortgage_flag = '是' THEN '抵押'
 					WHEN close_flag = '是' THEN '查封'
 					WHEN frozen_flag = '是' THEN '冻结'
 					WHEN presell_state = '已售' THEN '已售'
+					WHEN presell_state = '关闭' THEN '关闭'
 					WHEN sales_flag = '否' THEN nosale_reason
 					WHEN presell_state = '未售' THEN '未售'
 				ELSE '其他' END presell_state_name,
@@ -199,13 +207,14 @@
 					WHEN close_flag = '是' THEN 'dd6600'
 					WHEN frozen_flag = '是' THEN 'dd8800'
 					WHEN presell_state = '已售' THEN 'dd6a62'
+					WHEN presell_state = '关闭' THEN '959595'
 					WHEN sales_flag = '否' THEN '959595'
 					WHEN presell_state = '未售' THEN '00dd02'
 				ELSE '00dd02' END presell_state_code
 			FROM view_houseinfo t
 			WHERE t.project_id = #{projectId} AND t.bld_no = #{bldNo} AND t.floor_no = #{floorNo}
 		]]>
-		<if test="cellNo != null">
+		<if test = "cellNo != null">
 			AND cell_name = #{cellNo}
 		</if>
 		<![CDATA[

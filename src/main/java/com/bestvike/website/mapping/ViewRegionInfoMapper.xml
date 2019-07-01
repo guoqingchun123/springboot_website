@@ -126,7 +126,8 @@
 				 'top:' || round(vci.y * 100) || '%;left:' ||  round(vci.x * 100) || '%' else '' end AS location
 			from (
 				SELECT #{projectId} project_id, t1.cell_name as cell_no,
-				case when instr(t2.bld_name, '地下') > 0 THEN 'B' || t1.cell_name ELSE t1.cell_name || '单元' END cell_name,
+				case when instr(t1.cell_name, 'B') > 0 then t1.cell_name
+					when instr(t2.bld_name, '地下') > 0 THEN 'B' || t1.cell_name ELSE t1.cell_name || '单元' END cell_name,
 				t2.bld_name, t2.bld_no,
 				count(1) over(partition BY t1.bld_no, t1.cell_name, t1.floor_no) house_num
 				FROM view_houseinfo t1 left join view_bldinfo t2
@@ -163,7 +164,8 @@
 			SELECT cell_no, cell_name, max(house_num) max_house_num, max(house_num) show_house_num
 			from (
 				SELECT cell_name as cell_no,
-				case when instr(bld_no, '地下') > 0 THEN 'B' || cell_name ELSE cell_name || '单元' END cell_name,
+				case when instr(cell_name, 'B') > 0 then cell_name
+					when instr(bld_no, '地下') > 0 THEN 'B' || cell_name ELSE cell_name || '单元' END cell_name,
 				count(1) over(partition BY bld_no, cell_name, floor_no) house_num
 				FROM view_houseinfo WHERE project_id = #{projectId} AND bld_no = #{bldNo} AND floor_no = #{floorNo}
 		]]>

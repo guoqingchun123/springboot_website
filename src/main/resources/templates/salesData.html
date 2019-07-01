@@ -43,7 +43,7 @@
 					<div carousel-item="">
 						<div id="regionSalesData"></div>
 						<div style="padding-left: 2px;text-align: center" th:each="str:${region?.regionLogos}">
-							<img th:src="${str}" style="height: 100%;width: 100%"/>
+							<img th:src="${str}" style="height: 400px"/>
 						</div>
 					</div>
 				</div>
@@ -51,14 +51,14 @@
 			<div id="viewImageDiv" class="layui-col-md6" style="padding-left: 3px">
 				<div style="position: relative;height: auto;display:inline-block">
                     <div th:if="${cellNo == null}">
-                        <img th:src="${region?.viewPath}" class="view-url" style="height:400px">
+                        <img th:src="${region?.viewPath}" class="view-url" style="width: 100%;height: 100%">
                         <div th:each="regionBld, iterStat:${region?.listRegionBlds}" th:if="${region.listRegionBlds}">
 							<span th:class="${region.viewPath != null ? 'bldSpan' : 'bldDiv'}" th:classappend="${bldNo == null ? iterStat.index == 0 : bldNo == regionBld.bldNo} ? 'selectedBld'"
                               th:data-project-id="${regionBld.projectId}" th:data-bld-no="${regionBld.bldNo}" th:style="${regionBld.location}" th:text="${regionBld.bldName}"></span>
                         </div>
                     </div>
                     <div th:if="${cellNo != null}">
-                        <img th:src="${region.bldView.viewPath}" class="view-url" style="height:400px">
+                        <img th:src="${region.bldView.viewPath}" class="view-url" style="width: 100%;height: 100%">
 						<a class="return-to" href="javascript:;">返回</a>
                         <div th:each="cell, iterStat:${region.bldView.cells}" th:if="${cell.location != null}">
                             <span th:class="cellSpan" th:classappend="${cellNo == cell.CellNo} ? 'selectedCell'"
@@ -92,7 +92,7 @@
 					非卖套数：<label style="color: #b9d8dd;font-size: large;font-weight: bold" th:text="${region.bldView.bldSales.noSaleNum}"></label>
 				</div>
 				<div class="legends">
-					图例：<div th:each="legend:${region.bldView?.legends}" class="legend"><i class="iconfont icon-home-fill" th:style="'color: #' + ${legend.color}"></i><span th:text="${legend.name}"></span></div>
+					<div class="legend" style="line-height: 25px;margin-left: 15px;">图例：</div><div th:each="legend:${region.bldView?.legends}" class="legend"><i class="iconfont icon-home-fill" th:style="'color: #' + ${legend.color}"></i><span th:text="${legend.name}"></span></div>
 				</div>
 				<div th:if="${region.bldView.showCell}" class="cells">
 					<div th:each="cell:${region.bldView?.cells}" th:text="${cell.cellName}"
