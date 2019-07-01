@@ -125,7 +125,9 @@
 				case when vci.x is not null and vci.x != 0 then
 				 'top:' || round(vci.y * 100) || '%;left:' ||  round(vci.x * 100) || '%' else '' end AS location
 			from (
-				SELECT #{projectId} project_id, t1.cell_name as cell_no, t1.cell_name || '单元' as cell_name, t2.bld_name, t2.bld_no,
+				SELECT #{projectId} project_id, t1.cell_name as cell_no,
+				case when instr(t2.bld_name, '地下') > 0 THEN 'B' || t1.cell_name ELSE t1.cell_name || '单元' END cell_name,
+				t2.bld_name, t2.bld_no,
 				count(1) over(partition BY t1.bld_no, t1.cell_name, t1.floor_no) house_num
 				FROM view_houseinfo t1 left join view_bldinfo t2
 				on t1.project_id = t2.project_id AND t1.bld_no = t2.bld_no
@@ -160,7 +162,8 @@
 		<![CDATA[
 			SELECT cell_no, cell_name, max(house_num) max_house_num, max(house_num) show_house_num
 			from (
-				SELECT cell_name as cell_no, cell_name || '单元' as cell_name,
+				SELECT cell_name as cell_no,
+				case when instr(bld_no, '地下') > 0 THEN 'B' || cell_name ELSE cell_name || '单元' END cell_name,
 				count(1) over(partition BY bld_no, cell_name, floor_no) house_num
 				FROM view_houseinfo WHERE project_id = #{projectId} AND bld_no = #{bldNo} AND floor_no = #{floorNo}
 		]]>
@@ -182,7 +185,9 @@
 			FROM view_regionInfo t1 left join ass_regbld t2 on t1.region_id = t2.region_id
 			LEFT JOIN view_bldInfo t3 on t2.project_id = t3.project_id and t2.bld_no = t3.bld_no
 			WHERE t1.region_id = #{regionId} AND t1.state = '0000'
-			ORDER BY to_number(nvl(regexp_replace(t3.bld_name, '[^0-9]'), -1)) asc, t3.bld_no asc
+			ORDER BY
+			case when instr(t3.bld_name, '地下') > 0 or instr(t3.bld_name, '配套') > 0
+				then 99 else to_number(nvl(regexp_replace(t3.bld_name, '[^0-9]'), -1)) end asc, t3.bld_no asc
 		]]>
 	</select>
 

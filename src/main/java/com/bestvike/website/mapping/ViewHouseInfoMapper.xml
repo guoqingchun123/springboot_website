@@ -23,9 +23,10 @@
 
 	<select id = "selectRegionCellList" parameterType = "String" resultType = "com.bestvike.website.entity.RegionCell">
 		<![CDATA[
-			SELECT t.project_id, t.bld_no, t.cell_no, t1.bld_name || '#' || t.cell_name || '单元' cell_name
+			SELECT t.project_id, t.bld_no, t.cell_no,
+			case when instr(t1.bld_name, '地下') > 0 THEN 'B' || t.cell_name ELSE t.cell_name || '单元' END cell_name
 			FROM view_houseinfo t LEFT JOIN view_bldinfo t1 ON t.bld_no = t1.bld_no AND t.project_id = t1.project_id
-			 WHERE t.project_id in (select a.project_id from ASS_REGBLD a where a.region_id = #{regionId})
+			WHERE t.project_id in (select a.project_id from ASS_REGBLD a where a.region_id = #{regionId})
 			GROUP BY t.project_id, t.bld_no, t.cell_no, t1.bld_name, t.cell_name
 			ORDER BY t.project_id, t.bld_no, t.cell_no, t1.bld_name, t.cell_name
 		]]>
@@ -104,7 +105,8 @@
 				CASE WHEN instr(t2.bld_name, '#') > 0 THEN t2.bld_name else t2.bld_name || '#' end bld_name,
 		]]>
 		<if test="cellNo != null">
-			CASE WHEN instr(t2.bld_name, '#') > 0 THEN t2.bld_name else t2.bld_name || '#' end || t.cell_name || '单元' cell_name,
+			CASE WHEN instr(t2.bld_name, '#') > 0 THEN t2.bld_name else t2.bld_name || '#' end ||
+				case when instr(t2.bld_name, '地下') > 0 THEN 'B' || t.cell_name ELSE t.cell_name || '单元' END cell_name,
 		</if>
 		<![CDATA[
 				count(1) total_num,
@@ -130,7 +132,8 @@
 
 	<select id = "selectCellSummary" parameterType="map" resultType="com.bestvike.website.entity.CellSummary">
 		<![CDATA[
-			SELECT t.project_id, t.bld_no, t.cell_name cell_no, t.cell_name || '单元' cell_name,
+			SELECT t.project_id, t.bld_no, t.cell_name cell_no,
+				case when instr(t.bld_no, '地下') > 0 THEN 'B' || t.cell_name ELSE t.cell_name || '单元' END cell_name,
 				count(1) total_num,
 				SUM(CASE WHEN presell_state = '已售' then 1 else 0 end) sell_num,
 				sum(case when sales_flag = '否' then 1 else 0 end) no_sale_num,
