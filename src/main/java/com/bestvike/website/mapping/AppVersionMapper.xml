@@ -6,7 +6,7 @@
 			SELECT
 			max(version_id) version_id,
 			case when count(1) > 0 then 'Y' else 'N' end has_newer,
-			case when sum(case when is_force = 'Y' then 1 else 0 end) > 0 then 'Y' else 'N' end is_force FROM app_version WHERE version_id > '1.0.0'
+			case when sum(case when is_force = 'Y' then 1 else 0 end) > 0 then 'Y' else 'N' end is_force FROM app_version WHERE version_id > #{versionId}
 		]]>
 	</select>
 </mapper>
