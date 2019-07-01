@@ -88,7 +88,7 @@
 				case when instr(floor_name, '层') > 0 THEN floor_name else floor_name || '层' end as floor_name,
 				COUNT(1) total_num,
 				sum(case when presell_state = '已售' then 1 else 0 END) sell_num,
-				sum(case when presell_state = '未售' then 1 else 0 END) nosaled_num,
+				sum(case when presell_state = '未售' and sales_flag = '是' then 1 else 0 END) nosaled_num,
 				sum(case when sales_flag != '是' and presell_state = '未售' then 1 else 0 END) nosale_num
 			FROM view_houseinfo t
 			WHERE t.project_id = #{projectId} AND t.bld_no = #{bldNo} AND t.cell_name = #{cellNo}
