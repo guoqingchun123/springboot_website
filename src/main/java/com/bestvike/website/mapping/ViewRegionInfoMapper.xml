@@ -77,7 +77,7 @@
 				SUM(CASE WHEN sales_flag = '否' and nosale_Reason = '自留' then t.construct_area else 0 END) 自留,
 				SUM(CASE WHEN mortgage_flag = '是' THEN t.construct_area ELSE 0 END) 抵押,
 				SUM(CASE WHEN close_flag = '是' THEN t.construct_area ELSE 0 END) 查封,
-	            SUM(CASE WHEN frozen_flag = '是' THEN t.construct_area ELSE 0 END) 冻结,
+	            SUM(CASE WHEN frozen_flag = '是' THEN t.construct_area ELSE 0 END) 关闭,
 	            SUM(CASE WHEN presell_state = '已售' THEN t.construct_area ELSE 0 END) 已售,
 	            SUM(CASE WHEN presell_state = '未售' AND sales_flag != '否' THEN t.construct_area ELSE 0 END) 未售
             FROM view_houseinfo t
@@ -114,7 +114,9 @@
 			FROM view_bldInfo t WHERE EXISTS (
 				SELECT 1 FROM ass_regbld WHERE region_id = #{regionId} AND project_id = t.project_id
 			)
-		    ORDER BY to_number(nvl(regexp_replace(t.bld_name, '[^0-9]'), -1)) asc, bld_no asc
+			ORDER BY
+			case when instr(t.bld_name, '地下') > 0 or instr(t.bld_name, '配套') > 0
+				then 99 else to_number(nvl(regexp_replace(t.bld_name, '[^0-9]'), -1)) end asc, t.bld_no asc
 		]]>
 	</select>
 

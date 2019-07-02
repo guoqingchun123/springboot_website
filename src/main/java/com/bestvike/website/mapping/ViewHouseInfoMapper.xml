@@ -61,9 +61,10 @@
 				construct_area, own_area,
 				CASE WHEN mortgage_flag = '是' THEN '抵押'
 					WHEN close_flag = '是' THEN '查封'
-					WHEN frozen_flag = '是' THEN '冻结'
+					WHEN frozen_flag = '是' THEN '关闭'
 					WHEN presell_state = '已售' THEN '已售'
 					WHEN presell_state = '关闭' THEN '关闭'
+					WHEN presell_state = '已受理' THEN '签订中'
 					WHEN sales_flag = '否' THEN t.nosale_reason
 					WHEN presell_state = '未售' THEN '未售'
 				ELSE '其他' END presell_state,
@@ -71,6 +72,7 @@
 					WHEN close_flag = '是' THEN 'dd6600'
 					WHEN frozen_flag = '是' THEN 'dd8800'
 					WHEN presell_state = '已售' THEN 'dd6a62'
+					WHEN presell_state = '已受理' THEN '03c2dd'
 					WHEN presell_state = '关闭' THEN '959595'
 					WHEN sales_flag = '否' THEN '959595'
 					WHEN presell_state = '未售' THEN '00dd02'
@@ -160,15 +162,17 @@
 			SELECT t.*,
 			CASE WHEN mortgage_flag = '是' THEN '抵押'
 					WHEN close_flag = '是' THEN '查封'
-					WHEN frozen_flag = '是' THEN '冻结'
+					WHEN frozen_flag = '是' THEN '关闭'
 					WHEN presell_state = '已售' THEN '已售'
 					WHEN presell_state = '关闭' THEN '关闭'
+					WHEN presell_state = '已受理' THEN '签订中'
 					WHEN sales_flag = '否' THEN t.nosale_reason
 					WHEN presell_state = '未售' THEN '未售'
 				ELSE '其他' END presell_state_name,
 				CASE WHEN mortgage_flag = '是' THEN 'ddb400'
 					WHEN close_flag = '是' THEN 'dd6600'
 					WHEN frozen_flag = '是' THEN 'dd8800'
+					WHEN presell_state = '已受理' THEN '03c2dd'
 					WHEN presell_state = '已售' THEN 'dd6a62'
 					WHEN presell_state = '关闭' THEN '959595'
 					WHEN sales_flag = '否' THEN '959595'
@@ -200,15 +204,17 @@
 			SELECT t.*,
 			CASE WHEN mortgage_flag = '是' THEN '抵押'
 					WHEN close_flag = '是' THEN '查封'
-					WHEN frozen_flag = '是' THEN '冻结'
+					WHEN frozen_flag = '是' THEN '关闭'
 					WHEN presell_state = '已售' THEN '已售'
 					WHEN presell_state = '关闭' THEN '关闭'
+					WHEN presell_state = '已受理' THEN '签订中'
 					WHEN sales_flag = '否' THEN nosale_reason
 					WHEN presell_state = '未售' THEN '未售'
 				ELSE '其他' END presell_state_name,
 				CASE WHEN mortgage_flag = '是' THEN 'ddb400'
 					WHEN close_flag = '是' THEN 'dd6600'
 					WHEN frozen_flag = '是' THEN 'dd8800'
+					WHEN presell_state = '已受理' THEN '03c2dd'
 					WHEN presell_state = '已售' THEN 'dd6a62'
 					WHEN presell_state = '关闭' THEN '959595'
 					WHEN sales_flag = '否' THEN '959595'
