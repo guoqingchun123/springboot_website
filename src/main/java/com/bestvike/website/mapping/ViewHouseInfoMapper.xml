@@ -36,7 +36,7 @@
 	<select id = "selectHouseInfoList" parameterType = "map" resultType = "ViewHouseInfo">
 		<![CDATA[
 			SELECT t.*, row_number() over(partition by bld_no, cell_no, floor_no order by lpad(floor_no, 10, '0'), show_name, house_id) init_room,
-				SUM(CASE WHEN t.presell_state = '已售' THEN 1 ELSE 0 END) over(partition BY bld_no, cell_name, floor_no) sale_num,
+				SUM(CASE WHEN t.presell_state = '已售' or t.presell_state = '已受理' THEN 1 ELSE 0 END) over(partition BY bld_no, cell_name, floor_no) sale_num,
        			SUM(CASE WHEN t.presell_state = '未售' and t.sales_flag = '是' THEN 1 ELSE 0 END) over(partition BY bld_no, cell_name, floor_no) no_sale_Num,
        			SUM(CASE WHEN t.presell_state = '未售' and t.sales_flag != '是' THEN 1 ELSE 0 END) over(partition BY bld_no, cell_name, floor_no) no_saled_Num,
        			SUM(1) over(partition BY bld_no, cell_name, floor_no) total_num
@@ -77,7 +77,7 @@
 					WHEN sales_flag = '否' THEN '959595'
 					WHEN presell_state = '未售' THEN '00dd02'
 				ELSE '00dd02' END color_code,
-				CASE WHEN presell_state = '已售' THEN 0 ELSE presell_price END presell_price
+				CASE WHEN presell_state = '已售' or presell_state = '已受理' THEN 0 ELSE presell_price END presell_price
 			FROM view_houseinfo t
 			WHERE project_id = #{projectId} AND bld_no = #{bldNo} AND cell_name = #{cellNo}
 		]]>
@@ -96,7 +96,7 @@
 			SELECT nvl(floor_no, '-') floor_no,
 				case when instr(floor_name, '层') > 0 THEN floor_name else floor_name || '层' end as floor_name,
 				COUNT(1) total_num,
-				sum(case when presell_state = '已售' then 1 else 0 END) sell_num,
+				sum(case when presell_state = '已售' or presell_state = '已受理' then 1 else 0 END) sell_num,
 				sum(case when presell_state = '未售' and sales_flag = '是' then 1 else 0 END) nosaled_num,
 				sum(case when sales_flag != '是' and presell_state = '未售' then 1 else 0 END) nosale_num
 			FROM view_houseinfo t
@@ -119,7 +119,7 @@
 		</if>
 		<![CDATA[
 				count(1) total_num,
-				SUM(CASE WHEN presell_state = '已售' then 1 else 0 end) sell_num,
+				SUM(CASE WHEN presell_state = '已售' or presell_state = '已受理' then 1 else 0 end) sell_num,
 				sum(case when sales_flag = '否' then 1 else 0 end) no_sale_num,
 				SUM(case when mortgage_flag = '是' then 1 else 0 end) mortgage_num,
 				SUM(case when close_flag = '是' then 1 else 0 end) close_num,
@@ -145,7 +145,7 @@
 				case when instr(t.cell_name, 'B') > 0 then t.cell_name
 					when instr(t.bld_no, '地下') > 0 THEN 'B' || t.cell_name ELSE t.cell_name || '单元' END cell_name,
 				count(1) total_num,
-				SUM(CASE WHEN presell_state = '已售' then 1 else 0 end) sell_num,
+				SUM(CASE WHEN presell_state = '已售' or presell_state = '已受理' then 1 else 0 end) sell_num,
 				sum(case when sales_flag = '否' then 1 else 0 end) no_sale_num,
 				SUM(case when mortgage_flag = '是' then 1 else 0 end) mortgage_num,
 				SUM(case when close_flag = '是' then 1 else 0 end) close_num,
