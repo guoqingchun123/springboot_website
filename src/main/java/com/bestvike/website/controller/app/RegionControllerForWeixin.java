@@ -74,4 +74,6 @@ public class RegionControllerForWeixin extends BaseController {
 	public Map<String, Object> cellFloorSummary(@RequestParam String projectId, @RequestParam String bldNo, @RequestParam String cellNo) {
 		return projectService.cellFloorSummary(projectId, bldNo, cellNo);
 	}
+
+
 }
