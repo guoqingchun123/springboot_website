@@ -240,18 +240,16 @@
 		<![CDATA[
 			SELECT sum(t.construct_area) from view_houseinfo t
 			where exists(select 1 from ass_regbld where bld_no = t.bld_no and project_id = t.project_id)
-			and t.sign_date is null
+			and t.sign_date = to_char(TRUNC(sysdate - 1), 'yyyy-mm-dd')
 		]]>
-		<!--to_char(TRUNC(sysdate - 1), 'yyyy-mm-dd')-->
 	</select>
 
 	<select id = "selectTodayTradingArea" resultType = "BigDecimal">
 		<![CDATA[
 			SELECT sum(t.construct_area) from view_houseinfo t
 			where exists(select 1 from ass_regbld where bld_no = t.bld_no and project_id = t.project_id)
-			and t.sign_date is null
+			and t.sign_date = to_char(TRUNC(sysdate), 'yyyy-mm-dd')
 		]]>
-		<!--to_char(TRUNC(sysdate), 'yyyy-mm-dd')-->
 	</select>
 
 	<select id = "selectMonthData" resultType = "com.bestvike.website.entity.MonthData">
@@ -267,7 +265,8 @@
 			SELECT t3.region_name, t1.sign_date, t1.address, t1.house_hold, t1.record_date, t1.buyer_names, t1.contract_no
 			FROM view_houseinfo t1 LEFT JOIN ass_regbld t2 on t1.project_id = t2.project_id and t1.bld_no = t2.bld_no
 			LEFT JOIN view_regioninfo t3 ON t2.region_id = t3.region_id
-			WHERE t3.state = '0000' and t1.sign_date = to_char(sysdate, 'yyyy-mm-dd')
+			WHERE t3.state = '0000' and t1.sign_date = to_char(TRUNC(sysdate - 1), 'yyyy-mm-dd')
+			ORDER BY t1.contract_no desc
 		]]>
 	</select>
 

@@ -105,9 +105,9 @@ public class LayoutServiceImpl implements LayoutService {
 				residenceStocks[i] = monthData.getResidenceStockArea();
 				businessStocks[i] = monthData.getBusinessStockArea();
 				matingStocks[i] = monthData.getMatingStockArea();
-				residenceTotals[i] = monthData.getResidenceArea().add(monthData.getResidenceArea());
-				businessTotals[i] = monthData.getBusinessStockArea().add(monthData.getBusinessArea());
-				matingTotals[i] = monthData.getMatingStockArea().add(monthData.getMatingArea());
+				residenceTotals[i] = monthData.getResidenceArea().add(monthData.getResidenceStockArea());
+				businessTotals[i] = monthData.getBusinessStockArea().add(monthData.getBusinessStockArea());
+				matingTotals[i] = monthData.getMatingStockArea().add(monthData.getMatingStockArea());
 				residencePrices[i] = monthData.getResidencePrice();
 				businessPrices[i] = monthData.getBusinessPrice();
 				matingPrices[i] = monthData.getMatingPrice();
