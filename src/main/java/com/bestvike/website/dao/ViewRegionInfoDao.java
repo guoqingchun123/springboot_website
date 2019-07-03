@@ -51,11 +51,15 @@ public interface ViewRegionInfoDao extends Mapper<ViewRegionInfo> {
 
 	public BigDecimal selectTodayTradingArea();
 
-	public List<MonthData> selectMonthData();
-
 	public List<Trade> selectTodayTrade();
 
 	public List<DivisionTrade> selectDivisionTrade();
 
 	public Map<String, Object> selectPriceMap(String regionId);
+
+	public List<Map<String, Object>> selectMonthArea();
+
+	public List<Map<String, Object>> selectMonthAvgPrice();
+
+	public List<Map<String, Object>> selectMonthStocks();
 }

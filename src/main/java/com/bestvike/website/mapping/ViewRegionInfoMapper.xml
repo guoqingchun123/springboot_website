@@ -252,14 +252,6 @@
 		]]>
 	</select>
 
-	<select id = "selectMonthData" resultType = "com.bestvike.website.entity.MonthData">
-		<![CDATA[
-			SELECT * from view_monthdata
-			WHERE data_month >= TO_CHAR(add_months(sysdate, -12), 'yyyy-MM')
-			ORDER BY data_month asc
-		]]>
-	</select>
-
 	<select id = "selectTodayTrade" resultType = "com.bestvike.website.entity.Trade">
 		<![CDATA[
 			SELECT t3.region_name, t1.sign_date, t1.address, t1.house_hold, t1.record_date, t1.buyer_names, t1.contract_no
@@ -296,6 +288,36 @@
 			from view_houseinfo t
 			where t.sales_flag = '是'
 				and exists(SELECT 1 FROM ass_regbld WHERE region_id = #{regionId} AND project_id = t.project_id and bld_no = t.bld_no)
+		]]>
+	</select>
+
+	<select id = "selectMonthArea" resultType = "Map">
+		<![CDATA[
+			SELECT data_month "月份",
+				total_area "商品房(销售)", total_area + total_stock_area "商品房(供给)",
+    			residence_area "住宅(销售)", residence_area + residence_stock_area "住宅(供给)"
+			FROM view_monthdata t
+			WHERE data_month >= TO_CHAR(add_months(sysdate, -6), 'yyyy-MM')
+			ORDER BY data_month ASC
+		]]>
+	</select>
+
+	<select id = "selectMonthAvgPrice" resultType = "Map">
+		<![CDATA[
+			SELECT data_month "月份", residence_price "住宅", business_price "商业", mating_price "配套"
+			FROM view_monthdata t
+			WHERE data_month >= TO_CHAR(add_months(sysdate, -6), 'yyyy-MM')
+			ORDER BY data_month ASC
+		]]>
+	</select>
+
+	<select id = "selectMonthStocks" resultType="map">
+		<![CDATA[
+			SELECT data_month "月份", total_stock_area "商品房", residence_stock_area "住宅",
+			business_stock_area "商业", mating_stock_area "配套"
+			FROM view_monthdata t
+			WHERE data_month >= TO_CHAR(add_months(sysdate, -6), 'yyyy-MM')
+			ORDER BY data_month ASC
 		]]>
 	</select>
 </mapper>
