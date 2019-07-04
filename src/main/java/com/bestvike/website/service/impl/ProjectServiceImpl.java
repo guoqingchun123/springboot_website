@@ -428,7 +428,13 @@ public class ProjectServiceImpl implements ProjectService {
 
 		//查询配套销售汇总
 		ResidenceHouseSale matingCollects = viewRegionInfoDao.selectRegionHouseSaleData(parameterMap);
-		result.put("matingCollects", matingCollects);
+		if (null != matingCollects) {
+			result.put("matingCollects", matingCollects);
+		} else {
+			matingCollects = new ResidenceHouseSale();
+			result.put("matingCollects", matingCollects);
+		}
+
 		// 查询各种房屋类型的销售均价
 		List<PriceShow> priceShows = selectPriceShow(regionId);
 		if (priceShows.size() > 0) {
