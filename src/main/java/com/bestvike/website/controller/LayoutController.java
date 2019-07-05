@@ -104,15 +104,13 @@ public class LayoutController extends BaseController {
 	}
 
 	/**
-	 * 大数据屏数据返回
+	 * 后台进入登录页面
 	 * @return
 	 */
-	@GetMapping(value = "/console")
-	public ModelAndView console() {
+	@GetMapping(value = "/login")
+	public ModelAndView login() {
 		ModelAndView mv = new ModelAndView();
-		Map<String, Object> data = layoutService.selectConsoleData();
-		mv.addObject("data", data);
-		mv.setViewName("console");
+		mv.setViewName("login");
 		return mv;
 	}
 }

@@ -1,5 +1,7 @@
 package com.bestvike.website.controller;
 
+import com.bestvike.commons.redis.Cache;
+import com.bestvike.website.data.SUser;
 import com.bestvike.website.data.ViewPresalecard;
 import com.bestvike.website.data.ViewRegionInfo;
 import com.bestvike.website.entity.Region;
@@ -10,10 +12,14 @@ import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,6 +34,12 @@ public class ProjectController extends BaseController {
 
 	@Autowired
 	private ProjectService projectService;
+
+	@Value("${app.password}")
+	private String password;
+
+	@Autowired
+	private Cache cache;
 
 	@GetMapping(value = "/regions")
 	public List<Region> regions(@RequestParam(required = false) String order) {
@@ -87,5 +99,15 @@ public class ProjectController extends BaseController {
 			e.printStackTrace();
 		}
 		return paramterMap;
+	}
+
+	@PostMapping(value = "/checkLogin")
+	public String checkLogin(@RequestBody SUser sUser) {
+		if (sUser != null && password.equals(sUser.getPassword())) {
+			String token = UUID.randomUUID().toString();
+			cache.setExpire(token, sUser, 60 * 60);
+			return token;
+		}
+		return null;
 	}
 }
