@@ -35,6 +35,8 @@ public class ProjectController extends BaseController {
 	@Autowired
 	private ProjectService projectService;
 
+	@Value("${app.user}")
+	private String user;
 	@Value("${app.password}")
 	private String password;
 
@@ -103,7 +105,7 @@ public class ProjectController extends BaseController {
 
 	@PostMapping(value = "/checkLogin")
 	public String checkLogin(@RequestBody SUser sUser) {
-		if (sUser != null && password.equals(sUser.getPassword())) {
+		if (sUser != null && password.equals(sUser.getPassword()) && user.equals(sUser.getUser())) {
 			String token = UUID.randomUUID().toString();
 			cache.setExpire(token, sUser, 60 * 60);
 			return token;
