@@ -6,9 +6,11 @@ import com.bestvike.website.entity.Cell;
 import com.bestvike.website.entity.DivisionTrade;
 import com.bestvike.website.entity.Floor;
 import com.bestvike.website.entity.HouseHoldSale;
+import com.bestvike.website.entity.Lastest;
 import com.bestvike.website.entity.MonthData;
 import com.bestvike.website.entity.Region;
 import com.bestvike.website.entity.RegionBlds;
+import com.bestvike.website.entity.RegionTrade;
 import com.bestvike.website.entity.ResidenceHouseSale;
 import com.bestvike.website.entity.Trade;
 import java.math.BigDecimal;
@@ -65,4 +67,8 @@ public interface ViewRegionInfoDao extends Mapper<ViewRegionInfo> {
 	public List<Map<String, Object>> selectMonthAvgPrice();
 
 	public List<Map<String, Object>> selectMonthStocks();
+
+	public Lastest selectLatest();
+
+	public List<RegionTrade> selectRegionTrade(Map<String, Object> parameterMap);
 }

@@ -4,8 +4,10 @@ import com.bestvike.website.dao.ViewProjectInfoDao;
 import com.bestvike.website.dao.ViewRegionInfoDao;
 import com.bestvike.website.data.ViewPresalecard;
 import com.bestvike.website.entity.DivisionTrade;
+import com.bestvike.website.entity.Lastest;
 import com.bestvike.website.entity.MonthData;
 import com.bestvike.website.entity.Region;
+import com.bestvike.website.entity.RegionTrade;
 import com.bestvike.website.entity.Trade;
 import com.bestvike.website.service.LayoutService;
 import com.github.pagehelper.ISelect;
@@ -56,30 +58,9 @@ public class LayoutServiceImpl implements LayoutService {
 	@Override
 	public Map<String, Object> selectConsoleData() {
 		Map<String, Object> resultMap = new HashMap<>();
-		// 在售项目数
-		BigDecimal regionNum = viewRegionInfoDao.selectRegionNum();
-		if (regionNum == null) {
-			regionNum = BigDecimal.valueOf(0);
-		}
-		resultMap.put("regionNum", new DecimalFormat("###,##0").format(regionNum));
-		// 总体存量面积
-		BigDecimal stockArea = viewRegionInfoDao.selectStockArea();
-		if (stockArea == null) {
-			stockArea = BigDecimal.valueOf(0);
-		}
-		resultMap.put("stockArea", new DecimalFormat("###,##0.00").format(stockArea));
-		// 昨日交易量
-		BigDecimal yesterdayTradingArea = viewRegionInfoDao.selectYesterdayTradingArea();
-		if (yesterdayTradingArea == null) {
-			yesterdayTradingArea = BigDecimal.valueOf(0);
-		}
-		resultMap.put("yesterdayTradingArea", new DecimalFormat("###,##0").format(yesterdayTradingArea));
-		// 今日交易量
-		BigDecimal todayTradingArea = viewRegionInfoDao.selectTodayTradingArea();
-		if (todayTradingArea == null) {
-			todayTradingArea = BigDecimal.valueOf(0);
-		}
-		resultMap.put("todayTradingArea", new DecimalFormat("###,##0").format(todayTradingArea));
+		// 截止当前住宅、商品房套数面积
+		Lastest lastest = viewRegionInfoDao.selectLatest();
+		resultMap.put("lastest", lastest);
 		// 月供给及销售情况
 		List<Map<String, Object>> monthArea = viewRegionInfoDao.selectMonthArea();
 		resultMap.put("monthArea", monthArea);
@@ -92,18 +73,22 @@ public class LayoutServiceImpl implements LayoutService {
 		List<Map<String, Object>> monthStocks = viewRegionInfoDao.selectMonthStocks();
 		resultMap.put("monthStocks", monthStocks);
 
-		// 今日交易流水
-		PageInfo<Trade> tradePage = PageHelper.startPage(1, 15).doSelectPageInfo(new ISelect() {
-			@Override
-			public void doSelect() {
-				viewRegionInfoDao.selectTodayTrade();
-			}
-		});
-		resultMap.put("todayTrades", tradePage.getList());
-		// 按区查询三月内交易情况
-		List<DivisionTrade> divisionTrades = viewRegionInfoDao.selectDivisionTrade();
-		resultMap.put("divisionTrades", divisionTrades);
+//		// 按区查询三月内交易情况
+//		List<DivisionTrade> divisionTrades = viewRegionInfoDao.selectDivisionTrade();
+//		resultMap.put("divisionTrades", divisionTrades);
 
+		// 查询小区及30日内交易量
+		Map<String, Object> parameterMap = new HashMap<>();
+		List<RegionTrade> regionTrades = viewRegionInfoDao.selectRegionTrade(parameterMap);
+		Map<String, BigDecimal[]> regionMap = new HashMap<>();
+		for (RegionTrade regionTrade : regionTrades) {
+			BigDecimal[] positions = new BigDecimal[2];
+			positions[0] = regionTrade.getX();
+			positions[1] = regionTrade.getY();
+			regionMap.put(regionTrade.getRegionName(), positions);
+		}
+		resultMap.put("regionMap", regionMap);
+		resultMap.put("regionTrades", regionTrades);
 		return resultMap;
 	}
 }

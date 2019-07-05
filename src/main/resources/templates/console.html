@@ -18,90 +18,98 @@
 			height: 80px;
 			background-color: #ffffff;
 		}
-
+		
 		.header .logo {
 			height: 100%;
 			display: flex;
 			align-items: center;
 			padding-left: 20px;
 		}
+		
 		.header .container {
 			height: 100%;
 		}
+		
 		.header .video-btn {
 			display: flex;
 			justify-content: center;
 			align-items: center;
 		}
+		
 		.header .container .wrapper {
 			display: grid;
 			grid-template-rows: 30px 50px;
 			grid-template-columns: repeat(4, 1fr);
-			grid-template-areas:
-				"i t t t"
-				"i v v v";
+			grid-template-areas: "i t t t" "i v v v";
 		}
-
+		
 		.header .container .wrapper .wrapper-image {
 			grid-area: i;
 			display: flex;
 			justify-content: center;
 			align-items: center;
 		}
-
+		
 		.header .container .wrapper .wrapper-title {
 			grid-area: t;
 			color: #7d7e80;
 			padding-top: 10px;
 		}
-
+		
 		.header .container .wrapper .wrapper-value {
 			grid-area: v;
 			font-size: 20px;
 			font-weight: bold;
 		}
-
+		
 		.content {
 			margin-top: 20px;
 		}
+		
 		.content .container {
 			border-radius: 8px;
 			background-color: #ffffff;
 			margin: 0 16px 16px;
 		}
+		
 		.content .title {
 			height: 10%;
 		}
+		
 		.content .chart {
 			height: 90%;
 		}
+		
 		.content .title .maintitle {
 			font-size: 18px;
 			font-weight: bold;
 		}
-
+		
 		.content .title .subtitle {
 			font-size: 14px;
 			text-align: right;
 			color: #7d7e80;
 		}
-
+		
 		.tab-active {
 			color: #ff0000;
 			border-bottom: 4px red solid;
 		}
+		
 		.tab-business {
-			position: absolute;
-			height: 100%;
-			right: 30%;
-			cursor: pointer;
-		}
-		.tab-house {
 			position: absolute;
 			height: 100%;
 			right: 10%;
 			cursor: pointer;
 		}
+		
+		.tab-house {
+			position: absolute;
+			height: 100%;
+			right: 30%;
+			cursor: pointer;
+		}
+		
 		.content .layui-col-md4 {
 			height: 100%;
 		}
@@ -160,7 +168,8 @@
 					住宅套数/面积
 				</div>
 				<div class="wrapper-value">
-					<span class="data" th:text="${data.regionNum}?: '0'"></span>套&nbsp;&nbsp;/&nbsp;&nbsp;9999㎡
+					<span class="data" th:text="${data.lastest.residenceNum}?: '0'"></span>套/
+					<span class="data" th:text="${data.lastest.residenceArea}?: '0'"></span>万㎡
 				</div>
 			</div>
 		</div>
@@ -173,7 +182,8 @@
 					商业套数/面积
 				</div>
 				<div class="wrapper-value">
-					<span class="data" th:text="${data.stockArea}?: '0'"></span>套&nbsp;&nbsp;/&nbsp;&nbsp;9999㎡
+					<span class="data" th:text="${data.lastest.businessNum}?: '0'"></span>套/
+					<span class="data" th:text="${data.lastest.businessArea}?: '0'"></span>万㎡
 				</div>
 			</div>
 		</div>
@@ -183,10 +193,11 @@
 					<img th:src="@{/themes/images/console-yesterday.png}">
 				</div>
 				<div class="wrapper-title">
-					昨日交易量套数/面积
+					昨日交易套数/面积
 				</div>
 				<div class="wrapper-value">
-					<span class="data" th:text="*{data.yesterdayTradingArea}?: '0'"></span>套&nbsp;&nbsp;/&nbsp;&nbsp;9999㎡
+					<span class="data" th:text="${data.lastest.yesTradeNum}?: '0'"></span>套/
+					<span class="data" th:text="${data.lastest.yesTradeArea}?: '0'"></span>万㎡
 				</div>
 			</div>
 		</div>
@@ -196,10 +207,11 @@
 					<img th:src="@{/themes/images/console-today.png}">
 				</div>
 				<div class="wrapper-title">
-					今日交易量套数/面积
+					今日交易套数/面积
 				</div>
 				<div class="wrapper-value">
-					<span class="data" th:text="*{data.todayTradingArea}?: '0'"></span>套&nbsp;&nbsp;/&nbsp;&nbsp;9999㎡
+					<span class="data" th:text="${data.lastest.todTradeNum}?: '0'"></span>套/
+					<span class="data" th:text="${data.lastest.todTradeArea}?: '0'"></span>万㎡
 				</div>
 			</div>
 		</div>
@@ -280,7 +292,7 @@
 		<div class="layui-card-body" style="height: 95%;">
 			<div id="content-map" style="height: 100%;"></div>
 		</div>
-
+	
 	</div>
 	<div id="content-right" class="layui-col-md4">
 		<div class="chart-stock container layui-card">
@@ -302,9 +314,9 @@
 					项目房源热度(近30天)
 				</div>
 				<div class="subtitle layui-col-md6">
-					<span class="tab-business tab-active">商业</span>
+					<span class="tab-house tab-active">住宅</span>
 					&nbsp;&nbsp;&nbsp;&nbsp;
-					<span class="tab-house">住宅</span>
+					<span class="tab-business">商业</span>
 				</div>
 			</div>
 			<div class="layui-card-body chart">
@@ -447,11 +459,29 @@
 			yAxis: {},
 			series: [
 				{
-					type: 'bar'
+					type: 'bar',
+					label: {
+						normal: {
+							show: true,
+							position: 'top'
+						}
+					}
 				}, {
-					type: 'bar'
+					type: 'bar',
+					label: {
+						normal: {
+							show: true,
+							position: 'top'
+						}
+					}
 				}, {
-					type: 'bar'
+					type: 'bar',
+					label: {
+						normal: {
+							show: true,
+							position: 'top'
+						}
+					}
 				}
 			]
 		});
@@ -459,13 +489,13 @@
 		//// 交易流水
 		//tab 切换表格数据
 		$('.tab-business').on('click', function () {
-            $('.tab-business').addClass('tab-active')
-            $('.tab-house').removeClass('tab-active')
-        })
-        $('.tab-house').on('click', function () {
-            $('.tab-business').removeClass('tab-active')
-            $('.tab-house').addClass('tab-active')
-        })
+			$('.tab-business').addClass('tab-active');
+			$('.tab-house').removeClass('tab-active');
+		})
+		$('.tab-house').on('click', function () {
+			$('.tab-business').removeClass('tab-active');
+			$('.tab-house').addClass('tab-active');
+		});
 		//渲染表格数据
 		layui.table.render({
 			elem: '#list-trade-data',
@@ -474,17 +504,20 @@
 				[
 					{
 						field: 'regionName',
-						title: '小区名称'
+						title: '项目名称'
 					}, {
-						field: 'buyerNames',
-						title: '购房人'
+						field: 'divisionName',
+						title: '区域'
 					}, {
-						field: 'contractNo',
-						title: '合同编号'
+						field: 'sales',
+						title: '套数/面积'
+					}, {
+						field: 'avgPrice',
+						title: '均价'
 					}
 				]
 			],
-			data: [[${data.todayTrades}]]
+			data: [[${data.regionTrades}]]
 		});
 
 		//// 地图
@@ -494,38 +527,23 @@
 		$.get(ctxPath + '150400.json', function (geoJson) {
 			mapChart.hideLoading();
 			echarts.registerMap('maps', geoJson);
-			var geoCoordMap = {
-				'松山区': [118.858958, 42.281046],
-				'红山区': [118.975254, 42.246206],
-				'中梁首府壹号': [118.886528, 42.290379],
-				'悦山壹号': [118.963393, 42.252075],
-				'颐尚山水城': [118.955621, 42.251349]
-			};
+			var geoCoordMap = [[${data.regionMap}]];
 
 			var convertData = function (data) {
 				var res = [];
 				for (var i = 0; i < data.length; i++) {
-					var geoCoord = geoCoordMap[data[i].name];
+					var geoCoord = geoCoordMap[data[i].regionName];
 					if (geoCoord) {
 						res.push({
-							name: data[i].name,
-							value: geoCoord.concat(data[i].value)
+							name: data[i].regionName,
+							value: geoCoord.concat(data[i].tradeNum)
 						});
 					}
 				}
 				return res;
 			};
-			
-			// var divisons = [
-			// 	{name: '松山区', value: 412},
-			// 	{name: '红山区', value: 12},
-			// ]
 
-			var regions = [
-				{name: '中梁首府壹号', value: 221},
-				{name: '悦山壹号', value: 120},
-				{name: '颐尚山水城', value: 40}
-			];
+			var regions = [[${data.regionTrades}]];
 
 			option = {
 				/*title: {
@@ -554,16 +572,16 @@
 						}
 					}
 				},
-                visualMap: {
-                    min: 0,
-                    max: 500,
-                    text:['High','Low'],
-                    realtime: false,
-                    calculable: true,
-                    inRange: {
-                        color: ['lightskyblue','yellow', 'orangered']
-                    }
-                },
+				visualMap: {
+					min: 0,
+					max: 500,
+					text: ['High', 'Low'],
+					realtime: false,
+					calculable: true,
+					inRange: {
+						color: ['lightskyblue', 'yellow', 'orangered']
+					}
+				},
 				geo: {
 					show: true,
 					map: 'maps',
@@ -624,19 +642,11 @@
 						coordinateSystem: 'geo',
 						data: convertData(regions),
 						symbolSize: function (val) {
-							return val[2] / 20;
+							return 20;
 						},
 						showEffectOn: 'emphasis',
 						rippleEffect: {
 							brushType: 'stroke'
-						},
-						hoverAnimation: true,
-						itemStyle: {
-							normal: {
-								color: '#0af403',
-								shadowBlur: 10,
-								shadowColor: '#80f904'
-							}
 						},
 						zlevel: 1
 					}
