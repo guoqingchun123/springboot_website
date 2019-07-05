@@ -14,66 +14,94 @@
 			overflow: hidden;
 		}
 		
-		.logo {
-			height: 80px;
-			background: #ffffff url([[@{/themes/images/console-logo.png}]]) no-repeat center center;
-		}
-		
 		.header {
-			height: 150px;
-			margin: 15px;
+			height: 80px;
 			background-color: #ffffff;
 		}
-		
+
+		.header .logo {
+			height: 100%;
+			display: flex;
+			align-items: center;
+			padding-left: 20px;
+		}
 		.header .container {
-			margin: 16px;
-			height: 108px;
-			border-radius: 8px;
-			color: #ffffff;
-			font-size: 16px;
-			background-repeat: no-repeat;
-			background-position: 80% bottom;
+			height: 100%;
 		}
-		
-		.header .container.count-region {
-			background-color: #4fadef;
-			background-image: url([[@{/themes/images/console-region.png}]]);
+		.header .video-btn {
+			display: flex;
+			justify-content: center;
+			align-items: center;
 		}
-		
-		.header .container.count-area {
-			background-color: #f1696b;
-			background-image: url([[@{/themes/images/console-area.png}]]);
+		.header .container .wrapper {
+			display: grid;
+			grid-template-rows: 30px 50px;
+			grid-template-columns: repeat(4, 1fr);
+			grid-template-areas:
+				"i t t t"
+				"i v v v";
 		}
-		
-		.header .container.count-trade-yesterday {
-			background-color: #3bcfcd;
-			background-image: url([[@{/themes/images/console-trade.png}]]);
+
+		.header .container .wrapper .wrapper-image {
+			grid-area: i;
+			display: flex;
+			justify-content: center;
+			align-items: center;
 		}
-		
-		.header .container.count-trade-today {
-			background-color: #f48827;
-			background-image: url([[@{/themes/images/console-trade.png}]]);
+
+		.header .container .wrapper .wrapper-title {
+			grid-area: t;
+			color: #7d7e80;
+			padding-top: 10px;
 		}
-		
-		.header .container .detail {
-			padding-top: 25px;
-			padding-left: 40px;
+
+		.header .container .wrapper .wrapper-value {
+			grid-area: v;
+			font-size: 20px;
+			font-weight: bold;
 		}
-		
-		.header .container .detail .title {
-			margin-bottom: 5px;
+
+		.content {
+			margin-top: 20px;
 		}
-		
-		.header .container .detail .data {
-			font-size: 36px;
-		}
-		
 		.content .container {
 			border-radius: 8px;
 			background-color: #ffffff;
 			margin: 0 16px 16px;
 		}
-		
+		.content .title {
+			height: 10%;
+		}
+		.content .chart {
+			height: 90%;
+		}
+		.content .title .maintitle {
+			font-size: 18px;
+			font-weight: bold;
+		}
+
+		.content .title .subtitle {
+			font-size: 14px;
+			text-align: right;
+			color: #7d7e80;
+		}
+
+		.tab-active {
+			color: #ff0000;
+			border-bottom: 4px red solid;
+		}
+		.tab-business {
+			position: absolute;
+			height: 100%;
+			right: 30%;
+			cursor: pointer;
+		}
+		.tab-house {
+			position: absolute;
+			height: 100%;
+			right: 10%;
+			cursor: pointer;
+		}
 		.content .layui-col-md4 {
 			height: 100%;
 		}
@@ -109,17 +137,78 @@
 <div th:replace="common :: ready"></div>
 <script th:inline="javascript">
 	function initLayout() {
-		document.getElementById('content').style.height = (window.innerHeight - 260) + 'px';
-		document.getElementById('content-left').style.height = (window.innerHeight - 276) + 'px';
-		document.getElementById('content-right').style.height = (window.innerHeight - 276) + 'px';
+		document.getElementById('content').style.height = (window.innerHeight - 100) + 'px';
+		document.getElementById('content-left').style.height = (window.innerHeight - 116) + 'px';
+		document.getElementById('content-right').style.height = (window.innerHeight - 116) + 'px';
 	}
 
 	document.ready(function () {
 		initLayout();
 	});
 </script>
-<div class="logo"></div>
 <div class="header layui-row layui-col-space10">
+	<div class="logo layui-col-md3">
+		<img th:src="@{/themes/images/console-logo.png}">
+	</div>
+	<div class="container layui-col-md8">
+		<div class="layui-col-md3">
+			<div class="wrapper">
+				<div class="wrapper-image">
+					<img th:src="@{/themes/images/console-region-white.png}">
+				</div>
+				<div class="wrapper-title">
+					住宅套数/面积
+				</div>
+				<div class="wrapper-value">
+					<span class="data" th:text="${data.regionNum}?: '0'"></span>套&nbsp;&nbsp;/&nbsp;&nbsp;9999㎡
+				</div>
+			</div>
+		</div>
+		<div class="layui-col-md3">
+			<div class="wrapper">
+				<div class="wrapper-image">
+					<img th:src="@{/themes/images/console-area-white.png}">
+				</div>
+				<div class="wrapper-title">
+					商业套数/面积
+				</div>
+				<div class="wrapper-value">
+					<span class="data" th:text="${data.stockArea}?: '0'"></span>套&nbsp;&nbsp;/&nbsp;&nbsp;9999㎡
+				</div>
+			</div>
+		</div>
+		<div class="layui-col-md3">
+			<div class="wrapper">
+				<div class="wrapper-image">
+					<img th:src="@{/themes/images/console-yesterday.png}">
+				</div>
+				<div class="wrapper-title">
+					昨日交易量套数/面积
+				</div>
+				<div class="wrapper-value">
+					<span class="data" th:text="*{data.yesterdayTradingArea}?: '0'"></span>套&nbsp;&nbsp;/&nbsp;&nbsp;9999㎡
+				</div>
+			</div>
+		</div>
+		<div class="layui-col-md3">
+			<div class="wrapper">
+				<div class="wrapper-image">
+					<img th:src="@{/themes/images/console-today.png}">
+				</div>
+				<div class="wrapper-title">
+					今日交易量套数/面积
+				</div>
+				<div class="wrapper-value">
+					<span class="data" th:text="*{data.todayTradingArea}?: '0'"></span>套&nbsp;&nbsp;/&nbsp;&nbsp;9999㎡
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container layui-col-md1 video-btn">
+		<button type="button" class="layui-btn layui-btn-lg layui-btn-danger">视频入口</button>
+	</div>
+</div>
+<!--<div class="header layui-row layui-col-space10">
 	<div class="layui-col-md3">
 		<div class="container count-region">
 			<div class="detail">
@@ -152,21 +241,76 @@
 			</div>
 		</div>
 	</div>
-</div>
+</div>-->
 <div id="content" class="content layui-row layui-col-space10">
 	<div id="content-left" class="layui-col-md4">
-		<div id="content-sale" class="container chart-sale"></div>
-		<div id="content-price" class="container chart-price"></div>
+		<div class="chart-sale container layui-card">
+			<div class="title layui-row layui-card-header">
+				<div class="maintitle layui-col-md6">
+					商品房供给和销售情况示意图
+				</div>
+				<div class="subtitle layui-col-md6">
+					单位：<strong>万平方米</strong>
+				</div>
+			</div>
+			<div class="layui-card-body chart">
+				<div id="content-sale" style="height: 100%"></div>
+			</div>
+		</div>
+		<div class="chart-price container layui-card">
+			<div class="title layui-row layui-card-header">
+				<div class="maintitle layui-col-md6">
+					商品房销售均价示意图
+				</div>
+				<div class="subtitle layui-col-md6">
+					单位：<strong>元/平方米</strong>
+				</div>
+			</div>
+			<div class="layui-card-body chart">
+				<div id="content-price" style="height: 100%"></div>
+			</div>
+		</div>
 	</div>
-	<div class="layui-col-md4">
-		<div id="content-map" class="container chart-map"></div>
+	<div class="layui-col-md4 layui-card container chart-map">
+		<div class="layui-card-header" style="height: 5%;">
+			<div style="font-size: 18px;font-weight: bold;">
+				房源热度图
+			</div>
+		</div>
+		<div class="layui-card-body" style="height: 95%;">
+			<div id="content-map" style="height: 100%;"></div>
+		</div>
+
 	</div>
 	<div id="content-right" class="layui-col-md4">
-		<div class="container list-trade">
-			<h3>今日交易流水</h3>
-			<table id="list-trade-data"></table>
+		<div class="chart-stock container layui-card">
+			<div class="title layui-row layui-card-header">
+				<div class="maintitle layui-col-md6">
+					商品房库存情况示意图
+				</div>
+				<div class="subtitle layui-col-md6">
+					单位：<strong>万平方米</strong>
+				</div>
+			</div>
+			<div class="layui-card-body chart">
+				<div id="content-stock" style="height: 100%;"></div>
+			</div>
 		</div>
-		<div id="content-stock" class="container chart-stock"></div>
+		<div class="list-trade container layui-card">
+			<div class="title layui-row layui-card-header">
+				<div class="maintitle layui-col-md6">
+					项目房源热度(近30天)
+				</div>
+				<div class="subtitle layui-col-md6">
+					<span class="tab-business tab-active">商业</span>
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<span class="tab-house">住宅</span>
+				</div>
+			</div>
+			<div class="layui-card-body chart">
+				<table id="list-trade-data"></table>
+			</div>
+		</div>
 	</div>
 </div>
 <script th:src="@{/layui/layui.js}"></script>
@@ -180,20 +324,22 @@
 		// 供给和销售情况
 		var saleChart = echarts.init(document.getElementById('content-sale'), 'macarons');
 		saleChart.setOption({
-			title: {
+			/*title: {
 				text: '商品房供给和销售情况示意图',
-				x: 'center',
 				textStyle: {
 					fontSize: '18',
 					color: '#333333'
 				},
 				subtext: '单位：万平方米',
 				subtextStyle: {
-					color: '#333333'
+					color: '#333333',
+					rich: {
+					    align: "right"
+					}
 				}
-			},
+			},*/
 			legend: {
-				y: 'bottom'
+				y: 'top'
 			},
 			tooltip: {},
 			dataset: {
@@ -234,7 +380,7 @@
 		// 销售均价
 		var priceChart = echarts.init(document.getElementById('content-price'), 'macarons');
 		priceChart.setOption({
-			title: {
+			/*title: {
 				text: '商品房销售均价示意图',
 				x: 'center',
 				textStyle: {
@@ -245,7 +391,7 @@
 				subtextStyle: {
 					color: '#333333'
 				}
-			},
+			},*/
 			tooltip: {
 				trigger: 'axis'
 			},
@@ -254,7 +400,7 @@
 				source: [[${data.monthAvgPrice}]]
 			},
 			legend: {
-				y: 'bottom',
+				y: 'top',
 			},
 			xAxis: {type: 'category'},
 			yAxis: {},
@@ -275,7 +421,7 @@
 		// 库存
 		var stockChart = echarts.init(document.getElementById('content-stock'), 'macarons');
 		stockChart.setOption({
-			title: {
+			/*title: {
 				text: '商品房库存情况示意图',
 				x: 'center',
 				textStyle: {
@@ -286,7 +432,7 @@
 				subtextStyle: {
 					color: '#333333'
 				}
-			},
+			},*/
 			tooltip: {
 				trigger: 'axis'
 			},
@@ -295,7 +441,7 @@
 				source: [[${data.monthStocks}]]
 			},
 			legend: {
-				y: 'bottom'
+				y: 'top'
 			},
 			xAxis: {type: 'category'},
 			yAxis: {},
@@ -311,6 +457,16 @@
 		});
 
 		//// 交易流水
+		//tab 切换表格数据
+		$('.tab-business').on('click', function () {
+            $('.tab-business').addClass('tab-active')
+            $('.tab-house').removeClass('tab-active')
+        })
+        $('.tab-house').on('click', function () {
+            $('.tab-business').removeClass('tab-active')
+            $('.tab-house').addClass('tab-active')
+        })
+		//渲染表格数据
 		layui.table.render({
 			elem: '#list-trade-data',
 			skin: 'line',
@@ -360,10 +516,10 @@
 				return res;
 			};
 			
-			var divisons = [
-				{name: '松山区', value: 412},
-				{name: '红山区', value: 12},
-			]
+			// var divisons = [
+			// 	{name: '松山区', value: 412},
+			// 	{name: '红山区', value: 12},
+			// ]
 
 			var regions = [
 				{name: '中梁首府壹号', value: 221},
@@ -372,14 +528,14 @@
 			];
 
 			option = {
-				title: {
+				/*title: {
 					text: '房源热度图',
 					x: 'center',
 					textStyle: {
 						fontSize: '18',
 						color: '#333333'
 					}
-				},
+				},*/
 				tooltip: {
 					trigger: 'item',
 					formatter: function (params) {
@@ -398,6 +554,16 @@
 						}
 					}
 				},
+                visualMap: {
+                    min: 0,
+                    max: 500,
+                    text:['High','Low'],
+                    realtime: false,
+                    calculable: true,
+                    inRange: {
+                        color: ['lightskyblue','yellow', 'orangered']
+                    }
+                },
 				geo: {
 					show: true,
 					map: 'maps',
@@ -422,36 +588,36 @@
 					}
 				},
 				series: [
-					{
-						type: 'map',
-						map: 'maps',
-						geoIndex: 0,
-						aspectScale: 0.75,
-						showLegendSymbol: false,
-						label: {
-							normal: {
-								show: false
-							},
-							emphasis: {
-								show: false,
-								textStyle: {
-									color: '#fff'
-								}
-							}
-						},
-						roam: true,
-						itemStyle: {
-							normal: {
-								areaColor: '#074dff',
-								borderColor: '#3B5077',
-							},
-							emphasis: {
-								areaColor: '#2B91B7'
-							}
-						},
-						animation: true,
-						data: divisons
-					},
+					// {
+					// 	type: 'map',
+					// 	map: 'maps',
+					// 	geoIndex: 0,
+					// 	aspectScale: 0.75,
+					// 	showLegendSymbol: false,
+					// 	label: {
+					// 		normal: {
+					// 			show: false
+					// 		},
+					// 		emphasis: {
+					// 			show: false,
+					// 			textStyle: {
+					// 				color: '#fff'
+					// 			}
+					// 		}
+					// 	},
+					// 	roam: true,
+					// 	itemStyle: {
+					// 		normal: {
+					// 			areaColor: '#074dff',
+					// 			borderColor: '#3B5077',
+					// 		},
+					// 		emphasis: {
+					// 			areaColor: '#2B91B7'
+					// 		}
+					// 	},
+					// 	animation: true,
+					// 	data: divisons
+					// },
 					{
 						name: '散点图',
 						type: 'effectScatter',
