@@ -3,18 +3,11 @@ package com.bestvike.website.service.impl;
 import com.bestvike.website.dao.ViewProjectInfoDao;
 import com.bestvike.website.dao.ViewRegionInfoDao;
 import com.bestvike.website.data.ViewPresalecard;
-import com.bestvike.website.entity.DivisionTrade;
 import com.bestvike.website.entity.Lastest;
-import com.bestvike.website.entity.MonthData;
 import com.bestvike.website.entity.Region;
 import com.bestvike.website.entity.RegionTrade;
-import com.bestvike.website.entity.Trade;
 import com.bestvike.website.service.LayoutService;
-import com.github.pagehelper.ISelect;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +46,7 @@ public class LayoutServiceImpl implements LayoutService {
 
 	/**
 	 * 获取大数据屏显示数据
+	 *
 	 * @return
 	 */
 	@Override
@@ -90,5 +84,12 @@ public class LayoutServiceImpl implements LayoutService {
 		resultMap.put("regionMap", regionMap);
 		resultMap.put("regionTrades", regionTrades);
 		return resultMap;
+	}
+
+	@Override
+	public List<RegionTrade> selectRegionTrades(String dataType) {
+		Map<String, Object> parameterMap = new HashMap<>();
+		parameterMap.put("dataType", dataType);
+		return viewRegionInfoDao.selectRegionTrade(parameterMap);
 	}
 }

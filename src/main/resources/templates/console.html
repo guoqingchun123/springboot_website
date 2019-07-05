@@ -491,10 +491,64 @@
 		$('.tab-business').on('click', function () {
 			$('.tab-business').addClass('tab-active');
 			$('.tab-house').removeClass('tab-active');
-		})
+			var loadingIndex = layer.load(2);
+			$.get(ctxPath + "region-trades?dataType=business", {}, function (data) {
+				//渲染表格数据
+				layui.table.render({
+					elem: '#list-trade-data',
+					skin: 'line',
+					cols: [
+						[
+							{
+								field: 'regionName',
+								title: '项目名称'
+							}, {
+							field: 'divisionName',
+							title: '区域'
+						}, {
+							field: 'sales',
+							title: '套数/面积'
+						}, {
+							field: 'avgPrice',
+							title: '均价'
+						}
+						]
+					],
+					data: data
+				});
+			});
+			layer.close(loadingIndex);
+		});
 		$('.tab-house').on('click', function () {
 			$('.tab-business').removeClass('tab-active');
 			$('.tab-house').addClass('tab-active');
+			var loadingIndex = layer.load(2);
+			$.get(ctxPath + "region-trades?dataType=residence", {}, function (data) {
+				//渲染表格数据
+				layui.table.render({
+					elem: '#list-trade-data',
+					skin: 'line',
+					cols: [
+						[
+							{
+								field: 'regionName',
+								title: '项目名称'
+							}, {
+							field: 'divisionName',
+							title: '区域'
+						}, {
+							field: 'sales',
+							title: '套数/面积'
+						}, {
+							field: 'avgPrice',
+							title: '均价'
+						}
+						]
+					],
+					data: data
+				});
+			});
+			layer.close(loadingIndex);
 		});
 		//渲染表格数据
 		layui.table.render({
@@ -506,15 +560,15 @@
 						field: 'regionName',
 						title: '项目名称'
 					}, {
-						field: 'divisionName',
-						title: '区域'
-					}, {
-						field: 'sales',
-						title: '套数/面积'
-					}, {
-						field: 'avgPrice',
-						title: '均价'
-					}
+					field: 'divisionName',
+					title: '区域'
+				}, {
+					field: 'sales',
+					title: '套数/面积'
+				}, {
+					field: 'avgPrice',
+					title: '均价'
+				}
 				]
 			],
 			data: [[${data.regionTrades}]]
