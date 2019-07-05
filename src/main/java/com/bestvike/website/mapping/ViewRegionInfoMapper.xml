@@ -99,8 +99,11 @@
 		<if test = "houseUse != null and houseUse == '01'">
 			AND t.house_use like '%住宅%'
 		</if>
+		<if test = "houseUse != null and houseUse == '88'">
+			AND t.house_use like '%商业%'
+		</if>
 		<if test = "houseUse != null and houseUse == '99'">
-			AND t.house_use NOT like '%住宅%'
+			AND t.house_use NOT like '%住宅%'AND t.house_use NOT like '%商业%'
 		</if>
 		<![CDATA[
             GROUP BY house_use, house_hold
@@ -109,7 +112,9 @@
 	</select>
 	<select id = "selectRegionHouseSaleData" parameterType = "map" resultType = "com.bestvike.website.entity.ResidenceHouseSale">
 		<![CDATA[
-			SELECT case when instr(t.house_use, '住宅') = 0 then '配套' else '住宅' end house_use, COUNT(1) total_num,
+			SELECT case when instr(t.house_use, '住宅') > 0 then '住宅'
+						  when instr(t.house_use, '商业') > 0 then '商业'
+			else '配套' end house_use, COUNT(1) total_num,
 			sum(case when t.presell_state = '已售' or t.presell_state = '已受理' then 1 else 0 end) sell_num,
 			sum(case when t.presell_state = '已售'  then 1 else 0 end) signed_num,
 			sum(case when t.presell_state = '已受理' then 1 else 0 end) signing_num,
@@ -125,12 +130,19 @@
 		<if test = "houseUse != null and houseUse == '01'">
 			AND t.house_use like '%住宅%'
 		</if>
+		<if test = "houseUse != null and houseUse == '88'">
+			AND t.house_use like '%商业%'
+		</if>
 		<if test = "houseUse != null and houseUse == '99'">
-			AND t.house_use NOT like '%住宅%'
+			AND t.house_use NOT like '%住宅%'AND t.house_use NOT like '%商业%'
 		</if>
 		<![CDATA[
-            GROUP BY case when instr(t.house_use, '住宅') = 0 then '配套' else '住宅' end
-            ORDER BY case when instr(t.house_use, '住宅') = 0 then '配套' else '住宅' end
+            GROUP BY case when instr(t.house_use, '住宅') > 0 then '住宅'
+						    when instr(t.house_use, '商业') > 0 then '商业'
+							else '配套' end
+            ORDER BY case when instr(t.house_use, '住宅') > 0 then '住宅'
+						    when instr(t.house_use, '商业') > 0 then '商业'
+							else '配套' end
 		]]>
 	</select>
 	<select id = "selectBlds" parameterType = "String" resultType = "com.bestvike.website.entity.BldCells">

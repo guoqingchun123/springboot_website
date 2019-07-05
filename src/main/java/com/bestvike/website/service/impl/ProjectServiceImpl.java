@@ -420,6 +420,19 @@ public class ProjectServiceImpl implements ProjectService {
 			result.put("residenceCollects", residenceHouseSale);
 		}
 
+		// 查询商用销售情况
+		parameterMap.put("houseUse", "88");
+		List<HouseHoldSale> business = viewRegionInfoDao.selectRegionHouseHoldData(parameterMap);
+		result.put("business", business);
+
+		//查询商用销售汇总
+		ResidenceHouseSale businessCollects = viewRegionInfoDao.selectRegionHouseSaleData(parameterMap);
+		if (null != businessCollects) {
+			result.put("businessCollects", businessCollects);
+		} else {
+			businessCollects = new ResidenceHouseSale();
+			result.put("businessCollects", businessCollects);
+		}
 
 		// 查询配套销售情况
 		parameterMap.put("houseUse", "99");
@@ -428,13 +441,7 @@ public class ProjectServiceImpl implements ProjectService {
 
 		//查询配套销售汇总
 		ResidenceHouseSale matingCollects = viewRegionInfoDao.selectRegionHouseSaleData(parameterMap);
-		if (null != matingCollects) {
-			result.put("matingCollects", matingCollects);
-		} else {
-			matingCollects = new ResidenceHouseSale();
-			result.put("matingCollects", matingCollects);
-		}
-
+		result.put("matingCollects", matingCollects);
 		// 查询各种房屋类型的销售均价
 		List<PriceShow> priceShows = selectPriceShow(regionId);
 		if (priceShows.size() > 0) {
