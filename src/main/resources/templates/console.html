@@ -320,7 +320,7 @@
 				</div>
 			</div>
 			<div class="layui-card-body chart">
-				<table id="list-trade-data"></table>
+				<table id="list-trade-data" lay-filter="table"></table>
 			</div>
 		</div>
 	</div>
@@ -498,11 +498,14 @@
 					elem: '#list-trade-data',
 					skin: 'line',
 					cols: [
-						[
-							{
-								field: 'regionName',
-								title: '项目名称'
-							}, {
+						[{
+							field: 'regionId',
+							title: '小区Id',
+							hide: true
+						}, {
+							field: 'regionName',
+							title: '项目名称'
+						}, {
 							field: 'divisionName',
 							title: '区域'
 						}, {
@@ -511,8 +514,7 @@
 						}, {
 							field: 'avgPrice',
 							title: '均价'
-						}
-						]
+						}]
 					],
 					data: data
 				});
@@ -529,11 +531,14 @@
 					elem: '#list-trade-data',
 					skin: 'line',
 					cols: [
-						[
-							{
-								field: 'regionName',
-								title: '项目名称'
-							}, {
+						[{
+							field: 'regionId',
+							title: '小区Id',
+							hide: true
+						}, {
+							field: 'regionName',
+							title: '项目名称'
+						}, {
 							field: 'divisionName',
 							title: '区域'
 						}, {
@@ -542,8 +547,7 @@
 						}, {
 							field: 'avgPrice',
 							title: '均价'
-						}
-						]
+						}]
 					],
 					data: data
 				});
@@ -555,11 +559,14 @@
 			elem: '#list-trade-data',
 			skin: 'line',
 			cols: [
-				[
-					{
-						field: 'regionName',
-						title: '项目名称'
-					}, {
+				[{
+					field: 'regionId',
+					title: '小区Id',
+					hide: true
+				}, {
+					field: 'regionName',
+					title: '项目名称'
+				}, {
 					field: 'divisionName',
 					title: '区域'
 				}, {
@@ -568,10 +575,18 @@
 				}, {
 					field: 'avgPrice',
 					title: '均价'
-				}
-				]
+				}]
 			],
 			data: [[${data.regionTrades}]]
+		});
+
+		layui.table.on('row(table)', function (obj) {
+			var data = obj.data;
+
+			//标注选中样式
+			obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+
+			// window.location.replace(ctxPath + 'content/' + data.regionId);
 		});
 
 		//// 地图

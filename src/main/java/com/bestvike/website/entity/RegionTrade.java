@@ -9,6 +9,7 @@ public class RegionTrade implements Serializable {
 
 	private static final long serialVersionUID = 6250313846057457514L;
 
+	private String regionId;
 	private String regionName;
 	private String divisionName;
 	private BigDecimal x;
@@ -17,6 +18,14 @@ public class RegionTrade implements Serializable {
 	private BigDecimal tradeArea;
 	private String sales;
 	private String avgPrice;
+
+	public String getRegionId() {
+		return regionId;
+	}
+
+	public void setRegionId(String regionId) {
+		this.regionId = regionId;
+	}
 
 	public String getRegionName() {
 		return regionName;
