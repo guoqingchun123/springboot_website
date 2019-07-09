@@ -14,7 +14,7 @@
         ]]>
     </select>
 
-	<select id = "selectRegionBldList" parameterType = "String" resultType = "AssRegBld">
+	<select id = "selectRegionBldList" parameterType = "String" resultType = "ViewRegBld">
 		<![CDATA[
 			SELECT t.bld_id, t2.bld_name || '#',
 			t.region_id FROM view_regbld t LEFT JOIN View_BldInfo t2 on t.bld_id = t2.bld_id WHERE t.region_id = #{regionId}
