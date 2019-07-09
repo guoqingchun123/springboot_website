@@ -1,6 +1,7 @@
 package com.bestvike.website.controller;
 
 import com.bestvike.website.data.ViewRegionInfo;
+import com.bestvike.website.entity.BldView;
 import com.bestvike.website.entity.Region;
 import com.bestvike.website.service.LayoutService;
 import com.bestvike.website.service.ProjectService;
@@ -38,6 +39,18 @@ public class LayoutController extends BaseController {
 		mv.setViewName("index");
 		return mv;
 	}
+	@GetMapping(value = "/fragments-regions")
+	public ModelAndView regions(@RequestParam(required = false) String keywords,
+								@RequestParam int pageNo, @RequestParam int pageSize, @RequestParam(required = false) String divisionCode,
+								@RequestParam(required = false) String price, @RequestParam(required = false) String houseHold,
+								@RequestParam(required = false) String sort) {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("fragments/index :: regions");
+
+		Map<String, Object> resultMap = projectService.pageRegions(keywords, pageNo, pageSize, divisionCode, price, houseHold, sort);
+		mv.addObject("data", resultMap);
+		return mv;
+	}
 
 	@GetMapping(value = "/maps")
 	public ModelAndView maps() {
@@ -48,17 +61,35 @@ public class LayoutController extends BaseController {
 		return mv;
 	}
 
-	@GetMapping(value = "/content/{regionId}")
+	@GetMapping(value = "/sales/{regionId}")
 	public ModelAndView content(@PathVariable String regionId, @RequestParam(required = false) String viewType) {
 		ModelAndView mv = new ModelAndView();
-		viewType = StringUtils.isEmpty(viewType) ? "salesData" : viewType;
+		viewType = StringUtils.isEmpty(viewType) ? "sales" : viewType;
 		ViewRegionInfo viewRegionInfo = projectService.region(regionId, viewType);
 		mv.addObject("region", viewRegionInfo);
 		mv.setViewName(viewType);
 		return mv;
 	}
 
-	@GetMapping(value = "/content/{regionId}/{projectId}/{bldNo}")
+	@GetMapping(value = "/layout/{regionId}")
+	public ModelAndView layout(@PathVariable String regionId) {
+		ModelAndView mv = new ModelAndView();
+		ViewRegionInfo viewRegionInfo = projectService.layout(regionId);
+		mv.addObject("region", viewRegionInfo);
+		mv.setViewName("layout");
+		return mv;
+	}
+
+	@GetMapping(value = "/images/{regionId}")
+	public ModelAndView images(@PathVariable String regionId) {
+		ModelAndView mv = new ModelAndView();
+		ViewRegionInfo viewRegionInfo = projectService.images(regionId);
+		mv.addObject("region", viewRegionInfo);
+		mv.setViewName("images");
+		return mv;
+	}
+
+	@GetMapping(value = "/sales/{regionId}/{projectId}/{bldNo}")
 	public ModelAndView content(@PathVariable String regionId, @PathVariable String projectId, @PathVariable String bldNo) {
 		ModelAndView mv = new ModelAndView();
 		ViewRegionInfo viewRegionInfo = projectService.region(regionId, projectId, bldNo);
@@ -68,11 +99,11 @@ public class LayoutController extends BaseController {
 		if (!StringUtils.isEmpty(viewRegionInfo.getCellNo())) {
 			mv.addObject("cellNo", viewRegionInfo.getCellNo());
 		}
-		mv.setViewName("salesData");
+		mv.setViewName("sales");
 		return mv;
 	}
 
-	@GetMapping(value = "/content/{regionId}/{projectId}/{bldNo}/{cellNo}")
+	@GetMapping(value = "/sales/{regionId}/{projectId}/{bldNo}/{cellNo}")
 	public ModelAndView content(@PathVariable String regionId, @PathVariable String projectId, @PathVariable String bldNo, @PathVariable String cellNo) {
 		ModelAndView mv = new ModelAndView();
 		ViewRegionInfo viewRegionInfo = projectService.region(regionId, projectId, bldNo, cellNo);
@@ -80,7 +111,16 @@ public class LayoutController extends BaseController {
 		mv.addObject("projectId", projectId);
 		mv.addObject("bldNo", bldNo);
 		mv.addObject("cellNo", cellNo);
-		mv.setViewName("salesData");
+		mv.setViewName("sales");
+		return mv;
+	}
+
+	@GetMapping(value = "/building/{regionId}/{projectId}/{bldNo}/{cellNo}")
+	public ModelAndView contentBuilding(@PathVariable String regionId, @PathVariable String projectId, @PathVariable String bldNo, @PathVariable String cellNo) {
+		ModelAndView mv = new ModelAndView();
+		BldView bldView = projectService.building(regionId, projectId, bldNo, cellNo);
+		mv.addObject("building", bldView);
+		mv.setViewName("fragments/sales :: building");
 		return mv;
 	}
 

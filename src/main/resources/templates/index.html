@@ -1,119 +1,37 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="zh" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<div th:replace="common :: header"></div>
-	<style type="text/css">
-		/* 操作区 */
-		.website-toolbar {
-			width: 100%;
-			height: 60px;
-			background-color: #ffffff;
-			padding-top: 15px;
-		}
-
-		.website-search {
-			display: inline-block;
-			position: relative;
-		}
-
-		.layui-input-search {
-			width: 400px;
-			padding: 8px 20px;
-			border-radius: 20px;
-			box-shadow: none;
-			background: #fff;
-			border: 1px solid #1E9EFF;
-			outline: none;
-			font-size: 16px;
-		}
-
-		.layui-icon-search {
-			position: relative;
-			right: -400px;
-			top: -30px;
-			font-size: 23px;
-			color: #1E9FFF;
-		}
-
-		.layui-breadcrumb a.selected, .layui-breadcrumb a:hover {
-			color: #1E9FFF !important;
-		}
-
-		.summary-card {
-			cursor: pointer;
-			margin-bottom: 1px;
-		}
-		.summary-card:hover {
-			background-color: #fafafa;
-		}
-
-		.summary-card .region-name {
-			color: green;
-		}
-
-		.summary-card:hover .region-info button {
-			background-color: #1e9fff;
-			border: 1px solid #1e9fff;
-			color: #ffffff;
-		}
-
-		.layui-form-search {
-			margin-bottom: 10px;
-			padding-top: 10px;
-		}
-
-		.layui-form-search .layui-elem-quote {
-			border: none;
-			margin-bottom: 0;
-			padding-top: 10px;
-			padding-bottom: 10px;
-		}
-
-		.layui-card .layui-elem-quote {
-			border-left: none;
-			background-color: transparent;
-			padding: 0;
-		}
-		.layui-card .region-info .layui-elem-quote {
-			margin-bottom: 7px;
-		}
-		.layui-card .region-info .layui-elem-quote.region-name {
-			font-size: 24px;
-			font-weight: bold;
-			padding: 10px 0;
-		}
-		.region-info {
-			font-size:16px;
-		}
-	</style>
+	<th:block th:include="fragments/common :: header"></th:block>
+	<th:block th:replace="fragments/index :: style"></th:block>
 </head>
-<body class="website-body">
-<div class="website-header"></div>
-<div class="website-content">
-	<div class="website-toolbar">
-		<div class="website-search layui-col-md6">
-			<input id="auto-regions" name="auto-regions" class="layui-input-search" placeholder="请输入小区名称或小区地址进行检索" />
+<body id="website-body" class="layout-index">
+<div th:replace="fragments/common :: loading"></div>
+<div th:replace="fragments/common :: layout-header"></div>
+<div id="website-content">
+	<div id="website-toolbar">
+		<div id="website-search" class="layui-col-md6">
+			<input id="region-search-input" name="region-search-input" placeholder="请输入小区名称或小区地址进行检索" />
 			<i class="layui-icon layui-icon-search"></i>
 		</div>
-		<div class="layui-col-md6" style="padding-right: 15px;">
-			<button type="button" class="layui-btn layui-btn-lg layui-btn-normal layui-btn-maps" style="float:right;">
-				<i class="layui-icon layui-icon-location layui-btn-maps" style="color: #ff0813;"></i>地图导航
+		<div id="website-navigation" class="layui-col-md6">
+			<button type="button" id="website-navigation-button" class="layui-btn layui-btn-lg layui-btn-normal">
+				<i class="layui-icon layui-icon-location"></i>地图导航
 			</button>
 		</div>
 	</div>
-	<div class="layui-form-search" style="margin-top: 10px;background-color: white;">
+	<div id="region-filter">
 		<blockquote class="layui-elem-quote layui-quote-nm">
 			区域范围：
-			<span class="layui-breadcrumb division" lay-separator="|">
-					<a href="javascript:;" data-value="" class="selected">不限</a>
-					<a href="javascript:;" data-value="150404">松山区</a>
-					<a href="javascript:;" data-value="150402">红山区</a>
-				</span>
+			<span id="region-division" class="layui-breadcrumb" lay-separator="|">
+				<a href="javascript:;" data-value="" class="selected">不限</a>
+				<a href="javascript:;" data-value="150404">松山区</a>
+				<a href="javascript:;" data-value="150402">红山区</a>
+			</span>
 		</blockquote>
 		<!--
         <blockquote class="layui-elem-quote layui-quote-nm">
             备案均价：
-            <span class="layui-breadcrumb avgPrice" lay-separator="|">
+            <span class="layui-breadcrumb region-avg-price" lay-separator="|">
                 <a href="javascript:;" class="selected">不限</a>
                 <a href="javascript:;" data-value=" < 7000">7000元/㎡以下</a>
                 <a href="javascript:;" data-value="between 7000 and 8000">7000~8000元/㎡</a>
@@ -125,163 +43,21 @@
         -->
 		<blockquote class="layui-elem-quote layui-quote-nm">
 			房屋户型：
-			<span class="layui-breadcrumb houseHold" lay-separator="|">
-					<a href="javascript:;" class="selected">不限</a>
-					<a href="javascript:;" data-value="一室">一室</a>
-					<a href="javascript:;" data-value="二室">二室</a>
-					<a href="javascript:;" data-value="三室">三室</a>
-					<a href="javascript:;" data-value="四室">四室</a>
-					<a href="javascript:;" data-value="五室">五室</a>
-					<a href="javascript:;" data-value="其他">其他</a>
-				</span>
+			<span id="region-house-hold" class="layui-breadcrumb" lay-separator="|">
+				<a href="javascript:;" class="selected">不限</a>
+				<a href="javascript:;" data-value="一室">一室</a>
+				<a href="javascript:;" data-value="二室">二室</a>
+				<a href="javascript:;" data-value="三室">三室</a>
+				<a href="javascript:;" data-value="四室">四室</a>
+				<a href="javascript:;" data-value="五室">五室</a>
+				<a href="javascript:;" data-value="其他">其他</a>
+			</span>
 		</blockquote>
 	</div>
-	<div id="regionCardContainer"></div>
-	<div id="page" style="text-align: right"></div>
+	<div id="region-loader"></div>
 </div>
-<div th:replace="common :: ready"></div>
-<div th:replace="common :: body-height"></div>
-<div th:replace="common :: loading"></div>
-<div th:replace="common :: footer"></div>
-
-<script id="regionCardScript" type="text/html">
-	<blockquote class="layui-elem-quote layui-quote-nm" style="background-color: #fafafa; margin-bottom: 0; border-left: 0;">
-		小区列表：共为您筛选出<label style="color: red">{{d.page.totalSize}}</label>个小区
-	</blockquote>
-	{{#  layui.each(d.list, function(index, item){ }}
-	<div class="layui-card summary-card" data-value="{{=item.regionId}}" style="cursor: pointer;">
-		<!--<div class="layui-card-header">
-			<div style="float: left;">
-				<label style="color: green;font-weight:bold;font-size: large">{{item.regionName}}</label>
-			</div>
-			<div style="float: right">
-				<button type="button" class="layui-btn layui-btn-primary summary-btn" value="{{=item.regionId }}">查看详情</button>
-			</div>
-		</div>-->
-		<div class="layui-card-body" style="overflow: hidden">
-			<div class="layui-col-md9" style="float: left">
-				<div class="layui-col-md3" style="float: left">
-					<img src="{{=item.logoPath}}" style="width: 100%; max-width: 260px;">
-				</div>
-				<div class="layui-col-md9 region-info" style="float: left; padding-left: 30px">
-					<p class="layui-elem-quote region-name">{{item.regionName}}</p>
-					<p class="layui-elem-quote"><span class="gray">小区地址：</span><label>{{item.address}}</label></p>
-					<p class="layui-elem-quote"><span class="gray">预售许可日期：</span><label>{{item.preSaleDate}}</label></p>
-					<p class="layui-elem-quote"><button type="button" class="layui-btn layui-btn-primary summary-btn" value="{{=item.regionId }}">查看详情</button></p>
-				</div>
-			</div>
-			<div class="layui-col-md3" style="text-align: right;padding-top: 50px">
-				<!--
-				{{# if(item.avgPrice != 0){ }}
-				住宅备案均价：<label style="color: red;font-size: x-large">{{item.avgPrice}}元/㎡</label>
-				{{# } }}
-				-->
-			</div>
-		</div>
-	</div>
-	{{#  }); }}
-</script>
-<script th:src="@{/layui/layui.js}"></script>
-<script th:inline="javascript">
-	var ctxPath = /*[[@{/}]]*/'';
-	var page = {
-		pageNo: 1,
-		pageSize: 10,
-		totalSize: 1
-	};
-	layui.config({
-		base: ctxPath + 'layui/autocomplete/'
-	}).extend({ //设定模块别名
-		autocomplete: 'autocomplete'
-	});
-	layui.use(['laypage', 'carousel', 'element', 'layer', 'autocomplete', 'laytpl'], function () {
-		var $ = layui.jquery;
-		var autocomplete = layui.autocomplete;
-		var laytpl = layui.laytpl;
-
-		// auto 快速定位，过滤小区
-		autocomplete.render({
-			elem: $('#auto-regions')[0],
-			url: ctxPath + 'auto-regions',
-			template_val: '{{d.regionName}}',
-			template_txt: '{{d.regionName}} <span class=\'layui-badge layui-bg-gray\'>{{d.address}}</span>',
-			onselect: function (resp) {
-				// 跳转到选择的项目详情页面
-				window.location.href = ctxPath + 'content/' + resp.regionId;
-			}
-		});
-
-		refreshData(1);
-
-		// 跳转到地图刷新页面
-		$(".layui-btn-maps").on("click", function () {
-			window.open(ctxPath + 'maps', '_blank');
-		});
-
-		// 跳转到小区详情页面
-		$(".summary-card").on("click", function () {
-			window.open(ctxPath + 'content/' + $(this).attr("data-value"), '_parent');
-		});
-
-		$(".layui-breadcrumb a").on("click", function () {
-			$(this).parent().find(".selected").removeClass("selected");
-			$(this).addClass("selected");
-			refreshData(1);
-		});
-
-		$('img').error(function () {
-			$(this).attr('src', ctxPath + "themes/images/nothing.png");
-		});
-		
-		function refreshPage(page) {
-			var laypage = layui.laypage;
-
-			laypage.render({
-				elem: 'page'
-				, count: page.totalSize
-				, limit: page.pageSize
-				, curr: page.pageNo
-				, theme: '#1E9FFF'
-				, jump: function (obj, first) {
-					if (!first) {
-						refreshData(obj.curr);
-					}
-				}
-			});
-		}
-
-		function refreshData(pageNo) {
-			loading();
-			$.ajax({
-				url: ctxPath + 'filter-regions',
-				method: 'get',
-				data: {
-					divisionCode: $(".division").find(".selected").attr("data-value"),
-					price: $(".avgPrice").find(".selected").attr("data-value"),
-					houseHold: $(".houseHold").find(".selected").attr("data-value"),
-					pageNo: pageNo,
-					pageSize: page.pageSize
-				},
-				success: function (res) {
-					var getTpl = document.getElementById("regionCardScript").innerHTML
-						, view = document.getElementById('regionCardContainer');
-					laytpl(getTpl).render(res, function (html) {
-						view.innerHTML = html;
-						// 跳转到小区详情页面
-						$(".summary-card").off("click").on("click", function () {
-							window.open(ctxPath + 'content/' + $(this).attr("data-value"));
-						});
-					});
-					page.pageNo = pageNo;
-					page.totalSize = res.page.totalSize;
-					refreshPage(page);
-				},
-				complete: function (res) {
-					loading('hide');
-				}
-			});
-		}
-	});
-</script>
+<div th:replace="fragments/common :: layout-footer"></div>
+<script th:replace="fragments/common :: region-query-script"></script>
+<script th:replace="fragments/index :: script"></script>
 </body>
 </html>

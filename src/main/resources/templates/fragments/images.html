@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style th:fragment="style" rel="stylesheet" type="text/css">
+    </style>
+</head>
+<body>
+<script th:fragment="script" th:inline="javascript">
+    layui.use(['layer', 'element'], function () {
+        var $ = layui.jquery;
+
+        loading('hide');
+
+        $('.image-container').each(function () {
+            layer.photos({
+                photos: $(this).closest('.image-container')
+            });
+        });
+    });
+</script>
+</body>
+</html>
