@@ -7,7 +7,7 @@
 		  LEFT JOIN (SELECT COUNT(1) region_num, division_code FROM view_regioninfo WHERE state = '0000' GROUP BY division_code) t2
 		  ON t1.division_code = t2.division_code
 		  LEFT JOIN (SELECT COUNT(1) bld_num, division_code FROM view_regioninfo vr
-		  	INNER JOIN ass_regbld ar on vr.region_id = ar.region_id
+		  	INNER JOIN view_regbld ar on vr.region_id = ar.region_id
 		  	WHERE vr.state = '0000'
 		  GROUP BY division_code) t3
 		  ON t1.division_code = t3.division_code
@@ -17,7 +17,7 @@
 	<select id = "selectRegionBldList" parameterType = "String" resultType = "AssRegBld">
 		<![CDATA[
 			SELECT t.bld_id, t2.bld_name || '#',
-			t.region_id FROM Ass_RegBld t LEFT JOIN View_BldInfo t2 on t.bld_id = t2.bld_id WHERE t.region_id = #{regionId}
+			t.region_id FROM view_regbld t LEFT JOIN View_BldInfo t2 on t.bld_id = t2.bld_id WHERE t.region_id = #{regionId}
 		]]>
 	</select>
 
@@ -27,7 +27,7 @@
 			case when instr(t.cell_name, 'B') > 0 then t.cell_name
 				when instr(t1.bld_name, '地下') > 0 THEN 'B' || t.cell_name ELSE t.cell_name || '单元' END cell_name,
 			FROM view_houseinfo t LEFT JOIN view_bldinfo t1 ON t.bld_no = t1.bld_no AND t.project_id = t1.project_id
-			WHERE t.project_id in (select a.project_id from ASS_REGBLD a where a.region_id = #{regionId})
+			WHERE t.project_id in (select a.project_id from view_regbld a where a.region_id = #{regionId})
 			GROUP BY t.project_id, t.bld_no, t.cell_no, t1.bld_name, t.cell_name
 			ORDER BY t.project_id, t.bld_no, t.cell_no, t1.bld_name, t.cell_name
 		]]>
@@ -189,7 +189,7 @@
 			FROM (
 				SELECT t1.project_id, t1.bld_no, t1.bld_name, t2.house_num, t3.view_path
 				FROM view_bldinfo t1
-				LEFT JOIN ass_regbld t3 on t1.project_id = t3.project_id and t1.bld_no = t3.bld_no
+				LEFT JOIN view_regbld t3 on t1.project_id = t3.project_id and t1.bld_no = t3.bld_no
 				LEFT JOIN (SELECT project_id, bld_no,
 					count(1) over(partition BY bld_no, cell_name, floor_no) house_num FROM view_houseinfo
 					WHERE project_id = #{projectId} AND bld_no = #{bldNo}) t2

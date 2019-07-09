@@ -8,30 +8,29 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
-@Table(name = "Ass_RegBld")
-public class AssRegBld implements Serializable {
+@Table(name = "View_BldFloor")
+public class ViewBldFloor implements Serializable {
 
-	private static final long serialVersionUID = 9086418361123853195L;
+	private static final long serialVersionUID = -1527341565376546949L;
 
 	@Id
-	private String sysId;
+	private String floorId;
 	private String regionId;
 	private String projectId;
 	private String bldNo;
-	private BigDecimal x;
-	private BigDecimal y;
+	private String floorNo;
 	private String remark;
 	private String viewPath;
 
 	@Transient
-	private String bldName;
+	private String floorName;
 
-	public String getSysId() {
-		return sysId;
+	public String getFloorId() {
+		return floorId;
 	}
 
-	public void setSysId(String sysId) {
-		this.sysId = sysId;
+	public void setFloorId(String floorId) {
+		this.floorId = floorId;
 	}
 
 	public String getRegionId() {
@@ -58,20 +57,12 @@ public class AssRegBld implements Serializable {
 		this.bldNo = bldNo;
 	}
 
-	public BigDecimal getX() {
-		return x;
+	public String getFloorNo() {
+		return floorNo;
 	}
 
-	public void setX(BigDecimal x) {
-		this.x = x;
-	}
-
-	public BigDecimal getY() {
-		return y;
-	}
-
-	public void setY(BigDecimal y) {
-		this.y = y;
+	public void setFloorNo(String floorNo) {
+		this.floorNo = floorNo;
 	}
 
 	public String getRemark() {
@@ -82,19 +73,19 @@ public class AssRegBld implements Serializable {
 		this.remark = remark;
 	}
 
-	public String getBldName() {
-		return bldName;
-	}
-
-	public void setBldName(String bldName) {
-		this.bldName = bldName;
-	}
-
 	public String getViewPath() {
 		return viewPath;
 	}
 
 	public void setViewPath(String viewPath) {
 		this.viewPath = viewPath;
+	}
+
+	public String getFloorName() {
+		return floorName;
+	}
+
+	public void setFloorName(String floorName) {
+		this.floorName = floorName;
 	}
 }
