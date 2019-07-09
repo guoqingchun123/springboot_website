@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<th:block th:include="fragments/common :: header"></th:block>
+	<link th:href="@{/themes/iconfont/iconfont.css}" rel="stylesheet" type="text/css">
+	<th:block th:replace="fragments/sales :: style"></th:block>
+</head>
+<body id="website-body" class="layout-detail">
+<div th:replace="fragments/common :: loading"></div>
+<div th:replace="fragments/common :: layout-header(layout = 'detail')"></div>
+<div id="website-content">
+	<div th:replace="fragments/common :: layout-toolbar(current = 'sales')"></div>
+	<div id="region-guide">
+		<div class="layui-col-md6">
+			<div th:replace="fragments/common :: region-carousel"></div>
+		</div>
+		<div id="region-navigator" class="layui-col-md6">
+			<!--
+			<div id="region-layout" class="layui-carousel">
+				<div carousel-item>
+					<div class="carousel-auto region-logo-container" th:each="str:${region?.regionLogos}">
+						<img th:src="${str}" onerror="showDefaultImage(this)">
+					</div>
+				</div>
+				<div class="layui-carousel-ind">
+					<ul>
+						<li th:each="str, iterStat:${region?.regionLogos}" th:class="${iterStat.index == 0} ? 'layui-this'" th:text="${iterStat.index + 1}"></li>
+					</ul>
+				</div>
+			</div>
+			-->
+			<!--
+			<th:block th:if="${cellNo == null}">
+				<img th:src="${region?.viewPath}" onerror="showDefaultImage(this)">
+				<div class="navigator-container">
+					<th:block th:each="regionBld, iterStat:${region?.listRegionBlds}" th:if="${region.listRegionBlds}">
+						<span th:if="${regionBld.location}" th:class="${region.viewPath != null ? 'navigator-map' : 'navigator-list'}" th:classappend="${bldNo == null ? iterStat.index == 0 : bldNo == regionBld.bldNo} ? 'building-selected'"
+						  th:data-project-id="${regionBld.projectId}" th:data-bld-no="${regionBld.bldNo}" th:style="${regionBld.location}" th:text="${regionBld.bldName}"></span>
+					</th:block>
+				</div>
+			</th:block>
+			<th:block th:if="${cellNo != null}">
+				<img th:src="${region.bldView.viewPath}" onerror="showDefaultImage(this)">
+				<a class="return-to" href="javascript:;">返回</a>
+				<div class="navigator-container">
+					<th:block th:each="cell, iterStat:${region.bldView.cells}" th:if="${cell.location != null}">
+					<span th:if="${regionBld.location}" th:class="cell-navigator-map" th:classappend="${cellNo == cell.CellNo} ? 'cell-selected'"
+						  th:data-project-id="${cell.projectId}" th:data-bld-no="${cell.bldNo}" th:data-cell-no="${cell.cellNo}" th:style="${cell.location}" th:text="${cell.cellName}"></span>
+					</th:block>
+				</div>
+			</th:block>
+			-->
+		</div>
+	</div>
+	<div th:replace="fragments/common :: sale-price"></div>
+	<div class="layui-tab-content">
+		<div id="sale-summary" class="layui-elem-quote" th:if="${region.bldView != null && region.bldView.bldSales != null}">
+			<label th:text="${region.bldView.bldSales.cellName != null ? region.bldView.bldSales.cellName : region.bldView.bldSales.bldName}"></label>
+			<label>销售情况：</label>
+			总套数：<label style="color: #333333;" th:text="${region.bldView.bldSales.totalNum}"></label>
+			已售套数：<label style="color: red;" th:text="${region.bldView.bldSales.sellNum}"></label>
+			未售套数：<label style="color: #00dd02;" th:text="${region.bldView.bldSales.noSaledNum}"></label>
+			[抵押：<label style="color: #ddb400;" th:text="${region.bldView.bldSales.mortgageNum}"></label>
+			查封：<label style="color: #dd6600;" th:text="${region.bldView.bldSales.closeNum}"></label>
+			冻结：<label style="color: #dd8800;" th:text="${region.bldView.bldSales.frozenNum}"></label>]
+			自留/非卖套数：<label style="color: #b9d8dd;" th:text="${region.bldView.bldSales.noSaleNum}"></label>
+		</div>
+		<div class="legends">
+			<div th:each="legend:${region.bldView?.legends}" class="legend"><i class="iconfont icon-home-fill" th:style="'color: #' + ${legend.color}"></i><span th:text="${legend.name}"></span></div>
+		</div>
+	</div>
+	<div id="building-loader"></div>
+</div>
+<div th:replace="fragments/common :: layout-footer"></div>
+<script th:src="@{/layui/echarts/echarts.js}"></script>
+<script th:src="@{/layui/echarts/macarons.js}"></script>
+<script th:replace="fragments/common :: layout-toolbar-script"></script>
+<script th:replace="fragments/common :: region-query-script"></script>
+<script th:replace="fragments/common :: region-carousel-script"></script>
+<script th:replace="fragments/sales :: script"></script>
+</body>
+</html>

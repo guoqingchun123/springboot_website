@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<th:block th:include="fragments/common :: header"></th:block>
+	<th:block th:replace="fragments/layout :: style"></th:block>
+</head>
+<body id="website-body" class="layout-detail">
+<div th:replace="fragments/common :: loading"></div>
+<div th:replace="fragments/common :: layout-header(layout = 'detail')"></div>
+<div id="website-content">
+	<div th:replace="fragments/common :: layout-toolbar(current = 'images')"></div>
+	<div id="region-guide">
+		<div class="layui-col-md6">
+			<div th:replace="fragments/common :: region-carousel"></div>
+		</div>
+		<div class="layui-col-md6">
+			<div id="region-month-sales-chart"></div>
+		</div>
+	</div>
+
+	<div th:replace="fragments/common :: sale-price"></div>
+
+	<div id="region-images" class="layui-col-md12">
+		<div th:each="file:${region.listDocFiles}" th:if="${file.imageList != null && file.imageList.size() > 0}">
+			<p class="layui-elem-quote" th:text="${file.docName}"></p>
+			<div class="image-container">
+				<img th:each="image:${file.imageList}" th:data-id="${file.id}" th:src="${image.thumbUrl}" th:layer-src="${image.viewUrl}" onerror="showDefaultImage(this)">
+			</div>
+		</div>
+	</div>
+</div>
+<div th:replace="fragments/common :: layout-footer"></div>
+<script th:src="@{/layui/echarts/echarts.js}"></script>
+<script th:src="@{/layui/echarts/macarons.js}"></script>
+<script th:replace="fragments/common :: layout-toolbar-script"></script>
+<script th:replace="fragments/common :: region-carousel-script"></script>
+<script th:replace="fragments/common :: region-month-sales-script"></script>
+<script th:replace="fragments/images :: script"></script>
+</body>
+</html>

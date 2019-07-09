@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style th:fragment="style" rel="stylesheet" type="text/css">
+        /* 小区楼盘导航 */
+        #region-navigator img {
+            max-height: 400px;
+            width: 100%;
+        }
+
+        #region-layout {
+            overflow: hidden;
+        }
+        #region-layout.layui-carousel[lay-anim=updown] .layui-carousel-ind {
+            left: 20px;
+            right: auto;
+        }
+        #region-layout .layui-carousel-ind li {
+            background: none;
+            color: #ffffff;
+            width: 50px;
+            height: 20px;
+            line-height: 20px;
+            border-radius: 0;
+        }
+        #region-layout .layui-carousel-ind li.layui-this {
+            background: #ffffff;
+            color: #1E9FFF;
+        }
+
+        #building-container {
+            background: #ffffff;
+        }
+
+        .return-to {
+            width: 40px;
+            height: 40px;
+            color: #ffffff;
+            background-color: #1e9fff;
+            opacity: 0.5;
+            position: absolute;
+            right: 10px;
+            bottom: 10px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+        }
+        .return-to:hover {
+            color: #ffffff;
+            opacity: 1;
+        }
+
+        .room-list {
+            margin: 0;
+            padding: 5px 0;
+            width: 150px;
+            color: #333;
+            font-size: 14px;
+            line-height: 32px;
+            cursor: pointer;
+            position: relative;
+            display: inline-block;
+        }
+
+        .bg-gdcd {
+            height: 32px;
+            background: #00dd02;
+            font-size: 16px;
+            padding: 0 8px;
+            font-weight: bold;
+            position: relative;
+        }
+
+        .legends .iconfont {
+            font-size: 24px;
+            vertical-align: middle;
+        }
+
+        .bg-gdcd span.sell-state {
+            font-size: 14px;
+            height: 20px;
+            line-height: 20px;
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        }
+
+        .m-bott {
+            padding: 6px;
+            line-height: 20px;
+            border: 1px solid #dcdddd;
+        }
+
+        .room-content {
+            width: 260px;
+            position: absolute;
+            z-index: 999;
+            top: -120px;
+            left: 160px;
+            display: none;
+        }
+
+        .room-content h3 {
+            padding: 0 10px;
+            font-weight: bold;
+        }
+
+        .room-list:hover .room-content {
+            display: block;
+            z-index: 999;
+        }
+
+        .content-box {
+            background: #fff;
+            padding-left: 15px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        .content-box p {
+            margin: 0;
+            color: #999;
+        }
+
+        .content-box p span {
+            color: #333;
+        }
+
+        .box-title span {
+            font-size: 14px;
+            margin-left: 8px;
+            border: 1px solid #959595;
+            padding: 0 5px;
+        }
+
+        #website-content .layui-tab-content {
+            background: #ffffff;
+        }
+
+        /* 销售情况 */
+        #sale-summary > label {
+            color: #959595;
+            font-size: large;
+            font-weight: bold;
+        }
+
+        .navigator-map, .cell-navigator-map {
+            background-color: #F53081;
+            height: 25px;
+            line-height: 25px;
+            border-radius: 5px;
+            position: absolute;
+            cursor: pointer;
+            color: #ffffff;
+        }
+        .navigator-map:hover, .cell-navigator-map:hover {
+            background-color: #FF0000;
+        }
+
+        .navigator-list {
+            margin: 5px;
+            background-color: aqua;
+            text-align: center;
+            width: 150px;
+            color: #333;
+            font-size: 14px;
+            line-height: 32px;
+            cursor: pointer;
+            position: relative;
+            display: inline-block;
+        }
+
+        .navigator-list:hover {
+            background-color: #09ff11;
+        }
+
+        .building-selected, .cell-selected {
+            background-color: #FF0000;
+        }
+
+        .legends {
+            width: 100%;
+            display: inline-block;
+        }
+        .legends .legend {
+            float: left;
+            padding: 5px;
+        }
+        .legends .legend i, .legends .legend span {
+            float: left;
+            display: block;
+        }
+        .legends .legend span {
+            margin-top: 3px;
+        }
+        .cells {
+            display: inline-block;
+            margin: auto 30px;
+        }
+        .cells .cell-name {
+            float: left;
+            text-align: center;
+            background-color: #1E9FFF;
+            height: 30px;
+            line-height: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #ffffff;
+            margin: 1px;
+        }
+        .floor {
+            display: inline-block;
+            width: 100%;
+        }
+        .floor .layui-timeline-axis {
+            height: auto;
+        }
+        .floor.layui-timeline-item {
+            padding-bottom: 0;
+            margin-bottom: -3px;
+        }
+        .floor .cell {
+            float: left;
+            padding-bottom: 20px;
+            padding-left: 12px;
+            padding-right: 12px;
+        }
+        .floor .cell.normal {
+            padding-left: 11px;
+        }
+        .room-content .content-top {
+            background: url([[@{/themes/images/houseTitle.png}]]);
+        }
+        .room-content .content-box {
+            border: 1px solid #f2f2f2;
+            border-top: none;
+        }
+    </style>
+</head>
+<body>
+<div th:fragment="building" id="building-container">
+    <div th:if="${building.showCell}" class="cells">
+        <div th:each="cell:${building?.cells}" th:text="${cell.cellName}"
+             th:style="'width: ' + (${cell.showHouseNum} * 154 + 24) + 'px'" class="cell-name"></div>
+    </div>
+    <ul class="layui-timeline">
+        <li th:each="floor:${building?.floors}" class="layui-timeline-item floor">
+            <i class="layui-icon layui-timeline-axis" th:text="${floor.floorName}"></i>
+            <div class="layui-timeline-content layui-text">
+                <div th:each="cell:${floor?.cells}" class="cell"
+                     th:styleappend="${building.showCell && floor.showCell} ? 'width: ' + (${cell.showHouseNum} * 154 + 4) + 'px' : ''">
+                    <div th:each="house:${cell?.houses}" class="room-list">
+                        <div class="bg-gdcd" th:style="'background: #' + ${house.presellStateCode}"><span th:text="${house.showName}"></span><span class="sell-state" th:text="${house.presellStateName}"></span></div>
+                        <div class="m-bott">建筑面积：<span th:text="${house.constructArea}">㎡</span></div>
+                        <div class="room-content">
+                            <div class="content-top">
+                                <h3 th:text="${house.showName}"></h3>
+                            </div>
+                            <div class="content-box">
+                                <div class="box-title"><span th:text="${house.houseUse}"></span><span th:text="${house.presellStateName}"></span></div>
+                                <p>建筑面积：<span th:text="${house.constructArea}"></span>㎡</p>
+                                <p>套内面积：<span th:text="${house.ownArea}"></span>㎡</p>
+                                <p>户型：<span th:text="${house.houseHold}"></span></p>
+                                <p th:if="${house.presellPrice != null && house.presellPrice > 0 && house.salesFlag == '是'}">备案价格：<span th:text="${house.presellPrice}"></span>元/㎡</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
+<script th:fragment="script" th:inline="javascript">
+    layui.use(['layer', 'element', 'carousel'], function () {
+        var $ = layui.jquery;
+
+        var regionId = [[${regionId}]];
+        var projectId = [[${projectId}]];
+        var bldNo = [[${bldNo}]];
+        var cellNo = [[${cellNo}]];
+
+        // encodeURIComponent
+        if (projectId && bldNo && cellNo) {
+            $('#building-loader').load(ctxPath + 'building/' + regionId + '/' + projectId + '/' + encodeURIComponent(bldNo) + '/' + cellNo, function () {
+                loading('hide');
+            });
+        } else {
+            loading('hide');
+        }
+
+        /////////////////////////////////////////
+        $('#region-layout > div[carousel-item]').height(($('#region-layout').closest('.layui-col-md6').width() - 5) * 1080 / 1920);
+        layui.carousel.render({
+            elem: '#region-layout',
+            width: '100%',
+            height: 'auto',
+            anim: 'updown',
+            autoplay: false,
+            arrow: 'none',
+            indicator: 'custom'
+        });
+        $(window).resize(function () {
+            $('#region-layout > div[carousel-item]').height(($('#region-layout').closest('.layui-col-md6').width() - 5) * 1080 / 1920);
+        });
+        /////////////////////////////////////////
+
+        // $("#layui-body").height(window.innerHeight - 60);
+
+        /*var layid = location.hash.replace(/^#tab=/, '');
+        var element = layui.element;
+        element.tabChange('tab', layid);
+
+        element.on('tab(tab)', function (elem) {
+            location.hash = 'tab=' + $(this).attr('value');
+        });*/
+
+        $(".navigator-map, .navigator-list").on("click", function () {
+            // var bldId = $(this).attr("value");
+            var projectId = $(this).attr('data-project-id');
+            var bldNo = $(this).attr('data-bld-no');
+
+            loading();
+            window.location.replace(ctxPath + 'content/' + [[${region.regionId}]] + '/' + projectId + '/' + encodeURIComponent(bldNo));
+
+
+            // $(".navigator-map,.navigator-list").removeClass("building-selected");
+            // $(this).addClass("building-selected");
+        });
+        $(".navigator-map").on("click", function () {
+            var projectId = $(this).attr('data-project-id');
+            var bldNo = $(this).attr('data-bld-no');
+            var cellNo = $(this).attr('data-cell-no');
+
+            loading();
+            window.location.replace(ctxPath + 'content/' + [[${region.regionId}]] + '/' + projectId + '/' + encodeURIComponent(bldNo) + '/' + encodeURIComponent(cellNo));
+        });
+
+        $('.return-to').on('click', function () {
+            loading();
+            window.location.replace(ctxPath + 'content/' + [[${region.regionId}]]);
+        });
+    });
+</script>
+</body>
+</html>

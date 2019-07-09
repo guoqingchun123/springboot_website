@@ -24,7 +24,7 @@ spring:
       force: true
   data:
     mongodb:
-      uri: mongodb://website:website@10.10.12.1:27017/website
+      uri: mongodb://website:website@172.10.11.111:27017/website
       #uri: mongodb://website:website@192.168.2.21:27017/website
   redis:
     host: 10.10.12.1 # 192.168.2.21
@@ -35,14 +35,14 @@ spring:
       max-request-size: 20MB # 最大请求大小
   thymeleaf:
     cache: false # 开发时关闭缓存,不然没法看到实时页面
-    mode: LEGACYHTML5 # 用非严格的 HTML
+    mode: HTML
     encoding: UTF-8
     servlet:
       content-type: text/html
     prefix: classpath:/templates/
 datasources:
   website:
-    jdbc-url: jdbc:oracle:thin:@10.10.11.254:22522/orcl
+    jdbc-url: jdbc:oracle:thin:@172.10.11.5:1521/orcl
     #jdbc-url: jdbc:oracle:thin:@127.0.0.1:1521/orcl
     username: mid_house_test
     password: mid_house_test

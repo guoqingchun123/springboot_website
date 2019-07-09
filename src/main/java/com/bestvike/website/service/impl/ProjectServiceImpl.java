@@ -9,41 +9,11 @@ import com.bestvike.website.data.ViewDivisionInfo;
 import com.bestvike.website.data.ViewHouseInfo;
 import com.bestvike.website.data.ViewRegionInfo;
 import com.bestvike.website.document.Division;
-import com.bestvike.website.entity.BldCells;
-import com.bestvike.website.entity.BldSales;
-import com.bestvike.website.entity.BldView;
-import com.bestvike.website.entity.Cell;
-import com.bestvike.website.entity.CellSummary;
-import com.bestvike.website.entity.DocFile;
-import com.bestvike.website.entity.DocFiles;
-import com.bestvike.website.entity.Floor;
-import com.bestvike.website.entity.FloorSummary;
-import com.bestvike.website.entity.House;
-import com.bestvike.website.entity.HouseHoldSale;
-import com.bestvike.website.entity.HousePrice;
-import com.bestvike.website.entity.MonthData;
-import com.bestvike.website.entity.PageBean;
-import com.bestvike.website.entity.PriceShow;
-import com.bestvike.website.entity.Region;
-import com.bestvike.website.entity.RegionBlds;
-import com.bestvike.website.entity.ResidenceHouseSale;
+import com.bestvike.website.entity.*;
 import com.bestvike.website.service.ProjectService;
 import com.github.pagehelper.ISelect;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -51,6 +21,17 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
@@ -76,6 +57,11 @@ public class ProjectServiceImpl implements ProjectService {
 
 	/**
 	 * 刷新楼栋数据
+	 *
+	 * @param regionId
+	 * @param projectId
+	 * @param bldNo
+	 * @return
 	 */
 	@Override
 	public ViewRegionInfo region(String regionId, String projectId, String bldNo) {
@@ -107,8 +93,8 @@ public class ProjectServiceImpl implements ProjectService {
 		}
 
 		DocFiles docFiles = mongoTemplate.findOne(Query.query(Criteria.
-				where("keyId").is(regionId).
-				and("fileType").is("regionImage").and("docType").is("aerialView")), DocFiles.class);
+			where("keyId").is(regionId).
+			and("fileType").is("regionImage").and("docType").is("aerialView")), DocFiles.class);
 		if (docFiles != null) {
 			List<String> regionLogos = new ArrayList<>();
 			for (DocFile docFile : docFiles.getImageList()) {
@@ -126,7 +112,7 @@ public class ProjectServiceImpl implements ProjectService {
 		List<RegionBlds> listRegionBlds = viewRegionInfoDao.selectRegionBlds(regionId);
 		viewRegionInfo.setListRegionBlds(listRegionBlds);
 		// 增加按楼按单元显示房屋
-		if (listRegionBlds != null && listRegionBlds.size() > 0) {
+		/*if (listRegionBlds != null && listRegionBlds.size() > 0) {
 			parameterMap.put("projectId", projectId);
 			parameterMap.put("bldNo", bldNo);
 			// 查询楼栋楼层列表
@@ -159,7 +145,13 @@ public class ProjectServiceImpl implements ProjectService {
 			BldSales bldSales = viewHouseInfoDao.selectBldSalesData(parameterMap);
 			bldView.setBldSales(bldSales);
 			viewRegionInfo.setBldView(bldView);
-		}
+		}*/
+		// 查询楼栋销售情况
+		parameterMap.put("projectId", projectId);
+		parameterMap.put("bldNo", bldNo);
+		BldSales bldSales = viewHouseInfoDao.selectBldSalesData(parameterMap);
+		bldView.setBldSales(bldSales);
+		viewRegionInfo.setBldView(bldView);
 		// 查询各种房屋类型的销售均价
 		List<PriceShow> priceShows = selectPriceShow(regionId);
 		if (priceShows.size() > 0) {
@@ -170,6 +162,12 @@ public class ProjectServiceImpl implements ProjectService {
 
 	/**
 	 * 刷新单元数据
+	 *
+	 * @param regionId
+	 * @param projectId
+	 * @param bldNo
+	 * @param cellNo
+	 * @return
 	 */
 	@Override
 	public ViewRegionInfo region(String regionId, String projectId, String bldNo, String cellNo) {
@@ -188,8 +186,8 @@ public class ProjectServiceImpl implements ProjectService {
 		}
 
 		DocFiles docFiles = mongoTemplate.findOne(Query.query(Criteria.
-				where("keyId").is(regionId).
-				and("fileType").is("regionImage").and("docType").is("aerialView")), DocFiles.class);
+			where("keyId").is(regionId).
+			and("fileType").is("regionImage").and("docType").is("aerialView")), DocFiles.class);
 		if (docFiles != null) {
 			List<String> regionLogos = new ArrayList<>();
 			for (DocFile docFile : docFiles.getImageList()) {
@@ -212,7 +210,7 @@ public class ProjectServiceImpl implements ProjectService {
 			parameterMap.put("bldNo", bldNo);
 			BldView bldView = viewHouseInfoDao.selectBldView(parameterMap);
 			// 查询楼栋单元列表
-			List<Cell> listCell = viewRegionInfoDao.selectBldCells(parameterMap);
+			/*List<Cell> listCell = viewRegionInfoDao.selectBldCells(parameterMap);
 			bldView.setCells(listCell);
 			// 查询楼栋单元楼层列表
 			parameterMap.put("cellNo", cellNo);
@@ -231,7 +229,7 @@ public class ProjectServiceImpl implements ProjectService {
 				floor.setCells(listFloorCell);
 				floor.setShowCell(false);
 			}
-			bldView.setFloors(listFloor);
+			bldView.setFloors(listFloor);*/
 			// 查询楼栋销售情况
 			BldSales bldSales = viewHouseInfoDao.selectBldSalesData(parameterMap);
 			bldView.setBldSales(bldSales);
@@ -243,6 +241,37 @@ public class ProjectServiceImpl implements ProjectService {
 			viewRegionInfo.setPriceShows(priceShows);
 		}
 		return viewRegionInfo;
+	}
+
+	@Override
+	public BldView building(String regionId, String projectId, String bldNo, String cellNo) {
+		Map<String, Object> parameterMap = new HashMap<>();
+		parameterMap.put("regionId", regionId);
+		parameterMap.put("projectId", projectId);
+		parameterMap.put("bldNo", bldNo);
+		BldView bldView = viewHouseInfoDao.selectBldView(parameterMap);
+
+		List<Cell> listCell = viewRegionInfoDao.selectBldCells(parameterMap);
+		bldView.setCells(listCell);
+		// 查询楼栋单元楼层列表
+		parameterMap.put("cellNo", cellNo);
+		List<Floor> listFloor = viewRegionInfoDao.selectBldFloors(parameterMap);
+		for (Floor floor : listFloor) {
+			// 查询楼层单元信息
+			parameterMap.put("floorNo", floor.getFloorNo());
+			List<Cell> listFloorCell = viewRegionInfoDao.selectFloorCells(parameterMap);
+			// 只有一个单元
+			if (listFloorCell != null && listFloorCell.size() > 0) {
+				Cell cell = listFloorCell.get(0);
+				List<ViewHouseInfo> listHouse = viewHouseInfoDao.selectBldHouse(parameterMap);
+				cell.setHouses(listHouse);
+			}
+			bldView.setShowCell(false);
+			floor.setCells(listFloorCell);
+			floor.setShowCell(false);
+		}
+		bldView.setFloors(listFloor);
+		return bldView;
 	}
 
 	@Override
@@ -263,8 +292,8 @@ public class ProjectServiceImpl implements ProjectService {
 		}
 
 		DocFiles docFiles = mongoTemplate.findOne(Query.query(Criteria.
-				where("keyId").is(regionId).
-				and("fileType").is("regionImage").and("docType").is("aerialView")), DocFiles.class);
+			where("keyId").is(regionId).
+			and("fileType").is("regionImage").and("docType").is("aerialView")), DocFiles.class);
 		if (docFiles != null) {
 			List<String> regionLogos = new ArrayList<>();
 			for (DocFile docFile : docFiles.getImageList()) {
@@ -322,16 +351,103 @@ public class ProjectServiceImpl implements ProjectService {
 				bldView.setBldSales(bldSales);
 				viewRegionInfo.setBldView(bldView);
 			}
-		} else {
-			List<DocFiles> listDocFiles = queryRegionDocs(regionId, viewType);
-			viewRegionInfo.setListDocFiles(listDocFiles);
-			// 统计小区月销售量
-			parameterMap.clear();
-			parameterMap.put("regionId", regionId);
-			parameterMap.put("preSaleDate", viewRegionInfo.getPreSaleDate());
-			List<MonthData> listRegionSales = viewRegionInfoDao.selectRegionMonthSale(parameterMap);
-			viewRegionInfo.setListRegionSales(listRegionSales);
 		}
+		// 查询各种房屋类型的销售均价
+		List<PriceShow> priceShows = selectPriceShow(regionId);
+		if (priceShows.size() > 0) {
+			viewRegionInfo.setPriceShows(priceShows);
+		}
+		return viewRegionInfo;
+	}
+
+	@Override
+	public ViewRegionInfo layout(String regionId) {
+		ViewRegionInfo viewRegionInfo = viewRegionInfoDao.selectRegion(regionId);
+
+		Map<String, Object> salesMap = viewRegionInfoDao.selectRegionSalesData(regionId);
+		List<Map<String, Object>> salesData = new ArrayList<>();
+		if (null != salesMap) {
+			for (String key : salesMap.keySet()) {
+				Map<String, Object> sales = new HashMap<>();
+				if (null != salesMap.get(key) && ((BigDecimal) salesMap.get(key)).compareTo(BigDecimal.ZERO) > 0) {
+					sales.put("value", salesMap.get(key));
+					sales.put("name", key);
+					salesData.add(sales);
+				}
+			}
+		}
+
+		DocFiles docFiles = mongoTemplate.findOne(Query.query(Criteria.
+				where("keyId").is(regionId).
+				and("fileType").is("regionImage").and("docType").is("aerialView")), DocFiles.class);
+		if (docFiles != null) {
+			List<String> regionLogos = new ArrayList<>();
+			for (DocFile docFile : docFiles.getImageList()) {
+				regionLogos.add(docFile.getViewUrl());
+			}
+			viewRegionInfo.setRegionLogos(regionLogos);
+		}
+
+		Map<String, Object> parameterMap = new HashMap<>();
+		parameterMap.put("regionId", regionId);
+		List<HouseHoldSale> listHouseHold = viewRegionInfoDao.selectRegionHouseHoldData(parameterMap);
+		viewRegionInfo.setSalesData(salesData);
+		viewRegionInfo.setListHouseHold(listHouseHold);
+		List<DocFiles> listDocFiles = queryRegionDocs(regionId, "houseHold");
+		viewRegionInfo.setListDocFiles(listDocFiles);
+		// 统计小区月销售量
+		// parameterMap.put("regionId", regionId);
+		parameterMap.put("preSaleDate", viewRegionInfo.getPreSaleDate());
+		List<MonthData> listRegionSales = viewRegionInfoDao.selectRegionMonthSale(parameterMap);
+		viewRegionInfo.setListRegionSales(listRegionSales);
+		// 查询各种房屋类型的销售均价
+		List<PriceShow> priceShows = selectPriceShow(regionId);
+		if (priceShows.size() > 0) {
+			viewRegionInfo.setPriceShows(priceShows);
+		}
+		return viewRegionInfo;
+	}
+
+	@Override
+	public ViewRegionInfo images(String regionId) {
+		ViewRegionInfo viewRegionInfo = viewRegionInfoDao.selectRegion(regionId);
+
+		Map<String, Object> salesMap = viewRegionInfoDao.selectRegionSalesData(regionId);
+		List<Map<String, Object>> salesData = new ArrayList<>();
+		if (null != salesMap) {
+			for (String key : salesMap.keySet()) {
+				Map<String, Object> sales = new HashMap<>();
+				if (null != salesMap.get(key) && ((BigDecimal) salesMap.get(key)).compareTo(BigDecimal.ZERO) > 0) {
+					sales.put("value", salesMap.get(key));
+					sales.put("name", key);
+					salesData.add(sales);
+				}
+			}
+		}
+
+		DocFiles docFiles = mongoTemplate.findOne(Query.query(Criteria.
+				where("keyId").is(regionId).
+				and("fileType").is("regionImage").and("docType").is("aerialView")), DocFiles.class);
+		if (docFiles != null) {
+			List<String> regionLogos = new ArrayList<>();
+			for (DocFile docFile : docFiles.getImageList()) {
+				regionLogos.add(docFile.getViewUrl());
+			}
+			viewRegionInfo.setRegionLogos(regionLogos);
+		}
+
+		Map<String, Object> parameterMap = new HashMap<>();
+		parameterMap.put("regionId", regionId);
+		List<HouseHoldSale> listHouseHold = viewRegionInfoDao.selectRegionHouseHoldData(parameterMap);
+		viewRegionInfo.setSalesData(salesData);
+		viewRegionInfo.setListHouseHold(listHouseHold);
+		List<DocFiles> listDocFiles = queryRegionDocs(regionId, "regionImage");
+		viewRegionInfo.setListDocFiles(listDocFiles);
+		// 统计小区月销售量
+		// parameterMap.put("regionId", regionId);
+		parameterMap.put("preSaleDate", viewRegionInfo.getPreSaleDate());
+		List<MonthData> listRegionSales = viewRegionInfoDao.selectRegionMonthSale(parameterMap);
+		viewRegionInfo.setListRegionSales(listRegionSales);
 		// 查询各种房屋类型的销售均价
 		List<PriceShow> priceShows = selectPriceShow(regionId);
 		if (priceShows.size() > 0) {
@@ -391,12 +507,15 @@ public class ProjectServiceImpl implements ProjectService {
 
 	/**
 	 * 查询小区销售统计信息及logos
+	 *
+	 * @param regionId
+	 * @return
 	 */
 	public Map<String, Object> queryRegionSales(String regionId) {
 		Map<String, Object> result = new HashMap<>();
 		DocFiles docFiles = mongoTemplate.findOne(Query.query(Criteria.
-				where("keyId").is(regionId).
-				and("fileType").is("regionImage").and("docType").is("aerialView")), DocFiles.class);
+			where("keyId").is(regionId).
+			and("fileType").is("regionImage").and("docType").is("aerialView")), DocFiles.class);
 		if (docFiles != null) {
 			List<String> regionLogos = new ArrayList<>();
 			for (DocFile docFile : docFiles.getImageList()) {
@@ -410,49 +529,23 @@ public class ProjectServiceImpl implements ProjectService {
 		parameterMap.put("houseUse", "01");
 		List<HouseHoldSale> residence = viewRegionInfoDao.selectRegionHouseHoldData(parameterMap);
 		result.put("residence", residence);
-
-		//查询住宅销售汇总
-		ResidenceHouseSale residenceHouseSale = viewRegionInfoDao.selectRegionHouseSaleData(parameterMap);
-		if (null != residenceHouseSale) {
-			result.put("residenceCollects", residenceHouseSale);
-		} else {
-			residenceHouseSale = new ResidenceHouseSale();
-			result.put("residenceCollects", residenceHouseSale);
-		}
-
-		// 查询商用销售情况
-		parameterMap.put("houseUse", "88");
-		List<HouseHoldSale> business = viewRegionInfoDao.selectRegionHouseHoldData(parameterMap);
-		result.put("business", business);
-
-		//查询商用销售汇总
-		ResidenceHouseSale businessCollects = viewRegionInfoDao.selectRegionHouseSaleData(parameterMap);
-		if (null != businessCollects) {
-			result.put("businessCollects", businessCollects);
-		} else {
-			businessCollects = new ResidenceHouseSale();
-			result.put("businessCollects", businessCollects);
-		}
-
 		// 查询配套销售情况
 		parameterMap.put("houseUse", "99");
 		List<HouseHoldSale> mating = viewRegionInfoDao.selectRegionHouseHoldData(parameterMap);
 		result.put("mating", mating);
-
-		//查询配套销售汇总
-		ResidenceHouseSale matingCollects = viewRegionInfoDao.selectRegionHouseSaleData(parameterMap);
-		result.put("matingCollects", matingCollects);
 		// 查询各种房屋类型的销售均价
 		List<PriceShow> priceShows = selectPriceShow(regionId);
 		if (priceShows.size() > 0) {
 			result.put("priceShows", priceShows);
 		}
-
 		return result;
 	}
 
 	/**
 	 * 取销售价格
+	 *
+	 * @param regionId
+	 * @return
 	 */
 	public List<PriceShow> selectPriceShow(String regionId) {
 		List<PriceShow> priceShows = new ArrayList<>();
@@ -484,6 +577,7 @@ public class ProjectServiceImpl implements ProjectService {
 				priceShow.setHousePrices(housePrices);
 				priceShows.add(priceShow);
 			}
+			houseShow = "";
 			housePrices = new ArrayList<>();
 			if (priceMap.containsKey("CARPORT_PRICE") && ((BigDecimal) priceMap.get("CARPORT_PRICE")).compareTo(BigDecimal.ZERO) > 0) {
 				HousePrice housePrice = new HousePrice();
@@ -499,7 +593,7 @@ public class ProjectServiceImpl implements ProjectService {
 			}
 			if (housePrices.size() > 0) {
 				PriceShow priceShow = new PriceShow();
-				priceShow.setHouseShow("配套");
+				priceShow.setHouseShow("配套(按套内计算)");
 				priceShow.setHousePrices(housePrices);
 				priceShows.add(priceShow);
 			}
@@ -517,15 +611,15 @@ public class ProjectServiceImpl implements ProjectService {
 				case "houseHold":
 					// 户型图
 					List<DocFiles> docFiles = mongoTemplate.find(Query.query(Criteria.
-							where("keyId").is(regionId).
-							and("fileType").is("houseHold")), DocFiles.class);
+						where("keyId").is(regionId).
+						and("fileType").is("houseHold")), DocFiles.class);
 					return docFiles;
 				case "regionImage":
 					// 鸟瞰图
 					// 户型图
 					docFiles = mongoTemplate.find(Query.query(Criteria.
-							where("keyId").is(regionId).
-							and("fileType").is("regionImage")), DocFiles.class);
+						where("keyId").is(regionId).
+						and("fileType").is("regionImage")), DocFiles.class);
 					return docFiles;
 			}
 		}
