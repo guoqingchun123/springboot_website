@@ -5,6 +5,7 @@ import com.bestvike.website.data.SUser;
 import com.bestvike.website.data.ViewPresalecard;
 import com.bestvike.website.data.ViewRegionInfo;
 import com.bestvike.website.entity.Region;
+import com.bestvike.website.entity.RegionTrade;
 import com.bestvike.website.service.LayoutService;
 import com.bestvike.website.service.ProjectService;
 import java.io.UnsupportedEncodingException;
@@ -111,5 +112,11 @@ public class ProjectController extends BaseController {
 			return token;
 		}
 		return null;
+	}
+
+	@GetMapping(value = "/region-trades")
+	public List<RegionTrade> selectRegionTrades(@RequestParam String dataType) {
+		logger.info("检索条件：" + dataType);
+		return layoutService.selectRegionTrades(dataType);
 	}
 }

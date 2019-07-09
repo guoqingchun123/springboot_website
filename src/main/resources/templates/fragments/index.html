@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style th:fragment="style" rel="stylesheet" type="text/css">
+        /* 操作区 */
+        #website-toolbar {
+            width: 100%;
+            height: 60px;
+            background-color: #ffffff;
+            padding-top: 15px;
+        }
+
+        #website-navigation .layui-icon-location {
+            color: #ff0813;
+        }
+
+        /* 小区过滤 */
+        #region-filter {
+            margin-bottom: 10px;
+            padding-top: 10px;
+            margin-top: 10px;
+            background-color: #ffffff;
+        }
+
+        #region-filter .layui-elem-quote {
+            border: none;
+            margin-bottom: 0;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+        #region-filter .layui-breadcrumb a.selected, #region-filter .layui-breadcrumb a:hover {
+            color: #1E9FFF !important;
+        }
+
+        .region-container #region-search-result {
+            background-color: #fafafa;
+            margin-bottom: 0;
+            border-left: 0;
+        }
+        .region-container #region-search-result .total-size {
+            color: #FF0000;
+        }
+        .region-card {
+            cursor: pointer;
+            margin-bottom: 1px;
+        }
+        .region-card:hover {
+            background-color: #fafafa;
+        }
+
+        .region-card .layui-card-body {
+            overflow: hidden;
+        }
+        .region-card .region-logo img {
+            width: 100%;
+            max-width: 260px;
+        }
+        .region-card .region-name {
+            color: #008000;
+        }
+        .region-card .region-info {
+            font-size:16px;
+            float: left;
+            padding-left: 30px
+        }
+        .region-card:hover .region-info button {
+            background-color: #1e9fff;
+            border: 1px solid #1e9fff;
+            color: #ffffff;
+        }
+        .region-card .layui-elem-quote {
+            border-left: none;
+            background-color: transparent;
+            padding: 0;
+        }
+        .region-card .region-info .layui-elem-quote {
+            margin-bottom: 7px;
+        }
+        .region-card .region-info .layui-elem-quote.region-name {
+            font-size: 24px;
+            font-weight: bold;
+            padding: 10px 0;
+        }
+        .region-card .region-avg-price {
+            text-align: right;
+            padding-top: 50px;
+        }
+        .region-card .region-avg-price label {
+            color: #FF0000;
+            font-size: x-large;
+        }
+
+        #region-pager {
+            text-align: right;
+        }
+
+        #layout-footer {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div th:fragment="regions" class="region-container">
+    <blockquote id="region-search-result" class="layui-elem-quote layui-quote-nm">
+        小区列表：共为您筛选出<label class="total-size" th:text="${data.page.totalSize}"></label>个小区
+    </blockquote>
+    <div class="region-card layui-card" th:each="region:${data.list}" th:data-value="${region.regionId}">
+        <div class="layui-card-body">
+            <div class="layui-col-md9">
+                <div class="region-logo layui-col-md3">
+                    <img th:src="${region.logoPath}" onerror="showDefaultImage(this)">
+                </div>
+                <div class="region-info layui-col-md9">
+                    <p class="layui-elem-quote region-name" th:text="${region.regionName}"></p>
+                    <p class="layui-elem-quote"><span>小区地址：</span><label th:text="${region.address}"></label></p>
+                    <p class="layui-elem-quote"><span>预售许可日期：</span><label th:text="${region.preSaleDate}"></label></p>
+                    <p class="layui-elem-quote"><button type="button" class="layui-btn layui-btn-primary summary-btn" th:value="${region.regionId}">查看详情</button></p>
+                </div>
+            </div>
+            <div class="region-avg-price layui-col-md3" th:if="${region.avgPrice != null && region.avgPrice > 0}">
+                <!--
+                住宅备案均价：<label th:text="${region.avgPrice} + '元/㎡'"></label>
+                -->
+            </div>
+        </div>
+    </div>
+    <div id="region-pager" th:data-total-size="${data.page.totalSize}"></div>
+</div>
+<script th:fragment="script" th:inline="javascript">
+    var page = {
+        pageNo: 1,
+        pageSize: 10,
+        totalSize: 1
+    };
+    layui.use(['layer', 'laypage', 'element'], function () {
+        var $ = layui.jquery;
+
+        refreshData(1);
+
+        // 跳转到地图刷新页面
+        $(".website-navigation-button").on("click", function () {
+            window.open(ctxPath + 'maps', '_blank');
+        });
+
+        $(document).on('click', '.layui-breadcrumb a', function () {
+            $(this).parent().find(".selected").removeClass("selected");
+            $(this).addClass("selected");
+            refreshData(1);
+        });
+
+        // 跳转到小区详情页面
+        $(document).on('click', '.region-card', function () {
+            window.open(ctxPath + 'sales/' + $(this).attr("data-value"));
+        });
+
+        function refreshPage(page) {
+            layui.laypage.render({
+                elem: 'region-pager'
+                , count: page.totalSize
+                , limit: page.pageSize
+                , curr: page.pageNo
+                , theme: '#1E9FFF'
+                , jump: function (obj, first) {
+                    if (!first) {
+                        refreshData(obj.curr);
+                    }
+                }
+            });
+        }
+
+        function refreshData(pageNo) {
+            loading();
+            var url = ctxPath + 'fragments-regions?pageNo=' + pageNo + '&pageSize=' + page.pageSize;
+            var divisionCode = $('#region-division').find(".selected").attr("data-value");
+            if (divisionCode) {
+                url += '&divisionCode=' + divisionCode;
+            }
+            /*var price = $('#region-avg-price').find(".selected").attr("data-value");
+            if (price) {
+                url += '&price=' + price;
+            }*/
+            var houseHold = $('#region-house-hold').find(".selected").attr("data-value");
+            if (houseHold) {
+                url += '&houseHold=' + houseHold;
+            }
+            $('#region-loader').load(url, function () {
+                page.pageNo = pageNo;
+                page.totalSize = $('#region-pager').attr('data-total-size');
+                refreshPage(page);
+                loading('hide');
+            });
+        }
+    });
+</script>
+</body>
+</html>

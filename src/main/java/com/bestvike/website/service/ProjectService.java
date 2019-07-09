@@ -3,12 +3,14 @@ package com.bestvike.website.service;
 import com.bestvike.website.data.ViewRegionInfo;
 import com.bestvike.website.document.Division;
 import com.bestvike.website.entity.BldCells;
+import com.bestvike.website.entity.BldView;
 import com.bestvike.website.entity.DocFiles;
-import java.util.List;
-import java.util.Map;
+import org.springframework.stereotype.Service;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public interface ProjectService {
@@ -18,8 +20,11 @@ public interface ProjectService {
 	public ViewRegionInfo region(String regionId, String projectId, String bldNo);
 
 	public ViewRegionInfo region(String regionId, String projectId, String bldNo, String cellNo);
+	public BldView building(String regionId, String projectId, String bldNo, String cellNo);
 
 	public ViewRegionInfo region(String regionId, String viewType);
+	public ViewRegionInfo layout(String regionId);
+	public ViewRegionInfo images(String regionId);
 
 	public Map<String, Object> pageRegions(String keywords, int pageNo, int pageSize, String divisionCode, String price, String houseHold, String sort);
 

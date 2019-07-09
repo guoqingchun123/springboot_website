@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="header">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>赤峰市房产信息网</title>
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
+    <link th:href="@{/layui/css/layui.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{/layui/autocomplete/autocomplete.css}" rel="stylesheet" type="text/css">
+    <!--[if lt IE 9]>
+    <script th:src="@{/js/respond.min.js}"></script>
+    <![endif]-->
+    <style rel="stylesheet" type="text/css">
+        /* 公共样式 */
+        /* 垂直的tabs */
+        .layui-tab.vertical .layui-tab-title {
+            width: 60px;
+        }
+        .layui-tab.vertical li {
+            display: block;
+            padding: 0;
+        }
+        /* 查询 */
+        /* 首页 */
+        .layout-index .layui-tab-title {
+
+        }
+        .layout-index #website-search {
+            display: inline-block;
+            position: relative;
+        }
+
+        .layout-index #website-search #region-search-input {
+            width: 400px;
+            padding: 8px 20px;
+            border-radius: 20px;
+            box-shadow: none;
+            background: #fff;
+            border: 1px solid #1E9EFF;
+            outline: none;
+            font-size: 16px;
+        }
+
+        .layout-index #website-search .layui-icon-search {
+            position: relative;
+            right: -400px;
+            top: -30px;
+            font-size: 23px;
+            color: #1E9FFF;
+        }
+
+        /* 地图导航 */
+        .layout-index #website-navigation {
+            padding-right: 15px;
+            float: right;
+            text-align: right;
+        }
+
+        /* 其他页 */
+        .layout-detail #website-search {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+        }
+        .layout-detail #region-search-input {
+            width: 300px;
+        }
+        .layout-detail #region-search-button {
+            position: absolute;
+            top: 7px;
+            right: 10px;
+        }
+        .layout-detail #region-search-button i {
+            font-size: 24px;
+        }
+
+        #region-navigator {
+            padding-left: 3px;
+            position: relative;
+            height: auto;
+            display: inline-block;
+        }
+
+        /* body */
+        #website-body {
+            min-width: 1000px;
+            /*overflow-x: auto;
+            overflow-y: auto;*/
+            background: #f1f1f1;
+            text-align: center;
+        }
+
+        /* header - logo */
+        #website-header {
+            position: fixed;
+            width: 100%;
+            height: 60px;
+            background: #1E9FFF url([[@{/themes/images/logo.png}]]) no-repeat 20px center;
+            z-index: 1000;
+            text-align: center;
+        }
+
+        #website-header #website-notice {
+            height: 60px;
+            line-height: 60px;
+            color: #FFFF00;
+            font-size: 18px;
+        }
+
+        #website-toolbar {
+            height: 50px;
+            margin-bottom: 10px;
+            padding-top: 15px;
+            background: #ffffff;
+            padding-left: 15px;
+        }
+        #website-toolbar .layui-breadcrumb {
+            font-size: 30px;
+        }
+        #website-toolbar .layui-breadcrumb a.current {
+            color: #5FB878 !important;
+            cursor: text;
+        }
+
+        /* 小区图片 */
+        #region-guide {
+            display: inline-block;
+            width: 100%;
+        }
+        #region-guide .layui-col-md6 {
+            min-height: 1px;
+        }
+        #region-carousel {
+            overflow: hidden;
+        }
+        .region-logo-container {
+            padding-left: 2px;
+            text-align: center;
+        }
+        .region-logo-container img {
+            max-height: 400px;
+            width: 100%;
+        }
+
+        /* 价格备案情况 */
+        #sale-price {
+            /*width: 100%;*/
+            background-color: #ffffff;
+            margin-top: 10px;
+            overflow: hidden;
+            height: 30px;
+            line-height: 30px;
+            padding: 5px;
+            color: #999;
+        }
+
+        /* 内容 */
+        #website-content {
+            display: inline-block;
+            width: 75%;
+            min-width: 1000px;
+            /*margin: 0px auto;*/
+            padding-top: 65px;
+            text-align: left;
+            /*min-height: 641px;*/
+        }
+
+        #website-footer {
+            width: 600px;
+            margin: 20px auto 30px;
+            position: relative;
+        }
+        #website-footer .shiye {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+        }
+        #website-footer .zc {
+            position: absolute;
+            right: -80px;
+            bottom: 0;
+        }
+        #website-footer .description {
+            text-align: center;
+            font-size: 14px;
+        }
+        #website-footer .description span {
+            padding: 0 10px;
+        }
+        #website-loading {
+            z-index: 2000;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            margin-left: -110px;
+            margin-top:-35px;
+            border: 1px solid #f2f2f2;
+            background: #ffffff;
+            padding: 10px 20px;
+            box-shadow: 0px 0px 30px rgba(0,0,0,0.3);
+        }
+
+        .layui-carousel > [carousel-item] {
+            overflow: visible;
+        }
+        .layui-carousel > [carousel-item] > .carousel-auto {
+            height: auto;
+        }
+        .layui-carousel-ind {
+            margin-top: -20px;
+            top: auto;
+            bottom: 10px;
+        }
+
+        /* 小区图片 */
+        .region-images {
+            margin-bottom: 20px;
+        }
+        .region-images .layui-elem-quote {
+            margin-bottom: 0;
+        }
+        .image-container {
+            display: inline-block;
+        }
+        .image-container > img {
+            cursor: pointer;
+            float: left;
+            padding: 5px;
+            height: 150px;
+        }
+    </style>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var ctxPath = /*[[@{/}]]*/ '';
+        /*]]>*/
+
+        // ready实现
+        (function () {
+            var ie =!!(window.attachEvent&&!window.opera),wk=/webkit\/(\d+)/i.test(navigator.userAgent)&&(RegExp.$1<525);
+            var fn =[],run=function(){for(var i=0;i<fn.length;i++)fn[i]();},d=document;d.ready=function(f){
+                if(!ie&&!wk&&d.addEventListener){return d.addEventListener('DOMContentLoaded',f,false);}if(fn.push(f)>1)return;
+                if(ie)(function(){try{d.documentElement.doScroll('left');run();}catch(err){setTimeout(arguments.callee,0);}})();
+                else if(wk)var t=setInterval(function(){if(/^(loaded|complete)$/.test(d.readyState))clearInterval(t),run();},0);};
+        })();
+        document.ready(function () {
+            if (document.getElementById('website-content') != null) {
+                document.getElementById('website-content').style.minHeight = (window.innerHeight - 172) + 'px';
+            }
+            if (document.getElementById('website-footer') != null) {
+                document.getElementById('website-footer').style.display = 'block';
+            }
+        });
+
+        window.onresize = function (ev) {
+            if (document.getElementById('website-content') != null) {
+                document.getElementById('website-content').style.minHeight = (window.innerHeight - 172) + 'px';
+            }
+        };
+
+        function showDefaultImage(img) {
+            img.src = ctxPath + "themes/images/nothing.png";
+        }
+        function loading(hide) {
+            if (!hide) {
+                document.getElementById('website-loading').style.display = 'block';
+            } else {
+                document.getElementById('website-loading').style.display = 'none';
+            }
+        }
+    </script>
+    <script th:src="@{/layui/layui.js}"></script>
+</head>
+<body>
+<div th:fragment="loading" id="website-loading">
+    <img th:src="@{/themes/images/loading.gif}" style="width: 200px;">
+</div>
+<div th:fragment="layout-header" id="website-header">
+    <div id="website-notice">此平台发布的房源信息为2019年6月20日以后准予预售的商品房信息！</div>
+    <div th:if="${layout== 'detail'}" id="website-search">
+        <input id="region-search-input" name="region-search-input" class="layui-input layui-input-search" placeholder="请输入小区名称或小区地址进行检索" />
+        <a id="region-search-button" href="javascript:;"><i class="layui-icon layui-icon-search"></i></a>
+    </div>
+</div>
+<div th:fragment="layout-toolbar" id="website-toolbar">
+    <div id="region-name" class="layui-col-md3">
+        <h1 th:text="${region.regionName}"></h1>
+    </div>
+    <div class="layui-breadcrumb layui-col-md9" lay-separator="|">
+        <a href="javascript:;" data-value="index">首页</a>
+        <a href="javascript:;" data-value="sales" th:class="${current == 'sales'} ? 'current'">销售情况</a>
+        <a href="javascript:;" data-value="layout" th:class="${current == 'layout'} ? 'current'">户型图</a>
+        <a href="javascript:;" data-value="images" th:class="${current == 'images'} ? 'current'">项目相册</a>
+    </div>
+</div>
+<div th:fragment="region-carousel" id="region-carousel" class="layui-carousel">
+    <div carousel-item>
+        <div id="region-sales-chart"></div>
+        <div class="carousel-auto region-logo-container" th:each="str:${region?.regionLogos}">
+            <img th:src="${str}" onerror="showDefaultImage(this)">
+        </div>
+    </div>
+</div>
+<div th:fragment="sale-price" id="sale-price" th:if="region?.priceShows">
+    <span>价格备案情况：</span>
+    <span th:each="price:${region.priceShows}">
+				<span th:text="${price.houseShow}"></span>
+				（<span th:each="housePrice, iterStat:${price.housePrices}">
+					<span th:if="${iterStat.index > 0}">，</span>
+					<span th:text="${housePrice.houseHold}"></span>：<span th:text="${housePrice.price}"></span>元/平方米</span>）
+			</span>
+</div>
+<div th:fragment="layout-footer" id="website-footer">
+    <!--<div class="shiye">
+        <a target="_blank" href="http://bszs.conac.cn/sitename?method=show&amp;id=069D7D248AE75E02E053012819AC7D94"><img th:src="@{/themes/images/dzjg.png}"></a>
+    </div>-->
+    <div class="description">
+        <div><span>欢迎光临本站！</span></div>
+        <div>
+            <span>主办单位：赤峰房产信息网</span>
+            <span>主管单位：赤峰住房和城乡建设局</span>
+            <!--<span class="beian">备案号：</span>-->
+        </div>
+        <div>
+            <span>技术支持单位：济南百思为科信息工程有限公司</span>
+        </div>
+    </div>
+    <!--<div class="zc">
+        <a target="_blank" href="http://121.43.68.40/exposure/jiucuo.html?site_code=1504000017&amp;url=http%3A%2F%2Ffgj.chifeng.gov.cn"><img th:src="@{/themes/images/zc.jpg}"></a>
+    </div>-->
+</div>
+<script th:fragment="layout-toolbar-script" th:inline="javascript">
+    layui.use(['layer'], function () {
+        var $ = layui.jquery;
+
+        $(document).on('click', '.layui-breadcrumb a:not(.current)', function () {
+            var viewType = $(this).attr("data-value");
+            if (viewType === 'index') {
+                window.location.replace(ctxPath);
+            } else if (viewType === 'salesData') {
+                window.location.replace(ctxPath + 'content/' + [[${region.regionId}]]);
+            } else {
+                window.location.replace(ctxPath + viewType + '/' + [[${region.regionId}]]);
+            }
+        });
+    });
+</script>
+<script th:fragment="region-query-script" th:inline="javascript">
+    layui.config({
+        base: ctxPath + 'layui/autocomplete/'
+    }).extend({ //设定模块别名
+        autocomplete: 'autocomplete'
+    });
+    layui.use(['layer', 'autocomplete'], function () {
+        var $ = layui.jquery;
+        var autocomplete = layui.autocomplete;
+
+        autocomplete.render({
+            elem: document.getElementById('region-search-input'),
+            url: ctxPath + 'auto-regions',
+            template_val: '{{d.regionName}}',
+            template_txt: '{{d.regionName}} <span class=\'layui-badge layui-bg-gray\'>{{d.address}}</span>',
+            onselect: function (res) {
+                // 跳转到选择的项目详情页面
+                window.location.href = ctxPath + 'content/' + res.regionId;
+            }
+        });
+    });
+</script>
+<script th:fragment="region-carousel-script" th:inline="javascript">
+    layui.use(['layer', 'carousel'], function () {
+        var $ = layui.jquery;
+        var carousel = layui.carousel;
+
+        var carouselOptions = {
+            elem: '#region-carousel'
+            , width: '100%' //设置容器宽度
+            , height: 'auto' // (($('#region-carousel').closest('.layui-col-md6').width() - 5) * 1080 / 1920) + 'px'
+            , arrow: 'always' //始终显示箭头
+        };
+
+        var option = {
+            title: {
+                text: '项目销售情况',
+                x: 'left'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: "{b} : {c} ({d}%)"
+            },
+            series: [
+                {
+                    name: '销售情况',
+                    type: 'pie',
+                    radius: '85%',
+                    data: [[${region.salesData}]],
+                    label: {
+                        normal: {
+                            formatter: function(v) {
+                                return Math.round(v.percent) + '%' + '' + v.name
+                            },
+                            textStyle: {
+                                fontWeight: 300,
+                                fontSize: 16    //文字的字体大小
+                            }
+                        }
+                    }
+                }
+            ]
+        };
+
+        $('#region-carousel > div[carousel-item]').height(($('#region-carousel').closest('.layui-col-md6').width() - 5) * 1080 / 1920);
+        carousel.render(carouselOptions);
+
+        var regionSalesDataCharts = echarts.init(document.getElementById('region-sales-chart'), 'macarons');
+        regionSalesDataCharts.setOption(option);
+
+        $(window).resize(function () {
+            $('#region-carousel > div[carousel-item]').height(($('#region-carousel').closest('.layui-col-md6').width() - 5) * 1080 / 1920);
+
+            regionSalesDataCharts.resize();
+        });
+    });
+</script>
+<script th:fragment="region-month-sales-script" th:inline="javascript">
+    layui.use(['layer'], function () {
+        var $ = layui.jquery;
+
+        var listRegionSales = [[${region.listRegionSales}]];
+
+        var months = [];
+        var residenceNums = [];
+        var businessNums = [];
+        var matingNums = [];
+
+        for (var i = 0; i < listRegionSales.length; i++) {
+            months.push(listRegionSales[i].dataMonth);
+            residenceNums.push(listRegionSales[i].residenceNum);
+            businessNums.push(listRegionSales[i].businessNum);
+            matingNums.push(listRegionSales[i].matingNum);
+        }
+
+        var option = {
+            title: {
+                text: '项目月度销售情况'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['住宅', '商业', '配套']
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    magicType: {show: true, type: ['line', 'bar']},
+                }
+            },
+            calculable: true,
+            xAxis: [
+                {
+                    type: 'category',
+                    data: months
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '住宅',
+                    type: 'bar',
+                    data: residenceNums
+                },
+                {
+                    name: '商业',
+                    type: 'bar',
+                    data: businessNums
+                },
+                {
+                    name: '配套',
+                    type: 'bar',
+                    data: matingNums
+                }
+            ]
+        };
+
+        $('#region-month-sales-chart').height(($('#region-month-sales-chart').closest('.layui-col-md6').width() - 5) * 1080 / 1920);
+        var regionMonthSalesDataCharts = echarts.init(document.getElementById('region-month-sales-chart'), 'macarons');
+        regionMonthSalesDataCharts.setOption(option);
+
+        $(window).resize(function () {
+            $('#region-month-sales-chart').height(($('#region-month-sales-chart').closest('.layui-col-md6').width() - 5) * 1080 / 1920);
+            regionMonthSalesDataCharts.resize();
+        });
+    });
+</script>
+</body>
+</html>
