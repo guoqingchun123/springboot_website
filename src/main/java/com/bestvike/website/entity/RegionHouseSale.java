@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import javax.persistence.Entity;
 
 @Entity
-public class ResidenceHouseSale implements Serializable {
+public class RegionHouseSale implements Serializable {
 
 	private static final long serialVersionUID = -8881290539595052784L;
 

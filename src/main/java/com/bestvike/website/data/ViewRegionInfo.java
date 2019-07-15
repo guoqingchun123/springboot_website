@@ -75,6 +75,18 @@ public class ViewRegionInfo implements Serializable {
 	private String cellNo;
 	@Transient
 	private List<PriceShow> priceShows;
+	@Transient
+	private List<HouseHoldSale> residence;
+	@Transient
+	private RegionHouseSale residenceCollects;
+	@Transient
+	private List<HouseHoldSale> business;
+	@Transient
+	private RegionHouseSale businessCollects;
+	@Transient
+	private List<HouseHoldSale> mating;
+	@Transient
+	private RegionHouseSale matingCollects;
 
 	public String getRegionId() {
 		return regionId;
@@ -346,5 +358,53 @@ public class ViewRegionInfo implements Serializable {
 
 	public void setPriceShows(List<PriceShow> priceShows) {
 		this.priceShows = priceShows;
+	}
+
+	public List<HouseHoldSale> getResidence() {
+		return residence;
+	}
+
+	public void setResidence(List<HouseHoldSale> residence) {
+		this.residence = residence;
+	}
+
+	public RegionHouseSale getResidenceCollects() {
+		return residenceCollects;
+	}
+
+	public void setResidenceCollects(RegionHouseSale residenceCollects) {
+		this.residenceCollects = residenceCollects;
+	}
+
+	public List<HouseHoldSale> getBusiness() {
+		return business;
+	}
+
+	public void setBusiness(List<HouseHoldSale> business) {
+		this.business = business;
+	}
+
+	public RegionHouseSale getBusinessCollects() {
+		return businessCollects;
+	}
+
+	public void setBusinessCollects(RegionHouseSale businessCollects) {
+		this.businessCollects = businessCollects;
+	}
+
+	public List<HouseHoldSale> getMating() {
+		return mating;
+	}
+
+	public void setMating(List<HouseHoldSale> mating) {
+		this.mating = mating;
+	}
+
+	public RegionHouseSale getMatingCollects() {
+		return matingCollects;
+	}
+
+	public void setMatingCollects(RegionHouseSale matingCollects) {
+		this.matingCollects = matingCollects;
 	}
 }

@@ -11,7 +11,7 @@ import com.bestvike.website.entity.MonthData;
 import com.bestvike.website.entity.Region;
 import com.bestvike.website.entity.RegionBlds;
 import com.bestvike.website.entity.RegionTrade;
-import com.bestvike.website.entity.ResidenceHouseSale;
+import com.bestvike.website.entity.RegionHouseSale;
 import com.bestvike.website.entity.Trade;
 import java.math.BigDecimal;
 import java.util.List;
@@ -32,7 +32,7 @@ public interface ViewRegionInfoDao extends Mapper<ViewRegionInfo> {
 
 	public List<HouseHoldSale> selectRegionHouseHoldData(Map<String, Object> parameterMap);
 
-	public ResidenceHouseSale selectRegionHouseSaleData(Map<String, Object> parameterMap);
+	public RegionHouseSale selectRegionHouseSaleData(Map<String, Object> parameterMap);
 
 	public List<BldCells> selectBlds(String regionId);
 

@@ -9,22 +9,28 @@ import com.bestvike.website.data.ViewDivisionInfo;
 import com.bestvike.website.data.ViewHouseInfo;
 import com.bestvike.website.data.ViewRegionInfo;
 import com.bestvike.website.document.Division;
-import com.bestvike.website.entity.*;
+import com.bestvike.website.entity.BldCells;
+import com.bestvike.website.entity.BldSales;
+import com.bestvike.website.entity.BldView;
+import com.bestvike.website.entity.Cell;
+import com.bestvike.website.entity.CellSummary;
+import com.bestvike.website.entity.DocFile;
+import com.bestvike.website.entity.DocFiles;
+import com.bestvike.website.entity.Floor;
+import com.bestvike.website.entity.FloorSummary;
+import com.bestvike.website.entity.House;
+import com.bestvike.website.entity.HouseHoldSale;
+import com.bestvike.website.entity.HousePrice;
+import com.bestvike.website.entity.MonthData;
+import com.bestvike.website.entity.PageBean;
+import com.bestvike.website.entity.PriceShow;
+import com.bestvike.website.entity.Region;
+import com.bestvike.website.entity.RegionBlds;
+import com.bestvike.website.entity.RegionHouseSale;
 import com.bestvike.website.service.ProjectService;
 import com.github.pagehelper.ISelect;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -32,6 +38,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
@@ -235,6 +251,7 @@ public class ProjectServiceImpl implements ProjectService {
 			bldView.setBldSales(bldSales);
 			viewRegionInfo.setBldView(bldView);
 		}
+
 		// 查询各种房屋类型的销售均价
 		List<PriceShow> priceShows = selectPriceShow(regionId);
 		if (priceShows.size() > 0) {
@@ -352,6 +369,36 @@ public class ProjectServiceImpl implements ProjectService {
 				viewRegionInfo.setBldView(bldView);
 			}
 		}
+
+		// 查询住宅销售情况
+		parameterMap.clear();
+		parameterMap.put("regionId", regionId);
+		parameterMap.put("houseUse", "01");
+		List<HouseHoldSale> residence = viewRegionInfoDao.selectRegionHouseHoldData(parameterMap);
+		viewRegionInfo.setResidence(residence);
+
+		//查询住宅销售汇总
+		RegionHouseSale residenceCollects = viewRegionInfoDao.selectRegionHouseSaleData(parameterMap);
+		viewRegionInfo.setResidenceCollects(residenceCollects == null ? new RegionHouseSale() : residenceCollects);
+
+		// 查询商用销售情况
+		parameterMap.put("houseUse", "88");
+		List<HouseHoldSale> business = viewRegionInfoDao.selectRegionHouseHoldData(parameterMap);
+		viewRegionInfo.setBusiness(business);
+
+		//查询商用销售汇总
+		RegionHouseSale businessCollects = viewRegionInfoDao.selectRegionHouseSaleData(parameterMap);
+		viewRegionInfo.setBusinessCollects(businessCollects == null ? new RegionHouseSale() : businessCollects);
+
+		// 查询配套销售情况
+		parameterMap.put("houseUse", "99");
+		List<HouseHoldSale> mating = viewRegionInfoDao.selectRegionHouseHoldData(parameterMap);
+		viewRegionInfo.setMating(mating);
+
+		//查询配套销售汇总
+		RegionHouseSale matingCollects = viewRegionInfoDao.selectRegionHouseSaleData(parameterMap);
+		viewRegionInfo.setMatingCollects(matingCollects == null ? new RegionHouseSale() : matingCollects);
+
 		// 查询各种房屋类型的销售均价
 		List<PriceShow> priceShows = selectPriceShow(regionId);
 		if (priceShows.size() > 0) {
@@ -378,8 +425,8 @@ public class ProjectServiceImpl implements ProjectService {
 		}
 
 		DocFiles docFiles = mongoTemplate.findOne(Query.query(Criteria.
-				where("keyId").is(regionId).
-				and("fileType").is("regionImage").and("docType").is("aerialView")), DocFiles.class);
+			where("keyId").is(regionId).
+			and("fileType").is("regionImage").and("docType").is("aerialView")), DocFiles.class);
 		if (docFiles != null) {
 			List<String> regionLogos = new ArrayList<>();
 			for (DocFile docFile : docFiles.getImageList()) {
@@ -400,6 +447,35 @@ public class ProjectServiceImpl implements ProjectService {
 		parameterMap.put("preSaleDate", viewRegionInfo.getPreSaleDate());
 		List<MonthData> listRegionSales = viewRegionInfoDao.selectRegionMonthSale(parameterMap);
 		viewRegionInfo.setListRegionSales(listRegionSales);
+		// 查询住宅销售情况
+		parameterMap.clear();
+		parameterMap.put("regionId", regionId);
+		parameterMap.put("houseUse", "01");
+		List<HouseHoldSale> residence = viewRegionInfoDao.selectRegionHouseHoldData(parameterMap);
+		viewRegionInfo.setResidence(residence);
+
+		//查询住宅销售汇总
+		RegionHouseSale residenceCollects = viewRegionInfoDao.selectRegionHouseSaleData(parameterMap);
+		viewRegionInfo.setResidenceCollects(residenceCollects == null ? new RegionHouseSale() : residenceCollects);
+
+		// 查询商用销售情况
+		parameterMap.put("houseUse", "88");
+		List<HouseHoldSale> business = viewRegionInfoDao.selectRegionHouseHoldData(parameterMap);
+		viewRegionInfo.setBusiness(business);
+
+		//查询商用销售汇总
+		RegionHouseSale businessCollects = viewRegionInfoDao.selectRegionHouseSaleData(parameterMap);
+		viewRegionInfo.setBusinessCollects(businessCollects == null ? new RegionHouseSale() : businessCollects);
+
+		// 查询配套销售情况
+		parameterMap.put("houseUse", "99");
+		List<HouseHoldSale> mating = viewRegionInfoDao.selectRegionHouseHoldData(parameterMap);
+		viewRegionInfo.setMating(mating);
+
+		//查询配套销售汇总
+		RegionHouseSale matingCollects = viewRegionInfoDao.selectRegionHouseSaleData(parameterMap);
+		viewRegionInfo.setMatingCollects(matingCollects == null ? new RegionHouseSale() : matingCollects);
+
 		// 查询各种房屋类型的销售均价
 		List<PriceShow> priceShows = selectPriceShow(regionId);
 		if (priceShows.size() > 0) {
@@ -426,8 +502,8 @@ public class ProjectServiceImpl implements ProjectService {
 		}
 
 		DocFiles docFiles = mongoTemplate.findOne(Query.query(Criteria.
-				where("keyId").is(regionId).
-				and("fileType").is("regionImage").and("docType").is("aerialView")), DocFiles.class);
+			where("keyId").is(regionId).
+			and("fileType").is("regionImage").and("docType").is("aerialView")), DocFiles.class);
 		if (docFiles != null) {
 			List<String> regionLogos = new ArrayList<>();
 			for (DocFile docFile : docFiles.getImageList()) {
@@ -529,10 +605,38 @@ public class ProjectServiceImpl implements ProjectService {
 		parameterMap.put("houseUse", "01");
 		List<HouseHoldSale> residence = viewRegionInfoDao.selectRegionHouseHoldData(parameterMap);
 		result.put("residence", residence);
+
+		//查询住宅销售汇总
+		RegionHouseSale houseHoldHouseSale = viewRegionInfoDao.selectRegionHouseSaleData(parameterMap);
+		if (null != houseHoldHouseSale) {
+			result.put("residenceCollects", houseHoldHouseSale);
+		} else {
+			houseHoldHouseSale = new RegionHouseSale();
+			result.put("residenceCollects", houseHoldHouseSale);
+		}
+
+		// 查询商用销售情况
+		parameterMap.put("houseUse", "88");
+		List<HouseHoldSale> business = viewRegionInfoDao.selectRegionHouseHoldData(parameterMap);
+		result.put("business", business);
+
+		//查询商用销售汇总
+		RegionHouseSale businessCollects = viewRegionInfoDao.selectRegionHouseSaleData(parameterMap);
+		if (null != businessCollects) {
+			result.put("businessCollects", businessCollects);
+		} else {
+			businessCollects = new RegionHouseSale();
+			result.put("businessCollects", businessCollects);
+		}
+
 		// 查询配套销售情况
 		parameterMap.put("houseUse", "99");
 		List<HouseHoldSale> mating = viewRegionInfoDao.selectRegionHouseHoldData(parameterMap);
 		result.put("mating", mating);
+
+		//查询配套销售汇总
+		RegionHouseSale matingCollects = viewRegionInfoDao.selectRegionHouseSaleData(parameterMap);
+		result.put("matingCollects", matingCollects);
 		// 查询各种房屋类型的销售均价
 		List<PriceShow> priceShows = selectPriceShow(regionId);
 		if (priceShows.size() > 0) {

@@ -110,7 +110,7 @@
             ORDER BY house_use, house_hold
 		]]>
 	</select>
-	<select id = "selectRegionHouseSaleData" parameterType = "map" resultType = "com.bestvike.website.entity.ResidenceHouseSale">
+	<select id = "selectRegionHouseSaleData" parameterType = "map" resultType = "com.bestvike.website.entity.RegionHouseSale">
 		<![CDATA[
 			SELECT case when instr(t.house_use, '住宅') > 0 then '住宅'
 						  when instr(t.house_use, '商业') > 0 then '商业'
