@@ -34,7 +34,7 @@ public interface ViewRegionInfoDao extends Mapper<ViewRegionInfo> {
 
 	public RegionHouseSale selectRegionHouseSaleData(Map<String, Object> parameterMap);
 
-	public List<BldCells> selectBlds(String regionId);
+	public List<BldCells> selectBlds(Map<String, Object> parameterMap);
 
 	public List<Cell> selectBldCells(Map<String, Object> parameterMap);
 

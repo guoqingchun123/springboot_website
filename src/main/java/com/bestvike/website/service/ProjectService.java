@@ -41,9 +41,13 @@ public interface ProjectService {
 
 	public List<BldCells> queryRegionBldCells(String regionId);
 
+	public List<BldCells> queryRegionBldCells(String regionId, String houseShow);
+
 	public Map<String, Object> pageHouses(String projectId, String bldNo, String cellNo, int pageNo, int pageSize);
 
 	public Map<String, Object> cellFloorSummary(String projectId, String bldNo, String cellNo);
+
+	public Map<String, Object> cellFloorSummary(String projectId, String bldNo, String cellNo, String houseShow);
 
 	public <T> T selectAppVersion(String versionId);
 

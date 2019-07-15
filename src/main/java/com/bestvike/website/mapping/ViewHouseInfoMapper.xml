@@ -85,6 +85,9 @@
 		<if test = "floorNo != null">
 			AND floor_no = #{floorNo}
 		</if>
+		<if test = "houseShow != null">
+			AND case when instr(t.house_use, '住宅') > 0 THEN t.house_hold else t.house_use END = #{houseShow}
+		</if>
 		<![CDATA[
 			ORDER BY case when instr(t.floor_no, '阁楼') > 0 or instr(t.floor_no, '顶') > 0 then 9999
 				when regexp_replace(t.floor_no,'^[-\+]?\d+(\.\d+)?$','') is not null then -100 else to_number(t.floor_no) end DESC,
@@ -102,6 +105,11 @@
 				sum(case when sales_flag != '是' and presell_state = '未售' then 1 else 0 END) nosale_num
 			FROM view_houseinfo t
 			WHERE t.project_id = #{projectId} AND t.bld_no = #{bldNo} AND t.cell_name = #{cellNo}
+		]]>
+		<if test = "houseShow != null">
+			AND case when instr(t.house_use, '住宅') > 0 THEN t.house_hold else t.house_use END = #{houseShow}
+		</if>
+		<![CDATA[
 			GROUP BY floor_no, floor_name
 			ORDER BY CASE WHEN instr(t.floor_no, '阁楼') > 0 or instr(t.floor_no, '顶') > 0 then 9999
 				when regexp_replace(t.floor_no,'^[-\+]?\d+(\.\d+)?$','') is not null then -100 else to_number(t.floor_no) end DESC
@@ -116,7 +124,7 @@
 		<if test = "cellNo != null">
 			CASE WHEN instr(t2.bld_name, '#') > 0 THEN t2.bld_name else t2.bld_name || '#' end ||
 			case when instr(t.cell_name, 'B') > 0 then t.cell_name
-				when instr(t2.bld_name, '地下') > 0 THEN 'B' || t.cell_name ELSE t.cell_name || '单元' END cell_name,
+			when instr(t2.bld_name, '地下') > 0 THEN 'B' || t.cell_name ELSE t.cell_name || '单元' END cell_name,
 		</if>
 		<![CDATA[
 				count(1) total_num,
@@ -154,6 +162,11 @@
 				sum(case when presell_state = '未售' and sales_flag = '是' then 1 else 0 end) no_saled_num
 			FROM view_houseinfo t
 			WHERE t.project_id = #{projectId} and t.bld_no = #{bldNo} AND t.cell_name = #{cellNo}
+		]]>
+		<if test = "houseShow != null">
+			AND case when instr(t.house_use, '住宅') > 0 THEN t.house_hold else t.house_use END = #{houseShow}
+		</if>
+		<![CDATA[
 			GROUP BY t.project_id, t.bld_no, t.cell_no, t.cell_name
 		]]>
 	</select>

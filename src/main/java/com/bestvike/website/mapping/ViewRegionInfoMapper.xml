@@ -145,12 +145,20 @@
 							else '配套' end
 		]]>
 	</select>
-	<select id = "selectBlds" parameterType = "String" resultType = "com.bestvike.website.entity.BldCells">
+	<select id = "selectBlds" parameterType = "map" resultType = "com.bestvike.website.entity.BldCells">
 		<![CDATA[
 			SELECT project_id, bld_no, CASE WHEN instr(bld_name, '#') > 0 THEN bld_name else bld_name || '#' end bld_name
 			FROM view_bldInfo t WHERE EXISTS (
 				SELECT 1 FROM view_regbld WHERE region_id = #{regionId} AND project_id = t.project_id
 			)
+		]]>
+		<if test="houseShow != null">
+			AND EXISTS (
+				SELECT 1 FROM view_houseinfo WHERE bld_no = t.bld_no AND project_id = t.project_id
+				AND case when instr(house_use, '住宅') > 0 THEN house_hold else house_use END = #{houseShow}
+			)
+		</if>
+		<![CDATA[
 			ORDER BY
 			case when instr(t.bld_name, '地下') > 0 or instr(t.bld_name, '配套') > 0
 				then 99 else to_number(nvl(regexp_replace(t.bld_name, '[^0-9]'), -1)) end asc, t.bld_no asc
@@ -175,6 +183,9 @@
 		]]>
 		<if test = "cellNo != null">
 			AND t1.cell_name = #{cellNo}
+		</if>
+		<if test="houseShow != null">
+			AND case when instr(t1.house_use, '住宅') > 0 THEN t1.house_hold else t1.house_use END = #{houseShow}
 		</if>
 		<![CDATA[
 			) t LEFT JOIN view_cellInfo vci on t.project_id = vci.project_id and t.bld_no = vci.bld_no and t.cell_no = vci.cell_name

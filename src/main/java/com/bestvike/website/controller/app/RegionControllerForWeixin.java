@@ -59,21 +59,14 @@ public class RegionControllerForWeixin extends BaseController {
 		return listRegionInfo;
 	}
 
-	@GetMapping(value = "/regionBldCells/{regionId}")
-	public List<BldCells> regionBldCells(@PathVariable String regionId) {
-		return projectService.queryRegionBldCells(regionId);
-	}
-
-	@GetMapping(value = "/houses")
-	public Map<String, Object> houses(@RequestParam String projectId, @RequestParam String bldNo, @RequestParam String cellNo,
-		@RequestParam int pageNo, @RequestParam int pageSize) {
-		return projectService.pageHouses(projectId, bldNo, cellNo, pageNo, pageSize);
+	@GetMapping(value = "/regionBldCells")
+	public List<BldCells> regionBldCells(@RequestParam String regionId, @RequestParam(required = false) String houseShow) {
+		return projectService.queryRegionBldCells(regionId, houseShow);
 	}
 
 	@GetMapping(value = "/cellFloorSummary")
-	public Map<String, Object> cellFloorSummary(@RequestParam String projectId, @RequestParam String bldNo, @RequestParam String cellNo) {
-		return projectService.cellFloorSummary(projectId, bldNo, cellNo);
+	public Map<String, Object> cellFloorSummary(@RequestParam String projectId, @RequestParam String bldNo, @RequestParam String cellNo,
+		@RequestParam(required = false) String houseShow) {
+		return projectService.cellFloorSummary(projectId, bldNo, cellNo, houseShow);
 	}
-
-
 }

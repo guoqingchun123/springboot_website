@@ -695,7 +695,6 @@ public class ProjectServiceImpl implements ProjectService {
 				priceShow.setHousePrices(housePrices);
 				priceShows.add(priceShow);
 			}
-			houseShow = "";
 			housePrices = new ArrayList<>();
 			if (priceMap.containsKey("CARPORT_PRICE") && ((BigDecimal) priceMap.get("CARPORT_PRICE")).compareTo(BigDecimal.ZERO) > 0) {
 				HousePrice housePrice = new HousePrice();
@@ -711,7 +710,7 @@ public class ProjectServiceImpl implements ProjectService {
 			}
 			if (housePrices.size() > 0) {
 				PriceShow priceShow = new PriceShow();
-				priceShow.setHouseShow("配套(按套内计算)");
+				priceShow.setHouseShow("配套");
 				priceShow.setHousePrices(housePrices);
 				priceShows.add(priceShow);
 			}
@@ -746,9 +745,33 @@ public class ProjectServiceImpl implements ProjectService {
 
 	@Override
 	public List<BldCells> queryRegionBldCells(String regionId) {
-		List<BldCells> listBldCells = viewRegionInfoDao.selectBlds(regionId);
+		Map<String, Object> parameterMap = new HashMap<>();
+		parameterMap.put("regionId", regionId);
+		List<BldCells> listBldCells = viewRegionInfoDao.selectBlds(parameterMap);
 		for (BldCells bldCells : listBldCells) {
-			Map<String, Object> parameterMap = new HashMap<>();
+			parameterMap.put("projectId", bldCells.getProjectId());
+			parameterMap.put("bldNo", bldCells.getBldNo());
+			List<Cell> listCell = viewRegionInfoDao.selectBldCells(parameterMap);
+			bldCells.setListCell(listCell);
+		}
+		return listBldCells;
+	}
+
+	/**
+	 * 根据房屋类型过滤楼栋单元
+	 * @param regionId
+	 * @param houseShow
+	 * @return
+	 */
+	@Override
+	public List<BldCells> queryRegionBldCells(String regionId, String houseShow) {
+		Map<String, Object> parameterMap = new HashMap<>();
+		parameterMap.put("regionId", regionId);
+		if (!StringUtils.isEmpty(houseShow)) {
+			parameterMap.put("houseShow", houseShow);
+		}
+		List<BldCells> listBldCells = viewRegionInfoDao.selectBlds(parameterMap);
+		for (BldCells bldCells : listBldCells) {
 			parameterMap.put("projectId", bldCells.getProjectId());
 			parameterMap.put("bldNo", bldCells.getBldNo());
 			List<Cell> listCell = viewRegionInfoDao.selectBldCells(parameterMap);
@@ -792,6 +815,43 @@ public class ProjectServiceImpl implements ProjectService {
 		parameterMap.put("projectId", projectId);
 		parameterMap.put("bldNo", bldNo);
 		parameterMap.put("cellNo", cellNo);
+		List<FloorSummary> listFloorSummary = viewHouseInfoDao.selectFloorSummary(parameterMap);
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("listFloorSummary", listFloorSummary);
+		for (FloorSummary floorSummary : listFloorSummary) {
+			parameterMap.put("floorNo", floorSummary.getFloorNo());
+			List<House> listHouse = viewHouseInfoDao.selectHouseByParameter(parameterMap);
+			floorSummary.setRooms(listHouse);
+		}
+		CellSummary cellSummary = viewHouseInfoDao.selectCellSummary(parameterMap);
+		resultMap.put("cellSummary", cellSummary);
+		cellSummary.setSellColor("dd6a62");
+		cellSummary.setNosaledColor("959595");
+		cellSummary.setNosaleColor("00dd02");
+		ViewRegionInfo viewRegionInfo = viewRegionInfoDao.selectRegionByProjectId(projectId);
+		List<String> imageList = new ArrayList<>();
+		imageList.add(viewRegionInfo.getViewPath());
+		resultMap.put("imageList", imageList);
+		return resultMap;
+	}
+
+	/**
+	 * 根据房屋类型过滤单元楼层
+	 * @param projectId
+	 * @param bldNo
+	 * @param cellNo
+	 * @param houseShow
+	 * @return
+	 */
+	@Override
+	public Map<String, Object> cellFloorSummary(String projectId, String bldNo, String cellNo, String houseShow) {
+		Map<String, Object> parameterMap = new HashMap<>();
+		parameterMap.put("projectId", projectId);
+		parameterMap.put("bldNo", bldNo);
+		parameterMap.put("cellNo", cellNo);
+		if (!StringUtils.isEmpty(houseShow)) {
+			parameterMap.put("houseShow", houseShow);
+		}
 		List<FloorSummary> listFloorSummary = viewHouseInfoDao.selectFloorSummary(parameterMap);
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("listFloorSummary", listFloorSummary);
