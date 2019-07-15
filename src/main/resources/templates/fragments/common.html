@@ -348,7 +348,7 @@
             if (viewType === 'index') {
                 window.location.replace(ctxPath);
             } else if (viewType === 'salesData') {
-                window.location.replace(ctxPath + 'content/' + [[${region.regionId}]]);
+                window.location.replace(ctxPath + 'sales/' + [[${region.regionId}]]);
             } else {
                 window.location.replace(ctxPath + viewType + '/' + [[${region.regionId}]]);
             }
@@ -372,7 +372,7 @@
             template_txt: '{{d.regionName}} <span class=\'layui-badge layui-bg-gray\'>{{d.address}}</span>',
             onselect: function (res) {
                 // 跳转到选择的项目详情页面
-                window.location.href = ctxPath + 'content/' + res.regionId;
+                window.location.href = ctxPath + 'sales/' + res.regionId;
             }
         });
     });
