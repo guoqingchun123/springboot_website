@@ -65,6 +65,130 @@
 			冻结：<label style="color: #dd8800;" th:text="${region.bldView.bldSales.frozenNum}"></label>]
 			自留/非卖套数：<label style="color: #b9d8dd;" th:text="${region.bldView.bldSales.noSaleNum}"></label>
 		</div>
+		<div class="sales-sum-box">
+			<div style="border: 1px #1E9EFF solid;flex: 1;margin-right: 20px">
+				<div style="height: 10%;background-color: #1E9EFF;color: white;padding: 10px 10px 0px 10px;">
+					<span style="font-size: 18px;font-weight: bold;">住宅汇总</span>
+					<span style="font-size: 16px;float: right;">总套数:9999套</span>
+				</div>
+				<div style="height: 57%;margin: 15px 15px 0px 15px;">
+					<div style="width: 100%">
+						<p style="font-size: 16px;color: #6B91A6">已售:</p>
+						<div style="display: grid;grid-template-columns: repeat(3,1fr);grid-template-rows: 20px;grid-gap: 30px;margin-top: 5px;">
+							<div><span style="color: #9D9D9D">合计:</span> 999套</div>
+							<div><span style="color: #9D9D9D">已签订:</span> 666套</div>
+							<div><span style="color: #9D9D9D">签订中:</span> 333套</div>
+						</div>
+					</div>
+					<div style="width: 100%;margin-top: 15px;">
+						<p style="font-size: 16px;color: #6B91A6">未售:</p>
+						<div style="display: grid;grid-template-columns: repeat(3,1fr);grid-template-rows: 20px;grid-gap: 30px;margin-top: 5px;">
+							<div><span style="color: #9D9D9D">合计:</span> 999套</div>
+							<div><span style="color: #9D9D9D">查封:</span> 666套</div>
+							<div><span style="color: #9D9D9D">抵押:</span> 333套</div>
+						</div>
+					</div>
+					<div style="width: 100%;margin-top: 15px;">
+						<p><span style="font-size: 16px;color: #6B91A6">自留/非卖:</span>999套</p>
+					</div>
+					<div style="width: 100%;margin-top: 15px;">
+						<p><span style="font-size: 16px;color: #6B91A6">关闭:</span>999套</p>
+					</div>
+				</div>
+				<div style="height: 30%;border-top: 1px solid #EBEBEB;margin: 0px 15px 0px 15px;">
+					<div style="width: 100%;margin-top: 15px;">
+						<p>
+							<span style="font-size: 16px;color: #6B91A6">七室两厅:</span>
+							<span style="position:relative;left: 10px;"><span style="color: #9D9D9D">共:</span>6户</span>
+							<span style="position:absolute;left: 25%;"><span style="color: #9D9D9D">已售出:</span>0户</span>
+						</p>
+					</div>
+					<div style="width: 100%;margin-top: 15px;">
+						<p>
+							<span style="font-size: 16px;color: #6B91A6">三室一厅:</span>
+							<span style="position:relative;left: 10px;"><span style="color: #9D9D9D">共:</span>212户</span>
+							<span style="position:absolute;left: 25%;"><span style="color: #9D9D9D">已售出:</span>208户</span>
+						</p>
+					</div>
+				</div>
+			</div>
+			<div style="border: 1px #F59815 solid;flex: 1;margin-right: 20px;">
+				<div style="height: 10%;background-color: #F59815;color: white;padding: 10px 10px 0px 10px;">
+					<span style="font-size: 18px;font-weight: bold;">配套汇总</span>
+					<span style="font-size: 16px;float: right;">总套数:9999套</span>
+				</div>
+				<div style="height: 57%;margin: 15px 15px 0px 15px;">
+					<div style="width: 100%">
+						<p style="font-size: 16px;color: #C6A556">已售:</p>
+						<div style="display: grid;grid-template-columns: repeat(3,1fr);grid-template-rows: 20px;grid-gap: 30px;margin-top: 5px;">
+							<div><span style="color: #9D9D9D">合计:</span> 999套</div>
+							<div><span style="color: #9D9D9D">已签订:</span> 666套</div>
+							<div><span style="color: #9D9D9D">签订中:</span> 333套</div>
+						</div>
+					</div>
+					<div style="width: 100%;margin-top: 15px;">
+						<p style="font-size: 16px;color: #C6A556">未售:</p>
+						<div style="display: grid;grid-template-columns: repeat(3,1fr);grid-template-rows: 20px;grid-gap: 30px;margin-top: 5px;">
+							<div><span style="color: #9D9D9D">合计:</span> 999套</div>
+							<div><span style="color: #9D9D9D">查封:</span> 666套</div>
+							<div><span style="color: #9D9D9D">抵押:</span> 333套</div>
+						</div>
+					</div>
+					<div style="width: 100%;margin-top: 15px;">
+						<p><span style="font-size: 16px;color: #C6A556">自留/非卖:</span>999套</p>
+					</div>
+					<div style="width: 100%;margin-top: 15px;">
+						<p><span style="font-size: 16px;color: #C6A556">关闭:</span>999套</p>
+					</div>
+				</div>
+			</div>
+			<div style="border: 1px #00BFD1 solid;flex: 1;">
+				<div style="height: 10%;background-color: #00BFD1;color: white;padding: 10px 10px 0px 10px;">
+					<span style="font-size: 18px;font-weight: bold;">商业汇总</span>
+					<span style="font-size: 16px;float: right;">总套数:9999套</span>
+				</div>
+				<div style="height: 57%;margin: 15px 15px 0px 15px;">
+					<div style="width: 100%">
+						<p style="font-size: 16px;color: #519795">已售:</p>
+						<div style="display: grid;grid-template-columns: repeat(3,1fr);grid-template-rows: 20px;grid-gap: 30px;margin-top: 5px;">
+							<div><span style="color: #9D9D9D">合计:</span> 999套</div>
+							<div><span style="color: #9D9D9D">已签订:</span> 666套</div>
+							<div><span style="color: #9D9D9D">签订中:</span> 333套</div>
+						</div>
+					</div>
+					<div style="width: 100%;margin-top: 15px;">
+						<p style="font-size: 16px;color: #519795">未售:</p>
+						<div style="display: grid;grid-template-columns: repeat(3,1fr);grid-template-rows: 20px;grid-gap: 30px;margin-top: 5px;">
+							<div><span style="color: #9D9D9D">合计:</span> 999套</div>
+							<div><span style="color: #9D9D9D">查封:</span> 666套</div>
+							<div><span style="color: #9D9D9D">抵押:</span> 333套</div>
+						</div>
+					</div>
+					<div style="width: 100%;margin-top: 15px;">
+						<p><span style="font-size: 16px;color: #519795">自留/非卖:</span>999套</p>
+					</div>
+					<div style="width: 100%;margin-top: 15px;">
+						<p><span style="font-size: 16px;color: #519795">关闭:</span>999套</p>
+					</div>
+				</div>
+				<div style="height: 30%;border-top: 1px solid #EBEBEB;margin: 0px 15px 0px 15px;">
+					<div style="width: 100%;margin-top: 15px;">
+						<p>
+							<span style="font-size: 16px;color: #6B91A6">七室两厅:</span>
+							<span style="position:relative;left: 10px;"><span style="color: #9D9D9D">共:</span>6户</span>
+							<span style="position:absolute;left: 25%;"><span style="color: #9D9D9D">已售出:</span>0户</span>
+						</p>
+					</div>
+					<div style="width: 100%;margin-top: 15px;">
+						<p>
+							<span style="font-size: 16px;color: #6B91A6">三室一厅:</span>
+							<span style="position:relative;left: 10px;"><span style="color: #9D9D9D">共:</span>212户</span>
+							<span style="position:absolute;left: 25%;"><span style="color: #9D9D9D">已售出:</span>208户</span>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class="legends">
 			<div th:each="legend:${region.bldView?.legends}" class="legend"><i class="iconfont icon-home-fill" th:style="'color: #' + ${legend.color}"></i><span th:text="${legend.name}"></span></div>
 		</div>

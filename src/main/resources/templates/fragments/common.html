@@ -118,6 +118,7 @@
         }
         #website-toolbar .layui-breadcrumb {
             font-size: 30px;
+            float: right;
         }
         #website-toolbar .layui-breadcrumb a.current {
             color: #5FB878 !important;
@@ -218,6 +219,10 @@
         .region-images {
             margin-bottom: 20px;
         }
+        #region-images {
+            padding: 0px 10px 0px 10px;
+            background-color: #FFFFFF;
+        }
         .region-images .layui-elem-quote {
             margin-bottom: 0;
         }
@@ -287,7 +292,7 @@
     <div id="region-name" class="layui-col-md3">
         <h1 th:text="${region.regionName}"></h1>
     </div>
-    <div class="layui-breadcrumb layui-col-md9" lay-separator="|">
+    <div class="layui-breadcrumb layui-col-md3" lay-separator="|">
         <a href="javascript:;" data-value="index">首页</a>
         <a href="javascript:;" data-value="sales" th:class="${current == 'sales'} ? 'current'">销售情况</a>
         <a href="javascript:;" data-value="layout" th:class="${current == 'layout'} ? 'current'">户型图</a>
@@ -302,14 +307,18 @@
         </div>
     </div>
 </div>
-<div th:fragment="sale-price" id="sale-price" th:if="region?.priceShows">
-    <span>价格备案情况：</span>
-    <span th:each="price:${region.priceShows}">
+<div th:fragment="sale-price" id="sale-price" th:if="region?.priceShows" style="padding: 20px 10px 10px 10px;height: 50px;">
+    <div style="height: 100%;background-color: #F1F1F1;display: flex;align-items: center;">
+        <span style="background-color: #009588;width: 5px;height: 100%;"></span>
+        <span style="font-size: 16px;color: #4F9488;font-weight: bold;padding-left: 20px;">价格备案情况：</span>
+        <span th:each="price:${region.priceShows}" style="padding-right: 40px;">
 				<span th:text="${price.houseShow}"></span>
 				（<span th:each="housePrice, iterStat:${price.housePrices}">
 					<span th:if="${iterStat.index > 0}">，</span>
 					<span th:text="${housePrice.houseHold}"></span>：<span th:text="${housePrice.price}"></span>元/平方米</span>）
 			</span>
+    </div>
+
 </div>
 <div th:fragment="layout-footer" id="website-footer">
     <!--<div class="shiye">
