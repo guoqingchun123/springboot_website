@@ -66,9 +66,8 @@
 			自留/非卖套数：<label style="color: #b9d8dd;" th:text="${region.bldView.bldSales.noSaleNum}"></label>
 		</div>
 		<div class="sales-sum-box">
-			<div class="sales-residence">
-				<div class="sales-header" style="background-color: #1E9EFF;"
-					 th:if="${region.residence != null && region.residence.size() > 0}">
+			<div class="sales-residence" th:if="${region.residence != null && region.residence.size() > 0}">
+				<div class="sales-header" style="background-color: #1E9EFF;">
 					<span class="header-title">住宅汇总</span>
 					<span class="header-subtitle">总套数:
 						<label th:text="${region.residenceCollects?.totalNum}"></label>套</span>
@@ -121,9 +120,8 @@
 					</div>
 				</div>
 			</div>
-			<div class="sales-business">
-				<div class="sales-header" style="background-color: #00BFD1;"
-					 th:if="${region.business != null && region.business.size() > 0}">
+			<div class="sales-business" th:if="${region.business != null && region.business.size() > 0}">
+				<div class="sales-header" style="background-color: #00BFD1;">
 					<span class="header-title">商业汇总</span>
 					<span class="header-subtitle">总套数:
 						<label th:text="${region.businessCollects?.totalNum}"></label>套</span>
@@ -176,7 +174,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="sales-mating">
+			<div class="sales-mating" th:if="${region.mating != null && region.mating.size() > 0}">
 				<div class="sales-header" style="background-color: #F59815;"
 					 th:if="${region.mating != null && region.mating.size() > 0}">
 					<span class="header-title">配套汇总</span>
