@@ -87,6 +87,9 @@ public class ProjectServiceImpl implements ProjectService {
 		BldView bldView = viewHouseInfoDao.selectBldView(parameters);
 		List<Cell> listCell = viewRegionInfoDao.selectBldCells(parameters);
 		bldView.setCells(listCell);
+		// 查询楼栋销售情况
+		BldSales bldSales = viewHouseInfoDao.selectBldSalesData(parameters);
+		bldView.setBldSales(bldSales);
 		if (!StringUtils.isEmpty(bldView.getViewPath())) {
 			// 楼栋下有单元标记，以单元显示房屋，并提供单元选择刷新功能
 			Cell cell = listCell.get(0);
@@ -95,6 +98,7 @@ public class ProjectServiceImpl implements ProjectService {
 			return viewRegionInfo;
 		}
 		ViewRegionInfo viewRegionInfo = viewRegionInfoDao.selectRegion(regionId);
+
 		Map<String, Object> salesMap = viewRegionInfoDao.selectRegionSalesData(regionId);
 		List<Map<String, Object>> salesData = new ArrayList<>();
 		if (null != salesMap) {
@@ -107,6 +111,7 @@ public class ProjectServiceImpl implements ProjectService {
 				}
 			}
 		}
+		viewRegionInfo.setSalesData(salesData);
 
 		DocFiles docFiles = mongoTemplate.findOne(Query.query(Criteria.
 			where("keyId").is(regionId).
@@ -122,51 +127,13 @@ public class ProjectServiceImpl implements ProjectService {
 		Map<String, Object> parameterMap = new HashMap<>();
 		parameterMap.put("regionId", regionId);
 		List<HouseHoldSale> listHouseHold = viewRegionInfoDao.selectRegionHouseHoldData(parameterMap);
-		viewRegionInfo.setSalesData(salesData);
 		viewRegionInfo.setListHouseHold(listHouseHold);
 		// 查询小区楼栋列表
 		List<RegionBlds> listRegionBlds = viewRegionInfoDao.selectRegionBlds(regionId);
 		viewRegionInfo.setListRegionBlds(listRegionBlds);
-		// 增加按楼按单元显示房屋
-		/*if (listRegionBlds != null && listRegionBlds.size() > 0) {
-			parameterMap.put("projectId", projectId);
-			parameterMap.put("bldNo", bldNo);
-			// 查询楼栋楼层列表
-			List<Floor> listFloor = viewRegionInfoDao.selectBldFloors(parameterMap);
-			for (Floor floor : listFloor) {
-				// 查询楼层单元信息
-				parameterMap.put("floorNo", floor.getFloorNo());
-				List<Cell> listFloorCell = viewRegionInfoDao.selectFloorCells(parameterMap);
-				if (BigDecimal.valueOf(8).compareTo(bldView.getCellFloorNum()) < 0) {
-					// 每层每单元户数大于8， 不按单元显示，房屋都放到单元上
-					Cell cell = listFloorCell.get(0);
-					List<ViewHouseInfo> listHouse = viewHouseInfoDao.selectBldHouse(parameterMap);
-					cell.setHouses(listHouse);
-					bldView.setShowCell(false);
-				} else {
-					for (Cell cell : listFloorCell) {
-						parameterMap.put("cellNo", cell.getCellNo());
-						List<ViewHouseInfo> listHouse = viewHouseInfoDao.selectFloorCellHouses(parameterMap);
-						cell.setHouses(listHouse);
-						// 防止遍历过程中串单元
-						parameterMap.remove("cellNo");
-					}
-					bldView.setShowCell(true);
-				}
-				floor.setCells(listFloorCell);
-				floor.setShowCell(true);
-			}
-			bldView.setFloors(listFloor);
-			// 查询楼栋销售情况
-			BldSales bldSales = viewHouseInfoDao.selectBldSalesData(parameterMap);
-			bldView.setBldSales(bldSales);
-			viewRegionInfo.setBldView(bldView);
-		}*/
 		// 查询楼栋销售情况
 		parameterMap.put("projectId", projectId);
 		parameterMap.put("bldNo", bldNo);
-		BldSales bldSales = viewHouseInfoDao.selectBldSalesData(parameterMap);
-		bldView.setBldSales(bldSales);
 		viewRegionInfo.setBldView(bldView);
 		// 查询各种房屋类型的销售均价
 		List<PriceShow> priceShows = selectPriceShow(regionId);
@@ -226,10 +193,10 @@ public class ProjectServiceImpl implements ProjectService {
 			parameterMap.put("bldNo", bldNo);
 			BldView bldView = viewHouseInfoDao.selectBldView(parameterMap);
 			// 查询楼栋单元列表
-			/*List<Cell> listCell = viewRegionInfoDao.selectBldCells(parameterMap);
+			List<Cell> listCell = viewRegionInfoDao.selectBldCells(parameterMap);
 			bldView.setCells(listCell);
 			// 查询楼栋单元楼层列表
-			parameterMap.put("cellNo", cellNo);
+			/*parameterMap.put("cellNo", cellNo);
 			List<Floor> listFloor = viewRegionInfoDao.selectBldFloors(parameterMap);
 			for (Floor floor : listFloor) {
 				// 查询楼层单元信息
@@ -247,6 +214,7 @@ public class ProjectServiceImpl implements ProjectService {
 			}
 			bldView.setFloors(listFloor);*/
 			// 查询楼栋销售情况
+			parameterMap.put("cellNo", cellNo);
 			BldSales bldSales = viewHouseInfoDao.selectBldSalesData(parameterMap);
 			bldView.setBldSales(bldSales);
 			viewRegionInfo.setBldView(bldView);
@@ -258,6 +226,43 @@ public class ProjectServiceImpl implements ProjectService {
 			viewRegionInfo.setPriceShows(priceShows);
 		}
 		return viewRegionInfo;
+	}
+
+	@Override
+	public BldView building(String regionId, String projectId, String bldNo) {
+		Map<String, Object> parameterMap = new HashMap<>();
+		parameterMap.put("regionId", regionId);
+		parameterMap.put("projectId", projectId);
+		parameterMap.put("bldNo", bldNo);
+		BldView bldView = viewHouseInfoDao.selectBldView(parameterMap);
+		List<Cell> listCell = viewRegionInfoDao.selectBldCells(parameterMap);
+		bldView.setCells(listCell);
+		// 查询楼栋楼层列表
+		List<Floor> listFloor = viewRegionInfoDao.selectBldFloors(parameterMap);
+		for (Floor floor : listFloor) {
+			// 查询楼层单元信息
+			parameterMap.put("floorNo", floor.getFloorNo());
+			List<Cell> listFloorCell = viewRegionInfoDao.selectFloorCells(parameterMap);
+			if (BigDecimal.valueOf(8).compareTo(bldView.getCellFloorNum()) < 0) {
+				// 每层每单元户数大于8， 不按单元显示，房屋都放到单元上
+				Cell cell = listFloorCell.get(0);
+				List<ViewHouseInfo> listHouse = viewHouseInfoDao.selectBldHouse(parameterMap);
+				cell.setHouses(listHouse);
+				bldView.setShowCell(false);
+			} else {
+				for (Cell cell : listFloorCell) {
+					parameterMap.put("cellNo", cell.getCellNo());
+					List<ViewHouseInfo> listHouse = viewHouseInfoDao.selectFloorCellHouses(parameterMap);
+					cell.setHouses(listHouse);
+					parameterMap.remove("cellNo");
+				}
+				bldView.setShowCell(true);
+			}
+			floor.setCells(listFloorCell);
+			floor.setShowCell(true);
+		}
+		bldView.setFloors(listFloor);
+		return bldView;
 	}
 
 	@Override
@@ -294,7 +299,8 @@ public class ProjectServiceImpl implements ProjectService {
 	@Override
 	public ViewRegionInfo region(String regionId, String viewType) {
 		ViewRegionInfo viewRegionInfo = viewRegionInfoDao.selectRegion(regionId);
-
+		Map<String, Object> parameterMap = new HashMap<>();
+		// 饼图数据start
 		Map<String, Object> salesMap = viewRegionInfoDao.selectRegionSalesData(regionId);
 		List<Map<String, Object>> salesData = new ArrayList<>();
 		if (null != salesMap) {
@@ -307,7 +313,9 @@ public class ProjectServiceImpl implements ProjectService {
 				}
 			}
 		}
-
+		viewRegionInfo.setSalesData(salesData);
+		// 饼图数据end
+		// 轮播图数据start
 		DocFiles docFiles = mongoTemplate.findOne(Query.query(Criteria.
 			where("keyId").is(regionId).
 			and("fileType").is("regionImage").and("docType").is("aerialView")), DocFiles.class);
@@ -318,57 +326,63 @@ public class ProjectServiceImpl implements ProjectService {
 			}
 			viewRegionInfo.setRegionLogos(regionLogos);
 		}
-
-		Map<String, Object> parameterMap = new HashMap<>();
-		parameterMap.put("regionId", regionId);
-		List<HouseHoldSale> listHouseHold = viewRegionInfoDao.selectRegionHouseHoldData(parameterMap);
-		viewRegionInfo.setSalesData(salesData);
-		viewRegionInfo.setListHouseHold(listHouseHold);
-		if (StringUtils.isEmpty(viewType) || "salesData".equals(viewType)) {
-			// 查询小区楼栋列表
-			List<RegionBlds> listRegionBlds = viewRegionInfoDao.selectRegionBlds(regionId);
-			viewRegionInfo.setListRegionBlds(listRegionBlds);
-			// 增加按楼按单元显示房屋
-			if (listRegionBlds != null && listRegionBlds.size() > 0) {
-				String projectId = listRegionBlds.get(0).getProjectId();
-				String bldNo = listRegionBlds.get(0).getBldNo();
-				parameterMap.put("projectId", projectId);
-				parameterMap.put("bldNo", bldNo);
-				BldView bldView = viewHouseInfoDao.selectBldView(parameterMap);
-				// 查询楼栋单元列表
-				List<Cell> listCell = viewRegionInfoDao.selectBldCells(parameterMap);
-				bldView.setCells(listCell);
-				// 查询楼栋楼层列表
-				List<Floor> listFloor = viewRegionInfoDao.selectBldFloors(parameterMap);
-				for (Floor floor : listFloor) {
-					// 查询楼层单元信息
-					parameterMap.put("floorNo", floor.getFloorNo());
-					List<Cell> listFloorCell = viewRegionInfoDao.selectFloorCells(parameterMap);
-					if (BigDecimal.valueOf(8).compareTo(bldView.getCellFloorNum()) < 0) {
-						// 每层每单元户数大于8， 不按单元显示，房屋都放到单元上
-						Cell cell = listFloorCell.get(0);
-						List<ViewHouseInfo> listHouse = viewHouseInfoDao.selectBldHouse(parameterMap);
-						cell.setHouses(listHouse);
-						bldView.setShowCell(false);
-					} else {
-						for (Cell cell : listFloorCell) {
-							parameterMap.put("cellNo", cell.getCellNo());
-							List<ViewHouseInfo> listHouse = viewHouseInfoDao.selectFloorCellHouses(parameterMap);
-							cell.setHouses(listHouse);
-							parameterMap.remove("cellNo");
-						}
-						bldView.setShowCell(true);
-					}
-					floor.setCells(listFloorCell);
-					floor.setShowCell(true);
-				}
-				bldView.setFloors(listFloor);
-				// 查询楼栋销售情况
-				BldSales bldSales = viewHouseInfoDao.selectBldSalesData(parameterMap);
-				bldView.setBldSales(bldSales);
-				viewRegionInfo.setBldView(bldView);
-			}
-		}
+		// 轮播图数据end
+		// 鸟瞰定位图start
+		// 查询每栋楼的坐标
+		List<RegionBlds> listRegionBlds = viewRegionInfoDao.selectRegionBlds(regionId);
+		viewRegionInfo.setListRegionBlds(listRegionBlds);
+		// 鸟瞰定位图end
+		// 户型销售情况start delete by jiankai
+//		parameterMap.put("regionId", regionId);
+//		List<HouseHoldSale> listHouseHold = viewRegionInfoDao.selectRegionHouseHoldData(parameterMap);
+//		viewRegionInfo.setListHouseHold(listHouseHold);
+		// 户型销售情况end
+		// 初始进入小区详情， 不显示楼盘图， delete by ljk
+//		if (StringUtils.isEmpty(viewType) || "salesData".equals(viewType)) {
+//			// 查询小区楼栋列表
+//			List<RegionBlds> listRegionBlds = viewRegionInfoDao.selectRegionBlds(regionId);
+//			viewRegionInfo.setListRegionBlds(listRegionBlds);
+//			// 增加按楼按单元显示房屋
+//			if (listRegionBlds != null && listRegionBlds.size() > 0) {
+//				String projectId = listRegionBlds.get(0).getProjectId();
+//				String bldNo = listRegionBlds.get(0).getBldNo();
+//				parameterMap.put("projectId", projectId);
+//				parameterMap.put("bldNo", bldNo);
+//				BldView bldView = viewHouseInfoDao.selectBldView(parameterMap);
+//				// 查询楼栋单元列表
+//				List<Cell> listCell = viewRegionInfoDao.selectBldCells(parameterMap);
+//				bldView.setCells(listCell);
+//				// 查询楼栋楼层列表
+//				List<Floor> listFloor = viewRegionInfoDao.selectBldFloors(parameterMap);
+//				for (Floor floor : listFloor) {
+//					// 查询楼层单元信息
+//					parameterMap.put("floorNo", floor.getFloorNo());
+//					List<Cell> listFloorCell = viewRegionInfoDao.selectFloorCells(parameterMap);
+//					if (BigDecimal.valueOf(8).compareTo(bldView.getCellFloorNum()) < 0) {
+//						// 每层每单元户数大于8， 不按单元显示，房屋都放到单元上
+//						Cell cell = listFloorCell.get(0);
+//						List<ViewHouseInfo> listHouse = viewHouseInfoDao.selectBldHouse(parameterMap);
+//						cell.setHouses(listHouse);
+//						bldView.setShowCell(false);
+//					} else {
+//						for (Cell cell : listFloorCell) {
+//							parameterMap.put("cellNo", cell.getCellNo());
+//							List<ViewHouseInfo> listHouse = viewHouseInfoDao.selectFloorCellHouses(parameterMap);
+//							cell.setHouses(listHouse);
+//							parameterMap.remove("cellNo");
+//						}
+//						bldView.setShowCell(true);
+//					}
+//					floor.setCells(listFloorCell);
+//					floor.setShowCell(true);
+//				}
+//				bldView.setFloors(listFloor);
+//				// 查询楼栋销售情况
+//				BldSales bldSales = viewHouseInfoDao.selectBldSalesData(parameterMap);
+//				bldView.setBldSales(bldSales);
+//				viewRegionInfo.setBldView(bldView);
+//			}
+//		}
 
 		// 查询住宅销售情况
 		parameterMap.clear();

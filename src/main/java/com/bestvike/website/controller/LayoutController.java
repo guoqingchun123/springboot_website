@@ -115,8 +115,17 @@ public class LayoutController extends BaseController {
 		return mv;
 	}
 
+	@GetMapping(value = "/building/{regionId}/{projectId}/{bldNo}")
+	public ModelAndView contentBuilding(@PathVariable String regionId, @PathVariable String projectId, @PathVariable String bldNo) {
+		ModelAndView mv = new ModelAndView();
+		BldView bldView = projectService.building(regionId, projectId, bldNo);
+		mv.addObject("building", bldView);
+		mv.setViewName("fragments/sales :: building");
+		return mv;
+	}
+
 	@GetMapping(value = "/building/{regionId}/{projectId}/{bldNo}/{cellNo}")
-	public ModelAndView contentBuilding(@PathVariable String regionId, @PathVariable String projectId, @PathVariable String bldNo, @PathVariable String cellNo) {
+	public ModelAndView contentCell(@PathVariable String regionId, @PathVariable String projectId, @PathVariable String bldNo, @PathVariable String cellNo) {
 		ModelAndView mv = new ModelAndView();
 		BldView bldView = projectService.building(regionId, projectId, bldNo, cellNo);
 		mv.addObject("building", bldView);

@@ -20,10 +20,15 @@ public interface ProjectService {
 	public ViewRegionInfo region(String regionId, String projectId, String bldNo);
 
 	public ViewRegionInfo region(String regionId, String projectId, String bldNo, String cellNo);
+
+	public BldView building(String regionId, String projectId, String bldNo);
+
 	public BldView building(String regionId, String projectId, String bldNo, String cellNo);
 
 	public ViewRegionInfo region(String regionId, String viewType);
+
 	public ViewRegionInfo layout(String regionId);
+
 	public ViewRegionInfo images(String regionId);
 
 	public Map<String, Object> pageRegions(String keywords, int pageNo, int pageSize, String divisionCode, String price, String houseHold, String sort);

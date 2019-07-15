@@ -15,26 +15,23 @@
 			<div th:replace="fragments/common :: region-carousel"></div>
 		</div>
 		<div id="region-navigator" class="layui-col-md6">
-			<!--
-			<div id="region-layout" class="layui-carousel">
-				<div carousel-item>
-					<div class="carousel-auto region-logo-container" th:each="str:${region?.regionLogos}">
-						<img th:src="${str}" onerror="showDefaultImage(this)">
-					</div>
-				</div>
-				<div class="layui-carousel-ind">
-					<ul>
-						<li th:each="str, iterStat:${region?.regionLogos}" th:class="${iterStat.index == 0} ? 'layui-this'" th:text="${iterStat.index + 1}"></li>
-					</ul>
-				</div>
-			</div>
-			-->
-			<!--
+			<!--<div id="region-layout" class="layui-carousel">-->
+				<!--<div carousel-item>-->
+					<!--<div class="carousel-auto region-logo-container" th:each="str:${region?.regionLogos}">-->
+						<!--<img th:src="${str}" onerror="showDefaultImage(this)">-->
+					<!--</div>-->
+				<!--</div>-->
+				<!--<div class="layui-carousel-ind">-->
+					<!--<ul>-->
+						<!--<li th:each="str, iterStat:${region?.regionLogos}" th:class="${iterStat.index == 0} ? 'layui-this'" th:text="${iterStat.index + 1}"></li>-->
+					<!--</ul>-->
+				<!--</div>-->
+			<!--</div>-->
 			<th:block th:if="${cellNo == null}">
 				<img th:src="${region?.viewPath}" onerror="showDefaultImage(this)">
 				<div class="navigator-container">
 					<th:block th:each="regionBld, iterStat:${region?.listRegionBlds}" th:if="${region.listRegionBlds}">
-						<span th:if="${regionBld.location}" th:class="${region.viewPath != null ? 'navigator-map' : 'navigator-list'}" th:classappend="${bldNo == null ? iterStat.index == 0 : bldNo == regionBld.bldNo} ? 'building-selected'"
+						<span th:if="${regionBld.location}" th:class="${region.viewPath != null ? 'navigator-map' : 'navigator-list'}" th:classappend="${bldNo != null && bldNo == regionBld.bldNo} ? 'building-selected'"
 						  th:data-project-id="${regionBld.projectId}" th:data-bld-no="${regionBld.bldNo}" th:style="${regionBld.location}" th:text="${regionBld.bldName}"></span>
 					</th:block>
 				</div>
@@ -44,12 +41,11 @@
 				<a class="return-to" href="javascript:;">返回</a>
 				<div class="navigator-container">
 					<th:block th:each="cell, iterStat:${region.bldView.cells}" th:if="${cell.location != null}">
-					<span th:if="${regionBld.location}" th:class="cell-navigator-map" th:classappend="${cellNo == cell.CellNo} ? 'cell-selected'"
+					<span th:if="${cell.location}" th:class="cell-navigator-map" th:classappend="${cellNo == cell.cellNo} ? 'cell-selected'"
 						  th:data-project-id="${cell.projectId}" th:data-bld-no="${cell.bldNo}" th:data-cell-no="${cell.cellNo}" th:style="${cell.location}" th:text="${cell.cellName}"></span>
 					</th:block>
 				</div>
 			</th:block>
-			-->
 		</div>
 	</div>
 	<div th:replace="fragments/common :: sale-price"></div>

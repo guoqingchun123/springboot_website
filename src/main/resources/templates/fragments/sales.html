@@ -257,7 +257,6 @@
 		
 		.sales-sum-box {
 			display: flex;
-			min-height: 350px;
 		}
 		
 		.sales-sum-box .sales-residence {
@@ -403,6 +402,10 @@
 			$('#building-loader').load(ctxPath + 'building/' + regionId + '/' + projectId + '/' + encodeURIComponent(bldNo) + '/' + cellNo, function () {
 				loading('hide');
 			});
+		} else if (projectId && bldNo) {
+			$('#building-loader').load(ctxPath + 'building/' + regionId + '/' + projectId + '/' + encodeURIComponent(bldNo), function () {
+				loading('hide');
+			});
 		} else {
 			loading('hide');
 		}
@@ -439,23 +442,23 @@
 			var bldNo = $(this).attr('data-bld-no');
 
 			loading();
-			window.location.replace(ctxPath + 'content/' + [[${region.regionId}]] + '/' + projectId + '/' + encodeURIComponent(bldNo));
+			window.location.replace(ctxPath + 'sales/' + [[${region.regionId}]] + '/' + projectId + '/' + encodeURIComponent(bldNo));
 
 			// $(".navigator-map,.navigator-list").removeClass("building-selected");
 			// $(this).addClass("building-selected");
 		});
-		$(".navigator-map").on("click", function () {
+		$(".cell-navigator-map").on("click", function () {
 			var projectId = $(this).attr('data-project-id');
 			var bldNo = $(this).attr('data-bld-no');
 			var cellNo = $(this).attr('data-cell-no');
 
 			loading();
-			window.location.replace(ctxPath + 'content/' + [[${region.regionId}]] + '/' + projectId + '/' + encodeURIComponent(bldNo) + '/' + encodeURIComponent(cellNo));
+			window.location.replace(ctxPath + 'sales/' + [[${region.regionId}]] + '/' + projectId + '/' + encodeURIComponent(bldNo) + '/' + encodeURIComponent(cellNo));
 		});
 
 		$('.return-to').on('click', function () {
 			loading();
-			window.location.replace(ctxPath + 'content/' + [[${region.regionId}]]);
+			window.location.replace(ctxPath + 'sales/' + [[${region.regionId}]]);
 		});
 	});
 </script>
