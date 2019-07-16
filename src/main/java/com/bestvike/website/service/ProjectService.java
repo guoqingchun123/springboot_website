@@ -39,13 +39,15 @@ public interface ProjectService {
 
 	public List<DocFiles> queryRegionDocs(String regionId, String type);
 
-	public List<BldCells> queryRegionBldCells(String regionId);
+//	public List<BldCells> queryRegionBldCells(String regionId);
 
 	public List<BldCells> queryRegionBldCells(String regionId, String houseShow);
 
-	public Map<String, Object> pageHouses(String projectId, String bldNo, String cellNo, int pageNo, int pageSize);
+//	public Map<String, Object> pageHouses(String projectId, String bldNo, String cellNo, int pageNo, int pageSize);
 
-	public Map<String, Object> cellFloorSummary(String projectId, String bldNo, String cellNo);
+	public Map<String, Object> pageHouses(String projectId, String bldNo, String cellNo, int pageNo, int pageSize, String houseShow);
+
+//	public Map<String, Object> cellFloorSummary(String projectId, String bldNo, String cellNo);
 
 	public Map<String, Object> cellFloorSummary(String projectId, String bldNo, String cellNo, String houseShow);
 

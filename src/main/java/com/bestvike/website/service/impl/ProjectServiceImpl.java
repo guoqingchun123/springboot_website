@@ -743,19 +743,19 @@ public class ProjectServiceImpl implements ProjectService {
 		return null;
 	}
 
-	@Override
-	public List<BldCells> queryRegionBldCells(String regionId) {
-		Map<String, Object> parameterMap = new HashMap<>();
-		parameterMap.put("regionId", regionId);
-		List<BldCells> listBldCells = viewRegionInfoDao.selectBlds(parameterMap);
-		for (BldCells bldCells : listBldCells) {
-			parameterMap.put("projectId", bldCells.getProjectId());
-			parameterMap.put("bldNo", bldCells.getBldNo());
-			List<Cell> listCell = viewRegionInfoDao.selectBldCells(parameterMap);
-			bldCells.setListCell(listCell);
-		}
-		return listBldCells;
-	}
+//	@Override
+//	public List<BldCells> queryRegionBldCells(String regionId) {
+//		Map<String, Object> parameterMap = new HashMap<>();
+//		parameterMap.put("regionId", regionId);
+//		List<BldCells> listBldCells = viewRegionInfoDao.selectBlds(parameterMap);
+//		for (BldCells bldCells : listBldCells) {
+//			parameterMap.put("projectId", bldCells.getProjectId());
+//			parameterMap.put("bldNo", bldCells.getBldNo());
+//			List<Cell> listCell = viewRegionInfoDao.selectBldCells(parameterMap);
+//			bldCells.setListCell(listCell);
+//		}
+//		return listBldCells;
+//	}
 
 	/**
 	 * 根据房屋类型过滤楼栋单元
@@ -780,8 +780,37 @@ public class ProjectServiceImpl implements ProjectService {
 		return listBldCells;
 	}
 
+//	@Override
+//	public Map<String, Object> pageHouses(String projectId, String bldNo, String cellNo, int pageNo, int pageSize) {
+//		PageInfo<House> simpleHousePage = PageHelper.startPage(pageNo, pageSize).doSelectPageInfo(new ISelect() {
+//			@Override
+//			public void doSelect() {
+//				Map<String, Object> paramterMap = new HashMap<>();
+//				if (!StringUtils.isEmpty(projectId)) {
+//					paramterMap.put("projectId", projectId);
+//				}
+//				if (!StringUtils.isEmpty(bldNo)) {
+//					paramterMap.put("bldNo", bldNo);
+//				}
+//				if (!StringUtils.isEmpty(cellNo)) {
+//					paramterMap.put("cellNo", cellNo);
+//				}
+//				viewHouseInfoDao.selectHouseByParameter(paramterMap);
+//			}
+//		});
+//		Map<String, Object> result = new HashMap<>();
+//		result.put("list", simpleHousePage.getList());
+//		PageBean pageBean = new PageBean();
+//		pageBean.setPageNo(simpleHousePage.getPageNum());
+//		pageBean.setPageSize(simpleHousePage.getPageSize());
+//		pageBean.setTotalPage(simpleHousePage.getPages());
+//		pageBean.setTotalSize(simpleHousePage.getTotal());
+//		result.put("page", pageBean);
+//		return result;
+//	}
+
 	@Override
-	public Map<String, Object> pageHouses(String projectId, String bldNo, String cellNo, int pageNo, int pageSize) {
+	public Map<String, Object> pageHouses(String projectId, String bldNo, String cellNo, int pageNo, int pageSize, String houseShow) {
 		PageInfo<House> simpleHousePage = PageHelper.startPage(pageNo, pageSize).doSelectPageInfo(new ISelect() {
 			@Override
 			public void doSelect() {
@@ -794,6 +823,9 @@ public class ProjectServiceImpl implements ProjectService {
 				}
 				if (!StringUtils.isEmpty(cellNo)) {
 					paramterMap.put("cellNo", cellNo);
+				}
+				if (!StringUtils.isEmpty(houseShow)) {
+					paramterMap.put("houseShow", houseShow);
 				}
 				viewHouseInfoDao.selectHouseByParameter(paramterMap);
 			}
@@ -809,31 +841,31 @@ public class ProjectServiceImpl implements ProjectService {
 		return result;
 	}
 
-	@Override
-	public Map<String, Object> cellFloorSummary(String projectId, String bldNo, String cellNo) {
-		Map<String, Object> parameterMap = new HashMap<>();
-		parameterMap.put("projectId", projectId);
-		parameterMap.put("bldNo", bldNo);
-		parameterMap.put("cellNo", cellNo);
-		List<FloorSummary> listFloorSummary = viewHouseInfoDao.selectFloorSummary(parameterMap);
-		Map<String, Object> resultMap = new HashMap<>();
-		resultMap.put("listFloorSummary", listFloorSummary);
-		for (FloorSummary floorSummary : listFloorSummary) {
-			parameterMap.put("floorNo", floorSummary.getFloorNo());
-			List<House> listHouse = viewHouseInfoDao.selectHouseByParameter(parameterMap);
-			floorSummary.setRooms(listHouse);
-		}
-		CellSummary cellSummary = viewHouseInfoDao.selectCellSummary(parameterMap);
-		resultMap.put("cellSummary", cellSummary);
-		cellSummary.setSellColor("dd6a62");
-		cellSummary.setNosaledColor("959595");
-		cellSummary.setNosaleColor("00dd02");
-		ViewRegionInfo viewRegionInfo = viewRegionInfoDao.selectRegionByProjectId(projectId);
-		List<String> imageList = new ArrayList<>();
-		imageList.add(viewRegionInfo.getViewPath());
-		resultMap.put("imageList", imageList);
-		return resultMap;
-	}
+//	@Override
+//	public Map<String, Object> cellFloorSummary(String projectId, String bldNo, String cellNo) {
+//		Map<String, Object> parameterMap = new HashMap<>();
+//		parameterMap.put("projectId", projectId);
+//		parameterMap.put("bldNo", bldNo);
+//		parameterMap.put("cellNo", cellNo);
+//		List<FloorSummary> listFloorSummary = viewHouseInfoDao.selectFloorSummary(parameterMap);
+//		Map<String, Object> resultMap = new HashMap<>();
+//		resultMap.put("listFloorSummary", listFloorSummary);
+//		for (FloorSummary floorSummary : listFloorSummary) {
+//			parameterMap.put("floorNo", floorSummary.getFloorNo());
+//			List<House> listHouse = viewHouseInfoDao.selectHouseByParameter(parameterMap);
+//			floorSummary.setRooms(listHouse);
+//		}
+//		CellSummary cellSummary = viewHouseInfoDao.selectCellSummary(parameterMap);
+//		resultMap.put("cellSummary", cellSummary);
+//		cellSummary.setSellColor("dd6a62");
+//		cellSummary.setNosaledColor("959595");
+//		cellSummary.setNosaleColor("00dd02");
+//		ViewRegionInfo viewRegionInfo = viewRegionInfoDao.selectRegionByProjectId(projectId);
+//		List<String> imageList = new ArrayList<>();
+//		imageList.add(viewRegionInfo.getViewPath());
+//		resultMap.put("imageList", imageList);
+//		return resultMap;
+//	}
 
 	/**
 	 * 根据房屋类型过滤单元楼层
