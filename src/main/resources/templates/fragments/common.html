@@ -151,10 +151,12 @@
             background-color: #ffffff;
             margin-top: 10px;
             overflow: hidden;
-            height: 30px;
+            /*height: 30px;*/
             line-height: 30px;
-            padding: 5px;
+            /*padding: 5px;*/
             color: #999;
+            padding: 20px 10px 10px 10px;
+            height: 50px;
         }
 
         /* 内容 */
@@ -238,6 +240,28 @@
         .layui-form-autocomplete {
             text-align: left;
         }
+        .sale-price {
+            height: 100%;
+            background-color: #F1F1F1;
+        }
+        .sale-price .sale-price-icon {
+            position: absolute;
+            background-color: #009588;
+            width: 5px;height: 50px;
+        }
+        .sale-price .sale-price-title {
+            font-size: 16px;
+            color: #4F9488;
+            font-weight: bold;
+            padding-left: 20px;
+            position: relative;
+            top: 10px;
+        }
+        .sale-price .sale-price-content {
+            padding-right: 40px;
+            position: relative;
+            top: 10px;
+        }
     </style>
     <script th:inline="javascript">
         /*<![CDATA[*/
@@ -310,18 +334,17 @@
         </div>
     </div>
 </div>
-<div th:fragment="sale-price" id="sale-price" th:if="region?.priceShows" style="padding: 20px 10px 10px 10px;height: 50px;">
-    <div style="height: 100%;background-color: #F1F1F1;display: flex;align-items: center;">
-        <span style="background-color: #009588;width: 5px;height: 100%;"></span>
-        <span style="font-size: 16px;color: #4F9488;font-weight: bold;padding-left: 20px;">价格备案情况：</span>
-        <span th:each="price:${region.priceShows}" style="padding-right: 40px;">
+<div th:fragment="sale-price" id="sale-price" th:if="region?.priceShows">
+    <div class="sale-price">
+        <span class="sale-price-icon"></span>
+        <span class="sale-price-title" style="">价格备案情况：</span>
+        <span th:each="price:${region.priceShows}" class="sale-price-content">
 				<span th:text="${price.houseShow}"></span>
 				（<span th:each="housePrice, iterStat:${price.housePrices}">
 					<span th:if="${iterStat.index > 0}">，</span>
 					<span th:text="${housePrice.houseHold}"></span>：<span th:text="${housePrice.price}"></span>元/平方米</span>）
 			</span>
     </div>
-
 </div>
 <div th:fragment="layout-footer" id="website-footer">
     <!--<div class="shiye">

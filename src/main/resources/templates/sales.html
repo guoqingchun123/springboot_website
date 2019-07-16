@@ -61,167 +61,173 @@
 			冻结：<label style="color: #dd8800;" th:text="${region.bldView.bldSales.frozenNum}"></label>]
 			自留/非卖套数：<label style="color: #b9d8dd;" th:text="${region.bldView.bldSales.noSaleNum}"></label>
 		</div>
-		<div class="sales-sum-box">
-			<div class="sales-residence" th:if="${region.residence != null && region.residence.size() > 0}">
-				<div class="sales-header" style="background-color: #1E9EFF;">
-					<span class="header-title">住宅汇总</span>
-					<span class="header-subtitle">总套数:
+		<div class="sales-sum-box layui-row layui-col-space20">
+			<div class="layui-col-md4">
+				<div class="sales-residence" th:if="${region.residence != null && region.residence.size() > 0}">
+					<div class="sales-header" style="background-color: #1E9EFF;">
+						<span class="header-title">住宅汇总</span>
+						<span class="header-subtitle">总套数:
 						<label th:text="${region.residenceCollects?.totalNum}"></label>套</span>
-				</div>
-				<div class="sales-sum-info">
-					<div style="width: 100%">
-						<p class="residence-sum-title">已售:</p>
-						<div class="sales-sum-style">
-							<div><span>合计:</span>
-								<label th:text="${region.residenceCollects?.sellNum}"></label></div>
-							<div><span>已签订:</span>
-								<label th:text="${region.residenceCollects?.signedNum}"></label></div>
-							<div><span>签订中:</span>
-								<label th:text="${region.residenceCollects?.signingNum}"></label></div>
+					</div>
+					<div class="sales-sum-info">
+						<div style="width: 100%">
+							<p class="residence-sum-title">已售:</p>
+							<div class="layui-row sales-sum-style">
+								<div class="layui-col-md4"><span>合计:</span>
+									<label th:text="${region.residenceCollects?.sellNum}"></label></div>
+								<div class="layui-col-md4"><span>已签订:</span>
+									<label th:text="${region.residenceCollects?.signedNum}"></label></div>
+								<div class="layui-col-md4"><span>签订中:</span>
+									<label th:text="${region.residenceCollects?.signingNum}"></label></div>
+							</div>
+						</div>
+						<div class="sum-position">
+							<p class="residence-sum-title">未售:</p>
+							<div class="layui-row sales-sum-style">
+								<div class="layui-col-md4"><span>合计:</span>
+									<label th:text="${region.residenceCollects?.nosaledNum}"></label></div>
+								<div class="layui-col-md4"><span>查封:</span>
+									<label th:text="${region.residenceCollects?.closeNum}"></label></div>
+								<div class="layui-col-md4"><span>抵押:</span>
+									<label th:text="${region.residenceCollects?.mortgageNum}"></label></div>
+							</div>
+						</div>
+						<div class="sum-position">
+							<p><span class="residence-sum-title">自留/非卖:</span>
+								<label th:text="${region.residenceCollects?.nosaleNum}"></label></p>
+						</div>
+						<div class="sum-position">
+							<p><span class="residence-sum-title">关闭:</span>
+								<label th:text="${region.residenceCollects?.frozen}"></label></p>
 						</div>
 					</div>
-					<div class="sum-position">
-						<p class="residence-sum-title">未售:</p>
-						<div class="sales-sum-style">
-							<div><span>合计:</span>
-								<label th:text="${region.residenceCollects?.nosaledNum}"></label></div>
-							<div><span>查封:</span>
-								<label th:text="${region.residenceCollects?.closeNum}"></label></div>
-							<div><span>抵押:</span>
-								<label th:text="${region.residenceCollects?.mortgageNum}"></label></div>
-						</div>
-					</div>
-					<div class="sum-position">
-						<p><span class="residence-sum-title">自留/非卖:</span>
-							<label th:text="${region.residenceCollects?.nosaleNum}"></label></p>
-					</div>
-					<div class="sum-position">
-						<p><span class="residence-sum-title">关闭:</span>
-							<label th:text="${region.residenceCollects?.frozen}"></label></p>
-					</div>
-				</div>
-				<div class="sales-style-info">
-					<div class="sum-position" th:each="houseHoldSale:${region.residence}">
-						<p>
+					<div class="sales-style-info">
+						<div class="sum-position" th:each="houseHoldSale:${region.residence}">
+							<p>
 							<span class="sum-position-title">
 								<label th:text="${houseHoldSale.houseShow}"></label>
 							</span>
-							<span class="position-sum-style"><span>共:</span>
+								<span class="position-sum-style"><span>共:</span>
 								<label th:text="${houseHoldSale.totalNum}"></label></span>
-							<span class="position-sales-style" th:if="${houseHoldSale.nosaleReason == null}"><span>已售出:</span>
+								<span class="position-sales-style" th:if="${houseHoldSale.nosaleReason == null}"><span>已售出:</span>
 								<label th:text="${houseHoldSale.sellNum}"></label></span>
-							<span class="position-sales-style" th:if="${houseHoldSale.nosaleReason != null}"><span></span>
+								<span class="position-sales-style" th:if="${houseHoldSale.nosaleReason != null}"><span></span>
 								<label th:text="${houseHoldSale.nosaleReason}"></label></span>
-						</p>
+							</p>
+						</div>
 					</div>
 				</div>
 			</div>
-			<div class="sales-business" th:if="${region.business != null && region.business.size() > 0}">
-				<div class="sales-header" style="background-color: #00BFD1;">
-					<span class="header-title">商业汇总</span>
-					<span class="header-subtitle">总套数:
+			<div class="layui-col-md4">
+				<div class="sales-business" th:if="${region.business != null && region.business.size() > 0}">
+					<div class="sales-header" style="background-color: #00BFD1;">
+						<span class="header-title">商业汇总</span>
+						<span class="header-subtitle">总套数:
 						<label th:text="${region.businessCollects?.totalNum}"></label>套</span>
-				</div>
-				<div class="sales-sum-info">
-					<div style="width: 100%">
-						<p class="business-sum-title">已售:</p>
-						<div class="sales-sum-style">
-							<div><span>合计:</span>
-								<label th:text="${region.businessCollects?.sellNum}"></label></div>
-							<div><span>已签订:</span>
-								<label th:text="${region.businessCollects?.signedNum}"></label></div>
-							<div><span>签订中:</span>
-								<label th:text="${region.businessCollects?.signingNum}"></label></div>
+					</div>
+					<div class="sales-sum-info">
+						<div style="width: 100%">
+							<p class="business-sum-title">已售:</p>
+							<div class="layui-row sales-sum-style">
+								<div class="layui-col-md4"><span>合计:</span>
+									<label th:text="${region.businessCollects?.sellNum}"></label></div>
+								<div class="layui-col-md4"><span>已签订:</span>
+									<label th:text="${region.businessCollects?.signedNum}"></label></div>
+								<div class="layui-col-md4"><span>签订中:</span>
+									<label th:text="${region.businessCollects?.signingNum}"></label></div>
+							</div>
+						</div>
+						<div class="sum-position">
+							<p class="business-sum-title">未售:</p>
+							<div class="layui-row sales-sum-style">
+								<div class="layui-col-md4"><span>合计:</span>
+									<label th:text="${region.businessCollects?.nosaledNum}"></label></div>
+								<div class="layui-col-md4"><span>查封:</span>
+									<label th:text="${region.businessCollects?.closeNum}"></label></div>
+								<div class="layui-col-md4"><span>抵押:</span>
+									<label th:text="${region.businessCollects?.mortgageNum}"></label></div>
+							</div>
+						</div>
+						<div class="sum-position">
+							<p><span class="business-sum-title">自留/非卖:</span>
+								<label th:text="${region.businessCollects?.nosaleNum}"></label></p>
+						</div>
+						<div class="sum-position">
+							<p><span class="business-sum-title">关闭:</span>
+								<label th:text="${region.businessCollects?.frozen}"></label></p>
 						</div>
 					</div>
-					<div class="sum-position">
-						<p class="business-sum-title">未售:</p>
-						<div class="sales-sum-style">
-							<div><span>合计:</span>
-								<label th:text="${region.businessCollects?.nosaledNum}"></label></div>
-							<div><span>查封:</span>
-								<label th:text="${region.businessCollects?.closeNum}"></label></div>
-							<div><span>抵押:</span>
-								<label th:text="${region.businessCollects?.mortgageNum}"></label></div>
-						</div>
-					</div>
-					<div class="sum-position">
-						<p><span class="business-sum-title">自留/非卖:</span>
-							<label th:text="${region.businessCollects?.nosaleNum}"></label></p>
-					</div>
-					<div class="sum-position">
-						<p><span class="business-sum-title">关闭:</span>
-							<label th:text="${region.businessCollects?.frozen}"></label></p>
-					</div>
-				</div>
-				<div class="sales-style-info">
-					<div class="sum-position" th:each="houseHoldSale:${region.business}">
-						<p>
+					<div class="sales-style-info">
+						<div class="sum-position" th:each="houseHoldSale:${region.business}">
+							<p>
 							<span class="sum-position-title">
 								<label th:text="${houseHoldSale.houseShow}"></label>
 							</span>
-							<span class="position-sum-style"><span>共:</span>
+								<span class="position-sum-style"><span>共:</span>
 								<label th:text="${houseHoldSale.totalNum}"></label></span>
-							<span class="position-sales-style" th:if="${houseHoldSale.nosaleReason == null}"><span>已售出:</span>
+								<span class="position-sales-style" th:if="${houseHoldSale.nosaleReason == null}"><span>已售出:</span>
 								<label th:text="${houseHoldSale.sellNum}"></label></span>
-							<span class="position-sales-style" th:if="${houseHoldSale.nosaleReason != null}"><span></span>
+								<span class="position-sales-style" th:if="${houseHoldSale.nosaleReason != null}"><span></span>
 								<label th:text="${houseHoldSale.nosaleReason}"></label></span>
-						</p>
+							</p>
+						</div>
 					</div>
 				</div>
 			</div>
-			<div class="sales-mating" th:if="${region.mating != null && region.mating.size() > 0}">
-				<div class="sales-header" style="background-color: #F59815;"
-					 th:if="${region.mating != null && region.mating.size() > 0}">
-					<span class="header-title">配套汇总</span>
-					<span class="header-subtitle">总套数:
+			<div class="layui-col-md4">
+				<div class="sales-mating" th:if="${region.mating != null && region.mating.size() > 0}">
+					<div class="sales-header" style="background-color: #F59815;"
+						 th:if="${region.mating != null && region.mating.size() > 0}">
+						<span class="header-title">配套汇总</span>
+						<span class="header-subtitle">总套数:
 						<label th:text="${region.matingCollects?.totalNum}"></label>套</span>
-				</div>
-				<div class="sales-sum-info">
-					<div style="width: 100%">
-						<p class="mating-sum-title">已售:</p>
-						<div class="sales-sum-style">
-							<div><span>合计:</span>
-								<label th:text="${region.matingCollects?.sellNum}"></label></div>
-							<div><span>已签订:</span>
-								<label th:text="${region.matingCollects?.signedNum}"></label></div>
-							<div><span>签订中:</span>
-								<label th:text="${region.matingCollects?.signingNum}"></label></div>
+					</div>
+					<div class="sales-sum-info">
+						<div style="width: 100%">
+							<p class="mating-sum-title">已售:</p>
+							<div class="layui-row sales-sum-style">
+								<div class="layui-col-md4"><span>合计:</span>
+									<label th:text="${region.matingCollects?.sellNum}"></label></div>
+								<div class="layui-col-md4"><span>已签订:</span>
+									<label th:text="${region.matingCollects?.signedNum}"></label></div>
+								<div class="layui-col-md4"><span>签订中:</span>
+									<label th:text="${region.matingCollects?.signingNum}"></label></div>
+							</div>
+						</div>
+						<div class="sum-position">
+							<p class="mating-sum-title">未售:</p>
+							<div class="layui-row sales-sum-style">
+								<div class="layui-col-md4"><span>合计:</span>
+									<label th:text="${region.matingCollects?.nosaledNum}"></label></div>
+								<div class="layui-col-md4"><span>查封:</span>
+									<label th:text="${region.matingCollects?.closeNum}"></label></div>
+								<div class="layui-col-md4"><span>抵押:</span>
+									<label th:text="${region.matingCollects?.mortgageNum}"></label></div>
+							</div>
+						</div>
+						<div class="sum-position">
+							<p><span class="mating-sum-title">自留/非卖:</span>
+								<label th:text="${region.matingCollects?.nosaleNum}"></label></p>
+						</div>
+						<div class="sum-position">
+							<p><span class="mating-sum-title">关闭:</span>
+								<label th:text="${region.matingCollects?.frozen}"></label></p>
 						</div>
 					</div>
-					<div class="sum-position">
-						<p class="mating-sum-title">未售:</p>
-						<div class="sales-sum-style">
-							<div><span>合计:</span>
-								<label th:text="${region.matingCollects?.nosaledNum}"></label></div>
-							<div><span>查封:</span>
-								<label th:text="${region.matingCollects?.closeNum}"></label></div>
-							<div><span>抵押:</span>
-								<label th:text="${region.matingCollects?.mortgageNum}"></label></div>
-						</div>
-					</div>
-					<div class="sum-position">
-						<p><span class="mating-sum-title">自留/非卖:</span>
-							<label th:text="${region.matingCollects?.nosaleNum}"></label></p>
-					</div>
-					<div class="sum-position">
-						<p><span class="mating-sum-title">关闭:</span>
-							<label th:text="${region.matingCollects?.frozen}"></label></p>
-					</div>
-				</div>
-				<div class="sales-style-info">
-					<div class="sum-position" th:each="houseHoldSale:${region.mating}">
-						<p>
+					<div class="sales-style-info">
+						<div class="sum-position" th:each="houseHoldSale:${region.mating}">
+							<p>
 							<span class="sum-position-title">
 								<label th:text="${houseHoldSale.houseShow}"></label>
 							</span>
-							<span class="position-sum-style"><span>共:</span>
+								<span class="position-sum-style"><span>共:</span>
 								<label th:text="${houseHoldSale.totalNum}"></label></span>
-							<span class="position-sales-style" th:if="${houseHoldSale.nosaleReason == null}"><span>已售出:</span>
+								<span class="position-sales-style" th:if="${houseHoldSale.nosaleReason == null}"><span>已售出:</span>
 								<label th:text="${houseHoldSale.sellNum}"></label></span>
-							<span class="position-sales-style" th:if="${houseHoldSale.nosaleReason != null}"><span></span>
+								<span class="position-sales-style" th:if="${houseHoldSale.nosaleReason != null}"><span></span>
 								<label th:text="${houseHoldSale.nosaleReason}"></label></span>
-						</p>
+							</p>
+						</div>
 					</div>
 				</div>
 			</div>

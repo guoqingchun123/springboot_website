@@ -256,25 +256,33 @@
 		}
 		
 		.sales-sum-box {
-			display: flex;
+			/*display: flex;*/
 		}
 		
 		.sales-sum-box .sales-residence {
 			border: 1px #1E9EFF solid;
-			flex: 1;
-			margin-right: 20px;
+			/*width: 32%;
+			float: left;*/
+			/*flex: 1;*/
+			/*margin-right: 20px;*/
 		}
 		
 		.sales-sum-box .sales-mating {
 			border: 1px #F59815 solid;
-			flex: 1;
-			margin-right: 20px;
+			/*width: 32%;*/
+			/*float: left;*/
+			/*margin-left: 25px;*/
+			/*flex: 1;*/
+			/*margin-right: 20px;*/
 		}
 		
 		.sales-sum-box .sales-business {
 			border: 1px #00BFD1 solid;
-			flex: 1;
-			margin-right: 20px;
+			/*width: 32%;*/
+			/*float: left;*/
+			/*margin-left: 25px;*/
+			/*flex: 1;*/
+			/*margin-right: 20px;*/
 		}
 		
 		.sales-sum-box .sales-header {
@@ -307,13 +315,16 @@
 			color: #6B91A6;
 		}
 		
-		.sales-sum-style {
+		/*.sales-sum-style {
 			display: grid;
+			display: -ms-grid;
 			grid-template-columns: repeat(3, 1fr);
+			-ms-grid-columns: 1fr 1fr 1fr;
 			grid-template-rows: 20px;
+			-ms-grid-rows: 20px;
 			grid-gap: 30px;
 			margin-top: 5px;
-		}
+		}*/
 		
 		.sales-sum-style span {
 			color: #9D9D9D;
@@ -460,6 +471,17 @@
 			loading();
 			window.location.replace(ctxPath + 'sales/' + [[${region.regionId}]]);
 		});
+		//判断三个汇总表格动态设置相同高度
+		var maxHeight = $('.sales-residence').height();
+		if ($('.sales-business').height() > maxHeight) {
+            maxHeight = $('.sales-business').height();
+		}
+		if ($('.sales-mating').height() > maxHeight) {
+            maxHeight = $('.sales-mating').height()
+        }
+        $('.sales-residence').height(maxHeight);
+        $('.sales-business').height(maxHeight);
+        $('.sales-mating').height(maxHeight);
 	});
 </script>
 </body>
