@@ -121,7 +121,7 @@
 			cursor: pointer;
 		}
 		
-		.content .layui-col-md4 {
+		.content .layui-col-xs4 {
 			height: 100%;
 		}
 		
@@ -156,9 +156,11 @@
 <div th:replace="common :: ready"></div>
 <script th:inline="javascript">
 	function initLayout() {
-		document.getElementById('content').style.height = (window.innerHeight - 100) + 'px';
-		document.getElementById('content-left').style.height = (window.innerHeight - 116) + 'px';
-		document.getElementById('content-right').style.height = (window.innerHeight - 116) + 'px';
+	    //获取高度兼容IE8 window.innerHeight
+        var height=window.innerHeight||Math.max(document.documentElement.clientHeight, document.body.clientHeight);
+		document.getElementById('content').style.height = (height - 100) + 'px';
+		document.getElementById('content-left').style.height = (height - 116) + 'px';
+		document.getElementById('content-right').style.height = (height - 116) + 'px';
 	}
 
 	document.ready(function () {
@@ -166,11 +168,11 @@
 	});
 </script>
 <div class="header layui-row layui-col-space10">
-	<div class="logo layui-col-md3">
+	<div class="logo layui-col-xs3">
 		<img th:src="@{/themes/images/console-logo.png}">
 	</div>
-	<div class="container layui-col-md8">
-		<div class="layui-col-md3" style="height: 100%">
+	<div class="container layui-col-xs8">
+		<div class="layui-col-xs3" style="height: 100%">
 			<div class="wrapper">
 				<div class="wrapper-image">
 					<img th:src="@{/themes/images/console-region-white.png}">
@@ -184,7 +186,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="layui-col-md3" style="height: 100%">
+		<div class="layui-col-xs3" style="height: 100%">
 			<div class="wrapper">
 				<div class="wrapper-image">
 					<img th:src="@{/themes/images/console-area-white.png}">
@@ -198,7 +200,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="layui-col-md3" style="height: 100%">
+		<div class="layui-col-xs3" style="height: 100%">
 			<div class="wrapper">
 				<div class="wrapper-image">
 					<img th:src="@{/themes/images/console-yesterday.png}">
@@ -212,7 +214,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="layui-col-md3" style="height: 100%">
+		<div class="layui-col-xs3" style="height: 100%">
 			<div class="wrapper">
 				<div class="wrapper-image">
 					<img th:src="@{/themes/images/console-today.png}">
@@ -227,12 +229,12 @@
 			</div>
 		</div>
 	</div>
-	<div class="container layui-col-md1 video-btn">
+	<div class="container layui-col-xs1 video-btn">
 		<button type="button" class="layui-btn layui-btn-lg layui-btn-danger">视频入口</button>
 	</div>
 </div>
 <!--<div class="header layui-row layui-col-space10">
-	<div class="layui-col-md3">
+	<div class="layui-col-xs3">
 		<div class="container count-region">
 			<div class="detail">
 				<div class="title">小区数</div>
@@ -240,7 +242,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="layui-col-md3">
+	<div class="layui-col-xs3">
 		<div class="container count-area">
 			<div class="detail">
 				<div class="title">存量面积</div>
@@ -248,7 +250,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="layui-col-md3">
+	<div class="layui-col-xs3">
 		<div class="container count-trade-yesterday">
 			<div class="detail">
 				<div class="title">昨日交易量</div>
@@ -256,7 +258,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="layui-col-md3">
+	<div class="layui-col-xs3">
 		<div class="container count-trade-today">
 			<div class="detail">
 				<div class="title">今日交易量</div>
@@ -266,13 +268,13 @@
 	</div>
 </div>-->
 <div id="content" class="content layui-row layui-col-space10">
-	<div id="content-left" class="layui-col-md4">
+	<div id="content-left" class="layui-col-xs4">
 		<div class="chart-sale container layui-card">
 			<div class="title layui-row layui-card-header">
-				<div class="maintitle layui-col-md6">
+				<div class="maintitle layui-col-xs6">
 					商品房供给和销售情况示意图
 				</div>
-				<div class="subtitle layui-col-md6">
+				<div class="subtitle layui-col-xs6">
 					单位：<strong>万平方米</strong>
 				</div>
 			</div>
@@ -282,10 +284,10 @@
 		</div>
 		<div class="chart-price container layui-card">
 			<div class="title layui-row layui-card-header">
-				<div class="maintitle layui-col-md6">
+				<div class="maintitle layui-col-xs6">
 					商品房销售均价示意图
 				</div>
-				<div class="subtitle layui-col-md6">
+				<div class="subtitle layui-col-xs6">
 					单位：<strong>元/平方米</strong>
 				</div>
 			</div>
@@ -294,7 +296,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="layui-col-md4 layui-card container chart-map">
+	<div class="layui-col-xs4 layui-card container chart-map">
 		<div class="layui-card-header" style="height: 5%;">
 			<div style="font-size: 18px;font-weight: bold;">
 				房源热度图
@@ -305,13 +307,13 @@
 		</div>
 	
 	</div>
-	<div id="content-right" class="layui-col-md4">
+	<div id="content-right" class="layui-col-xs4">
 		<div class="chart-stock container layui-card">
 			<div class="title layui-row layui-card-header">
-				<div class="maintitle layui-col-md6">
+				<div class="maintitle layui-col-xs6">
 					商品房库存情况示意图
 				</div>
-				<div class="subtitle layui-col-md6">
+				<div class="subtitle layui-col-xs6">
 					单位：<strong>万平方米</strong>
 				</div>
 			</div>
@@ -321,10 +323,10 @@
 		</div>
 		<div class="list-trade container layui-card">
 			<div class="title layui-row layui-card-header">
-				<div class="maintitle layui-col-md6">
+				<div class="maintitle layui-col-xs6">
 					项目房源热度(近30天)
 				</div>
-				<div class="subtitle layui-col-md6">
+				<div class="subtitle layui-col-xs6">
 					<span class="tab-house tab-active">住宅</span>
 					&nbsp;&nbsp;&nbsp;&nbsp;
 					<span class="tab-business">商业</span>
