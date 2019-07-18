@@ -743,19 +743,19 @@ public class ProjectServiceImpl implements ProjectService {
 		return null;
 	}
 
-//	@Override
-//	public List<BldCells> queryRegionBldCells(String regionId) {
-//		Map<String, Object> parameterMap = new HashMap<>();
-//		parameterMap.put("regionId", regionId);
-//		List<BldCells> listBldCells = viewRegionInfoDao.selectBlds(parameterMap);
-//		for (BldCells bldCells : listBldCells) {
-//			parameterMap.put("projectId", bldCells.getProjectId());
-//			parameterMap.put("bldNo", bldCells.getBldNo());
-//			List<Cell> listCell = viewRegionInfoDao.selectBldCells(parameterMap);
-//			bldCells.setListCell(listCell);
-//		}
-//		return listBldCells;
-//	}
+	@Override
+	public List<BldCells> queryRegionBldCells(String regionId) {
+		Map<String, Object> parameterMap = new HashMap<>();
+		parameterMap.put("regionId", regionId);
+		List<BldCells> listBldCells = viewRegionInfoDao.selectBlds(parameterMap);
+		for (BldCells bldCells : listBldCells) {
+			parameterMap.put("projectId", bldCells.getProjectId());
+			parameterMap.put("bldNo", bldCells.getBldNo());
+			List<Cell> listCell = viewRegionInfoDao.selectBldCells(parameterMap);
+			bldCells.setListCell(listCell);
+		}
+		return listBldCells;
+	}
 
 	/**
 	 * 根据房屋类型过滤楼栋单元
