@@ -43,7 +43,29 @@ public class AuthorityController extends BaseController {
 		if (null != cache.get(token, SUser.class)) {
 			Map<String, Object> data = layoutService.selectConsoleData();
 			mv.addObject("data", data);
+			mv.addObject("token", token);
 			mv.setViewName("console");
+			return mv;
+		}
+
+		mv.setViewName("login");
+		return mv;
+	}
+
+	/**
+	 * 校验跳转视频监控页面
+	 * @param token
+	 * @return
+	 */
+	@GetMapping(value = "/video/{token}")
+	public ModelAndView video(@PathVariable String token) {
+		ModelAndView mv = new ModelAndView();
+		if (StringUtils.isEmpty(token)) {
+			mv.setViewName("login");
+			return mv;
+		}
+		if (null != cache.get(token, SUser.class)) {
+			mv.setViewName("video");
 			return mv;
 		}
 

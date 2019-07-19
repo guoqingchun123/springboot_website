@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="renderer" content="webkit">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<title>赤峰市房产信息网</title>
+	<link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
+	<link th:href="@{/layui/css/layui.css}" rel="stylesheet" type="text/css">
+	<script th:src="@{/js/respond.min.js}"></script>
+	<style>
+		body {
+			background-color: #F2F2F2;
+			overflow: hidden;
+		}
+		
+		.header {
+			height: 80px;
+			background-color: #ffffff;
+		}
+		
+		.header .logo {
+			height: 100%;
+			padding: 20px;
+		}
+		
+		.header .container {
+			height: 100%;
+		}
+		
+		.header .region-search {
+			display: inline-block;
+			position: relative;
+			padding-top: 20px;
+			text-align: right;
+		}
+
+		.header .region-search #region-search-input {
+			width: 400px;
+			padding: 8px 20px;
+			border-radius: 20px;
+			box-shadow: none;
+			background: #fff;
+			border: 1px solid #1E9EFF;
+			outline: none;
+			font-size: 16px;
+		}
+
+		.header .region-search .layui-icon-search {
+			position: relative;
+			right: 50px;
+			top: 5px;
+			font-size: 23px;
+			color: #1E9FFF;
+		}
+
+		.content {
+			margin: 20px;
+		}
+		
+		.content .container {
+			margin: 0 16px 16px;
+		}
+		
+		.content >div {
+			border-radius: 8px;
+			background-color: #ffffff;
+			height: 100%;
+			/*border: 1px red solid;*/
+		}
+
+		.content #content-right {
+			overflow: auto;
+		}
+
+		.content .video-preview {
+			margin: 0;
+		}
+
+		.region-list {
+			height: 200px;
+			margin: 10px;
+			cursor: pointer;
+		}
+
+		.region-list img {
+			height: 100%;
+			width: 60%;
+		}
+
+		.region-list span {
+			font-size: 18px;
+			margin-left: 10px;
+		}
+	</style>
+</head>
+<body>
+<div th:replace="common :: ready"></div>
+<script th:inline="javascript">
+	function initLayout() {
+	    //获取高度兼容IE8 window.innerHeight
+        var height=window.innerHeight||Math.max(document.documentElement.clientHeight, document.body.clientHeight);
+		document.getElementById('content').style.height = (height - 100) + 'px';
+		// document.getElementById('content-left').style.height = (height - 116) + 'px';
+		// document.getElementById('content-right').style.height = (height - 116) + 'px';
+	}
+
+	document.ready(function () {
+		initLayout();
+	});
+</script>
+<div class="header layui-row layui-col-space10">
+	<div class="logo layui-col-md8">
+		<img th:src="@{/themes/images/console-logo.png}">
+	</div>
+	<div class="container layui-col-md4 region-search">
+		<input id="region-search-input" name="region-search-input" placeholder="请输入小区名称或小区地址进行检索" />
+		<i class="layui-icon layui-icon-search"></i>
+	</div>
+</div>
+<div id="content" class="content layui-row layui-col-space20">
+	<div class="layui-col-md8 container video-preview">
+		<div id="playWnd" class="playWnd" style="height: 100%;width: 100%"></div>
+	</div>
+	<div id="content-right" class="layui-col-md4">
+		<div class="region-list">
+			<img src="http://fgj.chifeng.gov.cn:180/file/group1/M00/00/12/CgoMAV0YEGOAGcG_AAZkBKS_f-w596_400x300.jpg">
+			<span>悦山壹号</span>
+		</div>
+		<div class="region-list">
+			<img src="http://fgj.chifeng.gov.cn:180/file/group1/M00/00/13/CgoMAV0YIRWAZAn8AAEmSBF5AVc339_400x300.jpg">
+			<span>颐尚山水城</span>
+		</div>
+		<div class="region-list">
+			<img src="http://fgj.chifeng.gov.cn:180/file/group1/M00/00/12/CgoMAV0YFkKALU49AAfR2k5ehzg261_400x300.jpg">
+			<span>未名园</span>
+		</div>
+		<div class="region-list">
+			<img src="http://fgj.chifeng.gov.cn:180/file/group1/M00/00/12/CgoMAV0YGeWATN5RAAct8zd-jQE738_400x300.jpg">
+			<span>春成天一阁</span>
+		</div>
+		<div class="region-list">
+			<img src="http://fgj.chifeng.gov.cn:180/file/group1/M00/00/13/CgoMAV0YI3WALv1uABCE-xXIAmM501_400x300.jpg">
+			<span>中梁首府壹号</span>
+		</div>
+		<div class="region-list">
+			<img src="http://fgj.chifeng.gov.cn:180/file/group1/M00/00/12/CgoMAV0YD_6AMgBdAAdMxy9hWtI453_400x300.jpg">
+			<span>悦府知园</span>
+		</div>
+		<div class="region-list">
+			<img src="http://fgj.chifeng.gov.cn:180/file/group1/M00/00/12/CgoMAV0YEBmAer0WAAfGgHi_jNY116_400x300.jpg">
+			<span>悦府和园</span>
+		</div>
+	</div>
+</div>
+<script th:src="@{/layui/layui.js}"></script>
+<script th:src="@{/js/jsencrypt.min.js}"></script>
+<script th:src="@{/js/jsWebControl-1.0.0.min.js}"></script>
+<script th:inline="javascript">
+	var ctxPath = /*[[@{/}]]*/'';
+	layui.use(['layer', 'table'], function () {
+		var $ = layui.jquery;
+
+        var oWebControl = null;// 插件对象
+        var bIE = (!!window.ActiveXObject || 'ActiveXObject' in window);// 是否为IE浏览器
+        var pubKey = '';
+
+        var iLastCoverLeft = 0;
+        var iLastCoverTop = 0;
+        var iLastCoverRight = 0;
+        var iLastCoverBottom = 0;
+        var initCount = 0;
+        // 初始化插件
+        function initPlugin () {
+            oWebControl = new WebControl({
+                szPluginContainer: "playWnd",
+                iServicePortStart: 15900,
+                iServicePortEnd: 15909,
+                cbConnectSuccess: function () {
+                    setCallbacks();
+
+                    //启动服务
+                    oWebControl.JS_StartService("window", {
+                        dllPath: "./VideoPluginConnect.dll"
+                        //dllPath: "./DllForTest-Win32.dll"
+                    }).then(function () {
+                        //创建视频播放窗口
+                        oWebControl.JS_CreateWnd("playWnd", 1200, 800).then(function () {
+                            //初始化并预览视频
+                            initLayout();
+                            console.log("JS_CreateWnd success");
+                        });
+                    }, function () {
+
+                    });
+                },
+                cbConnectError: function () {
+                    // console.log("cbConnectError");
+                    oWebControl = null;
+                    $("#playWnd").html("插件未启动，正在尝试启动，请稍候...");
+                    WebControl.JS_WakeUp("VideoWebPlugin://");
+                    initCount ++;
+                    if (initCount < 3) {
+                        setTimeout(function () {
+                            initPlugin();
+                        }, 3000)
+                    } else {
+                        $("#playWnd").html("插件启动失败，请检查插件是否安装！");
+                    }
+                },
+                cbConnectClose: function () {
+                    console.log("cbConnectClose");
+                    oWebControl = null;
+                }
+            });
+        }
+
+        initPlugin();
+
+        // 获取公钥
+        function getPubKey (callback) {
+            oWebControl.JS_RequestInterface({
+                funcName: "getRSAPubKey",
+                argument: JSON.stringify({
+                    keyLength: 1024
+                })
+            }).then(function (oData) {
+                // console.log(oData)
+                if (oData.responseMsg.data) {
+                    pubKey = oData.responseMsg.data
+                    callback()
+                }
+            })
+        }
+
+        // 设置窗口控制回调
+        function setCallbacks() {
+            oWebControl.JS_SetWindowControlCallback({
+                cbIntegrationCallBack: cbIntegrationCallBack
+            });
+        }
+
+        // 推送消息
+        function cbIntegrationCallBack(oData) {
+            console.log(JSON.stringify(oData.responseMsg));
+        }
+
+        // RSA加密
+        function setEncrypt (value) {
+            var encrypt = new JSEncrypt();
+            encrypt.setPublicKey(pubKey);
+            return encrypt.encrypt(value);
+        }
+        // 标签关闭
+        $(window).unload(function () {
+            // 此处请勿调反初始化
+            if (oWebControl != null){
+                oWebControl.JS_Disconnect().then(function(){}, function() {});
+            }
+        });
+        // 窗口resize
+        $(window).resize(function () {
+            if (oWebControl != null) {
+                oWebControl.JS_Resize($(window).width()*0.62, $(window).height()*0.84);
+                // setWndCover();
+            }
+        });
+
+        // 滚动条scroll
+        $(window).scroll(function () {
+            if (oWebControl != null) {
+                oWebControl.JS_Resize($(window).width()*0.62, $(window).height()*0.84);
+                // setWndCover();
+            }
+        });
+        // 设置窗口遮挡
+        function setWndCover() {
+            var iWidth = $(window).width();
+            var iHeight = $(window).height();
+            var oDivRect = $("#playWnd").get(0).getBoundingClientRect();
+
+            var iCoverLeft = (oDivRect.left < 0) ? Math.abs(oDivRect.left): 0;
+            var iCoverTop = (oDivRect.top < 0) ? Math.abs(oDivRect.top): 0;
+            var iCoverRight = (oDivRect.right - iWidth > 0) ? Math.round(oDivRect.right - iWidth) : 0;
+            var iCoverBottom = (oDivRect.bottom - iHeight > 0) ? Math.round(oDivRect.bottom - iHeight) : 0;
+
+            iCoverLeft = (iCoverLeft > 1200) ? 1200 : iCoverLeft;
+            iCoverTop = (iCoverTop > 800) ? 800 : iCoverTop;
+            iCoverRight = (iCoverRight > 1200) ? 1200 : iCoverRight;
+            iCoverBottom = (iCoverBottom > 800) ? 800 : iCoverBottom;
+
+            if (iLastCoverLeft != iCoverLeft) {
+                console.log("iCoverLeft: " + iCoverLeft);
+                iLastCoverLeft = iCoverLeft;
+                oWebControl.JS_SetWndCover("left", iCoverLeft);
+            }
+            if (iLastCoverTop != iCoverTop) {
+                console.log("iCoverTop: " + iCoverTop);
+                iLastCoverTop = iCoverTop;
+                oWebControl.JS_SetWndCover("top", iCoverTop);
+            }
+            if (iLastCoverRight != iCoverRight) {
+                console.log("iCoverRight: " + iCoverRight);
+                iLastCoverRight = iCoverRight;
+                oWebControl.JS_SetWndCover("right", iCoverRight);
+            }
+            if (iLastCoverBottom != iCoverBottom) {
+                console.log("iCoverBottom: " + iCoverBottom);
+                iLastCoverBottom = iCoverBottom;
+                oWebControl.JS_SetWndCover("bottom", iCoverBottom);
+            }
+        }
+        //视频预览
+		function startPreview() {
+            //监控点编号
+            var cameraIndexCode  = '15040400001120000067';
+            //主子码流标识，0：主码流，1：子码流
+            var streamMode = '0';
+            //传输协议，1：TCP,0:UDP
+            var transMode = '1';
+            //是否启用GPU硬解：0：不启用，1：启用
+            var gpuMode = '0';
+            var wndId = -1;  //默认为空闲窗口回放
+
+            cameraIndexCode = cameraIndexCode.replace(/(^\s*)/g, "");
+            cameraIndexCode = cameraIndexCode.replace(/(\s*$)/g, "");
+
+            //TODO 预览模式
+            var v = 0;
+            if (2 == v)//指定窗口回放
+            {
+                wndId = parseInt('0', 10);
+            }
+            else if (1 == v) //选中窗口回放
+            {
+                wndId = 0;
+            }
+
+            if (!cameraIndexCode ) {
+                console.log("监控点编号不能为空！");
+                return
+            }
+
+            oWebControl.JS_RequestInterface({
+                funcName: "startPreview",
+                argument: JSON.stringify({
+                    cameraIndexCode : cameraIndexCode ,
+                    streamMode: streamMode,
+                    transMode: transMode,
+                    gpuMode: gpuMode,
+                    wndId: wndId
+                })
+            }).then(function (oData) {
+                console.log(JSON.stringify(oData ? oData.responseMsg : ''));
+            });
+        }
+
+		//初始化布局
+		function initLayout() {
+            // initPlugin();
+            getPubKey(function () {
+                var appkey = '24067695';
+                var secret = setEncrypt('ItmUAPnCPPWqlQRTykYk');
+                var ip = '222.74.69.146'; //平台IP地址
+                var szPort = '1443'; //平台端口
+                var snapDir = 'D:\\SnapDir'; //抓图存储路径
+                var videoDir = 'D:\\VideoDir'; //录像存储路径
+                var layout = '2x2'; //初始化布局
+                var encryptedFields = ['secret', 'ip', 'appkey'];
+
+                appkey = appkey.replace(/(^\s*)/g, "");
+                appkey = appkey.replace(/(\s*$)/g, "");
+
+                secret = secret.replace(/(^\s*)/g, "");
+                secret = secret.replace(/(\s*$)/g, "");
+
+                ip = ip.replace(/(^\s*)/g, "");
+                ip = ip.replace(/(\s*$)/g, "");
+
+                szPort = szPort.replace(/(^\s*)/g, "");
+                szPort = szPort.replace(/(\s*$)/g, "");
+
+                snapDir = snapDir.replace(/(^\s*)/g, "");
+                snapDir = snapDir.replace(/(\s*$)/g, "");
+
+                videoDir = videoDir.replace(/(^\s*)/g, "");
+                videoDir = videoDir.replace(/(\s*$)/g, "");
+
+                var port = parseInt(szPort);
+                //启用HTTPS协议，1：启用，0：不启用
+                var enableHttps = parseInt('1');
+
+                appkey = setEncrypt(appkey);
+			    ip = setEncrypt(ip);
+
+                oWebControl.JS_RequestInterface({
+                    funcName: "init",
+                    argument: JSON.stringify({
+                        appkey: appkey,
+                        secret: secret,
+                        ip: ip,
+                        playMode: 0, // 预览
+                        port: port,
+                        snapDir: snapDir,
+                        videoDir: videoDir,
+                        layout: layout,
+                        enableHTTPS: enableHttps,
+                        encryptedFields: encryptedFields
+                    })
+                }).then(function (oData) {
+                   console.log(JSON.stringify(oData ? oData.responseMsg : ''));
+                });
+            });
+            startPreview();
+        }
+	});
+</script>
+</body>
