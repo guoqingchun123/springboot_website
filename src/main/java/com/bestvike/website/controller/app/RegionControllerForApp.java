@@ -49,6 +49,11 @@ public class RegionControllerForApp extends BaseController {
 		return projectService.queryRegionDocs(regionId, type);
 	}
 
+	@GetMapping(value = "/regionBldCells/{regionId}")
+	public List<BldCells> regionBldCells(@PathVariable String regionId) {
+		return projectService.queryRegionBldCells(regionId);
+	}
+
 	@GetMapping(value = "/regionBldCells")
 	public List<BldCells> regionBldCells(@RequestParam String regionId, @RequestParam(required = false) String houseShow) {
 		return projectService.queryRegionBldCells(regionId, houseShow);

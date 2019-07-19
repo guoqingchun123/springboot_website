@@ -39,7 +39,7 @@ public interface ProjectService {
 
 	public List<DocFiles> queryRegionDocs(String regionId, String type);
 
-//	public List<BldCells> queryRegionBldCells(String regionId);
+	public List<BldCells> queryRegionBldCells(String regionId);
 
 	public List<BldCells> queryRegionBldCells(String regionId, String houseShow);
 
