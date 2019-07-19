@@ -28,7 +28,11 @@
 		.header .container {
 			height: 100%;
 		}
-		
+
+		.header .return-btn {
+			padding: 20px;
+		}
+
 		.header .region-search {
 			display: inline-block;
 			position: relative;
@@ -84,14 +88,33 @@
 			cursor: pointer;
 		}
 
-		.region-list img {
-			height: 100%;
-			width: 60%;
+		.region-list:hover {
+			background-color: #fafafa;
 		}
 
-		.region-list span {
-			font-size: 18px;
-			margin-left: 10px;
+		.region-list .region-img {
+			display: flex;
+			height: 100%;
+			align-items: center;
+		}
+
+		.region-list .region-img img {
+			height: 100%;
+			width: 100%;
+			max-width: 260px;
+		}
+
+		.region-list .region-info p {
+			font-size: 24px;
+			font-weight: bold;
+			color: #008000;
+			padding: 40px 0;
+		}
+
+		.region-list:hover .region-info button {
+			background-color: #1e9fff;
+			border: 1px solid #1e9fff;
+			color: #ffffff;
 		}
 	</style>
 </head>
@@ -111,12 +134,15 @@
 	});
 </script>
 <div class="header layui-row layui-col-space10">
-	<div class="logo layui-col-md8">
+	<div class="logo layui-col-md7">
 		<img th:src="@{/themes/images/console-logo.png}">
 	</div>
 	<div class="container layui-col-md4 region-search">
 		<input id="region-search-input" name="region-search-input" placeholder="请输入小区名称或小区地址进行检索" />
 		<i class="layui-icon layui-icon-search"></i>
+	</div>
+	<div class="container layui-col-md1 return-btn">
+		<button type="button" class="layui-btn layui-btn-lg layui-btn-normal">&nbsp;返回&nbsp;</button>
 	</div>
 </div>
 <div id="content" class="content layui-row layui-col-space20">
@@ -124,33 +150,68 @@
 		<div id="playWnd" class="playWnd" style="height: 100%;width: 100%"></div>
 	</div>
 	<div id="content-right" class="layui-col-md4">
-		<div class="region-list">
-			<img src="http://fgj.chifeng.gov.cn:180/file/group1/M00/00/12/CgoMAV0YEGOAGcG_AAZkBKS_f-w596_400x300.jpg">
-			<span>悦山壹号</span>
+		<div class="region-list layui-row layui-col-space12">
+			<div class="layui-col-md6 region-img">
+				<img src="http://fgj.chifeng.gov.cn:180/file/group1/M00/00/12/CgoMAV0YEGOAGcG_AAZkBKS_f-w596_400x300.jpg">
+			</div>
+			<div class="region-info layui-col-md6">
+				<p>悦山壹号</p>
+				<button type="button" class="layui-btn layui-btn-primary summary-btn">视频预览</button>
+			</div>
 		</div>
-		<div class="region-list">
-			<img src="http://fgj.chifeng.gov.cn:180/file/group1/M00/00/13/CgoMAV0YIRWAZAn8AAEmSBF5AVc339_400x300.jpg">
-			<span>颐尚山水城</span>
+		<div class="region-list layui-row layui-col-space12">
+			<div class="layui-col-md6 region-img">
+				<img src="http://fgj.chifeng.gov.cn:180/file/group1/M00/00/13/CgoMAV0YIRWAZAn8AAEmSBF5AVc339_400x300.jpg">
+			</div>
+			<div class="region-info layui-col-md6">
+				<p>颐尚山水城</p>
+				<button type="button" class="layui-btn layui-btn-primary summary-btn">视频预览</button>
+			</div>
 		</div>
-		<div class="region-list">
-			<img src="http://fgj.chifeng.gov.cn:180/file/group1/M00/00/12/CgoMAV0YFkKALU49AAfR2k5ehzg261_400x300.jpg">
-			<span>未名园</span>
+		<div class="region-list layui-row layui-col-space12">
+			<div class="layui-col-md6 region-img">
+				<img src="http://fgj.chifeng.gov.cn:180/file/group1/M00/00/12/CgoMAV0YFkKALU49AAfR2k5ehzg261_400x300.jpg">
+			</div>
+			<div class="region-info layui-col-md6">
+				<p>未名园</p>
+				<button type="button" class="layui-btn layui-btn-primary summary-btn">视频预览</button>
+			</div>
 		</div>
-		<div class="region-list">
-			<img src="http://fgj.chifeng.gov.cn:180/file/group1/M00/00/12/CgoMAV0YGeWATN5RAAct8zd-jQE738_400x300.jpg">
-			<span>春成天一阁</span>
+		<div class="region-list layui-row layui-col-space12">
+			<div class="layui-col-md6 region-img">
+				<img src="http://fgj.chifeng.gov.cn:180/file/group1/M00/00/12/CgoMAV0YGeWATN5RAAct8zd-jQE738_400x300.jpg">
+			</div>
+			<div class="region-info layui-col-md6">
+				<p>春成天一阁</p>
+				<button type="button" class="layui-btn layui-btn-primary summary-btn">视频预览</button>
+			</div>
 		</div>
-		<div class="region-list">
-			<img src="http://fgj.chifeng.gov.cn:180/file/group1/M00/00/13/CgoMAV0YI3WALv1uABCE-xXIAmM501_400x300.jpg">
-			<span>中梁首府壹号</span>
+		<div class="region-list layui-row layui-col-space12">
+			<div class="layui-col-md6 region-img">
+				<img src="http://fgj.chifeng.gov.cn:180/file/group1/M00/00/13/CgoMAV0YI3WALv1uABCE-xXIAmM501_400x300.jpg">
+			</div>
+			<div class="region-info layui-col-md6">
+				<p>中梁首府壹号</p>
+				<button type="button" class="layui-btn layui-btn-primary summary-btn">视频预览</button>
+			</div>
 		</div>
-		<div class="region-list">
-			<img src="http://fgj.chifeng.gov.cn:180/file/group1/M00/00/12/CgoMAV0YD_6AMgBdAAdMxy9hWtI453_400x300.jpg">
-			<span>悦府知园</span>
+		<div class="region-list layui-row layui-col-space12">
+			<div class="layui-col-md6 region-img">
+				<img src="http://fgj.chifeng.gov.cn:180/file/group1/M00/00/12/CgoMAV0YD_6AMgBdAAdMxy9hWtI453_400x300.jpg">
+			</div>
+			<div class="region-info layui-col-md6">
+				<p>悦府知园</p>
+				<button type="button" class="layui-btn layui-btn-primary summary-btn">视频预览</button>
+			</div>
 		</div>
-		<div class="region-list">
-			<img src="http://fgj.chifeng.gov.cn:180/file/group1/M00/00/12/CgoMAV0YEBmAer0WAAfGgHi_jNY116_400x300.jpg">
-			<span>悦府和园</span>
+		<div class="region-list layui-row layui-col-space12">
+			<div class="layui-col-md6 region-img">
+				<img src="http://fgj.chifeng.gov.cn:180/file/group1/M00/00/12/CgoMAV0YEBmAer0WAAfGgHi_jNY116_400x300.jpg">
+			</div>
+			<div class="region-info layui-col-md6">
+				<p>悦府和园</p>
+				<button type="button" class="layui-btn layui-btn-primary summary-btn">视频预览</button>
+			</div>
 		</div>
 	</div>
 </div>
@@ -161,6 +222,13 @@
 	var ctxPath = /*[[@{/}]]*/'';
 	layui.use(['layer', 'table'], function () {
 		var $ = layui.jquery;
+        var token = [[${token}]];
+
+        //跳转到大屏展示页面
+        $('.return-btn').on('click', function () {
+            stopPreview();
+            window.location.href = ctxPath + 'console/' + token;
+        });
 
         var oWebControl = null;// 插件对象
         var bIE = (!!window.ActiveXObject || 'ActiveXObject' in window);// 是否为IE浏览器
@@ -187,10 +255,75 @@
                     }).then(function () {
                         //创建视频播放窗口
                         oWebControl.JS_CreateWnd("playWnd", 1200, 800).then(function () {
-                            //初始化并预览视频
-                            initLayout();
                             console.log("JS_CreateWnd success");
-                        });
+                            //初始化
+                            oWebControl.JS_RequestInterface({
+                                funcName: "getRSAPubKey",
+                                argument: JSON.stringify({
+                                    keyLength: 1024
+                                })
+                            }).then(function (oData) {
+                                if (oData.responseMsg.data) {
+                                    pubKey = oData.responseMsg.data
+
+                                    var appkey = '24067695';
+                                    var secret = 'ItmUAPnCPPWqlQRTykYk';
+                                    var ip = '222.74.69.146'; //平台IP地址
+                                    var szPort = '1443'; //平台端口
+                                    var snapDir = 'D:\\SnapDir'; //抓图存储路径
+                                    var videoDir = 'D:\\VideoDir'; //录像存储路径
+                                    var layout = '2x2'; //初始化布局
+                                    var encryptedFields = ['secret'];
+
+                                    appkey = appkey.replace(/(^\s*)/g, "");
+                                    appkey = appkey.replace(/(\s*$)/g, "");
+
+                                    secret = secret.replace(/(^\s*)/g, "");
+                                    secret = secret.replace(/(\s*$)/g, "");
+
+                                    ip = ip.replace(/(^\s*)/g, "");
+                                    ip = ip.replace(/(\s*$)/g, "");
+
+                                    szPort = szPort.replace(/(^\s*)/g, "");
+                                    szPort = szPort.replace(/(\s*$)/g, "");
+
+                                    snapDir = snapDir.replace(/(^\s*)/g, "");
+                                    snapDir = snapDir.replace(/(\s*$)/g, "");
+
+                                    videoDir = videoDir.replace(/(^\s*)/g, "");
+                                    videoDir = videoDir.replace(/(\s*$)/g, "");
+
+                                    var port = parseInt(szPort);
+                                    //启用HTTPS协议，1：启用，0：不启用
+                                    var enableHttps = parseInt('1');
+
+                                    // appkey = setEncrypt(appkey);
+                                    // ip = setEncrypt(ip);
+
+                                    oWebControl.JS_RequestInterface({
+                                        funcName: "init",
+                                        argument: JSON.stringify({
+                                            appkey: appkey,
+                                            secret: secret,
+                                            ip: ip,
+                                            playMode: 0, // 预览
+                                            port: port,
+                                            snapDir: snapDir,
+                                            videoDir: videoDir,
+                                            layout: layout,
+                                            enableHTTPS: enableHttps,
+                                            encryptedFields: encryptedFields
+                                        })
+                                    }).then(function (oData) {
+                                        console.log("初始化布局完成"+JSON.stringify(oData ? oData.responseMsg : ''));
+
+                                        //视频预览
+                                        startPreview();
+                                    });
+                                }
+                            })
+
+                        })
                     }, function () {
 
                     });
@@ -217,22 +350,6 @@
         }
 
         initPlugin();
-
-        // 获取公钥
-        function getPubKey (callback) {
-            oWebControl.JS_RequestInterface({
-                funcName: "getRSAPubKey",
-                argument: JSON.stringify({
-                    keyLength: 1024
-                })
-            }).then(function (oData) {
-                // console.log(oData)
-                if (oData.responseMsg.data) {
-                    pubKey = oData.responseMsg.data
-                    callback()
-                }
-            })
-        }
 
         // 设置窗口控制回调
         function setCallbacks() {
@@ -314,7 +431,7 @@
         //视频预览
 		function startPreview() {
             //监控点编号
-            var cameraIndexCode  = '15040400001120000067';
+            var cameraIndexCode  = 'a8b95c38fd9445c2b55ab2a007454af5';
             //主子码流标识，0：主码流，1：子码流
             var streamMode = '0';
             //传输协议，1：TCP,0:UDP
@@ -352,67 +469,16 @@
                     wndId: wndId
                 })
             }).then(function (oData) {
-                console.log(JSON.stringify(oData ? oData.responseMsg : ''));
+                console.log("视频预览"+JSON.stringify(oData ? oData.responseMsg : ''));
             });
         }
-
-		//初始化布局
-		function initLayout() {
-            // initPlugin();
-            getPubKey(function () {
-                var appkey = '24067695';
-                var secret = setEncrypt('ItmUAPnCPPWqlQRTykYk');
-                var ip = '222.74.69.146'; //平台IP地址
-                var szPort = '1443'; //平台端口
-                var snapDir = 'D:\\SnapDir'; //抓图存储路径
-                var videoDir = 'D:\\VideoDir'; //录像存储路径
-                var layout = '2x2'; //初始化布局
-                var encryptedFields = ['secret', 'ip', 'appkey'];
-
-                appkey = appkey.replace(/(^\s*)/g, "");
-                appkey = appkey.replace(/(\s*$)/g, "");
-
-                secret = secret.replace(/(^\s*)/g, "");
-                secret = secret.replace(/(\s*$)/g, "");
-
-                ip = ip.replace(/(^\s*)/g, "");
-                ip = ip.replace(/(\s*$)/g, "");
-
-                szPort = szPort.replace(/(^\s*)/g, "");
-                szPort = szPort.replace(/(\s*$)/g, "");
-
-                snapDir = snapDir.replace(/(^\s*)/g, "");
-                snapDir = snapDir.replace(/(\s*$)/g, "");
-
-                videoDir = videoDir.replace(/(^\s*)/g, "");
-                videoDir = videoDir.replace(/(\s*$)/g, "");
-
-                var port = parseInt(szPort);
-                //启用HTTPS协议，1：启用，0：不启用
-                var enableHttps = parseInt('1');
-
-                appkey = setEncrypt(appkey);
-			    ip = setEncrypt(ip);
-
-                oWebControl.JS_RequestInterface({
-                    funcName: "init",
-                    argument: JSON.stringify({
-                        appkey: appkey,
-                        secret: secret,
-                        ip: ip,
-                        playMode: 0, // 预览
-                        port: port,
-                        snapDir: snapDir,
-                        videoDir: videoDir,
-                        layout: layout,
-                        enableHTTPS: enableHttps,
-                        encryptedFields: encryptedFields
-                    })
-                }).then(function (oData) {
-                   console.log(JSON.stringify(oData ? oData.responseMsg : ''));
-                });
+        //停止预览
+		function stopPreview() {
+            oWebControl.JS_RequestInterface({
+                funcName: "stopAllPreview"
+            }).then(function (oData) {
+                console.log(JSON.stringify(oData ? oData.responseMsg : ''));
             });
-            startPreview();
         }
 	});
 </script>

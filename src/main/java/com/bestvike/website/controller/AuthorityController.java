@@ -65,6 +65,7 @@ public class AuthorityController extends BaseController {
 			return mv;
 		}
 		if (null != cache.get(token, SUser.class)) {
+			mv.addObject("token", token);
 			mv.setViewName("video");
 			return mv;
 		}
