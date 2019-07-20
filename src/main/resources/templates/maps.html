@@ -35,6 +35,7 @@
 			<div class="region-content"></div>
 			<button type="button" class="layui-btn layui-btn-normal">查看详情</button>
 			<button type="button" class="layui-btn layui-btn-primary layui-btn-back">隐藏</button>
+			<button type="button" class="layui-btn layui-btn-warm" >路线查询</button>
 		</div>
 	</div>
 </div>
@@ -45,6 +46,7 @@
 	var district = null;
 	var polygons = [];
 	var infoWindow = null;
+	var startLngLat = null;
 
 	var regions = [[${regions}]];
 
@@ -94,6 +96,25 @@
 		toolBar.hideDirection();
 		map.addControl(toolBar);
 
+		//定位
+		AMap.plugin('AMap.Geolocation', function() {
+			var geolocation = new AMap.Geolocation({
+													   enableHighAccuracy: true,//是否使用高精度定位，默认:true
+													   timeout: 10000,          //超过10秒后停止定位，默认：5s
+												   });
+			map.addControl(geolocation);
+			geolocation.getCurrentPosition(function(status,result){
+				if(status=='complete'){
+					startLngLat = [ result.position.lng, result.position.lat];
+				}else{
+					onError(result)
+				}
+			});
+		});
+		function onError(data) {
+			document.getElementById('status').innerHTML='定位失败'
+			document.getElementById('result').innerHTML = '失败原因排查信息:'+data.message;
+		}
 		map.on('zoomend', function () {
 			// 地图缩放，刷新业务数据
 			mapRefresh();
@@ -278,6 +299,24 @@
 			// 跳转到新页面
 			$(".layui-btn-normal").off('click').on("click", function () {
 				window.open(ctxPath + 'sales/' + region.regionId, '_blank');
+			});
+
+			AMap.plugin(["AMap.Driving"], function() {
+				var drivingOption = {
+					policy:AMap.DrivingPolicy.LEAST_TIME
+				};
+				var driving = new AMap.Driving(drivingOption); //构造驾车导航类
+				//根据起终点坐标规划驾车路线
+				var endLngLat = [region.x, region.y]
+				//startLngLat = [118.916202, 42.271235]
+				driving.search(startLngLat,endLngLat,function(status,result){debugger
+					$(".layui-btn-warm").off('click').on("click", function () {
+						driving.searchOnAMAP({
+												 origin:result.origin,
+												 destination:result.destination
+											 });
+					});
+				});
 			});
 		}
 
