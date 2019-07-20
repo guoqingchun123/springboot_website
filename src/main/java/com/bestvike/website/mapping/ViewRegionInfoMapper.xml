@@ -420,4 +420,13 @@
 			order by sum(case when nvl(t3.sign_date, '0000-01-01') >= to_char(TRUNC(sysdate - 30), 'yyyy-mm-dd') then t3.construct_area else 0 end) desc
 		]]>
 	</select>
+	<select id="selectInitVideo" resultType="ViewRegionInfo">
+		<![CDATA[
+			SELECT T.REGION_ID,
+			   T.REGION_NAME,
+			   T.LOGO_PATH,
+			   DECODE(T.VIDEO_NO, NULL, 0, '', 0, 1) AS has_video
+		  FROM VIEW_REGIONINFO T
+		]]>
+	</select>
 </mapper>

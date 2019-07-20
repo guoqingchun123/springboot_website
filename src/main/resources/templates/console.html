@@ -31,13 +31,22 @@
 			height: 100%;
 		}
 		
-		.header .video-btn {
-			padding: 20px;
+		.header .btn-group {
+			text-align: right;
+			padding: 20px 40px;
 			/*display: flex;
 			justify-content: center;
 			align-items: center;*/
 		}
-		
+
+		.header .btn-group .refresh-btn{
+			width: 40%;
+		}
+
+		.header .btn-group .video-btn{
+			width: 50%;
+		}
+
 		.header .container .wrapper {
 			height: 100%;
 			/*display: grid;
@@ -70,7 +79,7 @@
 			width: 75%;
 			float: right;
 			/*grid-area: v;*/
-			font-size: 20px;
+			font-size: 16px;
 			font-weight: bold;
 		}
 		
@@ -172,7 +181,7 @@
 	<div class="logo layui-col-md3">
 		<img th:src="@{/themes/images/console-logo.png}">
 	</div>
-	<div class="container layui-col-md8">
+	<div class="container layui-col-md7">
 		<div class="layui-col-md3" style="height: 100%">
 			<div class="wrapper">
 				<div class="wrapper-image">
@@ -230,8 +239,9 @@
 			</div>
 		</div>
 	</div>
-	<div class="container layui-col-md1 video-btn">
-		<button type="button" class="layui-btn layui-btn-lg layui-btn-danger">视频入口</button>
+	<div class="container layui-col-md2 btn-group">
+		<button type="button" class="layui-btn layui-btn-lg layui-btn-warm refresh-btn">&nbsp;刷新&nbsp;</button>
+		<button type="button" class="layui-btn layui-btn-lg layui-btn-danger video-btn">视频入口</button>
 	</div>
 </div>
 <!--<div class="header layui-row layui-col-space10">
@@ -351,6 +361,10 @@
         $('.video-btn').on('click', function () {
             // window.open(ctxPath + 'sales/' + $(this).attr("data-value"));
             window.location.href = ctxPath + 'video/' + token;
+        });
+        //刷新页面
+        $('.refresh-btn').on('click', function () {
+            window.location.reload();
         });
 
 		// 供给和销售情况

@@ -2,9 +2,14 @@ package com.bestvike.website.controller;
 
 import com.bestvike.commons.redis.Cache;
 import com.bestvike.website.data.SUser;
+import com.bestvike.website.data.ViewRegionInfo;
 import com.bestvike.website.service.LayoutService;
+
+import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+
+import com.bestvike.website.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -23,6 +28,8 @@ public class AuthorityController extends BaseController {
 
 	@Autowired
 	private LayoutService layoutService;
+    @Autowired
+    private VideoService videoService;
 
 	@Autowired
 	private Cache cache;
@@ -65,6 +72,9 @@ public class AuthorityController extends BaseController {
 			return mv;
 		}
 		if (null != cache.get(token, SUser.class)) {
+		    //初始查询小区信息
+            List<ViewRegionInfo> list = videoService.selectInitVideo();
+			mv.addObject("data", list);
 			mv.addObject("token", token);
 			mv.setViewName("video");
 			return mv;

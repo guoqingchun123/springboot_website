@@ -71,4 +71,6 @@ public interface ViewRegionInfoDao extends Mapper<ViewRegionInfo> {
 	public Lastest selectLatest();
 
 	public List<RegionTrade> selectRegionTrade(Map<String, Object> parameterMap);
+
+	public List<ViewRegionInfo> selectInitVideo();
 }

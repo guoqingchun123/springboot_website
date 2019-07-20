@@ -30,6 +30,7 @@ public class ViewRegionInfo implements Serializable {
 	private String logoPath;
 	private String viewPath;
 	private String houseHolds;
+	private String videoNo;
 
 	@Transient
 	private String houseNum;
@@ -87,6 +88,8 @@ public class ViewRegionInfo implements Serializable {
 	private List<HouseHoldSale> mating;
 	@Transient
 	private RegionHouseSale matingCollects;
+	@Transient
+	private int hasVideo;
 
 	public String getRegionId() {
 		return regionId;
@@ -406,5 +409,21 @@ public class ViewRegionInfo implements Serializable {
 
 	public void setMatingCollects(RegionHouseSale matingCollects) {
 		this.matingCollects = matingCollects;
+	}
+
+	public String getVideoNo() {
+		return videoNo;
+	}
+
+	public void setVideoNo(String videoNo) {
+		this.videoNo = videoNo;
+	}
+
+	public int getHasVideo() {
+		return hasVideo;
+	}
+
+	public void setHasVideo(int hasVideo) {
+		this.hasVideo = hasVideo;
 	}
 }

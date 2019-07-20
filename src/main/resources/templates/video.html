@@ -8,13 +8,14 @@
 	<title>赤峰市房产信息网</title>
 	<link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
 	<link th:href="@{/layui/css/layui.css}" rel="stylesheet" type="text/css">
+	<link th:href="@{/layui/autocomplete/autocomplete.css}" rel="stylesheet" type="text/css">
 	<script th:src="@{/js/respond.min.js}"></script>
 	<style>
 		body {
 			background-color: #F2F2F2;
 			overflow: hidden;
 		}
-		
+
 		.header {
 			height: 80px;
 			background-color: #ffffff;
@@ -24,24 +25,43 @@
 			height: 100%;
 			padding: 20px;
 		}
-		
+
+		.header .video-loading {
+			text-align: center;
+			margin-top: 5px;
+		}
+
+		 #video-loading {
+			z-index: 2000;
+		    display: none;
+		}
+
 		.header .container {
 			height: 100%;
 		}
 
-		.header .return-btn {
-			padding: 20px;
+		.header .btn-group {
+			text-align: right;
+			padding: 20px 40px;
+		}
+
+		.header .btn-group .refresh-btn{
+			width: 45%;
+		}
+
+		.header .btn-group .return-btn{
+			width: 45%;
 		}
 
 		.header .region-search {
 			display: inline-block;
 			position: relative;
-			padding-top: 20px;
+			padding-top: 25px;
 			text-align: right;
 		}
 
 		.header .region-search #region-search-input {
-			width: 400px;
+			width: 100%;
 			padding: 8px 20px;
 			border-radius: 20px;
 			box-shadow: none;
@@ -53,10 +73,14 @@
 
 		.header .region-search .layui-icon-search {
 			position: relative;
-			right: 50px;
-			top: 5px;
+			top: -30px;
+			right: -15px;
 			font-size: 23px;
 			color: #1E9FFF;
+		}
+
+		.layui-form-autocomplete {
+			text-align: left;
 		}
 
 		.content {
@@ -111,7 +135,13 @@
 			padding: 40px 0;
 		}
 
-		.region-list:hover .region-info button {
+		.region-list:hover .region-info .summary-btn {
+			background-color: #1e9fff;
+			border: 1px solid #1e9fff;
+			color: #ffffff;
+		}
+
+		.curr-button {
 			background-color: #1e9fff;
 			border: 1px solid #1e9fff;
 			color: #ffffff;
@@ -134,15 +164,19 @@
 	});
 </script>
 <div class="header layui-row layui-col-space10">
-	<div class="logo layui-col-md7">
+	<div class="logo layui-col-md4">
 		<img th:src="@{/themes/images/console-logo.png}">
 	</div>
-	<div class="container layui-col-md4 region-search">
+	<div th:fragment="loading" class="layui-col-md4 video-loading">
+		<img th:src="@{/themes/images/loading.gif}" style="width: 200px;" id="video-loading">
+	</div>
+	<div class="container layui-col-md2 region-search">
 		<input id="region-search-input" name="region-search-input" placeholder="请输入小区名称或小区地址进行检索" />
 		<i class="layui-icon layui-icon-search"></i>
 	</div>
-	<div class="container layui-col-md1 return-btn">
-		<button type="button" class="layui-btn layui-btn-lg layui-btn-normal">&nbsp;返回&nbsp;</button>
+	<div class="container layui-col-md2 btn-group">
+		<button type="button" class="layui-btn layui-btn-lg layui-btn-warm refresh-btn">&nbsp;刷新&nbsp;</button>
+		<button type="button" class="layui-btn layui-btn-lg layui-btn-normal return-btn">&nbsp;返回&nbsp;</button>
 	</div>
 </div>
 <div id="content" class="content layui-row layui-col-space20">
@@ -150,67 +184,14 @@
 		<div id="playWnd" class="playWnd" style="height: 100%;width: 100%"></div>
 	</div>
 	<div id="content-right" class="layui-col-md4">
-		<div class="region-list layui-row layui-col-space12">
+		<div class="region-list layui-row layui-col-space12" th:each="region:${data}" th:region-id="${region.regionId}" th:has-video="${region.hasVideo}">
 			<div class="layui-col-md6 region-img">
-				<img src="http://fgj.chifeng.gov.cn:180/file/group1/M00/00/12/CgoMAV0YEGOAGcG_AAZkBKS_f-w596_400x300.jpg">
+				<img th:src="${region.logoPath}">
 			</div>
 			<div class="region-info layui-col-md6">
-				<p>悦山壹号</p>
-				<button type="button" class="layui-btn layui-btn-primary summary-btn">视频预览</button>
-			</div>
-		</div>
-		<div class="region-list layui-row layui-col-space12">
-			<div class="layui-col-md6 region-img">
-				<img src="http://fgj.chifeng.gov.cn:180/file/group1/M00/00/13/CgoMAV0YIRWAZAn8AAEmSBF5AVc339_400x300.jpg">
-			</div>
-			<div class="region-info layui-col-md6">
-				<p>颐尚山水城</p>
-				<button type="button" class="layui-btn layui-btn-primary summary-btn">视频预览</button>
-			</div>
-		</div>
-		<div class="region-list layui-row layui-col-space12">
-			<div class="layui-col-md6 region-img">
-				<img src="http://fgj.chifeng.gov.cn:180/file/group1/M00/00/12/CgoMAV0YFkKALU49AAfR2k5ehzg261_400x300.jpg">
-			</div>
-			<div class="region-info layui-col-md6">
-				<p>未名园</p>
-				<button type="button" class="layui-btn layui-btn-primary summary-btn">视频预览</button>
-			</div>
-		</div>
-		<div class="region-list layui-row layui-col-space12">
-			<div class="layui-col-md6 region-img">
-				<img src="http://fgj.chifeng.gov.cn:180/file/group1/M00/00/12/CgoMAV0YGeWATN5RAAct8zd-jQE738_400x300.jpg">
-			</div>
-			<div class="region-info layui-col-md6">
-				<p>春成天一阁</p>
-				<button type="button" class="layui-btn layui-btn-primary summary-btn">视频预览</button>
-			</div>
-		</div>
-		<div class="region-list layui-row layui-col-space12">
-			<div class="layui-col-md6 region-img">
-				<img src="http://fgj.chifeng.gov.cn:180/file/group1/M00/00/13/CgoMAV0YI3WALv1uABCE-xXIAmM501_400x300.jpg">
-			</div>
-			<div class="region-info layui-col-md6">
-				<p>中梁首府壹号</p>
-				<button type="button" class="layui-btn layui-btn-primary summary-btn">视频预览</button>
-			</div>
-		</div>
-		<div class="region-list layui-row layui-col-space12">
-			<div class="layui-col-md6 region-img">
-				<img src="http://fgj.chifeng.gov.cn:180/file/group1/M00/00/12/CgoMAV0YD_6AMgBdAAdMxy9hWtI453_400x300.jpg">
-			</div>
-			<div class="region-info layui-col-md6">
-				<p>悦府知园</p>
-				<button type="button" class="layui-btn layui-btn-primary summary-btn">视频预览</button>
-			</div>
-		</div>
-		<div class="region-list layui-row layui-col-space12">
-			<div class="layui-col-md6 region-img">
-				<img src="http://fgj.chifeng.gov.cn:180/file/group1/M00/00/12/CgoMAV0YEBmAer0WAAfGgHi_jNY116_400x300.jpg">
-			</div>
-			<div class="region-info layui-col-md6">
-				<p>悦府和园</p>
-				<button type="button" class="layui-btn layui-btn-primary summary-btn">视频预览</button>
+				<p th:text="${region.regionName}"></p>
+				<button type="button" class="layui-btn layui-btn-primary summary-btn" th:if="${region.hasVideo==1}">视频预览</button>
+				<button type="button" class="layui-btn layui-btn-primary layui-btn-disabled" th:if="${region.hasVideo==0}">未开通</button>
 			</div>
 		</div>
 	</div>
@@ -218,16 +199,122 @@
 <script th:src="@{/layui/layui.js}"></script>
 <script th:src="@{/js/jsencrypt.min.js}"></script>
 <script th:src="@{/js/jsWebControl-1.0.0.min.js}"></script>
-<script th:inline="javascript">
-	var ctxPath = /*[[@{/}]]*/'';
-	layui.use(['layer', 'table'], function () {
-		var $ = layui.jquery;
-        var token = [[${token}]];
+<script th:fragment="region-query-script" th:inline="javascript">
+    var ctxPath = /*[[@{/}]]*/'';
 
+    layui.config({
+        base: ctxPath + 'layui/autocomplete/'
+    }).extend({ //设定模块别名
+        autocomplete: 'autocomplete'
+    });
+    layui.use(['layer', 'autocomplete'], function () {
+        var $ = layui.jquery;
+        var autocomplete = layui.autocomplete;
+
+        var token = [[${token}]];
+        var list = [[${data}]];
+
+        //当前预览中的小区Id
+        var regionIdNow;
+        //当前预览中的按钮元素
+        var currBtn;
+        var isLoading = false;
+
+        //搜索下拉菜单选中
+        autocomplete.render({
+            elem: document.getElementById('region-search-input'),
+            url: ctxPath + 'auto-regions',
+            template_val: '{{d.regionName}}',
+            template_txt: '{{d.regionName}} <span class=\'layui-badge layui-bg-gray\'>{{d.address}}</span>',
+            onselect: function (res) {
+				//取消之前选中小区的预览中状态
+                $(".region-list").each(function () {
+                    if ($(this).attr("region-id") == regionIdNow) {
+                        $(this).find('.summary-btn')[0].innerText='视频预览';
+                        $(this).find('.summary-btn').removeClass('curr-button');
+                        return false;
+                    }
+                })
+				//设置当前选中小区的预览中状态
+                regionIdNow = res.regionId;
+                $(".region-list").each(function () {
+                    if ($(this).attr("region-id") == regionIdNow) {
+                        currBtn = $(this).find('.summary-btn');
+                        $(this).find('.summary-btn')[0].innerText='预览中';
+                        $(this).find('.summary-btn').addClass('curr-button');
+                        return false;
+                    }
+                })
+				//预览视频
+                if (oWebControl != null){
+                    oWebControl.JS_Disconnect().then(function(){
+                        $.get(ctxPath + "videoNos/" + regionIdNow, {}, function (data) {
+                            initPlugin(data)
+                        });
+                    }, function() {});
+                }
+            }
+        });
+
+        //初始选出当前正在预览的小区
+        for (var i=0;i<list.length;i++) {
+            if (list[i].hasVideo == 1) {
+                regionIdNow = list[i].regionId;
+                break;
+            }
+        }
+        //初始预览当前小区视频
+        $(document).ready(function () {
+            //设置当前小区的选中状态
+            $(".region-list").each(function () {
+                if ($(this).attr("region-id") == regionIdNow) {
+                    currBtn = $(this).find('.summary-btn');
+                    $(this).find('.summary-btn')[0].innerText='预览中';
+                    // $(this).find('.summary-btn').css({'background-color': '#1e9fff','border': '1px solid #1e9fff','color': '#ffffff'});
+                    $(this).find('.summary-btn').addClass('curr-button');
+                    return false;
+                }
+            })
+            //查询当前小区的监控点编号初始化视频插件并预览视频
+            $.get(ctxPath + "videoNos/" + regionIdNow, {}, function (data) {
+                initPlugin(data)
+            });
+        });
         //跳转到大屏展示页面
         $('.return-btn').on('click', function () {
-            stopPreview();
-            window.location.href = ctxPath + 'console/' + token;
+            stopPreview().then(function () {
+                window.location.href = ctxPath + 'console/' + token;
+            });
+        });
+        //刷新页面
+        $('.refresh-btn').on('click', function () {
+            window.location.reload();
+        });
+
+        //切换小区监控
+        $('.region-list').on('click', function () {
+            //操作还有监控点编号的小区按钮
+            if (!isLoading && $(this).attr("has-video") == 1) {
+                //取消预览中的小区按钮状态
+                regionIdNow = $(this).attr("region-id");
+                currBtn[0].innerText='视频预览';
+                currBtn.removeClass('curr-button');
+
+                //设置当前选中的小区按钮状态
+                currBtn = $(this).find('.summary-btn');
+                $(this).find('.summary-btn')[0].innerText='预览中';
+                $(this).find('.summary-btn').addClass('curr-button');
+
+                //停止预览
+                if (oWebControl != null){
+                    oWebControl.JS_Disconnect().then(function(){
+                        console.log(oWebControl)
+                        $.get(ctxPath + "videoNos/" + regionIdNow, {}, function (data) {
+                            initPlugin(data);
+                        });
+                    }, function() {});
+                }
+            }
         });
 
         var oWebControl = null;// 插件对象
@@ -240,12 +327,13 @@
         var iLastCoverBottom = 0;
         var initCount = 0;
         // 初始化插件
-        function initPlugin () {
+        function initPlugin (data) {
             oWebControl = new WebControl({
                 szPluginContainer: "playWnd",
                 iServicePortStart: 15900,
                 iServicePortEnd: 15909,
                 cbConnectSuccess: function () {
+                    console.log("对象"+oWebControl)
                     setCallbacks();
 
                     //启动服务
@@ -300,6 +388,16 @@
                                     // appkey = setEncrypt(appkey);
                                     // ip = setEncrypt(ip);
 
+                                    //根据监控点数量设置布局
+                                    if (data.length == 1) {
+                                        layout = '1x1';
+                                    } else if (data.length > 1 && data.length <= 4) {
+                                        layout = '2x2';
+                                    } else if (data.length > 4 && data.length <= 9) {
+                                        layout = '3x3';
+                                    } else {
+                                        layout = '4x4';
+                                    }
                                     oWebControl.JS_RequestInterface({
                                         funcName: "init",
                                         argument: JSON.stringify({
@@ -316,9 +414,11 @@
                                         })
                                     }).then(function (oData) {
                                         console.log("初始化布局完成"+JSON.stringify(oData ? oData.responseMsg : ''));
-
-                                        //视频预览
-                                        startPreview();
+                                        loading();
+                                        for (var i = 0; i<data.length; i++) {
+                                            //视频预览
+                                            syncPreview(data, 0);
+                                        }
                                     });
                                 }
                             })
@@ -336,7 +436,7 @@
                     initCount ++;
                     if (initCount < 3) {
                         setTimeout(function () {
-                            initPlugin();
+                            initPlugin(data);
                         }, 3000)
                     } else {
                         $("#playWnd").html("插件启动失败，请检查插件是否安装！");
@@ -349,13 +449,13 @@
             });
         }
 
-        initPlugin();
-
         // 设置窗口控制回调
         function setCallbacks() {
-            oWebControl.JS_SetWindowControlCallback({
-                cbIntegrationCallBack: cbIntegrationCallBack
-            });
+            if (oWebControl) {
+                oWebControl.JS_SetWindowControlCallback({
+                    cbIntegrationCallBack: cbIntegrationCallBack
+                });
+			}
         }
 
         // 推送消息
@@ -429,37 +529,27 @@
             }
         }
         //视频预览
-		function startPreview() {
+        function startPreview(code, index) {
             //监控点编号
-            var cameraIndexCode  = 'a8b95c38fd9445c2b55ab2a007454af5';
+            var cameraIndexCode  = code;
             //主子码流标识，0：主码流，1：子码流
             var streamMode = '0';
             //传输协议，1：TCP,0:UDP
             var transMode = '1';
             //是否启用GPU硬解：0：不启用，1：启用
             var gpuMode = '0';
-            var wndId = -1;  //默认为空闲窗口回放
+            // var wndId = -1;  //默认为空闲窗口回放
+            var wndId = parseInt(index+1, 10);
 
             cameraIndexCode = cameraIndexCode.replace(/(^\s*)/g, "");
             cameraIndexCode = cameraIndexCode.replace(/(\s*$)/g, "");
-
-            //TODO 预览模式
-            var v = 0;
-            if (2 == v)//指定窗口回放
-            {
-                wndId = parseInt('0', 10);
-            }
-            else if (1 == v) //选中窗口回放
-            {
-                wndId = 0;
-            }
 
             if (!cameraIndexCode ) {
                 console.log("监控点编号不能为空！");
                 return
             }
 
-            oWebControl.JS_RequestInterface({
+            return oWebControl.JS_RequestInterface({
                 funcName: "startPreview",
                 argument: JSON.stringify({
                     cameraIndexCode : cameraIndexCode ,
@@ -473,13 +563,47 @@
             });
         }
         //停止预览
-		function stopPreview() {
-            oWebControl.JS_RequestInterface({
+        function stopPreview() {
+            return oWebControl.JS_RequestInterface({
                 funcName: "stopAllPreview"
             }).then(function (oData) {
                 console.log(JSON.stringify(oData ? oData.responseMsg : ''));
             });
         }
-	});
+        //设置布局
+        function setLayout(layout) {
+            oWebControl.JS_RequestInterface({
+                funcName: "setLayout",
+                argument: JSON.stringify({
+                    layout : layout
+                })
+            })
+        }
+        //递归视频预览
+        function syncPreview(data, count) {
+            startPreview(data[count], count).then(function () {
+                count++;
+                if (data.length > count) {
+                    setTimeout(function () {
+                        syncPreview(data, count);
+                    }, 2000)
+                } else {
+                    setTimeout(function () {
+                        loading('hide');
+                    }, 2000)
+                }
+            });
+        }
+        //加载中
+        function loading(hide) {
+            if (!hide) {
+                isLoading = true;
+                $("#video-loading").show();
+            } else {
+                isLoading = false;
+                $("#video-loading").hide();
+            }
+        }
+    });
 </script>
 </body>
