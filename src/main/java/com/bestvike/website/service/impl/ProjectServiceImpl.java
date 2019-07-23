@@ -1,13 +1,7 @@
 package com.bestvike.website.service.impl;
 
-import com.bestvike.website.dao.AppVersionDao;
-import com.bestvike.website.dao.ViewDivisionInfoDao;
-import com.bestvike.website.dao.ViewHouseInfoDao;
-import com.bestvike.website.dao.ViewRegionInfoDao;
-import com.bestvike.website.data.AppVersion;
-import com.bestvike.website.data.ViewDivisionInfo;
-import com.bestvike.website.data.ViewHouseInfo;
-import com.bestvike.website.data.ViewRegionInfo;
+import com.bestvike.website.dao.*;
+import com.bestvike.website.data.*;
 import com.bestvike.website.document.Division;
 import com.bestvike.website.entity.BldCells;
 import com.bestvike.website.entity.BldSales;
@@ -48,6 +42,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import tk.mybatis.mapper.entity.Example;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
@@ -58,6 +53,10 @@ public class ProjectServiceImpl implements ProjectService {
 	private ViewRegionInfoDao viewRegionInfoDao;
 	@Autowired
 	private ViewHouseInfoDao viewHouseInfoDao;
+	@Autowired
+	private ViewBldFloorDao viewBldFloorDao;
+	@Autowired
+	private ViewFloorCellDao viewFloorCellDao;
 	@Autowired
 	private MongoTemplate mongoTemplate;
 	@Autowired
@@ -80,23 +79,72 @@ public class ProjectServiceImpl implements ProjectService {
 	 * @return
 	 */
 	@Override
-	public ViewRegionInfo region(String regionId, String projectId, String bldNo) {
+	public ViewRegionInfo region(String regionId, String projectId, String bldNo, String floorNo) {
 		Map<String, Object> parameters = new HashMap<>();
 		parameters.put("projectId", projectId);
 		parameters.put("bldNo", bldNo);
+		parameters.put("regionId", regionId);
 		BldView bldView = viewHouseInfoDao.selectBldView(parameters);
 		List<Cell> listCell = viewRegionInfoDao.selectBldCells(parameters);
 		bldView.setCells(listCell);
 		// 查询楼栋销售情况
 		BldSales bldSales = viewHouseInfoDao.selectBldSalesData(parameters);
 		bldView.setBldSales(bldSales);
-		if (!StringUtils.isEmpty(bldView.getViewPath())) {
+		//查询楼栋下分层
+		List<ViewBldFloor> bldFloors = viewBldFloorDao.selectBldFloors(parameters);
+		if (bldFloors.size()>0) {
+			String floor2;
+			if (floorNo.equals("null")) {
+				floor2 = bldFloors.get(0).getFloorNo();
+			} else {
+				floor2 = floorNo;
+
+			}
+			parameters.put("floorNo", floor2);
+			List<ViewFloorCell> viewFloorCells = viewFloorCellDao.selectFloorCells(parameters);
+
+			if (viewFloorCells.size() > 0) {
+				// 楼栋下有单元标记，以单元显示房屋，并提供单元选择刷新功能
+				ViewRegionInfo viewRegionInfo = region(regionId, projectId, bldNo,floor2, viewFloorCells.get(0).getCellNo());
+				return viewRegionInfo;
+			} else {
+				ViewRegionInfo viewRegionInfo = viewRegionInfoDao.selectRegion(regionId);
+				viewRegionInfo.setFloorNo(floor2);
+				viewRegionInfo.setCellNo("null");
+				viewRegionInfo.setBldFloors(bldFloors);
+				Map<String, Object> salesMap = viewRegionInfoDao.selectRegionSalesData(regionId);
+				List<Map<String, Object>> salesData = new ArrayList<>();
+				if (null != salesMap) {
+					for (String key : salesMap.keySet()) {
+						Map<String, Object> sales = new HashMap<>();
+						if (null != salesMap.get(key) && ((BigDecimal) salesMap.get(key)).compareTo(BigDecimal.ZERO) > 0) {
+							sales.put("value", salesMap.get(key));
+							sales.put("name", key);
+							salesData.add(sales);
+						}
+					}
+				}
+				viewRegionInfo.setSalesData(salesData);
+				DocFiles docFiles = mongoTemplate.findOne(Query.query(Criteria.
+						where("keyId").is(regionId).
+						and("fileType").is("regionImage").and("docType").is("aerialView")), DocFiles.class);
+				if (docFiles != null) {
+					List<String> regionLogos = new ArrayList<>();
+					for (DocFile docFile : docFiles.getImageList()) {
+						regionLogos.add(docFile.getViewUrl());
+					}
+					viewRegionInfo.setRegionLogos(regionLogos);
+				}
+				return viewRegionInfo;
+			}
+		}
+		/*if (!StringUtils.isEmpty(bldView.getViewPath())) {
 			// 楼栋下有单元标记，以单元显示房屋，并提供单元选择刷新功能
 			Cell cell = listCell.get(0);
 			ViewRegionInfo viewRegionInfo = region(regionId, projectId, bldNo, cell.getCellNo());
 			viewRegionInfo.setCellNo(cell.getCellNo());
 			return viewRegionInfo;
-		}
+		}*/
 		ViewRegionInfo viewRegionInfo = viewRegionInfoDao.selectRegion(regionId);
 
 		Map<String, Object> salesMap = viewRegionInfoDao.selectRegionSalesData(regionId);
@@ -153,7 +201,7 @@ public class ProjectServiceImpl implements ProjectService {
 	 * @return
 	 */
 	@Override
-	public ViewRegionInfo region(String regionId, String projectId, String bldNo, String cellNo) {
+	public ViewRegionInfo region(String regionId, String projectId, String bldNo,String floorNo, String cellNo) {
 		ViewRegionInfo viewRegionInfo = viewRegionInfoDao.selectRegion(regionId);
 		Map<String, Object> salesMap = viewRegionInfoDao.selectRegionSalesData(regionId);
 		List<Map<String, Object>> salesData = new ArrayList<>();
@@ -214,6 +262,7 @@ public class ProjectServiceImpl implements ProjectService {
 			}
 			bldView.setFloors(listFloor);*/
 			// 查询楼栋销售情况
+			parameterMap.put("floorNo", floorNo);
 			parameterMap.put("cellNo", cellNo);
 			BldSales bldSales = viewHouseInfoDao.selectBldSalesData(parameterMap);
 			bldView.setBldSales(bldSales);
@@ -225,6 +274,18 @@ public class ProjectServiceImpl implements ProjectService {
 		if (priceShows.size() > 0) {
 			viewRegionInfo.setPriceShows(priceShows);
 		}
+
+		viewRegionInfo.setFloorNo(floorNo);
+		viewRegionInfo.setCellNo(cellNo);
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put("projectId", projectId);
+		parameters.put("bldNo", bldNo);
+		parameters.put("regionId", regionId);
+		List<ViewBldFloor> bldFloors = viewBldFloorDao.selectBldFloors(parameters);
+		parameters.put("floorNo", floorNo);
+		List<ViewFloorCell> viewFloorCells = viewFloorCellDao.selectFloorCells(parameters);
+		viewRegionInfo.setBldFloors(bldFloors);
+		viewRegionInfo.setViewFloorCells(viewFloorCells);
 		return viewRegionInfo;
 	}
 
@@ -266,17 +327,19 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	@Override
-	public BldView building(String regionId, String projectId, String bldNo, String cellNo) {
+	public BldView building(String regionId, String projectId, String bldNo,String floorNo, String cellNo) {
 		Map<String, Object> parameterMap = new HashMap<>();
 		parameterMap.put("regionId", regionId);
 		parameterMap.put("projectId", projectId);
 		parameterMap.put("bldNo", bldNo);
+		parameterMap.put("floorNo", floorNo);
 		BldView bldView = viewHouseInfoDao.selectBldView(parameterMap);
 
 		List<Cell> listCell = viewRegionInfoDao.selectBldCells(parameterMap);
 		bldView.setCells(listCell);
 		// 查询楼栋单元楼层列表
 		parameterMap.put("cellNo", cellNo);
+		//只有一层
 		List<Floor> listFloor = viewRegionInfoDao.selectBldFloors(parameterMap);
 		for (Floor floor : listFloor) {
 			// 查询楼层单元信息

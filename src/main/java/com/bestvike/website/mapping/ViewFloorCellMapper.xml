@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "com.bestvike.website.dao.ViewFloorCellDao">
+	<select id="selectFloorCells" parameterType="map" resultType="ViewFloorCell">
+		<![CDATA[
+			SELECT T.*,
+			   CASE
+				 WHEN T.X IS NOT NULL AND T.X != 0 THEN
+				  'top:' || ROUND(T.Y * 100) || '%;left:' || ROUND(T.X * 100) || '%'
+				 ELSE
+				  ''
+			   END AS LOCATION,
+			   case when  instr(T.cell_no, 'B') > 0 then T.cell_no
+					when instr(T.bld_no, '地下') > 0 THEN 'B' || T.cell_no ELSE T.cell_no || '单元' END cell_name
+		  FROM VIEW_FLOORCELL T
+		 WHERE T.REGION_ID = #{regionId}
+		   AND T.PROJECT_ID = #{projectId}
+		   and t.bld_no = #{bldNo}
+		   AND T.FLOOR_NO = #{floorNo}
+		   order by t.cell_no
+		]]>
+	</select>
+</mapper>

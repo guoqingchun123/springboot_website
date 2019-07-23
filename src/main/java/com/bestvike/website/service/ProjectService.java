@@ -17,13 +17,13 @@ public interface ProjectService {
 
 	public ViewRegionInfo region(String regionId);
 
-	public ViewRegionInfo region(String regionId, String projectId, String bldNo);
+	public ViewRegionInfo region(String regionId, String projectId, String bldNo, String floorNo);
 
-	public ViewRegionInfo region(String regionId, String projectId, String bldNo, String cellNo);
+	public ViewRegionInfo region(String regionId, String projectId, String bldNo, String floorNo, String cellNo);
 
 	public BldView building(String regionId, String projectId, String bldNo);
 
-	public BldView building(String regionId, String projectId, String bldNo, String cellNo);
+	public BldView building(String regionId, String projectId, String bldNo,String floorNo, String cellNo);
 
 	public ViewRegionInfo region(String regionId, String viewType);
 

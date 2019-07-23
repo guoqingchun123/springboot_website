@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "com.bestvike.website.dao.ViewBldFloorDao">
+	<select id="selectBldFloors" parameterType="map" resultType="ViewBldFloor">
+		<![CDATA[
+			SELECT T.*
+			  FROM VIEW_BLDFLOOR T
+			 WHERE T.REGION_ID = #{regionId}
+			   AND T.PROJECT_ID =#{projectId}
+			   AND T.BLD_NO = #{bldNo}
+			 ORDER BY CASE
+						WHEN REGEXP_REPLACE(FLOOR_NO, '^[-\+]?\d+(\.\d+)?$', '') IS NOT NULL THEN
+						 9999
+						ELSE
+						 TO_NUMBER(FLOOR_NO)
+					  END DESC
+		]]>
+	</select>
+</mapper>

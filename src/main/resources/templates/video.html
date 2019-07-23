@@ -16,6 +16,10 @@
 			overflow: hidden;
 		}
 
+		.playWnd {
+			margin: 20px;
+		}
+
 		.header {
 			height: 80px;
 			background-color: #ffffff;
@@ -181,7 +185,7 @@
 </div>
 <div id="content" class="content layui-row layui-col-space20">
 	<div class="layui-col-md8 container video-preview">
-		<div id="playWnd" class="playWnd" style="height: 100%;width: 100%"></div>
+		<div id="playWnd" class="playWnd" style=""></div>
 	</div>
 	<div id="content-right" class="layui-col-md4">
 		<div class="region-list layui-row layui-col-space12" th:each="region:${data}" th:region-id="${region.regionId}" th:has-video="${region.hasVideo}">
@@ -263,8 +267,17 @@
                 break;
             }
         }
+
+        function initLayout() {
+            //获取高度兼容IE8 window.innerHeight
+            var height=window.innerHeight||Math.max(document.documentElement.clientHeight, document.body.clientHeight);
+            var width=window.innerWidth||Math.max(document.documentElement.clientWidth, document.body.clientWidth);
+            document.getElementById('playWnd').style.height = Math.round(height * 0.85) + 'px';
+            document.getElementById('playWnd').style.width = Math.round(width * 0.60) + 'px';
+        }
         //初始预览当前小区视频
         $(document).ready(function () {
+            initLayout();
             //设置当前小区的选中状态
             $(".region-list").each(function () {
                 if ($(this).attr("region-id") == regionIdNow) {
@@ -341,8 +354,10 @@
                         dllPath: "./VideoPluginConnect.dll"
                         //dllPath: "./DllForTest-Win32.dll"
                     }).then(function () {
+                        var height=window.innerHeight||Math.max(document.documentElement.clientHeight, document.body.clientHeight);
+                        var width=window.innerWidth||Math.max(document.documentElement.clientWidth, document.body.clientWidth);
                         //创建视频播放窗口
-                        oWebControl.JS_CreateWnd("playWnd", 1200, 800).then(function () {
+                        oWebControl.JS_CreateWnd("playWnd", Math.round(width * 0.60), Math.round(height * 0.85)).then(function () {
                             console.log("JS_CreateWnd success");
                             //初始化
                             oWebControl.JS_RequestInterface({
@@ -479,7 +494,7 @@
         // 窗口resize
         $(window).resize(function () {
             if (oWebControl != null) {
-                oWebControl.JS_Resize($(window).width()*0.62, $(window).height()*0.84);
+                oWebControl.JS_Resize(Math.round($(window).width()*0.60), Math.round($(window).height()*0.85));
                 // setWndCover();
             }
         });
@@ -487,7 +502,7 @@
         // 滚动条scroll
         $(window).scroll(function () {
             if (oWebControl != null) {
-                oWebControl.JS_Resize($(window).width()*0.62, $(window).height()*0.84);
+                oWebControl.JS_Resize(Math.round($(window).width()*0.60), Math.round($(window).height()*0.85));
                 // setWndCover();
             }
         });
@@ -502,10 +517,10 @@
             var iCoverRight = (oDivRect.right - iWidth > 0) ? Math.round(oDivRect.right - iWidth) : 0;
             var iCoverBottom = (oDivRect.bottom - iHeight > 0) ? Math.round(oDivRect.bottom - iHeight) : 0;
 
-            iCoverLeft = (iCoverLeft > 1200) ? 1200 : iCoverLeft;
-            iCoverTop = (iCoverTop > 800) ? 800 : iCoverTop;
-            iCoverRight = (iCoverRight > 1200) ? 1200 : iCoverRight;
-            iCoverBottom = (iCoverBottom > 800) ? 800 : iCoverBottom;
+            iCoverLeft = (iCoverLeft > Math.round(iWidth*0.6)) ? Math.round(iWidth*0.6) : iCoverLeft;
+            iCoverTop = (iCoverTop > Math.round(iHeight * 0.85)) ? Math.round(iHeight * 0.85) : iCoverTop;
+            iCoverRight = (iCoverRight > Math.round(iWidth*0.6)) ? Math.round(iWidth*0.6) : iCoverRight;
+            iCoverBottom = (iCoverBottom > Math.round(iHeight * 0.85)) ? Math.round(iHeight * 0.85) : iCoverBottom;
 
             if (iLastCoverLeft != iCoverLeft) {
                 console.log("iCoverLeft: " + iCoverLeft);

@@ -200,6 +200,9 @@
 				case when instr(floor_name, '层') > 0 THEN floor_name else floor_name || '层' end as floor_name
 			FROM view_houseinfo WHERE project_id = #{projectId} AND bld_no = #{bldNo}
 		]]>
+		<if test = "floorNo != null">
+			AND floor_no = #{floorNo}
+		</if>
 		<if test = "cellNo != null">
 			AND cell_name = #{cellNo}
 		</if>

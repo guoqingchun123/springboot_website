@@ -11,7 +11,7 @@
 		#region-layout {
 			overflow: hidden;
 		}
-		
+
 		#region-layout.layui-carousel[lay-anim=updown] .layui-carousel-ind {
 			left: 20px;
 			right: auto;
@@ -406,11 +406,12 @@
 		var regionId = [[${regionId}]];
 		var projectId = [[${projectId}]];
 		var bldNo = [[${bldNo}]];
+        var floorNo = [[${floorNo}]];
 		var cellNo = [[${cellNo}]];
 
 		// encodeURIComponent
-		if (projectId && bldNo && cellNo) {
-			$('#building-loader').load(ctxPath + 'building/' + regionId + '/' + projectId + '/' + encodeURIComponent(bldNo) + '/' + cellNo, function () {
+		if (projectId && bldNo && floorNo && cellNo) {
+			$('#building-loader').load(ctxPath + 'building/' + regionId + '/' + projectId + '/' + encodeURIComponent(bldNo) + '/' + floorNo + '/' + cellNo, function () {
 				loading('hide');
 			});
 		} else if (projectId && bldNo) {
@@ -453,7 +454,7 @@
 			var bldNo = $(this).attr('data-bld-no');
 
 			loading();
-			window.location.replace(ctxPath + 'sales/' + [[${region.regionId}]] + '/' + projectId + '/' + encodeURIComponent(bldNo));
+			window.location.replace(ctxPath + 'sales/' + [[${region.regionId}]] + '/' + projectId + '/' + encodeURIComponent(bldNo)+'/'+'null');
 
 			// $(".navigator-map,.navigator-list").removeClass("building-selected");
 			// $(this).addClass("building-selected");
@@ -464,8 +465,13 @@
 			var cellNo = $(this).attr('data-cell-no');
 
 			loading();
-			window.location.replace(ctxPath + 'sales/' + [[${region.regionId}]] + '/' + projectId + '/' + encodeURIComponent(bldNo) + '/' + encodeURIComponent(cellNo));
+			window.location.replace(ctxPath + 'sales/' + [[${region.regionId}]] + '/' + projectId + '/' + encodeURIComponent(bldNo) + '/' + floorNo + '/' + encodeURIComponent(cellNo));
 		});
+		$(".floor-no").on('click', function () {
+            var floor = $(this).attr('data-floor-no');
+            loading();
+            window.location.replace(ctxPath + 'sales/' + regionId + '/' + projectId + '/' + encodeURIComponent(bldNo)+'/'+floor);
+        });
 
 		$('.return-to').on('click', function () {
 			loading();

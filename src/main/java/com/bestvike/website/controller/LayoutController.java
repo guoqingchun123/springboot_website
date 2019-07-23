@@ -89,13 +89,16 @@ public class LayoutController extends BaseController {
 		return mv;
 	}
 
-	@GetMapping(value = "/sales/{regionId}/{projectId}/{bldNo}")
-	public ModelAndView content(@PathVariable String regionId, @PathVariable String projectId, @PathVariable String bldNo) {
+	@GetMapping(value = "/sales/{regionId}/{projectId}/{bldNo}/{floorNo}")
+	public ModelAndView content(@PathVariable String regionId, @PathVariable String projectId, @PathVariable String bldNo, @PathVariable String floorNo) {
 		ModelAndView mv = new ModelAndView();
-		ViewRegionInfo viewRegionInfo = projectService.region(regionId, projectId, bldNo);
+		ViewRegionInfo viewRegionInfo = projectService.region(regionId, projectId, bldNo, floorNo);
 		mv.addObject("region", viewRegionInfo);
 		mv.addObject("projectId", projectId);
 		mv.addObject("bldNo", bldNo);
+		if (!StringUtils.isEmpty(viewRegionInfo.getFloorNo())) {
+			mv.addObject("floorNo", viewRegionInfo.getFloorNo());
+		}
 		if (!StringUtils.isEmpty(viewRegionInfo.getCellNo())) {
 			mv.addObject("cellNo", viewRegionInfo.getCellNo());
 		}
@@ -103,13 +106,14 @@ public class LayoutController extends BaseController {
 		return mv;
 	}
 
-	@GetMapping(value = "/sales/{regionId}/{projectId}/{bldNo}/{cellNo}")
-	public ModelAndView content(@PathVariable String regionId, @PathVariable String projectId, @PathVariable String bldNo, @PathVariable String cellNo) {
+	@GetMapping(value = "/sales/{regionId}/{projectId}/{bldNo}/{floorNo}/{cellNo}")
+	public ModelAndView content(@PathVariable String regionId, @PathVariable String projectId, @PathVariable String bldNo, @PathVariable String floorNo, @PathVariable String cellNo) {
 		ModelAndView mv = new ModelAndView();
-		ViewRegionInfo viewRegionInfo = projectService.region(regionId, projectId, bldNo, cellNo);
+		ViewRegionInfo viewRegionInfo = projectService.region(regionId, projectId, bldNo, floorNo, cellNo);
 		mv.addObject("region", viewRegionInfo);
 		mv.addObject("projectId", projectId);
 		mv.addObject("bldNo", bldNo);
+		mv.addObject("floorNo", floorNo);
 		mv.addObject("cellNo", cellNo);
 		mv.setViewName("sales");
 		return mv;
@@ -124,10 +128,10 @@ public class LayoutController extends BaseController {
 		return mv;
 	}
 
-	@GetMapping(value = "/building/{regionId}/{projectId}/{bldNo}/{cellNo}")
-	public ModelAndView contentCell(@PathVariable String regionId, @PathVariable String projectId, @PathVariable String bldNo, @PathVariable String cellNo) {
+	@GetMapping(value = "/building/{regionId}/{projectId}/{bldNo}/{floorNo}/{cellNo}")
+	public ModelAndView contentCell(@PathVariable String regionId, @PathVariable String projectId, @PathVariable String bldNo, @PathVariable String floorNo, @PathVariable String cellNo) {
 		ModelAndView mv = new ModelAndView();
-		BldView bldView = projectService.building(regionId, projectId, bldNo, cellNo);
+		BldView bldView = projectService.building(regionId, projectId, bldNo, floorNo, cellNo);
 		mv.addObject("building", bldView);
 		mv.setViewName("fragments/sales :: building");
 		return mv;

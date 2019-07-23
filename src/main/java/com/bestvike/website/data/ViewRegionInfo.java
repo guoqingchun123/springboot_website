@@ -73,7 +73,13 @@ public class ViewRegionInfo implements Serializable {
 	@Transient
 	private BldView bldView;
 	@Transient
+	private String floorNo;
+	@Transient
 	private String cellNo;
+	@Transient
+	private List<ViewBldFloor> bldFloors;
+	@Transient
+	private List<ViewFloorCell> viewFloorCells;
 	@Transient
 	private List<PriceShow> priceShows;
 	@Transient
@@ -141,6 +147,22 @@ public class ViewRegionInfo implements Serializable {
 
 	public BigDecimal getX() {
 		return x;
+	}
+
+	public List<ViewBldFloor> getBldFloors() {
+		return bldFloors;
+	}
+
+	public void setBldFloors(List<ViewBldFloor> bldFloors) {
+		this.bldFloors = bldFloors;
+	}
+
+	public List<ViewFloorCell> getViewFloorCells() {
+		return viewFloorCells;
+	}
+
+	public void setViewFloorCells(List<ViewFloorCell> viewFloorCells) {
+		this.viewFloorCells = viewFloorCells;
 	}
 
 	public void setX(BigDecimal x) {
@@ -393,6 +415,14 @@ public class ViewRegionInfo implements Serializable {
 
 	public void setBusinessCollects(RegionHouseSale businessCollects) {
 		this.businessCollects = businessCollects;
+	}
+
+	public String getFloorNo() {
+		return floorNo;
+	}
+
+	public void setFloorNo(String floorNo) {
+		this.floorNo = floorNo;
 	}
 
 	public List<HouseHoldSale> getMating() {

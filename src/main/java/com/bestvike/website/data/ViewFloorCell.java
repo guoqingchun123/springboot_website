@@ -26,10 +26,13 @@ public class ViewFloorCell implements Serializable {
 
 	@Transient
 	private String cellName;
+	@Transient
+	private String location;
 
 	public String getCellId() {
 		return cellId;
 	}
+
 
 	public void setCellId(String cellId) {
 		this.cellId = cellId;
@@ -105,5 +108,13 @@ public class ViewFloorCell implements Serializable {
 
 	public void setCellName(String cellName) {
 		this.cellName = cellName;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
 	}
 }
