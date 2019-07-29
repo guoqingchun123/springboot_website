@@ -428,7 +428,7 @@
 			SELECT T.REGION_ID,
 			   T.REGION_NAME,
 			   T.LOGO_PATH,
-			   DECODE(T.VIDEO_NO, NULL, 0, '', 0, 1) AS has_video
+			   DECODE(to_char(T.VIDEO_NO), NULL, 0, '', 0, 1) AS has_video
 		  FROM VIEW_REGIONINFO T
 		]]>
 	</select>

@@ -289,9 +289,11 @@
                 }
             })
             //查询当前小区的监控点编号初始化视频插件并预览视频
-            $.get(ctxPath + "videoNos/" + regionIdNow, {}, function (data) {
-                initPlugin(data)
-            });
+			if (regionIdNow) {
+                $.get(ctxPath + "videoNos/" + regionIdNow, {}, function (data) {
+                    initPlugin(data)
+                });
+			}
         });
         //跳转到大屏展示页面
         $('.return-btn').on('click', function () {
