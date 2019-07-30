@@ -323,7 +323,6 @@
                 //停止预览
                 if (oWebControl != null){
                     oWebControl.JS_Disconnect().then(function(){
-                        console.log(oWebControl)
                         $.get(ctxPath + "videoNos/" + regionIdNow, {}, function (data) {
                             initPlugin(data);
                         });
