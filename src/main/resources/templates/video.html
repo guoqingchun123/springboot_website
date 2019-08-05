@@ -297,9 +297,13 @@
         });
         //跳转到大屏展示页面
         $('.return-btn').on('click', function () {
-            stopPreview().then(function () {
+            if(regionIdNow) {
+                stopPreview().then(function () {
+                    window.location.href = ctxPath + 'console/' + token;
+                });
+			} else {
                 window.location.href = ctxPath + 'console/' + token;
-            });
+			}
         });
         //刷新页面
         $('.refresh-btn').on('click', function () {
