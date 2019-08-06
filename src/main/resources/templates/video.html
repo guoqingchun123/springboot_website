@@ -297,7 +297,7 @@
         });
         //跳转到大屏展示页面
         $('.return-btn').on('click', function () {
-            if(regionIdNow) {
+            if(regionIdNow && oWebControl) {
                 stopPreview().then(function () {
                     window.location.href = ctxPath + 'console/' + token;
                 });
