@@ -150,6 +150,12 @@
 			border: 1px solid #1e9fff;
 			color: #ffffff;
 		}
+
+		a:link {
+			color: #1E9FFF;
+			text-decoration: underline;
+			!important;
+		}
 	</style>
 </head>
 <body>
@@ -374,8 +380,8 @@
                                 if (oData.responseMsg.data) {
                                     pubKey = oData.responseMsg.data
 
-                                    var appkey = '24067695';
-                                    var secret = 'ItmUAPnCPPWqlQRTykYk';
+                                    var appkey = '22960396';//内网24067695
+                                    var secret = '5JWTaSovMCxkUjQSC8dI';//内网ItmUAPnCPPWqlQRTykYk
                                     var ip = '222.74.69.146'; //平台IP地址
                                     var szPort = '1443'; //平台端口
                                     var snapDir = 'D:\\SnapDir'; //抓图存储路径
@@ -451,7 +457,7 @@
                 cbConnectError: function () {
                     // console.log("cbConnectError");
                     oWebControl = null;
-                    $("#playWnd").html("插件未启动，正在尝试启动，请稍候...");
+                    $("#playWnd").html("<p style='font-size: 18px'>插件未启动，正在尝试启动，请稍候...</p>");
                     WebControl.JS_WakeUp("VideoWebPlugin://");
                     initCount ++;
                     if (initCount < 3) {
@@ -459,7 +465,7 @@
                             initPlugin(data);
                         }, 3000)
                     } else {
-                        $("#playWnd").html("插件启动失败，请检查插件是否安装！");
+                        $("#playWnd").html("<p style='font-size: 18px'>插件启动失败，请<a href='http://fgj.chifeng.gov.cn:180/videoPlugin/video.exe'>下载插件</a>安装！</p>");
                     }
                 },
                 cbConnectClose: function () {
