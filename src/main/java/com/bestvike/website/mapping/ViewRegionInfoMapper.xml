@@ -152,10 +152,10 @@
 				SELECT 1 FROM view_regbld WHERE region_id = #{regionId} AND project_id = t.project_id
 			)
 		]]>
-		<if test="houseShow != null">
+		<if test = "houseShow != null">
 			AND EXISTS (
-				SELECT 1 FROM view_houseinfo WHERE bld_no = t.bld_no AND project_id = t.project_id
-				AND case when instr(house_use, '住宅') > 0 THEN house_hold else house_use END = #{houseShow}
+			SELECT 1 FROM view_houseinfo WHERE bld_no = t.bld_no AND project_id = t.project_id
+			AND case when instr(house_use, '住宅') > 0 THEN house_hold else house_use END = #{houseShow}
 			)
 		</if>
 		<![CDATA[
@@ -184,7 +184,7 @@
 		<if test = "cellNo != null">
 			AND t1.cell_name = #{cellNo}
 		</if>
-		<if test="houseShow != null">
+		<if test = "houseShow != null">
 			AND case when instr(t1.house_use, '住宅') > 0 THEN t1.house_hold else t1.house_use END = #{houseShow}
 		</if>
 		<![CDATA[
@@ -362,7 +362,7 @@
 		]]>
 	</select>
 
-	<select id = "selectMonthStocks" resultType="map">
+	<select id = "selectMonthStocks" resultType = "map">
 		<![CDATA[
 			SELECT data_month "月份", total_stock_area "商品房", residence_stock_area "住宅",
 			business_stock_area "商业", mating_stock_area "配套"
@@ -372,7 +372,7 @@
 		]]>
 	</select>
 
-	<select id = "selectLatest" resultType="com.bestvike.website.entity.Lastest">
+	<select id = "selectLatest" resultType = "com.bestvike.website.entity.Lastest">
 		<![CDATA[
 			SELECT
 				SUM(CASE WHEN instr(house_use, '住宅') > 0 THEN 1 ELSE 0 END) residence_num,
@@ -389,7 +389,7 @@
 		]]>
 	</select>
 
-	<select id = "selectRegionTrade" resultType="com.bestvike.website.entity.RegionTrade">
+	<select id = "selectRegionTrade" resultType = "com.bestvike.website.entity.RegionTrade">
 		<![CDATA[
 			SELECT t1.region_name, t4.division_name, t1.region_id, t1.x, t1.y,
 			sum(case when nvl(t3.sign_date, '0000-01-01') >= to_char(TRUNC(sysdate - 30), 'yyyy-mm-dd') then 1 else 0 end) trade_num,
@@ -399,18 +399,18 @@
 			<when test = "dataType != null and dataType == 'business'">
 				SUM(case when nvl(t3.sign_date, '0000-01-01') >= to_char(TRUNC(sysdate - 30), 'yyyy-mm-dd')
 				AND instr(t3.house_use, '商业') > 0 then 1 else 0 end) || '/' ||
-					SUM(case when nvl(t3.sign_date, '0000-01-01') >= to_char(TRUNC(sysdate - 30), 'yyyy-mm-dd')
-						AND instr(t3.house_use, '商业') > 0 then t3.construct_area else 0 end) as sales,
+				SUM(case when nvl(t3.sign_date, '0000-01-01') >= to_char(TRUNC(sysdate - 30), 'yyyy-mm-dd')
+				AND instr(t3.house_use, '商业') > 0 then t3.construct_area else 0 end) as sales,
 				round(sum(case when t3.house_use like '商业' then t3.presell_amount else 0 end)
-					/ sum(case when t3.house_use like '商业' then t3.construct_area else 0.00001 end), 2) as avg_price
+				/ sum(case when t3.house_use like '商业' then t3.construct_area else 0.00001 end), 2) as avg_price
 			</when>
 			<otherwise>
 				SUM(case when nvl(t3.sign_date, '0000-01-01') >= to_char(TRUNC(sysdate - 30), 'yyyy-mm-dd')
 				AND instr(t3.house_use, '住宅') > 0 then 1 else 0 end) || '/' ||
-					SUM(case when nvl(t3.sign_date, '0000-01-01') >= to_char(TRUNC(sysdate - 30), 'yyyy-mm-dd')
-						AND instr(t3.house_use, '住宅') > 0 then t3.construct_area else 0 end) as sales,
+				SUM(case when nvl(t3.sign_date, '0000-01-01') >= to_char(TRUNC(sysdate - 30), 'yyyy-mm-dd')
+				AND instr(t3.house_use, '住宅') > 0 then t3.construct_area else 0 end) as sales,
 				round(sum(case when t3.house_use like '住宅' then t3.presell_amount else 0 end)
-					/ sum(case when t3.house_use like '住宅' then t3.construct_area else 0.00001 end), 2) as avg_price
+				/ sum(case when t3.house_use like '住宅' then t3.construct_area else 0.00001 end), 2) as avg_price
 			</otherwise>
 		</choose>
 		<![CDATA[
@@ -420,10 +420,19 @@
 			left JOIN view_divisioninfo t4 on t1.division_code = t4.division_code
 			WHERE t1.state = '0000'
 			group by t1.region_name, t4.division_name, t1.region_id, t1.x, t1.y
-			order by sum(case when nvl(t3.sign_date, '0000-01-01') >= to_char(TRUNC(sysdate - 30), 'yyyy-mm-dd') then t3.construct_area else 0 end) desc
 		]]>
+		<choose>
+			<when test = "dataType != null and dataType == 'business'">
+				order by SUM(case when nvl(t3.sign_date, '0000-01-01') >= to_char(TRUNC(sysdate - 30), 'yyyy-mm-dd')
+					AND instr(t3.house_use, '商业') > 0 then t3.construct_area else 0 end) desc
+			</when>
+			<otherwise>
+				order by SUM(case when nvl(t3.sign_date, '0000-01-01') >= to_char(TRUNC(sysdate - 30), 'yyyy-mm-dd')
+				AND instr(t3.house_use, '住宅') > 0 then t3.construct_area else 0 end) desc
+			</otherwise>
+		</choose>
 	</select>
-	<select id="selectInitVideo" resultType="ViewRegionInfo">
+	<select id = "selectInitVideo" resultType = "ViewRegionInfo">
 		<![CDATA[
 			SELECT T.REGION_ID,
 			   T.REGION_NAME,
