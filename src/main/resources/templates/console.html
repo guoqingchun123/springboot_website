@@ -628,6 +628,9 @@
 			//标注选中样式
 			obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
 
+			//跳转到小区详情页面
+            window.open(ctxPath + 'sales/' + data.regionId);
+
 			// window.location.replace(ctxPath + 'content/' + data.regionId);
 		});
 
@@ -646,8 +649,10 @@
 					var geoCoord = geoCoordMap[data[i].regionName];
 					if (geoCoord) {
 						res.push({
+                            id: data[i].regionId,
 							name: data[i].regionName,
-							value: geoCoord.concat(data[i].tradeNum)
+							// value: geoCoord.concat(data[i].tradeNum)//套数
+							value: geoCoord.concat(data[i].avgPrice)//已售均价
 						});
 					}
 				}
@@ -685,7 +690,8 @@
 				},
 				visualMap: {
 					min: 0,
-					max: 500,
+					// max: 500,
+					max: 12500,
 					text: ['High', 'Low'],
 					realtime: false,
 					calculable: true,
@@ -698,7 +704,7 @@
 					map: 'maps',
 					label: {
 						normal: {
-							show: false
+							show: true
 						},
 						emphasis: {
 							show: false,
@@ -764,6 +770,12 @@
 				]
 			};
 			mapChart.setOption(option);
+            mapChart.on('click', function (param) {
+                if (param.componentType && param.componentType == 'series') {
+                    //跳转到小区详情页面
+                    window.open(ctxPath + 'sales/' + param.data.id);
+                }
+            });
 		});
 
 		$(window).resize(function () {
