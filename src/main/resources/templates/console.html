@@ -387,7 +387,9 @@
 			legend: {
 				y: 'top'
 			},
-			tooltip: {},
+			tooltip: {
+                trigger: 'axis'
+			},
 			dataset: {
 				dimensions: ['月份', '商品房(供给)', '商品房(销售)', '住宅(供给)', '住宅(销售)'],
 				source: [[${data.monthArea}]]
@@ -453,7 +455,13 @@
 			series: [
 				{
 					type: 'line',
-					smooth: false
+					smooth: false,
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'top'
+                        }
+                    }
 				}, {
 					type: 'line',
 					smooth: false
