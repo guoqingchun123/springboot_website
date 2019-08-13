@@ -727,10 +727,17 @@
                     fillOpacity: 0.4,
                     fillColor: radomColor(),
                     zIndex: 50,
+                    regionId: regions[i].regionId,
+                    regionName: regions[i].regionName
                 });
                 regionMap.add(polygon);
                 polygonList.push(polygon);
-
+                polygon.on('click', function (e) {
+                    if (e && e.target && e.target.B) {
+                        //跳转到小区详情页面
+                        window.open(ctxPath + 'sales/' + e.target.B.regionId);
+                    }
+                });
                 var markerContent =
                     '<div class="region" id="' + regions[i].regionId + 'Div">'
                     + '<p class="region-text">' + regions[i].regionName + '</p>'
@@ -812,9 +819,17 @@
                                     // fillColor: _that.colors[Math.floor(Math.random()*10)],
                                     fillColor: radomColor(),
                                     zIndex: 50,
+                                    regionId: regions[i].regionId,
+                                    regionName: regions[i].regionName
                                 });
                                 regionMap.add(polygon);
                                 polygonList.push(polygon);
+                                polygon.on('click', function (e) {
+                                    if (e && e.target && e.target.B) {
+                                        //跳转到小区详情页面
+                                        window.open(ctxPath + 'sales/' + e.target.B.regionId);
+                                    }
+                                });
 
                                 var markerContent =
                                     '<div class="region" id="' + regions[i].regionId + 'Div">'
@@ -938,9 +953,17 @@
                                 // fillColor: _that.colors[Math.floor(Math.random()*10)],
                                 fillColor: radomColor(),
                                 zIndex: 50,
+                                regionId: regions[i].regionId,
+                                regionName: regions[i].regionName
                             });
                             regionMap.add(polygon);
                             polygonList.push(polygon);
+                            polygon.on('click', function (e) {
+                                if (e && e.target && e.target.B) {
+                                    //跳转到小区详情页面
+                                    window.open(ctxPath + 'sales/' + e.target.B.regionId);
+                                }
+                            });
 
                             var markerContent =
                                 '<div class="region" id="' + regions[i].regionId + 'Div">'
