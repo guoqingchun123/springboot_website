@@ -31,6 +31,7 @@ public class ViewRegionInfo implements Serializable {
 	private String viewPath;
 	private String houseHolds;
 	private String videoNo;
+	private String lnglats;
 
 	@Transient
 	private String houseNum;
@@ -455,5 +456,13 @@ public class ViewRegionInfo implements Serializable {
 
 	public void setHasVideo(int hasVideo) {
 		this.hasVideo = hasVideo;
+	}
+
+	public String getLnglats() {
+		return lnglats;
+	}
+
+	public void setLnglats(String lnglats) {
+		this.lnglats = lnglats;
 	}
 }

@@ -7,8 +7,12 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 	<title>赤峰市房产信息网</title>
 	<link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
+	<link th:href="@{/layui/css/maps.css}" rel="stylesheet" type="text/css">
 	<link th:href="@{/layui/css/layui.css}" rel="stylesheet" type="text/css">
 	<script th:src="@{/js/respond.min.js}"></script>
+	<script type="text/javascript"
+			src="https://webapi.amap.com/maps?v=1.4.14&key=8493be8a99d103cbed76edb91479bf7f&plugin=AMap.ToolBar,AMap.DistrictSearch,AMap.MouseTool"></script>
+	<script type="text/javascript" src="https://webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
 	<style>
 		body {
 			background-color: #F2F2F2;
@@ -159,6 +163,24 @@
 		.layui-table thead tr {
 			background-color: #eceff2;
 			color: #333333;
+		}
+
+		.visual-map {
+			position: absolute;
+			bottom: 20px;
+			left: 15px;
+			z-index: 999;
+			background: white;
+		}
+
+		.visual-map .price-avg-checkbox {
+			margin-left: 10px;
+			min-height: 36px;
+		}
+
+		.visual-map .price-avg-btn {
+			text-align: center;
+			min-height: 36px;
 		}
 	</style>
 </head>
@@ -314,9 +336,39 @@
 			</div>
 		</div>
 		<div class="layui-card-body" style="height: 95%;">
-			<div id="content-map" style="height: 100%;"></div>
+			<div id="content-map" style="height: 100%;">
+				<div class="visual-map">
+					<form class="layui-form">
+						<div class="layui-form-item">
+							<div class="price-avg-checkbox">
+								<input type="checkbox" name="checkAll" value="0" title="全选" lay-skin="primary" checked>
+							</div>
+							<div class="price-avg-checkbox">
+								<input type="checkbox" name="checks" value="1" title="0～2500" lay-skin="primary" checked>
+							</div>
+							<div class="price-avg-checkbox">
+								<input type="checkbox" name="checks" value="2" title="2500～5000" lay-skin="primary" checked>
+							</div>
+							<div class="price-avg-checkbox">
+								<input type="checkbox" name="checks" value="3" title="5000～7500" lay-skin="primary" checked>
+							</div>
+							<div class="price-avg-checkbox">
+								<input type="checkbox" name="checks" value="4" title="7500～10000" lay-skin="primary" checked>
+							</div>
+							<div class="price-avg-checkbox">
+								<input type="checkbox" name="checks" value="5" title="10000～12500" lay-skin="primary" checked>
+							</div>
+							<div class="price-avg-checkbox">
+								<input type="checkbox" name="checks" value="6" title="≥12500" lay-skin="primary" checked>
+							</div>
+							<!--<div class="price-avg-btn">
+                                <button type="button" class="layui-btn layui-btn-sm">&nbsp;&nbsp;确定&nbsp;&nbsp;</button>
+                            </div>-->
+						</div>
+					</form>
+				</div>
+			</div>
 		</div>
-	
 	</div>
 	<div id="content-right" class="layui-col-md4">
 		<div class="chart-stock container layui-card">
@@ -356,6 +408,7 @@
 	var ctxPath = /*[[@{/}]]*/'';
 	layui.use(['layer', 'table'], function () {
 		var $ = layui.jquery;
+        var form = layui.form;
 		var token = [[${token}]];
 		//跳转到视频直播页面
         $('.video-btn').on('click', function () {
@@ -635,7 +688,309 @@
 		});
 
 		//// 地图
-		var mapChart = echarts.init(document.getElementById('content-map'), 'macarons');
+        var polygonList = [];
+        var regions = [[${data.regionTrades}]];
+
+        //初始化加载地图
+        var regionMap = new AMap.Map('content-map', {
+            center: [118.916202, 42.271235], //初始地图中心点
+            resizeEnable: true, //是否监控地图容器尺寸变化
+            zoom: 15,
+            zooms: [10, 18]
+        });
+        function radomColor(){
+            var color = "#";
+            for( var i = 0; i < 6; i++ ){
+                color += ( Math.random()*16 | 0 ).toString(16);
+            }
+            return color;
+        };
+        //显示小区范围
+        if (regions && regions.length >0){
+            for (var i = 0; i < regions.length; i++) {
+                var lnglatList = [];
+                if (regions[i].lnglats == null){
+                    continue;
+                }
+                var pathLnglat = regions[i].lnglats.split(';');
+                for (var j = 0; j < pathLnglat.length; j++) {
+                    lnglatList.push(pathLnglat[j].split(","))
+                }
+                var polygon = new AMap.Polygon({
+                    path: lnglatList,
+                    strokeColor: radomColor(),
+                    strokeWeight: 6,
+                    strokeOpacity: 0.2,
+                    fillOpacity: 0.4,
+                    fillColor: radomColor(),
+                    zIndex: 50,
+                });
+                regionMap.add(polygon);
+                polygonList.push(polygon);
+
+                var markerContent =
+                    '<div class="region" id="' + regions[i].regionId + 'Div">'
+                    + '<p class="region-text">' + regions[i].regionName + '</p>'
+                    + '<i class="region-jiantou"></i>'
+                    + '</div>';
+                var marker = new AMap.Marker({
+                    position: [regions[i].x, regions[i].y],
+                    content: markerContent,
+                    // 以 icon 的 [center bottom] 为原点
+                    offset: new AMap.Pixel(-50, -27),
+                    extData: {
+                        id: regions[i].regionId,
+                        region: regions[i]
+                    }
+                });
+                // 鼠标滑过marker浮在最上层
+                marker.on("mouseover", function () {
+                    $(".amap-marker").css("z-index", "100");
+                    var region = $(this)[0].getExtData().region;
+                    $("#" + region.regionId + "Div").parents(".amap-marker").css("z-index", "101");
+                    // 添加infowindow项目简介
+                    var content = "<div class=\"layui-card\">"
+                        + "<div class=\"layui-card-header\">"
+                        + region.regionName
+                        + "</div>"
+                        + "<div class=\"layui-card-body\">"
+                        + "<img src='"+ region.logoPath +"' style='width:150px;height:150px'>"
+                        + "</div>"
+                        + "</div>";
+                    infoWindow = new AMap.InfoWindow({
+                        content: content,  //使用默认信息窗体框样式，显示信息内容
+                        offset: new AMap.Pixel(0, -27)
+                    });
+                    infoWindow.open(regionMap, [region.x, region.y]);
+                });
+                marker.on("mouseout", function () {
+                    if (infoWindow) {
+                        infoWindow.close();
+                    }
+                });
+                // 将 markers 添加到地图
+                regionMap.add(marker);
+            }
+        }
+        regionMap.setFitView(polygonList);
+
+        var count = 6;
+        form.on('checkbox', function(data){
+			if(data) {
+                //去除地图的所有覆盖物
+                regionMap && regionMap.clearMap();
+                regions = [];
+			    if (data.value == 0) {
+                    $("input[name='checks']").each(function () {
+                        this.checked = data.elem.checked;
+                        data.elem.checked ? count = 6 : count = 0;
+                    });
+                    if (data.elem.checked) {
+                        //全选
+                        polygonList = [];
+                        regions = [[${data.regionTrades}]];
+                        //显示小区范围
+                        if (regions && regions.length >0){
+                            for (var i = 0; i < regions.length; i++) {
+                                var lnglatList = [];
+                                if (regions[i].lnglats == null){
+                                    continue;
+                                }
+                                var pathLnglat = regions[i].lnglats.split(';');
+                                for (var j = 0; j < pathLnglat.length; j++) {
+                                    lnglatList.push(pathLnglat[j].split(","))
+                                }
+                                var polygon = new AMap.Polygon({
+                                    path: lnglatList,
+                                    strokeColor: radomColor(),
+                                    strokeWeight: 6,
+                                    strokeOpacity: 0.2,
+                                    fillOpacity: 0.4,
+                                    // fillColor: _that.colors[Math.floor(Math.random()*10)],
+                                    fillColor: radomColor(),
+                                    zIndex: 50,
+                                });
+                                regionMap.add(polygon);
+                                polygonList.push(polygon);
+
+                                var markerContent =
+                                    '<div class="region" id="' + regions[i].regionId + 'Div">'
+                                    + '<p class="region-text">' + regions[i].regionName + '</p>'
+                                    + '<i class="region-jiantou"></i>'
+                                    + '</div>';
+                                var marker = new AMap.Marker({
+                                    position: [regions[i].x, regions[i].y],
+                                    content: markerContent,
+                                    // 以 icon 的 [center bottom] 为原点
+                                    offset: new AMap.Pixel(-50, -27),
+                                    extData: {
+                                        id: regions[i].regionId,
+                                        region: regions[i]
+                                    }
+                                });
+                                // 鼠标滑过marker浮在最上层
+                                marker.on("mouseover", function () {
+                                    $(".amap-marker").css("z-index", "100");
+                                    var region = $(this)[0].getExtData().region;
+                                    $("#" + region.regionId + "Div").parents(".amap-marker").css("z-index", "101");
+                                    // 添加infowindow项目简介
+                                    var content = "<div class=\"layui-card\">"
+                                        + "<div class=\"layui-card-header\">"
+                                        + region.regionName
+                                        + "</div>"
+                                        + "<div class=\"layui-card-body\">"
+                                        + "<img src='"+ region.logoPath +"' style='width:150px;height:150px'>"
+                                        + "</div>"
+                                        + "</div>";
+                                    infoWindow = new AMap.InfoWindow({
+                                        content: content,  //使用默认信息窗体框样式，显示信息内容
+                                        offset: new AMap.Pixel(0, -27)
+                                    });
+                                    infoWindow.open(regionMap, [region.x, region.y]);
+                                });
+                                marker.on("mouseout", function () {
+                                    if (infoWindow) {
+                                        infoWindow.close();
+                                    }
+                                });
+                                // 将 markers 添加到地图
+                                regionMap.add(marker);
+                            }
+                        }
+                        regionMap.setFitView(polygonList);
+					}
+				} else {
+			        if (data.elem.checked) {
+                        count = count + 1;
+					} else {
+                        count = count - 1;
+					}
+                    $("[name='checkAll']").prop("checked", (count == 6));
+
+                    $("input[name='checks']:checked").each(function () {
+                        var flag  =$(this).val();
+                        if(flag == 1) {
+                            var regionList = [[${data.regionTrades}]];
+                            for (var i = 0; i < regionList.length; i++) {
+                                if(regionList[i].avgPrice >= 0 && regionList[i].avgPrice < 2500) {
+                                    regions.push(regionList[i]);
+                                }
+                            }
+						} else if(flag == 2) {
+                            var regionList = [[${data.regionTrades}]];
+                            for (var i = 0; i < regionList.length; i++) {
+                                if(regionList[i].avgPrice >= 2500 && regionList[i].avgPrice < 5000) {
+                                    regions.push(regionList[i]);
+                                }
+                            }
+						} else if(flag == 3) {
+                            var regionList = [[${data.regionTrades}]];
+                            for (var i = 0; i < regionList.length; i++) {
+                                if(regionList[i].avgPrice >= 5000 && regionList[i].avgPrice < 7500) {
+                                    regions.push(regionList[i]);
+                                }
+                            }
+                        } else if(flag == 4) {
+                            var regionList = [[${data.regionTrades}]];
+                            for (var i = 0; i < regionList.length; i++) {
+                                if(regionList[i].avgPrice >= 7500 && regionList[i].avgPrice < 10000) {
+                                    regions.push(regionList[i]);
+                                }
+                            }
+                        } else if(flag == 5) {
+                            var regionList = [[${data.regionTrades}]];
+                            for (var i = 0; i < regionList.length; i++) {
+                                if(regionList[i].avgPrice >= 10000 && regionList[i].avgPrice < 12500) {
+                                    regions.push(regionList[i]);
+                                }
+                            }
+                        } else if(flag == 6) {
+                            var regionList = [[${data.regionTrades}]];
+                            for (var i = 0; i < regionList.length; i++) {
+                                if(regionList[i].avgPrice >= 12500) {
+                                    regions.push(regionList[i]);
+                                }
+                            }
+                        }
+                    });
+
+                    polygonList = [];
+                    //显示小区范围
+                    if (regions && regions.length >0){
+                        for (var i = 0; i < regions.length; i++) {
+                            var lnglatList = [];
+                            if (regions[i].lnglats == null){
+                                continue;
+                            }
+                            var pathLnglat = regions[i].lnglats.split(';');
+                            for (var j = 0; j < pathLnglat.length; j++) {
+                                lnglatList.push(pathLnglat[j].split(","))
+                            }
+                            var polygon = new AMap.Polygon({
+                                path: lnglatList,
+                                strokeColor: radomColor(),
+                                strokeWeight: 6,
+                                strokeOpacity: 0.2,
+                                fillOpacity: 0.4,
+                                // fillColor: _that.colors[Math.floor(Math.random()*10)],
+                                fillColor: radomColor(),
+                                zIndex: 50,
+                            });
+                            regionMap.add(polygon);
+                            polygonList.push(polygon);
+
+                            var markerContent =
+                                '<div class="region" id="' + regions[i].regionId + 'Div">'
+                                + '<p class="region-text">' + regions[i].regionName + '</p>'
+                                + '<i class="region-jiantou"></i>'
+                                + '</div>';
+                            var marker = new AMap.Marker({
+                                position: [regions[i].x, regions[i].y],
+                                content: markerContent,
+                                // 以 icon 的 [center bottom] 为原点
+                                offset: new AMap.Pixel(-50, -27),
+                                extData: {
+                                    id: regions[i].regionId,
+                                    region: regions[i]
+                                }
+                            });
+                            // 鼠标滑过marker浮在最上层
+                            marker.on("mouseover", function () {
+                                $(".amap-marker").css("z-index", "100");
+                                var region = $(this)[0].getExtData().region;
+                                $("#" + region.regionId + "Div").parents(".amap-marker").css("z-index", "101");
+                                // 添加infowindow项目简介
+                                var content = "<div class=\"layui-card\">"
+                                    + "<div class=\"layui-card-header\">"
+                                    + region.regionName
+                                    + "</div>"
+                                    + "<div class=\"layui-card-body\">"
+                                    + "<img src='"+ region.logoPath +"' style='width:150px;height:150px'>"
+                                    + "</div>"
+                                    + "</div>";
+                                infoWindow = new AMap.InfoWindow({
+                                    content: content,  //使用默认信息窗体框样式，显示信息内容
+                                    offset: new AMap.Pixel(0, -27)
+                                });
+                                infoWindow.open(regionMap, [region.x, region.y]);
+                            });
+                            marker.on("mouseout", function () {
+                                if (infoWindow) {
+                                    infoWindow.close();
+                                }
+                            });
+                            // 将 markers 添加到地图
+                            regionMap.add(marker);
+                        }
+                    }
+                    regionMap.setFitView(polygonList);
+				}
+                form.render('checkbox');
+			}
+        });
+
+
+		/*var mapChart = echarts.init(document.getElementById('content-map'), 'macarons');
 		mapChart.showLoading();
 
 		$.get(ctxPath + '150400.json', function (geoJson) {
@@ -662,14 +1017,14 @@
 			var regions = [[${data.regionTrades}]];
 
 			option = {
-				/*title: {
+				/!*title: {
 					text: '房源热度图',
 					x: 'center',
 					textStyle: {
 						fontSize: '18',
 						color: '#333333'
 					}
-				},*/
+				},*!/
 				tooltip: {
 					trigger: 'item',
 					formatter: function (params) {
@@ -776,7 +1131,7 @@
                     window.open(ctxPath + 'sales/' + param.data.id);
                 }
             });
-		});
+		});*/
 
 		$(window).resize(function () {
 			initLayout();
@@ -785,7 +1140,7 @@
 			priceChart.resize();
 			stockChart.resize();
 
-			mapChart.resize();
+			// mapChart.resize();
 		});
 	});
 </script>

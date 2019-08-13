@@ -391,7 +391,7 @@
 
 	<select id = "selectRegionTrade" resultType = "com.bestvike.website.entity.RegionTrade">
 		<![CDATA[
-			SELECT t1.region_name, t4.division_name, t1.region_id, t1.x, t1.y,
+			SELECT t1.region_name, t4.division_name, t1.region_id, t1.x, t1.y, to_char(t1.lnglats) as lnglats, logo_path,
 			sum(case when nvl(t3.sign_date, '0000-01-01') >= to_char(TRUNC(sysdate - 30), 'yyyy-mm-dd') then 1 else 0 end) trade_num,
 			sum(case when nvl(t3.sign_date, '0000-01-01') >= to_char(TRUNC(sysdate - 30), 'yyyy-mm-dd') then t3.construct_area else 0 end) trade_area,
 		]]>
@@ -419,7 +419,7 @@
 			left join view_houseinfo t3 on t2.project_id = t3.project_id and t2.bld_no = t3.bld_no
 			left JOIN view_divisioninfo t4 on t1.division_code = t4.division_code
 			WHERE t1.state = '0000'
-			group by t1.region_name, t4.division_name, t1.region_id, t1.x, t1.y
+			group by t1.region_name, t4.division_name, t1.region_id, t1.x, t1.y, to_char(t1.lnglats), logo_path
 		]]>
 		<choose>
 			<when test = "dataType != null and dataType == 'business'">

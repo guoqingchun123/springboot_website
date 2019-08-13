@@ -18,6 +18,8 @@ public class RegionTrade implements Serializable {
 	private BigDecimal tradeArea;
 	private String sales;
 	private String avgPrice;
+	private String lnglats;
+	private String logoPath;
 
 	public String getRegionId() {
 		return regionId;
@@ -89,5 +91,21 @@ public class RegionTrade implements Serializable {
 
 	public void setAvgPrice(String avgPrice) {
 		this.avgPrice = avgPrice;
+	}
+
+	public String getLnglats() {
+		return lnglats;
+	}
+
+	public void setLnglats(String lnglats) {
+		this.lnglats = lnglats;
+	}
+
+	public String getLogoPath() {
+		return logoPath;
+	}
+
+	public void setLogoPath(String logoPath) {
+		this.logoPath = logoPath;
 	}
 }
