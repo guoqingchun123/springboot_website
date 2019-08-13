@@ -65,7 +65,7 @@
 			from view_houseinfo vhi
 			WHERE EXISTS(select 1 from view_regbld WHERE region_id = #{regionId} AND project_id = vhi.project_id AND bld_no = vhi.bld_no)) t3
 			on t1.region_id = t3.region_id
-			WHERE t1.region_id = #{regionId} AND t1.state = '0000'
+			WHERE t1.region_id = #{regionId}
 		]]>
 	</select>
 
