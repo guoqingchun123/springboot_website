@@ -107,7 +107,7 @@
 				if(status=='complete'){
 					startLngLat = [ result.position.lng, result.position.lat];
 				}else{
-					onError(result)
+					startLngLat = [118.8877,42.256892];
 				}
 			});
 		});
@@ -309,7 +309,7 @@
 				//根据起终点坐标规划驾车路线
 				var endLngLat = [region.x, region.y]
 				//startLngLat = [118.916202, 42.271235]
-				driving.search(startLngLat,endLngLat,function(status,result){
+				driving.search(startLngLat,endLngLat,function(status,result){debugger
 					$(".layui-btn-warm").off('click').on("click", function () {
 						driving.searchOnAMAP({
 												 origin:result.origin,
