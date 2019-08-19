@@ -239,7 +239,7 @@
 			CASE WHEN instr(bld_name, '#') > 0 THEN bld_name else bld_name || '#' end bld_name
 			FROM view_regionInfo t1 left join view_regbld t2 on t1.region_id = t2.region_id
 			LEFT JOIN view_bldInfo t3 on t2.project_id = t3.project_id and t2.bld_no = t3.bld_no
-			WHERE t1.region_id = #{regionId} AND t1.state = '0000'
+			WHERE t1.region_id = #{regionId}
 			ORDER BY
 			case when instr(t3.bld_name, '地下') > 0 or instr(t3.bld_name, '配套') > 0
 				then 99 else to_number(nvl(regexp_replace(t3.bld_name, '[^0-9]'), -1)) end asc, t3.bld_no asc
