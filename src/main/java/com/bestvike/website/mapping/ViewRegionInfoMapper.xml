@@ -12,7 +12,7 @@
 				left join view_regbld arb on vhi.project_id = arb.project_id and vhi.bld_no = arb.bld_no
 				group by arb.region_id) proj
            ON t1.region_id = proj.region_id
-           WHERE t1.state = '0000'
+           WHERE t1.state = '0000'	and t1.PUBLISH_DATE < #{nowDate}
            ORDER BY t1.pre_sale_date desc
         ]]>
 	</select>
@@ -29,7 +29,7 @@
 				group by arb.region_id
            ) proj
            ON t1.region_id = proj.region_id
-           WHERE t1.state = '0000'
+           WHERE t1.state = '0000' and t1.PUBLISH_DATE < #{nowDate}
         ]]>
 		<if test = "keywords != null">
 			AND t1.region_name like #{keywords} or t1.address like #{keywords}

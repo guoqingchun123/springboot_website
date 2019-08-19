@@ -8,6 +8,7 @@ import com.bestvike.website.entity.Region;
 import com.bestvike.website.entity.RegionTrade;
 import com.bestvike.website.service.LayoutService;
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,8 @@ public class LayoutServiceImpl implements LayoutService {
 	public List<Region> selectAllRegions(String order) {
 		Map<String, Object> maps = new HashMap<>();
 		maps.put("order", order);
+		java.util.Date date = new java.util.Date();
+		maps.put("nowDate",new Date(date.getTime()));
 		return viewRegionInfoDao.selectAllRegions(maps);
 	}
 
