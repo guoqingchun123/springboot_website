@@ -335,7 +335,7 @@
 				房源热度图
 			</div>
 		</div>
-		<div class="layui-card-body" style="height: 95%;">
+		<div class="layui-card-body" style="height: 93%;">
 			<div id="content-map" style="height: 100%;">
 				<div class="visual-map">
 					<form class="layui-form">
@@ -754,7 +754,7 @@
                     }
                 });
                 // 鼠标滑过marker浮在最上层
-                marker.on("mouseover", function () {
+                /*marker.on("mouseover", function () {
                     $(".amap-marker").css("z-index", "100");
                     var region = $(this)[0].getExtData().region;
                     $("#" + region.regionId + "Div").parents(".amap-marker").css("z-index", "101");
@@ -777,7 +777,13 @@
                     if (infoWindow) {
                         infoWindow.close();
                     }
-                });
+                });*/
+                marker.on("click", function (e) {
+                    if (e && e.target && e.target.getExtData()) {
+                        //跳转到小区详情页面
+                        window.open(ctxPath + 'sales/' + e.target.getExtData().id);
+                    }
+                })
                 // 将 markers 添加到地图
                 regionMap.add(marker);
             }
@@ -847,7 +853,7 @@
                                     }
                                 });
                                 // 鼠标滑过marker浮在最上层
-                                marker.on("mouseover", function () {
+                                /*marker.on("mouseover", function () {
                                     $(".amap-marker").css("z-index", "100");
                                     var region = $(this)[0].getExtData().region;
                                     $("#" + region.regionId + "Div").parents(".amap-marker").css("z-index", "101");
@@ -870,7 +876,14 @@
                                     if (infoWindow) {
                                         infoWindow.close();
                                     }
-                                });
+                                });*/
+
+                                marker.on("click", function (e) {
+                                    if (e && e.target && e.target.getExtData()) {
+                                        //跳转到小区详情页面
+                                        window.open(ctxPath + 'sales/' + e.target.getExtData().id);
+                                    }
+                                })
                                 // 将 markers 添加到地图
                                 regionMap.add(marker);
                             }
@@ -981,7 +994,7 @@
                                 }
                             });
                             // 鼠标滑过marker浮在最上层
-                            marker.on("mouseover", function () {
+                            /*marker.on("mouseover", function () {
                                 $(".amap-marker").css("z-index", "100");
                                 var region = $(this)[0].getExtData().region;
                                 $("#" + region.regionId + "Div").parents(".amap-marker").css("z-index", "101");
@@ -1004,7 +1017,14 @@
                                 if (infoWindow) {
                                     infoWindow.close();
                                 }
-                            });
+                            });*/
+
+                            marker.on("click", function (e) {
+                                if (e && e.target && e.target.getExtData()) {
+                                    //跳转到小区详情页面
+                                    window.open(ctxPath + 'sales/' + e.target.getExtData().id);
+                                }
+                            })
                             // 将 markers 添加到地图
                             regionMap.add(marker);
                         }
