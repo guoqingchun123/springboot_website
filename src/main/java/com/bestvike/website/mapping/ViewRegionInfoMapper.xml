@@ -398,17 +398,17 @@
 		<choose>
 			<when test = "dataType != null and dataType == 'business'">
 				SUM(case when nvl(t3.sign_date, '0000-01-01') >= to_char(TRUNC(sysdate - 30), 'yyyy-mm-dd')
-				AND instr(t3.house_use, '商业') > 0 then 1 else 0 end) || '/' ||
+				AND instr(t3.house_use, '商业') > 0 and t3.presell_state='已售' then 1 else 0 end) || '/' ||
 				SUM(case when nvl(t3.sign_date, '0000-01-01') >= to_char(TRUNC(sysdate - 30), 'yyyy-mm-dd')
-				AND instr(t3.house_use, '商业') > 0 then t3.construct_area else 0 end) as sales,
+				AND instr(t3.house_use, '商业') > 0 and t3.presell_state='已售' then t3.construct_area else 0 end) as sales,
 				round(sum(case when t3.house_use like '商业' then t3.presell_amount else 0 end)
 				/ sum(case when t3.house_use like '商业' then t3.construct_area else 0.00001 end), 2) as avg_price
 			</when>
 			<otherwise>
 				SUM(case when nvl(t3.sign_date, '0000-01-01') >= to_char(TRUNC(sysdate - 30), 'yyyy-mm-dd')
-				AND instr(t3.house_use, '住宅') > 0 then 1 else 0 end) || '/' ||
+				AND instr(t3.house_use, '住宅') > 0 and t3.presell_state='已售' then 1 else 0 end) || '/' ||
 				SUM(case when nvl(t3.sign_date, '0000-01-01') >= to_char(TRUNC(sysdate - 30), 'yyyy-mm-dd')
-				AND instr(t3.house_use, '住宅') > 0 then t3.construct_area else 0 end) as sales,
+				AND instr(t3.house_use, '住宅') > 0 and t3.presell_state='已售' then t3.construct_area else 0 end) as sales,
 				round(sum(case when t3.house_use like '住宅' then t3.presell_amount else 0 end)
 				/ sum(case when t3.house_use like '住宅' then t3.construct_area else 0.00001 end), 2) as avg_price
 			</otherwise>
