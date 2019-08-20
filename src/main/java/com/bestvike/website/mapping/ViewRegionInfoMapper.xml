@@ -376,15 +376,15 @@
 		<![CDATA[
 			SELECT
 				SUM(CASE WHEN instr(house_use, '住宅') > 0 THEN 1 ELSE 0 END) residence_num,
-				round(SUM(CASE WHEN instr(house_use, '住宅') > 0 THEN t.construct_area ELSE 0 END) / 10000, 2) residence_area,
+				round(SUM(CASE WHEN instr(house_use, '住宅') > 0 THEN t.construct_area ELSE 0 END) / 10000, 3) residence_area,
 				SUM(CASE WHEN instr(house_use, '商业') > 0 THEN 1 ELSE 0 END) business_num,
-				round(SUM(CASE WHEN instr(house_use, '商业') > 0 THEN t.construct_area ELSE 0 END) / 10000, 2) business_area,
+				round(SUM(CASE WHEN instr(house_use, '商业') > 0 THEN t.construct_area ELSE 0 END) / 10000, 3) business_area,
 				SUM(CASE WHEN instr(house_use, '商业') = 0 AND instr(house_use, '住宅') = 0 THEN 1 ELSE 0 END) mating_num,
-				round(SUM(CASE WHEN instr(house_use, '商业') = 0 AND instr(house_use, '住宅') = 0 THEN t.construct_area ELSE 0 END), 2) mating_area,
+				round(SUM(CASE WHEN instr(house_use, '商业') = 0 AND instr(house_use, '住宅') = 0 THEN t.construct_area ELSE 0 END), 3) mating_area,
 				sum(case when t.sign_date = to_char(TRUNC(sysdate - 1), 'yyyy-mm-dd') then 1 else 0 end) yes_trade_num,
-				round(sum(case when t.sign_date = to_char(TRUNC(sysdate - 1), 'yyyy-mm-dd') then 1 else 0 end) / 10000, 2) yes_trade_area,
+				round(sum(case when t.sign_date = to_char(TRUNC(sysdate - 1), 'yyyy-mm-dd') then t.construct_area else 0 end) / 10000, 3) yes_trade_area,
 				sum(case when t.sign_date = to_char(TRUNC(sysdate), 'yyyy-mm-dd') then 1 else 0 end) tod_trade_num,
-				round(sum(case when t.sign_date = to_char(TRUNC(sysdate), 'yyyy-mm-dd') then 1 else 0 end) / 10000, 2) tod_trade_area
+				round(sum(case when t.sign_date = to_char(TRUNC(sysdate), 'yyyy-mm-dd') then t.construct_area else 0 end) / 10000, 3) tod_trade_area
 			FROM view_houseinfo t
 		]]>
 	</select>
