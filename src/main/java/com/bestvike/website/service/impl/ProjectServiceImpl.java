@@ -1,7 +1,17 @@
 package com.bestvike.website.service.impl;
 
-import com.bestvike.website.dao.*;
-import com.bestvike.website.data.*;
+import com.bestvike.website.dao.AppVersionDao;
+import com.bestvike.website.dao.ViewBldFloorDao;
+import com.bestvike.website.dao.ViewDivisionInfoDao;
+import com.bestvike.website.dao.ViewFloorCellDao;
+import com.bestvike.website.dao.ViewHouseInfoDao;
+import com.bestvike.website.dao.ViewRegionInfoDao;
+import com.bestvike.website.data.AppVersion;
+import com.bestvike.website.data.ViewBldFloor;
+import com.bestvike.website.data.ViewDivisionInfo;
+import com.bestvike.website.data.ViewFloorCell;
+import com.bestvike.website.data.ViewHouseInfo;
+import com.bestvike.website.data.ViewRegionInfo;
 import com.bestvike.website.document.Division;
 import com.bestvike.website.entity.BldCells;
 import com.bestvike.website.entity.BldSales;
@@ -25,16 +35,7 @@ import com.bestvike.website.service.ProjectService;
 import com.github.pagehelper.ISelect;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -42,7 +43,19 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import tk.mybatis.mapper.entity.Example;
+
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
@@ -630,6 +643,8 @@ public class ProjectServiceImpl implements ProjectService {
 					String querySort = sort.replaceAll("avgPrice", "avg_price").replaceAll("preSaleDate", "pre_sale_date");
 					paramterMap.put("sort", querySort);
 				}
+				java.util.Date date = new java.util.Date();
+				paramterMap.put("nowDate",new Date(date.getTime()));
 				viewRegionInfoDao.selectRegionByParameter(paramterMap);
 			}
 		});
