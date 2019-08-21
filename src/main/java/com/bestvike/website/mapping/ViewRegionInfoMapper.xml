@@ -364,7 +364,7 @@
 
 	<select id = "selectMonthStocks" resultType = "map">
 		<![CDATA[
-			SELECT data_month "月份", total_stock_area "商品房", residence_stock_area "住宅",
+			SELECT DECODE(data_month, TO_CHAR(sysdate, 'yyyy-MM'),'当前',data_month) "月份", total_stock_area "商品房", residence_stock_area "住宅",
 			business_stock_area "商业", mating_stock_area "配套"
 			FROM view_monthdata t
 			WHERE data_month >= TO_CHAR(add_months(sysdate, -6), 'yyyy-MM')
