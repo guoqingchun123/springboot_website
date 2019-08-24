@@ -1,5 +1,6 @@
 package com.bestvike.website.service.impl;
 
+import com.bestvike.commons.exception.ServiceException;
 import com.bestvike.website.dao.AppVersionDao;
 import com.bestvike.website.dao.ViewBldFloorDao;
 import com.bestvike.website.dao.ViewDivisionInfoDao;
@@ -36,6 +37,8 @@ import com.github.pagehelper.ISelect;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -47,8 +50,9 @@ import org.springframework.util.StringUtils;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,7 +63,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
-
+	protected Log logger = LogFactory.getLog(this.getClass());
 	@Autowired
 	private ViewDivisionInfoDao viewDivisionInfoDao;
 	@Autowired
@@ -643,8 +647,15 @@ public class ProjectServiceImpl implements ProjectService {
 					String querySort = sort.replaceAll("avgPrice", "avg_price").replaceAll("preSaleDate", "pre_sale_date");
 					paramterMap.put("sort", querySort);
 				}
-				java.util.Date date = new java.util.Date();
-				paramterMap.put("nowDate",new Date(date.getTime()));
+				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+				String date = null;
+				try {
+					date = simpleDateFormat.format(new Date());
+				} catch (Exception e) {
+					logger.info("时间转换失败");
+					throw new ServiceException("90", "时间转换失败");
+				}
+				paramterMap.put("nowDate",date);
 				viewRegionInfoDao.selectRegionByParameter(paramterMap);
 			}
 		});

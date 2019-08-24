@@ -1,5 +1,6 @@
 package com.bestvike.website.service.impl;
 
+import com.bestvike.commons.exception.ServiceException;
 import com.bestvike.website.dao.ViewProjectInfoDao;
 import com.bestvike.website.dao.ViewRegionInfoDao;
 import com.bestvike.website.data.ViewPresalecard;
@@ -9,16 +10,20 @@ import com.bestvike.website.entity.RegionTrade;
 import com.bestvike.website.service.LayoutService;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 @Service
 public class LayoutServiceImpl implements LayoutService {
-
+	protected Log logger = LogFactory.getLog(this.getClass());
 	@Autowired
 	private ViewRegionInfoDao viewRegionInfoDao;
 	@Autowired
@@ -39,6 +44,15 @@ public class LayoutServiceImpl implements LayoutService {
 		if (!StringUtils.isEmpty(keywords)) {
 			maps.put("keywords", "%" + keywords + "%");
 		}
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String date = null;
+		try {
+			date = simpleDateFormat.format(new java.util.Date());
+		} catch (Exception e) {
+			logger.info("时间转换失败");
+			throw new ServiceException("90", "时间转换失败");
+		}
+		maps.put("nowDate",date);
 		return viewRegionInfoDao.selectRegionByParameter(maps);
 	}
 

@@ -29,10 +29,13 @@
 				group by arb.region_id
            ) proj
            ON t1.region_id = proj.region_id
-           WHERE t1.state = '0000' and t1.PUBLISH_DATE < #{nowDate}
+           WHERE t1.state = '0000'
         ]]>
+		<if test = "nowDate != null">
+			and <![CDATA[ t1.PUBLISH_DATE < #{nowDate}  ]]>
+		</if>
 		<if test = "keywords != null">
-			AND t1.region_name like #{keywords} or t1.address like #{keywords}
+			AND (t1.region_name like #{keywords} or t1.address like #{keywords})
 		</if>
 		<if test = "divisionCode != null">
 			AND t2.division_code = #{divisionCode}
@@ -438,7 +441,7 @@
 			   T.REGION_NAME,
 			   T.LOGO_PATH,
 			   DECODE(to_char(T.VIDEO_NO), NULL, 0, '', 0, 1) AS has_video
-		  FROM VIEW_REGIONINFO T
+		  FROM VIEW_REGIONINFO T where T.STATE = '0000'
 		]]>
 	</select>
 </mapper>
