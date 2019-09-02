@@ -33,8 +33,15 @@ public class LayoutServiceImpl implements LayoutService {
 	public List<Region> selectAllRegions(String order) {
 		Map<String, Object> maps = new HashMap<>();
 		maps.put("order", order);
-		java.util.Date date = new java.util.Date();
-		maps.put("nowDate",new Date(date.getTime()));
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String date = null;
+		try {
+			date = simpleDateFormat.format(new java.util.Date());
+		} catch (Exception e) {
+			logger.info("时间转换失败");
+			throw new ServiceException("90", "时间转换失败");
+		}
+		maps.put("nowDate",date);
 		return viewRegionInfoDao.selectAllRegions(maps);
 	}
 
