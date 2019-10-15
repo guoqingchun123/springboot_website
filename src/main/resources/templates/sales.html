@@ -17,7 +17,7 @@
 		<div id="region-navigator" class="layui-col-md6">
 			<div id="region-layout" class="layui-carousel" th:if="${cellNo != null}">
 				<div carousel-item>
-					<div class="carousel-auto region-logo-container" th:each="bldFloor:${region?.bldFloors}">
+					<div class="carousel-auto region-logo-container" th:each="bldFloor:${region?.bldFloors}" th:classappend="${floorNo != null && floorNo == bldFloor.floorNo} ? 'layui-this'">
 						<img th:src="${bldFloor.viewPath}" onerror="showDefaultImage(this)">
 						<a class="return-to" href="javascript:;">返回</a>
 						<div class="navigator-container">
