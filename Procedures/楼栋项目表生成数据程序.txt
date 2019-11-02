@@ -1,0 +1,215 @@
+create or replace procedure UPDATE_PRO_BLD as
+sysid varchar2(36);
+begin
+
+  select sys_guid() into sysid from dual;
+
+  insert into scheduler_update_pro_bld
+  values(sysid, '调起执行job', sysdate, null);
+  commit;
+
+ merge into view_projectinfo t
+ using (
+        select * from view_projectinfo_ 
+       ) tt
+on (t.PROJECT_ID = tt.PROJECT_ID)
+when matched then update set
+     t.PROJECT_NAME=tt.PROJECT_NAME,
+     t.DEVELOPER_NO=tt.DEVELOPER_NO,
+     t.DEVELOPER_NAME=tt.DEVELOPER_NAME,
+     t.SERVICE_NO=tt.SERVICE_NO,
+     t.SERVICE_NAME=tt.SERVICE_NAME,
+     t.SUMMARY=tt.SUMMARY,
+     t.STATE=tt.STATE,
+     t.ADDRESS=tt.ADDRESS,
+     t.DIVISION_CODE=tt.DIVISION_CODE,
+     t.PLAN_TYPE=tt.PLAN_TYPE,
+     t.CONSTRUCT_AREA=tt.CONSTRUCT_AREA,
+     t.COVER_AREA=tt.COVER_AREA,
+     t.HOUSE_USE=tt.HOUSE_USE,
+     t.SALE_PHONE=tt.SALE_PHONE,
+     t.BLD_NUM=tt.BLD_NUM,
+     t.HOUSE_NUM=tt.HOUSE_NUM,
+     t.PLAN_MAX_PRICE=tt.PLAN_MAX_PRICE,
+     t.PLAN_MIN_PRICE=tt.PLAN_MIN_PRICE,
+     t.PLAN_AVG_PRICE=tt.PLAN_AVG_PRICE,
+     t.MAX_PRICE=tt.MAX_PRICE,
+     t.MIN_PRICE=tt.MIN_PRICE,
+     t.AVG_PRICE=tt.AVG_PRICE,
+     t.PLAN_MAX_AMOUNT=tt.PLAN_MAX_AMOUNT,
+     t.PLAN_MIN_AMOUNT=tt.PLAN_MIN_AMOUNT,
+     t.PLAN_AVG_AMOUNT=tt.PLAN_AVG_AMOUNT,
+     t.MAX_AMOUNT=tt.MAX_AMOUNT,
+     t.MIN_AMOUNT=tt.MIN_AMOUNT,
+     t.AVG_AMOUNT=tt.AVG_AMOUNT,
+     t.FLOOR_NUM=tt.FLOOR_NUM,
+     t.START_DATE=tt.START_DATE,
+     t.BASIC_FINISH_DATE=tt.BASIC_FINISH_DATE,
+     t.BODY_FINISH_DATE=tt.BODY_FINISH_DATE,
+     t.FINISH_DATE=tt.FINISH_DATE,
+     t.HEATING_TYPE=tt.HEATING_TYPE,
+     t.HEATING_DATE=tt.HEATING_DATE,
+     t.AERATION_TYPE=tt.AERATION_TYPE,
+     t.AERATION_DATE=tt.AERATION_DATE,
+     t.GREENING_RATE=tt.GREENING_RATE,
+     t.REMARK=tt.REMARK
+
+when not matched then
+  insert
+    (t.PROJECT_ID,
+     t.PROJECT_NAME,
+     t.DEVELOPER_NO,
+     t.DEVELOPER_NAME,
+     t.SERVICE_NO,
+     t.SERVICE_NAME,
+     t.SUMMARY,
+     t.STATE,
+     t.ADDRESS,
+     t.DIVISION_CODE,
+     t.PLAN_TYPE,
+     t.CONSTRUCT_AREA,
+     t.COVER_AREA,
+     t.HOUSE_USE,
+     t.SALE_PHONE,
+     t.BLD_NUM,
+     t.HOUSE_NUM,
+     t.PLAN_MAX_PRICE,
+     t.PLAN_MIN_PRICE,
+     t.PLAN_AVG_PRICE,
+     t.MAX_PRICE,
+     t.MIN_PRICE,
+     t.AVG_PRICE,
+     t.PLAN_MAX_AMOUNT,
+     t.PLAN_MIN_AMOUNT,
+     t.PLAN_AVG_AMOUNT,
+     t.MAX_AMOUNT,
+     t.MIN_AMOUNT,
+     t.AVG_AMOUNT,
+     t.FLOOR_NUM,
+     t.START_DATE,
+     t.BASIC_FINISH_DATE,
+     t.BODY_FINISH_DATE,
+     t.FINISH_DATE,
+     t.HEATING_TYPE,
+     t.HEATING_DATE,
+     t.AERATION_TYPE,
+     t.AERATION_DATE,
+     t.GREENING_RATE,
+     t.REMARK)
+  values
+    (tt.PROJECT_ID,
+     tt.PROJECT_NAME,
+     tt.DEVELOPER_NO,
+     tt.DEVELOPER_NAME,
+     tt.SERVICE_NO,
+     tt.SERVICE_NAME,
+     tt.SUMMARY,
+     tt.STATE,
+     tt.ADDRESS,
+     tt.DIVISION_CODE,
+     tt.PLAN_TYPE,
+     tt.CONSTRUCT_AREA,
+     tt.COVER_AREA,
+     tt.HOUSE_USE,
+     tt.SALE_PHONE,
+     tt.BLD_NUM,
+     tt.HOUSE_NUM,
+     tt.PLAN_MAX_PRICE,
+     tt.PLAN_MIN_PRICE,
+     tt.PLAN_AVG_PRICE,
+     tt.MAX_PRICE,
+     tt.MIN_PRICE,
+     tt.AVG_PRICE,
+     tt.PLAN_MAX_AMOUNT,
+     tt.PLAN_MIN_AMOUNT,
+     tt.PLAN_AVG_AMOUNT,
+     tt.MAX_AMOUNT,
+     tt.MIN_AMOUNT,
+     tt.AVG_AMOUNT,
+     tt.FLOOR_NUM,
+     tt.START_DATE,
+     tt.BASIC_FINISH_DATE,
+     tt.BODY_FINISH_DATE,
+     tt.FINISH_DATE,
+     tt.HEATING_TYPE,
+     tt.HEATING_DATE,
+     tt.AERATION_TYPE,
+     tt.AERATION_DATE,
+     tt.GREENING_RATE,
+     tt.REMARK);
+     commit;
+     
+     
+ merge into view_bldinfo t
+ using (
+        select * from view_bldinfo_
+       ) tt
+on (t.BLD_ID = tt.BLD_ID)
+when matched then update set
+     t.BLD_NO=tt.BLD_NO,
+     t.SHEET_NO=tt.SHEET_NO,
+     t.LAND_NO=tt.LAND_NO,
+     t.PROJECT_ID=tt.PROJECT_ID,
+     t.ORIENTATION=tt.ORIENTATION,
+     t.PRE_SALE_NO=tt.PRE_SALE_NO,
+     t.PRE_SALE_DATE=tt.PRE_SALE_DATE,
+     t.CORP_NAME=tt.CORP_NAME,
+     t.SUB_NAME=tt.SUB_NAME,
+     t.BLD_NAME=tt.BLD_NAME,
+     t.BLD_ADDRESS=tt.BLD_ADDRESS,
+     t.FRAME_ATTR=tt.FRAME_ATTR,
+     t.HEIGHT_ATTR=tt.HEIGHT_ATTR,
+     t.OVER_FLOOR=tt.OVER_FLOOR,
+     t.UNDER_FLOOR=tt.UNDER_FLOOR,
+     t.START_DATE=tt.START_DATE,
+     t.FINISH_DATE=tt.FINISH_DATE,
+     t.REMARK=tt.REMARK
+    
+
+when not matched then
+  insert
+    (t.BLD_ID,
+     t.BLD_NO,
+     t.SHEET_NO,
+     t.LAND_NO,
+     t.PROJECT_ID,
+     t.ORIENTATION,
+     t.PRE_SALE_NO,
+     t.PRE_SALE_DATE,
+     t.CORP_NAME,
+     t.SUB_NAME,
+     t.BLD_NAME,
+     t.BLD_ADDRESS,
+     t.FRAME_ATTR,
+     t.HEIGHT_ATTR,
+     t.OVER_FLOOR,
+     t.UNDER_FLOOR,
+     t.START_DATE,
+     t.FINISH_DATE,
+     t.REMARK
+    )
+  values
+    (tt.BLD_ID,
+     tt.BLD_NO,
+     tt.SHEET_NO,
+     tt.LAND_NO,
+     tt.PROJECT_ID,
+     tt.ORIENTATION,
+     tt.PRE_SALE_NO,
+     tt.PRE_SALE_DATE,
+     tt.CORP_NAME,
+     tt.SUB_NAME,
+     tt.BLD_NAME,
+     tt.BLD_ADDRESS,
+     tt.FRAME_ATTR,
+     tt.HEIGHT_ATTR,
+     tt.OVER_FLOOR,
+     tt.UNDER_FLOOR,
+     tt.START_DATE,
+     tt.FINISH_DATE,
+     tt.REMARK);
+     commit;
+
+  update scheduler_update_pro_bld t set t.end_time = sysdate where t.sys_id = sysid;
+  commit;
+end UPDATE_PRO_BLD;

@@ -1,0 +1,357 @@
+create or replace procedure proc_insert_data as
+sysid varchar2(36);
+begin
+
+  select sys_guid() into sysid from dual;
+
+  insert into scheduler_insert_data
+  values(sysid, '调起执行job', sysdate, null);
+  commit;
+
+ merge into view_monthdata t
+ using (select to_char(TRUNC(SYSDATE - 1), 'yyyy-mm')  data_month,
+              sum(case
+                    when to_char(to_date(t.sign_date, 'yyyy-mm-dd'), 'yyyy-mm') =
+                         to_char(TRUNC(SYSDATE - 1), 'yyyy-mm')  then
+                     1
+                    else
+                     0
+                  end) total_num,
+              sum(case
+                    when t1.pre_sale_date <=
+                         to_char(TRUNC(SYSDATE - 1), 'yyyy-mm-dd')  and
+                         to_char(to_date(nvl(t.sign_date, '9999-12-01'),
+                                         'yyyy-mm-dd'),
+                                 'yyyy-mm') >
+                         to_char(TRUNC(SYSDATE - 1), 'yyyy-mm')  then
+                     1
+                    else
+                     0
+                  end) total_stock_num,
+              round(sum(case
+                          when t1.pre_sale_date <=
+                               to_char(TRUNC(SYSDATE - 1), 'yyyy-mm-dd')  and
+                               to_char(to_date(t.sign_date, 'yyyy-mm-dd'), 'yyyy-mm') =
+                               to_char(TRUNC(SYSDATE - 1), 'yyyy-mm')  then
+                           t.construct_area
+                          else
+                           0
+                        end) / 10000,
+                    2) total_area,
+              round(sum(case
+                          when t1.pre_sale_date <=
+                               to_char(TRUNC(SYSDATE - 1), 'yyyy-mm-dd')  and
+                               to_char(to_date(nvl(t.sign_date, '9999-12-01'),
+                                               'yyyy-mm-dd'),
+                                       'yyyy-mm') >
+                               to_char(TRUNC(SYSDATE - 1), 'yyyy-mm')  then
+                           t.construct_area
+                          else
+                           0
+                        end) / 10000,
+                    2) total_stock_area,
+              sum(case
+                    when to_char(to_date(t.sign_date, 'yyyy-mm-dd'), 'yyyy-mm') =
+                         to_char(TRUNC(SYSDATE - 1), 'yyyy-mm')  and
+                         instr(t.house_use, '住宅') > 0 then
+                     1
+                    else
+                     0
+                  end) residence_num,
+              sum(case
+                    when to_char(to_date(t.sign_date, 'yyyy-mm-dd'), 'yyyy-mm') =
+                         to_char(TRUNC(SYSDATE - 1), 'yyyy-mm')  and
+                         instr(t.house_use, '商业') > 0 then
+                     1
+                    else
+                     0
+                  end) business_num,
+              sum(case
+                    when to_char(to_date(t.sign_date, 'yyyy-mm-dd'), 'yyyy-mm') =
+                         to_char(TRUNC(SYSDATE - 1), 'yyyy-mm')  and
+                         instr(t.house_use, '住宅') = 0 and
+                         instr(t.house_use, '商业') = 0 then
+                     1
+                    else
+                     0
+                  end) mating_num,
+              round(sum(case
+                          when t1.pre_sale_date <=
+                               to_char(TRUNC(SYSDATE - 1), 'yyyy-mm-dd')  and
+                               to_char(to_date(t.sign_date, 'yyyy-mm-dd'), 'yyyy-mm') =
+                               to_char(TRUNC(SYSDATE - 1), 'yyyy-mm')  and
+                               instr(t.house_use, '住宅') > 0 then
+                           t.construct_area
+                          else
+                           0
+                        end) / 10000,
+                    2) residence_area,
+              round(sum(case
+                          when t1.pre_sale_date <=
+                               to_char(TRUNC(SYSDATE - 1), 'yyyy-mm-dd')  and
+                               to_char(to_date(t.sign_date, 'yyyy-mm-dd'), 'yyyy-mm') =
+                               to_char(TRUNC(SYSDATE - 1), 'yyyy-mm')  and
+                               instr(t.house_use, '商业') > 0 then
+                           t.construct_area
+                          else
+                           0
+                        end) / 10000,
+                    2) business_area,
+              round(sum(case
+                          when t1.pre_sale_date <=
+                               to_char(TRUNC(SYSDATE - 1), 'yyyy-mm-dd')  and
+                               to_char(to_date(t.sign_date, 'yyyy-mm-dd'), 'yyyy-mm') =
+                               to_char(TRUNC(SYSDATE - 1), 'yyyy-mm')  and
+                               instr(t.house_use, '住宅') = 0 and
+                               instr(t.house_use, '商业') = 0 then
+                           t.construct_area
+                          else
+                           0
+                        end) / 10000,
+                    2) mating_area,
+              sum(case
+                    when t1.pre_sale_date <=
+                         to_char(TRUNC(SYSDATE - 1), 'yyyy-mm-dd')  and
+                         to_char(to_date(nvl(t.sign_date, '9999-12-01'),
+                                         'yyyy-mm-dd'),
+                                 'yyyy-mm') >
+                         to_char(TRUNC(SYSDATE - 1), 'yyyy-mm')  and
+                         instr(t.house_use, '住宅') > 0 then
+                     1
+                    else
+                     0
+                  end) residence_stock_num,
+              round(sum(case
+                          when t1.pre_sale_date <=
+                               to_char(TRUNC(SYSDATE - 1), 'yyyy-mm-dd')  and
+                               to_char(to_date(nvl(t.sign_date, '9999-12-01'),
+                                               'yyyy-mm-dd'),
+                                       'yyyy-mm') >
+                               to_char(TRUNC(SYSDATE - 1), 'yyyy-mm')  and
+                               instr(t.house_use, '住宅') > 0 then
+                           t.construct_area
+                          else
+                           0
+                        end) / 10000,
+                    2) residence_stock_area,
+              sum(case
+                    when t1.pre_sale_date <=
+                         to_char(TRUNC(SYSDATE - 1), 'yyyy-mm-dd')  and
+                         to_char(to_date(nvl(t.sign_date, '9999-12-01'),
+                                         'yyyy-mm-dd'),
+                                 'yyyy-mm') >
+                         to_char(TRUNC(SYSDATE - 1), 'yyyy-mm')  and
+                         instr(t.house_use, '商业') > 0 then
+                     1
+                    else
+                     0
+                  end) business_stock_num,
+              round(sum(case
+                          when t1.pre_sale_date <=
+                               to_char(TRUNC(SYSDATE - 1), 'yyyy-mm-dd')  and
+                               to_char(to_date(nvl(t.sign_date, '9999-12-01'),
+                                               'yyyy-mm-dd'),
+                                       'yyyy-mm') >
+                               to_char(TRUNC(SYSDATE - 1), 'yyyy-mm')  and
+                               instr(t.house_use, '商业') > 0 then
+                           t.construct_area
+                          else
+                           0
+                        end) / 10000,
+                    2) business_stock_area,
+              sum(case
+                    when t1.pre_sale_date <=
+                         to_char(TRUNC(SYSDATE - 1), 'yyyy-mm-dd')  and
+                         to_char(to_date(nvl(t.sign_date, '9999-12-01'),
+                                         'yyyy-mm-dd'),
+                                 'yyyy-mm') >
+                         to_char(TRUNC(SYSDATE - 1), 'yyyy-mm')  and
+                         instr(t.house_use, '住宅') = 0 and
+                         instr(t.house_use, '商业') = 0 then
+                     1
+                    else
+                     0
+                  end) mating_stock_num,
+              round(sum(case
+                          when t1.pre_sale_date <=
+                               to_char(TRUNC(SYSDATE - 1), 'yyyy-mm-dd')  and
+                               to_char(to_date(nvl(t.sign_date, '9999-12-01'),
+                                               'yyyy-mm-dd'),
+                                       'yyyy-mm') >
+                               to_char(TRUNC(SYSDATE - 1), 'yyyy-mm')  and
+                               instr(t.house_use, '住宅') = 0 and
+                               instr(t.house_use, '商业') = 0 then
+                           t.construct_area
+                          else
+                           0
+                        end) / 10000,
+                    2) mating_stock_area,
+              0 remark,
+              case
+                when (sum(case
+                            when to_char(to_date(t.sign_date, 'yyyy-mm-dd'), 'yyyy-mm') =
+                                 to_char(TRUNC(SYSDATE - 1), 'yyyy-mm')  and
+                                 instr(t.house_use, '住宅') > 0 then
+                             t.construct_area
+                            else
+                             0
+                          end)) = 0 then
+                 0
+                else
+                 round(sum(case
+                             when to_char(to_date(t.sign_date, 'yyyy-mm-dd'), 'yyyy-mm') =
+                                  to_char(TRUNC(SYSDATE - 1), 'yyyy-mm')  and
+                                  instr(t.house_use, '住宅') > 0 then
+                              t.real_price * t.construct_area
+                             else
+                              0
+                           end) / sum(case
+                                        when to_char(to_date(t.sign_date, 'yyyy-mm-dd'), 'yyyy-mm') =
+                                             to_char(TRUNC(SYSDATE - 1), 'yyyy-mm')  and
+                                             instr(t.house_use, '住宅') > 0 then
+                                         t.construct_area
+                                        else
+                                         0
+                                      end),
+                       2)
+              end residence_price,
+              case
+                when (sum(case
+                            when to_char(to_date(t.sign_date, 'yyyy-mm-dd'), 'yyyy-mm') =
+                                 to_char(TRUNC(SYSDATE - 1), 'yyyy-mm')  and
+                                 instr(t.house_use, '商业') > 0 then
+                             t.construct_area
+                            else
+                             0
+                          end)) = 0 then
+                 0
+                else
+                 round(sum(case
+                             when to_char(to_date(t.sign_date, 'yyyy-mm-dd'), 'yyyy-mm') =
+                                  to_char(TRUNC(SYSDATE - 1), 'yyyy-mm')  and
+                                  instr(t.house_use, '商业') > 0 then
+                              t.real_price * t.construct_area
+                             else
+                              0
+                           end) / sum(case
+                                        when to_char(to_date(t.sign_date, 'yyyy-mm-dd'), 'yyyy-mm') =
+                                             to_char(TRUNC(SYSDATE - 1), 'yyyy-mm')  and
+                                             instr(t.house_use, '商业') > 0 then
+                                         t.construct_area
+                                        else
+                                         0
+                                      end),
+                       2)
+              end business_price,
+              case
+                when (sum(case
+                            when to_char(to_date(t.sign_date, 'yyyy-mm-dd'), 'yyyy-mm') =
+                                 to_char(TRUNC(SYSDATE - 1), 'yyyy-mm')  and
+                                 instr(t.house_use, '商业') = 0 and
+                                 instr(t.house_use, '住宅') = 0 then
+                             t.construct_area
+                            else
+                             0
+                          end)) = 0 then
+                 0
+                else
+                 round(sum(case
+                             when to_char(to_date(t.sign_date, 'yyyy-mm-dd'), 'yyyy-mm') =
+                                  to_char(TRUNC(SYSDATE - 1), 'yyyy-mm')  and
+                                  instr(t.house_use, '商业') = 0 and
+                                  instr(t.house_use, '住宅') = 0 then
+                              t.real_price * t.construct_area
+                             else
+                              0
+                           end) / sum(case
+                                        when to_char(to_date(t.sign_date, 'yyyy-mm-dd'), 'yyyy-mm') =
+                                             to_char(TRUNC(SYSDATE - 1), 'yyyy-mm')  and
+                                             instr(t.house_use, '商业') = 0 and
+                                             instr(t.house_use, '住宅') = 0 then
+                                         t.construct_area
+                                        else
+                                         0
+                                      end),
+                       2)
+              end mating_price
+         from view_houseinfo t
+         left join view_bldinfo t1
+           on t.project_id = t1.project_id
+          and t.bld_no = t1.bld_no
+       
+       
+       
+       ) tt
+on (t.data_month = tt.data_month)
+when matched then update set 
+     t.TOTAL_NUM=tt.TOTAL_NUM,
+     t.TOTAL_STOCK_NUM=tt.TOTAL_STOCK_NUM,
+     t.TOTAL_AREA=tt.TOTAL_AREA,
+     t.TOTAL_STOCK_AREA=tt.TOTAL_STOCK_AREA,
+     t.RESIDENCE_NUM=tt.RESIDENCE_NUM,
+     t.BUSINESS_NUM=tt.BUSINESS_NUM,
+     t.MATING_NUM=tt.MATING_NUM,
+     t.RESIDENCE_AREA=tt.RESIDENCE_AREA,
+     t.BUSINESS_AREA=tt.BUSINESS_AREA,
+     t.MATING_AREA=tt.MATING_AREA,
+     t.RESIDENCE_STOCK_NUM=tt.RESIDENCE_STOCK_NUM,
+     t.RESIDENCE_STOCK_AREA=tt.RESIDENCE_STOCK_AREA,
+     t.BUSINESS_STOCK_NUM=tt.BUSINESS_STOCK_NUM,
+     t.BUSINESS_STOCK_AREA=tt.BUSINESS_STOCK_AREA,
+     t.MATING_STOCK_NUM=tt.MATING_STOCK_NUM,
+     t.MATING_STOCK_AREA=tt.MATING_STOCK_AREA,
+     t.REMARK=tt.REMARK,
+     t.RESIDENCE_PRICE=tt.RESIDENCE_PRICE,
+     t.BUSINESS_PRICE=tt.BUSINESS_PRICE,
+     t.MATING_PRICE=tt.MATING_PRICE
+when not matched then
+  insert
+    (t.data_month,
+     t.TOTAL_NUM,
+     t.TOTAL_STOCK_NUM,
+     t.TOTAL_AREA,
+     t.TOTAL_STOCK_AREA,
+     t.RESIDENCE_NUM,
+     t.BUSINESS_NUM,
+     t.MATING_NUM,
+     t.RESIDENCE_AREA,
+     t.BUSINESS_AREA,
+     t.MATING_AREA,
+     t.RESIDENCE_STOCK_NUM,
+     t.RESIDENCE_STOCK_AREA,
+     t.BUSINESS_STOCK_NUM,
+     t.BUSINESS_STOCK_AREA,
+     t.MATING_STOCK_NUM,
+     t.MATING_STOCK_AREA,
+     t.REMARK,
+     t.RESIDENCE_PRICE,
+     t.BUSINESS_PRICE,
+     t.MATING_PRICE)
+  values
+    (tt.data_month,
+     tt.TOTAL_NUM,
+     tt.TOTAL_STOCK_NUM,
+     tt.TOTAL_AREA,
+     tt.TOTAL_STOCK_AREA,
+     tt.RESIDENCE_NUM,
+     tt.BUSINESS_NUM,
+     tt.MATING_NUM,
+     tt.RESIDENCE_AREA,
+     tt.BUSINESS_AREA,
+     tt.MATING_AREA,
+     tt.RESIDENCE_STOCK_NUM,
+     tt.RESIDENCE_STOCK_AREA,
+     tt.BUSINESS_STOCK_NUM,
+     tt.BUSINESS_STOCK_AREA,
+     tt.MATING_STOCK_NUM,
+     tt.MATING_STOCK_AREA,
+     tt.REMARK,
+     tt.RESIDENCE_PRICE,
+     tt.BUSINESS_PRICE,
+     tt.MATING_PRICE);
+     commit;
+
+  update scheduler_insert_data t set t.end_time = sysdate where t.sys_id = sysid;
+  commit;
+end proc_insert_data;
+
