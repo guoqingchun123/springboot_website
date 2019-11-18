@@ -397,7 +397,7 @@
 				<span th:text="${price.houseShow}"></span>
 				（<span th:each="housePrice, iterStat:${price.housePrices}">
 					<span th:if="${iterStat.index > 0}">，</span>
-					<span th:text="${housePrice.houseHold}"></span>：<span th:text="${housePrice.price}"></span>元/平方米</span>）
+					<span th:text="${housePrice.houseHold}"></span>：<span th:text="${housePrice.price}"></span>元/平方米 共<span th:text="${housePrice.area}"></span>平方米</span>）
 			</span>
 	</div>
 </div>

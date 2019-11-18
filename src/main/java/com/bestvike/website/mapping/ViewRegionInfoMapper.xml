@@ -333,12 +333,16 @@
 			select
 				sum(case when instr(t.house_use, '住宅') > 0 then t.presell_price * t.construct_area else 0 end)
 				/ (sum(case when instr(t.house_use, '住宅') > 0 then t.construct_area else 0 end) + 0.00001) residence_price,
+				sum(case when instr(t.house_use, '住宅') > 0 then t.construct_area else 0 end) residence_area,
 				sum(case when instr(t.house_use, '商业') > 0 then t.presell_price * t.construct_area else 0 end)
 				/ (sum(case when instr(t.house_use, '商业') > 0 then t.construct_area else 0 end) + 0.00001) business_price,
+				sum(case when instr(t.house_use, '商业') > 0 then t.construct_area else 0 end) business_area,
 				sum(case when instr(t.house_use, '车位') > 0 then t.presell_price * t.construct_area else 0 end)
 				/ (sum(case when instr(t.house_use, '车位') > 0 then t.construct_area else 0 end) + 0.00001) carport_price,
+				sum(case when instr(t.house_use, '车位') > 0 then t.construct_area else 0 end) carport_area,
 				sum(case when instr(t.house_use, '仓库') > 0 then t.presell_price * t.construct_area else 0 end)
-				/ (sum(case when instr(t.house_use, '仓库') > 0 then t.construct_area else 0 end) + 0.00001) warehouse_price
+				/ (sum(case when instr(t.house_use, '仓库') > 0 then t.construct_area else 0 end) + 0.00001) warehouse_price,
+				sum(case when instr(t.house_use, '仓库') > 0 then t.construct_area else 0 end) warehouse_area
 			from view_houseinfo t
 			where t.sales_flag = '是'
 				and exists(SELECT 1 FROM view_regbld WHERE region_id = #{regionId} AND project_id = t.project_id and bld_no = t.bld_no)

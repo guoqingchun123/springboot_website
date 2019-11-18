@@ -11,6 +11,7 @@ public class HousePrice implements Serializable {
 
 	private String houseHold;
 	private BigDecimal price;
+	private BigDecimal area;
 
 	public String getHouseHold() {
 		return houseHold;
@@ -26,5 +27,13 @@ public class HousePrice implements Serializable {
 
 	public void setPrice(BigDecimal price) {
 		this.price = price;
+	}
+
+	public BigDecimal getArea() {
+		return area;
+	}
+
+	public void setArea(BigDecimal area) {
+		this.area = area;
 	}
 }

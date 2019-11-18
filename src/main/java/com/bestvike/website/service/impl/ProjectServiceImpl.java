@@ -765,6 +765,7 @@ public class ProjectServiceImpl implements ProjectService {
 				houseShow += "住宅";
 				housePrice.setHouseHold("住宅");
 				housePrice.setPrice(((BigDecimal) priceMap.get("RESIDENCE_PRICE")).setScale(2, BigDecimal.ROUND_HALF_UP));
+				housePrice.setArea(((BigDecimal) priceMap.get("RESIDENCE_AREA")).setScale(2, BigDecimal.ROUND_HALF_UP));
 				housePrices.add(housePrice);
 			}
 			if (priceMap.containsKey("BUSINESS_PRICE") && ((BigDecimal) priceMap.get("BUSINESS_PRICE")).compareTo(BigDecimal.ZERO) > 0) {
@@ -776,6 +777,7 @@ public class ProjectServiceImpl implements ProjectService {
 				HousePrice housePrice = new HousePrice();
 				housePrice.setHouseHold("商业");
 				housePrice.setPrice(((BigDecimal) priceMap.get("BUSINESS_PRICE")).setScale(2, BigDecimal.ROUND_HALF_UP));
+				housePrice.setArea(((BigDecimal) priceMap.get("BUSINESS_AREA")).setScale(2, BigDecimal.ROUND_HALF_UP));
 				housePrices.add(housePrice);
 			}
 			if (!StringUtils.isEmpty(houseShow)) {
@@ -789,12 +791,14 @@ public class ProjectServiceImpl implements ProjectService {
 				HousePrice housePrice = new HousePrice();
 				housePrice.setHouseHold("车位");
 				housePrice.setPrice(((BigDecimal) priceMap.get("CARPORT_PRICE")).setScale(2, BigDecimal.ROUND_HALF_UP));
+				housePrice.setArea(((BigDecimal) priceMap.get("CARPORT_AREA")).setScale(2, BigDecimal.ROUND_HALF_UP));
 				housePrices.add(housePrice);
 			}
 			if (priceMap.containsKey("WAREHOUSE_PRICE") && ((BigDecimal) priceMap.get("WAREHOUSE_PRICE")).compareTo(BigDecimal.ZERO) > 0) {
 				HousePrice housePrice = new HousePrice();
 				housePrice.setHouseHold("仓库");
 				housePrice.setPrice(((BigDecimal) priceMap.get("WAREHOUSE_PRICE")).setScale(2, BigDecimal.ROUND_HALF_UP));
+				housePrice.setArea(((BigDecimal) priceMap.get("WAREHOUSE_AREA")).setScale(2, BigDecimal.ROUND_HALF_UP));
 				housePrices.add(housePrice);
 			}
 			if (housePrices.size() > 0) {
